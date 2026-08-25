@@ -10,8 +10,10 @@ import {
   postMessage,
   type ApiChat,
   type Source,
+  type Contract,
 } from "@/lib/api";
 import { useLexAi } from "./useLexAi";
+import ContractCard from "../ContractCard";
 import {
   IconStar,
   IconSend,
@@ -25,6 +27,7 @@ type Msg = {
   role: "user" | "assistant";
   content: string;
   sources?: Source[];
+  contracts?: Contract[];
   offline?: boolean;
 };
 
@@ -76,6 +79,7 @@ export default function ChatPage() {
           role: m.role,
           content: m.content,
           sources: m.sources,
+          contracts: m.contracts,
         })),
       );
     } catch {
@@ -108,13 +112,14 @@ export default function ChatPage() {
           ...cs,
         ]);
       }
-      const { assistant } = await postMessage(clientId, id, content);
+      const { assistant, contracts } = await postMessage(clientId, id, content);
       setMessages((m) => [
         ...m,
         {
           role: "assistant",
           content: assistant.content,
           sources: assistant.sources,
+          contracts,
         },
       ]);
       setChats((cs) =>
@@ -239,6 +244,13 @@ export default function ChatPage() {
                             </span>
                           ),
                         )}
+                      </div>
+                    ) : null}
+                    {m.contracts && m.contracts.length ? (
+                      <div className="amsg__files">
+                        {m.contracts.map((c, k) => (
+                          <ContractCard key={k} c={c} />
+                        ))}
                       </div>
                     ) : null}
                     {m.offline ? (

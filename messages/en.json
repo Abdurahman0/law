@@ -754,6 +754,7 @@
     "closeLabel": "Close",
     "online": "Online",
     "openFull": "Open full chat",
+    "downloadPdf": "Download PDF",
     "responses": {
       "greeting": { "text": "Hello! What legal matter can I help with? Just write your problem in two or three sentences.", "meta": "" },
       "thanks": { "text": "You're welcome. If you have another question, write it — or I can help you pick a matching lawyer.", "meta": "" },
@@ -791,7 +792,9 @@
     "you": "You",
     "assistant": "LexGo.AI",
     "offline": "Couldn't reach the server — this is an offline answer.",
-    "disclaimer": "LexGo.AI can make mistakes. The final legal decision stays with a lawyer."
+    "disclaimer": "LexGo.AI can make mistakes. The final legal decision stays with a lawyer.",
+    "downloadPdf": "Download PDF",
+    "open": "Open"
   },
   "notFound": {
     "title": "Page not found",

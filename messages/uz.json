@@ -754,6 +754,7 @@
     "closeLabel": "Yopish",
     "online": "Onlayn",
     "openFull": "To'liq chatni ochish",
+    "downloadPdf": "PDF yuklab olish",
     "responses": {
       "greeting": { "text": "Assalomu alaykum! Qanday huquqiy masala bo'yicha yordam kerak? Muammoni ikki-uch gapda yozsangiz kifoya.", "meta": "" },
       "thanks": { "text": "Arzimaydi. Yana savolingiz bo'lsa yozing — yoki mos advokatni tanlashga yordam beraman.", "meta": "" },
@@ -791,7 +792,9 @@
     "you": "Siz",
     "assistant": "LexGo.AI",
     "offline": "Serverga ulanib bo'lmadi — bu oflayn javob.",
-    "disclaimer": "LexGo.AI xato qilishi mumkin. Yakuniy huquqiy qaror advokatda qoladi."
+    "disclaimer": "LexGo.AI xato qilishi mumkin. Yakuniy huquqiy qaror advokatda qoladi.",
+    "downloadPdf": "PDF yuklab olish",
+    "open": "Ochish"
   },
   "notFound": {
     "title": "Sahifa topilmadi",

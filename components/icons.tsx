@@ -249,6 +249,20 @@ export const IconMenu = (p: P) => (
   </svg>
 );
 
+export const IconDownload = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M12 3v12M7 11l5 5 5-5" />
+    <path d="M5 21h14" />
+  </svg>
+);
+
+export const IconExternal = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M14 4h6v6M20 4l-9 9" />
+    <path d="M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" />
+  </svg>
+);
+
 export const IconGooglePlay = (p: P) => (
   <svg
     viewBox="0 0 24 24"

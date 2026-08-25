@@ -13,8 +13,31 @@ export type ApiMessage = {
   role: "user" | "assistant";
   content: string;
   sources?: Source[];
+  contracts?: Contract[];
   createdAt?: string;
 };
+
+export type Contract = {
+  id: string;
+  contractType: string;
+  status: string;
+  downloadUrl: string;
+  inlineUrl?: string;
+  fileName?: string;
+  mimeType?: string;
+  fileBase64?: string;
+};
+
+function absUrl(path: string): string {
+  if (!path) return "";
+  if (/^https?:\/\//i.test(path)) return path;
+  return `${API_BASE}${path.startsWith("/") ? "" : "/"}${path}`;
+}
+
+// Absolute URLs for a contract PDF (paths are backend-relative).
+export const contractDownloadUrl = (c: Contract): string => absUrl(c.downloadUrl);
+export const contractInlineUrl = (c: Contract): string =>
+  absUrl(c.inlineUrl || c.downloadUrl);
 
 export type ApiChat = {
   id: string;
@@ -63,6 +86,7 @@ export function normMessage(v: unknown): ApiMessage {
     role,
     content: asStr(d.content ?? d.text, ""),
     sources: normSources(d.sources),
+    contracts: normContracts(d.contracts),
     createdAt: typeof d.created_at === "string" ? d.created_at : undefined,
   };
 }
@@ -78,6 +102,25 @@ function normChat(v: unknown): ApiChat {
     lastMessage: lastStr || undefined,
     updatedAt: typeof d.updated_at === "string" ? d.updated_at : undefined,
   };
+}
+
+function normContract(v: unknown): Contract {
+  const d = asDict(v);
+  return {
+    id: String(d.id ?? ""),
+    contractType: asStr(d.contract_type ?? d.contractType, ""),
+    status: asStr(d.status, ""),
+    downloadUrl: asStr(d.download_url ?? d.downloadUrl, ""),
+    inlineUrl: asStr(d.inline_url ?? d.inlineUrl, "") || undefined,
+    fileName: asStr(d.file_name ?? d.fileName, "") || undefined,
+    mimeType: asStr(d.mime_type ?? d.mimeType, "application/pdf"),
+    fileBase64: asStr(d.file_base64 ?? d.fileBase64, "") || undefined,
+  };
+}
+
+function normContracts(v: unknown): Contract[] {
+  if (!Array.isArray(v)) return [];
+  return v.map(normContract).filter((c) => c.id || c.downloadUrl);
 }
 
 function listFrom(data: unknown, ...keys: string[]): unknown[] {
@@ -108,14 +151,25 @@ export async function getChatMessages(
   chatId: string,
 ): Promise<ApiMessage[]> {
   const data = await req(`/clients/${clientId}/chats/${chatId}`);
-  return listFrom(data, "messages", "items", "data").map(normMessage);
+  const messages = listFrom(data, "messages", "items", "data").map(normMessage);
+  // Some backends attach contracts at the top level rather than per-message.
+  const topContracts = normContracts(asDict(data).contracts);
+  if (topContracts.length) {
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].role === "assistant") {
+        if (!messages[i].contracts?.length) messages[i].contracts = topContracts;
+        break;
+      }
+    }
+  }
+  return messages;
 }
 
 export async function postMessage(
   clientId: string,
   chatId: string,
   content: string,
-): Promise<{ assistant: ApiMessage; sources: Source[] }> {
+): Promise<{ assistant: ApiMessage; sources: Source[]; contracts: Contract[] }> {
   const data = await req(`/clients/${clientId}/chats/${chatId}/messages`, {
     method: "POST",
     body: JSON.stringify({ content }),
@@ -127,7 +181,8 @@ export async function postMessage(
   const sources = assistant.sources?.length
     ? assistant.sources
     : normSources(d.sources);
-  return { assistant: { ...assistant, sources }, sources };
+  const contracts = normContracts(d.contracts);
+  return { assistant: { ...assistant, sources }, sources, contracts };
 }
 
 export function chatSocketUrl(clientId: string, chatId: string): string {

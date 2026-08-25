@@ -5,7 +5,8 @@ import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { useLexAi } from "./useLexAi";
 import { getClientId } from "@/lib/client";
-import { createChat, postMessage, type Source } from "@/lib/api";
+import { createChat, postMessage, type Source, type Contract } from "@/lib/api";
+import ContractCard from "../ContractCard";
 import { IconSend, IconStar, IconClose, IconArrowRight } from "../icons";
 
 type Msg = {
@@ -14,6 +15,7 @@ type Msg = {
   meta?: string;
   area?: string | null;
   sources?: Source[];
+  contracts?: Contract[];
 };
 
 export default function ChatWidget({
@@ -60,11 +62,16 @@ export default function ChatWidget({
         id = chat.id;
         chatId.current = id;
       }
-      const { assistant } = await postMessage(cid, id, content);
+      const { assistant, contracts } = await postMessage(cid, id, content);
       setTyping(false);
       setMsgs((m) => [
         ...m,
-        { role: "a", content: assistant.content, sources: assistant.sources },
+        {
+          role: "a",
+          content: assistant.content,
+          sources: assistant.sources,
+          contracts,
+        },
       ]);
     } catch {
       const r = reply(content);
@@ -126,6 +133,13 @@ export default function ChatWidget({
                   <span key={j} className="asrc">
                     {s.title || s.snippet || s.url}
                   </span>
+                ))}
+              </div>
+            ) : null}
+            {m.contracts && m.contracts.length ? (
+              <div className="amsg__files">
+                {m.contracts.map((c, j) => (
+                  <ContractCard key={j} c={c} />
                 ))}
               </div>
             ) : null}
