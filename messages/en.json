@@ -1,0 +1,801 @@
+{
+  "meta": {
+    "siteName": "LexGo",
+    "title": "LexGo — legal help in a few taps",
+    "description": "Find a lawyer, prepare documents and get free answers from LexGo.AI. Uzbekistan's legal services ecosystem.",
+    "titleTemplate": "%s — LexGo"
+  },
+  "enums": {
+    "currency": "UZS",
+    "areas": {
+      "criminal": "Criminal cases",
+      "economic": "Economic cases",
+      "civil": "Civil cases",
+      "family": "Family cases",
+      "labor": "Labor disputes",
+      "administrative": "Administrative cases",
+      "tax": "Tax disputes",
+      "ip": "Intellectual property",
+      "migration": "Migration & citizenship",
+      "realEstate": "Real estate"
+    },
+    "regions": {
+      "all": "All regions",
+      "tashkent": "Tashkent city",
+      "samarkand": "Samarkand",
+      "fergana": "Fergana",
+      "bukhara": "Bukhara",
+      "namangan": "Namangan",
+      "andijan": "Andijan",
+      "kashkadarya": "Kashkadarya",
+      "khorezm": "Khorezm",
+      "jizzakh": "Jizzakh",
+      "navoi": "Navoi"
+    },
+    "stages": {
+      "unknown": { "code": "TBD", "name": "Not determined yet" },
+      "preInvestigation": { "code": "01 · PIC", "name": "Pre-investigation check", "desc": "Reviewing materials, taking part in giving explanations, objecting to opening a case." },
+      "investigation": { "code": "02 · PI", "name": "Preliminary investigation", "desc": "Attending questioning, appealing the restraint measure, building the defence position." },
+      "firstInstance": { "code": "03 · COURT-1", "name": "First instance", "desc": "Full participation in hearings, presenting evidence, the defence speech." },
+      "appeal": { "code": "04 · APPEAL", "name": "Appeal", "desc": "Preparing the complaint within the deadline and defending it at the hearing." },
+      "cassation": { "code": "05 · CASS", "name": "Cassation and review", "desc": "Legal defence up to the end of review at the Supreme Court." }
+    }
+  },
+  "nav": {
+    "ai": "LexGo.AI",
+    "lawyers": "Lawyers",
+    "services": "Services",
+    "subscription": "Subscription",
+    "business": "Business",
+    "forLawyers": "For lawyers",
+    "warranty": "Warranty",
+    "app": "Mobile app",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "login": "Log in",
+    "start": "Get started",
+    "register": "Sign up",
+    "menu": "Menu",
+    "language": "Language",
+    "chat": "AI Chat"
+  },
+  "cta": {
+    "viewPackages": "View packages",
+    "requestOffer": "Request an offer",
+    "choose": "Choose",
+    "tryFree": "Try for free",
+    "subscriptionPrices": "Subscription prices",
+    "learnMore": "Learn more",
+    "getStarted": "Get started",
+    "leaveRequest": "Leave a request",
+    "back": "Back"
+  },
+  "tabbar": {
+    "home": "Home",
+    "services": "Services",
+    "ai": "AI",
+    "lawyers": "Lawyer",
+    "subscription": "Plan"
+  },
+  "footer": {
+    "about": "Uzbekistan's legal services ecosystem: AI, online services, a lawyer marketplace and a personal-lawyer subscription.",
+    "phoneNote": "Call center · calls are free",
+    "servicesTitle": "Services",
+    "directionsTitle": "Practice areas",
+    "companyTitle": "Company",
+    "links": {
+      "onlineConsultation": "Online consultation",
+      "docPrep": "Document preparation",
+      "docReview": "Document review",
+      "personalSub": "Personal-lawyer subscription",
+      "giftSub": "Gift a subscription",
+      "criminal": "Criminal & administrative",
+      "civil": "Civil cases",
+      "economic": "Economic disputes",
+      "findLawyer": "Find a lawyer",
+      "courses": "Courses"
+    },
+    "rights": "© 2026 LexGo.uz — all rights reserved",
+    "terms": "Terms of use",
+    "privacy": "Privacy policy",
+    "offer": "Public offer"
+  },
+  "home": {
+    "metaTitle": "Legal help in a few taps",
+    "hero": {
+      "titleLead": "Legal help is now",
+      "titleAccent": "just a few taps away",
+      "subtitle": "Find a lawyer, prepare a document in 5 minutes or get a free answer from LexGo.AI. Everything in one app.",
+      "tags": ["1,240+ lawyers", "14 regions", "First 5 requests free"]
+    },
+    "quick": {
+      "title": "Quick services",
+      "items": [
+        { "title": "Express consultation", "sub": "15 min · from 90,000 UZS" },
+        { "title": "Video consultation", "sub": "Face to face with a lawyer" },
+        { "title": "Contract drafting", "sub": "200+ templates" },
+        { "title": "Document review", "sub": "Errors and risks" },
+        { "title": "Defence in investigation", "sub": "Urgent lawyer" },
+        { "title": "Company registration", "sub": "Charter included" },
+        { "title": "Gift a subscription", "sub": "3 / 6 / 12 months" }
+      ]
+    },
+    "stats": {
+      "lawyers": "Registered lawyers",
+      "templates": "Ready document templates",
+      "response": "Lawyer response guarantee",
+      "coverage": "Regions covered",
+      "responseSuffix": " min"
+    },
+    "teaser": {
+      "aiTitle": "Legal AI trained on Uzbek law",
+      "aiText": "Question-and-answer with references to the exact article, document drafting and document analysis — grounded in the law in force.",
+      "lawyersTitle": "Lawyers with open experience and wins",
+      "lawyersText": "Every lawyer shows how many full and partial wins they achieved at the investigation and court stages.",
+      "subTitle": "Subscription — a lawyer always by your side",
+      "subText": "Instead of searching for a lawyer when a problem arises, they are already yours. The subscription also covers your family."
+    },
+    "ticker": [
+      { "city": "Tashkent", "text": "a lawyer accepted a criminal case in 4 minutes" },
+      { "city": "Samarkand", "text": "a lease agreement was prepared" },
+      { "city": "Fergana", "text": "a pre-claim was sent in a labor dispute" },
+      { "city": "Tashkent", "text": "LexGo.AI analyzed 12 documents" },
+      { "city": "Bukhara", "text": "a Premium subscription was completed" },
+      { "city": "Namangan", "text": "a statement of claim was filed with the court" },
+      { "city": "Andijan", "text": "a company-registration package was ordered" },
+      { "city": "Kashkadarya", "text": "a video consultation was completed" }
+    ]
+  },
+  "finder": {
+    "tabs": {
+      "lawyer": "Find a lawyer",
+      "doc": "Prepare a document",
+      "ai": "Ask the AI"
+    },
+    "labels": {
+      "area": "Practice area",
+      "region": "Region",
+      "stage": "Case stage",
+      "docType": "Document type",
+      "forWhom": "For whom",
+      "preparedBy": "Prepared by",
+      "yourProblem": "Describe your problem in your own words"
+    },
+    "buttons": {
+      "search": "Search",
+      "openTemplate": "Open the template",
+      "analyze": "Analyze"
+    },
+    "hints": {
+      "popular": "Popular:",
+      "templates": "200+ templates:",
+      "examples": "Examples:"
+    },
+    "docTypes": {
+      "contract": "Contract",
+      "application": "Application",
+      "complaint": "Complaint",
+      "claim": "Statement of claim",
+      "poa": "Power of attorney",
+      "corporate": "Corporate document"
+    },
+    "forWhom": {
+      "individual": "Individual",
+      "soleTrader": "Sole trader",
+      "legalEntity": "Legal entity"
+    },
+    "preparedBy": {
+      "ai": "LexGo.AI — faster and cheaper",
+      "lawyer": "Lawyer — in 60 minutes"
+    },
+    "quickLawyer": [
+      { "label": "Defence in investigation", "area": "criminal" },
+      { "label": "Contract dispute", "area": "economic" },
+      { "label": "Divorce", "area": "family" },
+      { "label": "Dismissal", "area": "labor" }
+    ],
+    "quickDoc": [
+      { "label": "Lease agreement", "doc": "contract" },
+      { "label": "Resignation letter", "doc": "application" },
+      { "label": "Debt recovery claim", "doc": "claim" },
+      { "label": "Car power of attorney", "doc": "poa" }
+    ],
+    "quickAsk": [
+      { "label": "Called for questioning", "text": "I was called for questioning, a criminal case has been opened" },
+      { "label": "Contract breached", "text": "The supplier breached the contract, goods were 40 days late" },
+      { "label": "Inheritance dispute", "text": "The inheritance is not being divided, I want to go to court" },
+      { "label": "Starting a business", "text": "I want to open an LLC and patent a trademark" }
+    ],
+    "askPlaceholder": "For example: I haven't been paid for 3 months, and on top of that I was dismissed…",
+    "askTooShort": "Write a sentence or two — what happened and when matters.",
+    "result": {
+      "title": "Result",
+      "ready": "Ready",
+      "lawyersFound": "{count} lawyers found",
+      "noLawyerTitle": "No matching lawyer found",
+      "noLawyerText": "There are no available lawyers in this region and area yet. Expand the region or leave a request — the call center will find a suitable lawyer within 30 minutes.",
+      "lawyerDisc": "The lawyer confirms the order within 30 minutes. Contacts are unlocked after a 10% upfront payment.",
+      "templateReadyTitle": "{doc} — template ready",
+      "templateTime": "5 min",
+      "byAi": "Prepared by LexGo.AI",
+      "byLawyer": "Prepared by a lawyer — in 60 minutes",
+      "kvDocument": "Document",
+      "kvForWhom": "For whom",
+      "kvPrice": "Price",
+      "templateSteps": [
+        "You fill in the fields step by step",
+        "The document takes shape before your eyes",
+        "After payment you download DOCX and PDF"
+      ],
+      "startFilling": "Start filling the template",
+      "aiAnalysisTitle": "LexGo.AI preliminary analysis",
+      "analysisDone": "Analysis complete",
+      "kvDirection": "Direction",
+      "kvStage": "Case stage",
+      "kvEstPrice": "Estimated price",
+      "aiDisc": "This is a preliminary analysis. AI does not replace a lawyer: the final legal decision stays with the lawyer.",
+      "perTemplate": "templates",
+      "fromSom": "from",
+      "somPackage": "from · package",
+      "ratingSuffix": "★"
+    },
+    "rules": {
+      "criminal": {
+        "dir": "Criminal case",
+        "services": ["Full participation in the preliminary investigation package", "Complaint against the restraint measure", "Urgent lawyer call (24/7)"],
+        "price": "3,500,000 – 6,200,000 UZS"
+      },
+      "administrative": {
+        "dir": "Administrative case",
+        "services": ["Preparing an objection to the protocol", "Representation in court", "Claim for damage recovery"],
+        "price": "900,000 – 2,400,000 UZS"
+      },
+      "labor": {
+        "dir": "Labor dispute",
+        "services": ["Pre-claim letter to the employer", "Claim for reinstatement", "Recovery of unpaid wages"],
+        "price": "1,200,000 – 3,100,000 UZS"
+      },
+      "civil": {
+        "dir": "Civil case",
+        "services": ["Preparing a statement of claim", "Representation in court", "Monitoring enforcement of the court decision"],
+        "price": "1,800,000 – 4,500,000 UZS"
+      },
+      "economic": {
+        "dir": "Economic dispute",
+        "services": ["Contract analysis and a risk report", "Pre-claim letter with a calculation annex", "Preparing a claim to the economic court"],
+        "price": "2,200,000 – 5,400,000 UZS"
+      },
+      "corporate": {
+        "dir": "Corporate matter",
+        "services": ["Company registration and an individual charter", "Trademark patenting", "Legal risk audit of the business"],
+        "price": "1,500,000 – 7,000,000 UZS"
+      },
+      "general": {
+        "dir": "General legal matter",
+        "services": ["Express consultation (15 min)", "Chat consultation with a lawyer", "Checking your documents"],
+        "price": "90,000 – 320,000 UZS"
+      }
+    },
+    "keywords": {
+      "criminal": ["investigation", "investigator", "criminal", "crime", "charge", "accused", "questioning", "detention", "arrest", "police", "internal affairs", "prosecutor", "suspect", "defendant", "article", "verdict", "punishment"],
+      "administrative": ["fine", "protocol", "traffic", "road", "administrative", "offence", "driving", "speed", "accident"],
+      "labor": ["wage", "salary", "dismiss", "dismissal", "employment contract", "leave", "vacation", "employer", "layoff", "pay", "workplace"],
+      "civil": ["inheritance", "heir", "divorce", "alimony", "marriage", "house", "apartment", "real estate", "debt", "pledge", "receipt", "not divided", "land"],
+      "economic": ["contract", "supply", "supplier", "counterparty", "commercial", "bankrupt", "tax", "penalty", "claim", "goods", "payment", "late", "breached", "partner"],
+      "corporate": ["llc", "sole trader", "open a company", "start a business", "charter", "share", "founder", "trademark", "patent", "license", "registration", "firm", "compliance", "branch"],
+      "stages": {
+        "preInvestigation": ["pre-investigation", "check", "gathering materials"],
+        "investigation": ["investigation", "questioning", "accused", "suspect", "arrest"],
+        "firstInstance": ["court", "hearing", "claim", "to court"],
+        "appeal": ["appeal", "against the verdict", "against the decision"],
+        "cassation": ["cassation", "review", "supreme court"]
+      }
+    }
+  },
+  "lawyers": {
+    "metaTitle": "Lawyers",
+    "kicker": "Lawyers",
+    "title": "Lawyers whose experience and wins are open to view",
+    "lead": "Every lawyer shows how many full and partial wins they achieved at the investigation and court stages, and uploads documents to prove it.",
+    "filters": {
+      "region": "Region",
+      "sort": "Sort by",
+      "sortRating": "Highest rating",
+      "sortExperience": "Most experience",
+      "sortPriceAsc": "Price: low to high",
+      "sortPriceDesc": "Price: high to low"
+    },
+    "stats": [
+      { "value": "1,240+", "label": "Verified lawyers" },
+      { "value": "63,000+", "label": "Closed cases" },
+      { "value": "4.8", "label": "Average rating" },
+      { "value": "30 min", "label": "Average response" }
+    ],
+    "filterAll": "All",
+    "card": {
+      "fullWin": "Full win",
+      "partialWin": "Partial",
+      "responseValue": "30",
+      "responseUnit": "min",
+      "responseLabel": "Response",
+      "reviews": "{count} reviews · {years} yrs experience",
+      "priceNote": "from · package",
+      "super": "Super lawyer",
+      "choose": "Choose"
+    },
+    "empty": "There are no lawyers in this area yet. Leave a request — we will find a suitable lawyer for you.",
+    "priceInfo": "The price is formed by open criteria: region (higher in big cities), experience (3–5 yrs +10%, 6–10 yrs +15%, 10+ yrs +20%), rating and super-lawyer status (regional TOP-3 — up to 30%, 10+ yrs in a narrow area — up to 20%). If the price is higher, the reason is shown in the order window.",
+    "flow": [
+      { "title": "You choose the service and the lawyer", "text": "Package, stage and the lawyer's card on one screen." },
+      { "title": "The lawyer replies within 30 minutes", "text": "Confirms or declines through the app." },
+      { "title": "10% upfront payment", "text": "After payment the communication channel opens." },
+      { "title": "The case is handled inside LexGo", "text": "Documents, chat, court date, payment — in one place." }
+    ]
+  },
+  "aiPage": {
+    "metaTitle": "LexGo.AI",
+    "kicker": "LexGo.AI",
+    "title": "Legal AI trained on Uzbek legislation",
+    "lead": "The system is loaded with national legislation, investigative and court practice outcomes, and document templates prepared by professional lawyers. Answers are not abstract — they rely on the norm in force.",
+    "features": [
+      "Q&A: with references to the exact article and norm",
+      "Document drafting: contracts, applications, complaints, claims, powers of attorney",
+      "Document analysis: errors, clauses that contradict the law, risks and suggestions",
+      "An internal assistant for call-center lawyers"
+    ],
+    "capabilitiesTitle": "What LexGo.AI can do",
+    "capabilities": [
+      { "title": "Answers with references", "text": "Every answer cites the exact article and the norm in force, not a vague summary." },
+      { "title": "Document drafting", "text": "Contracts, applications, complaints, claims and powers of attorney from 200+ templates." },
+      { "title": "Document analysis", "text": "Finds errors, clauses contradicting the law, hidden risks and one-sided terms." },
+      { "title": "Case chronology", "text": "Builds a timeline of events and deadlines from your uploaded files." },
+      { "title": "Direction & stage detection", "text": "Reads your problem in plain words and identifies the area and case stage." },
+      { "title": "Lawyer matching", "text": "Filters lawyers by area, region and rating and suggests the best fit." }
+    ],
+    "sourcesTitle": "Trained on",
+    "sources": [
+      "National legislation in force",
+      "Investigative and court practice outcomes",
+      "Templates prepared by professional lawyers",
+      "Anonymized outcomes of resolved cases"
+    ],
+    "examplesTitle": "Example questions",
+    "examples": [
+      { "q": "I was called for questioning — what are my rights?", "a": "You have the right to a lawyer at questioning, to remain silent, and to appeal a restraint measure within a short deadline." },
+      { "q": "The supplier delivered the goods 40 days late.", "a": "You keep the right to claim for breach even without a stated penalty. Order: pre-claim → calculation → claim to the economic court." },
+      { "q": "How do I open an LLC and protect my trademark?", "a": "Choose the tax regime first, use an individual charter, and register the trademark separately from the company." }
+    ],
+    "info": "The first 5 requests are free. Further ones are on a monthly subscription. Lawyers registered on the platform get a 50% discount on the subscription.",
+    "phone": {
+      "title": "LexGo.AI",
+      "status": "Online · {left} free requests left",
+      "greeting": "Hi! I'm LexGo.AI. Describe your problem in plain words — I'll tell you the direction, the case stage and the right service.",
+      "greetingNote": "First 5 requests free",
+      "quick": ["Called for questioning", "Contract breached", "Wages unpaid", "Want to open an LLC"],
+      "inputPlaceholder": "Type your question…"
+    }
+  },
+  "servicesPage": {
+    "metaTitle": "Online services",
+    "kicker": "Online services",
+    "title": "Through the AI as well as through a live lawyer",
+    "lead": "For every service the choice is yours: the faster and cheaper AI option, or the experienced lawyer option. The price difference is shown openly in the payment window.",
+    "tabs": {
+      "consultation": "Consultation",
+      "docPrep": "Document preparation",
+      "docReview": "Document review"
+    },
+    "consultation": {
+      "cards": [
+        { "title": "Express consultation", "text": "A short answer to a short question. No queue, up to 15 minutes.", "price": "90,000", "unit": "from UZS" },
+        { "title": "Video consultation", "text": "Face to face with a lawyer. You review documents together on screen.", "price": "240,000", "unit": "from UZS" },
+        { "title": "Chat consultation", "text": "Send files, photos, voice messages. The correspondence is saved.", "price": "140,000", "unit": "from UZS" },
+        { "title": "Second legal opinion", "text": "Second Opinion: independently assess another lawyer's advice.", "price": "320,000", "unit": "from UZS" }
+      ],
+      "info": "Optional add-on: get the outcome formalized as a written legal opinion — set separately in the payment window."
+    },
+    "docPrep": {
+      "cards": [
+        { "title": "Contract", "text": "Sale, lease, services. You enter both parties' details.", "price": "110,000", "unit": "from UZS" },
+        { "title": "Application", "text": "To a court, government body or employer. Filled step by step.", "price": "70,000", "unit": "from UZS" },
+        { "title": "Complaint", "text": "Against decisions and actions. Deadlines are calculated automatically.", "price": "95,000", "unit": "from UZS" },
+        { "title": "Statement of claim", "text": "Civil and commercial claims. The state fee is calculated too.", "price": "180,000", "unit": "from UZS" },
+        { "title": "Power of attorney", "text": "Simple and notarized forms. You choose the list of powers.", "price": "60,000", "unit": "from UZS" },
+        { "title": "Corporate documents", "text": "Charter, resolution, minutes. Adapted to shares and management.", "price": "320,000", "unit": "from UZS" }
+      ],
+      "flow": [
+        { "title": "Find the template", "text": "By search or through the topic sections." },
+        { "title": "Fill in the fields", "text": "You're shown what to enter and where." },
+        { "title": "See the result", "text": "The document forms before your eyes, editable." },
+        { "title": "Pay and download", "text": "DOCX and PDF. A lawyer review can be added." }
+      ],
+      "info": "If you choose lawyer review, the application goes to the call-center lawyers and a written result reaches your app within 60 minutes at most."
+    },
+    "docReview": {
+      "cards": [
+        { "title": "Errors", "text": "Clauses that contradict the norm in force or may be declared void are highlighted." },
+        { "title": "Risks", "text": "One-sided liability, vague deadlines, hidden penalties and payment terms." },
+        { "title": "Suggestions", "text": "For each problem clause a ready alternative wording is offered.", "price": "150,000", "unit": "from UZS" }
+      ],
+      "flow": [
+        { "title": "Upload the document", "text": "PDF, DOCX or a photo. Several files are fine." },
+        { "title": "Mark the type", "text": "The filter helps find the lawyer fast." },
+        { "title": "Choose the reviewer", "text": "AI — fast and cheap. Lawyer — deeper." },
+        { "title": "Get the report", "text": "A list of errors, risks and concrete suggestions." }
+      ]
+    },
+    "compare": {
+      "title": "LexGo.AI or a live lawyer?",
+      "lead": "Every service offers both options. Pick speed and price, or depth and a human signature.",
+      "headers": { "feature": "", "ai": "LexGo.AI", "lawyer": "Lawyer" },
+      "rows": [
+        { "feature": "Turnaround", "ai": "1–5 minutes", "lawyer": "Up to 60 minutes" },
+        { "feature": "Price", "ai": "From 60,000 UZS", "lawyer": "From 140,000 UZS" },
+        { "feature": "References to the law", "ai": "yes", "lawyer": "yes" },
+        { "feature": "Written legal opinion", "ai": "Optional", "lawyer": "yes" },
+        { "feature": "Court representation", "ai": "no", "lawyer": "yes" },
+        { "feature": "Available 24/7", "ai": "yes", "lawyer": "By schedule" }
+      ]
+    }
+  },
+  "stages": {
+    "metaTitle": "Case stages",
+    "kicker": "Case path",
+    "title": "The package is built according to the stage the case is at",
+    "lead": "Taking part in a pre-investigation check is not the same price as defending a review at the Supreme Court. There is a separate package for each stage."
+  },
+  "directions": {
+    "kicker": "Practice areas",
+    "title": "Small services combined into ready packages",
+    "lead": "Instead of listing separate services, you pick a single package — for example, \"full participation in the preliminary investigation\".",
+    "cards": [
+      { "title": "Criminal & administrative cases", "text": "From detention to review at the Supreme Court — a separate package for each stage: participation in the investigation, defence in court, appeal, complaints, urgent lawyer." },
+      { "title": "Civil & economic cases", "text": "Debt, inheritance, property, family and labor disputes, and commercial disputes with counterparties: pre-claim, claim, representation in court, enforcement." },
+      { "title": "Entrepreneurs & organizations", "text": "Outsourced legal service, legal risk audit, company registration and individual charter, compliance, HR documents, contract inventory, corporate governance." }
+    ]
+  },
+  "subscription": {
+    "metaTitle": "Personal-lawyer subscription",
+    "kicker": "Personal lawyer",
+    "title": "Subscription — a lawyer always by your side",
+    "lead": "Instead of searching for a lawyer when a problem arises, they are already yours. The subscription also covers family members.",
+    "term6": "6 months",
+    "term12": "12 months · −10%",
+    "upfront": "I'll pay in full at once — another −10%",
+    "perMonth": "UZS / month",
+    "totalFor": "For {term} months, {total} UZS total",
+    "youSave": " · you save {amount} UZS",
+    "mostChosen": "Most chosen",
+    "plans": {
+      "standard": {
+        "name": "Standard",
+        "for": "Everyday legal support for you and your spouse.",
+        "features": [
+          "Unlimited 30-minute consultations on new matters",
+          "A lawyer reviews contracts and key documents — up to 10 pages",
+          "150+ ready legal document templates",
+          "25% off additional services in the lawyer network",
+          "10% off LexGo products, including LexGo.AI",
+          "Your spouse is covered too"
+        ],
+        "cta": "Choose Standard"
+      },
+      "premium": {
+        "name": "Premium",
+        "for": "For those who run a business and also want to cover their family.",
+        "features": [
+          "Everything in the Standard plan",
+          "Legal check of the business: a 1-hour consultation once a year",
+          "One copyright registration each month",
+          "10% off company registration and trademark patenting",
+          "150+ template base for business and personal matters",
+          "Parents, spouse and dependent children"
+        ],
+        "cta": "Choose Premium"
+      },
+      "gift": {
+        "badge": "LexGo Gift",
+        "badgeSub": "Gift subscription · 3 / 6 / 12 months",
+        "name": "Gift it",
+        "for": "Gift a personal lawyer to someone close — with a QR code and an illustrated flyer.",
+        "price": "747,000",
+        "priceUnit": "from · 3 months",
+        "payNote": "You pay in full",
+        "features": [
+          "You get a QR code and an illustrated, explained flyer",
+          "The term starts once the gift is accepted",
+          "The recipient registers via the link",
+          "You track the gift status in your profile"
+        ],
+        "cta": "Gift it",
+        "quote": "«We don't gift a legal service — we gift legal peace of mind»"
+      }
+    },
+    "ratingInfo": "After each service you rate the lawyer — this shapes their rating and helps future clients make the right choice.",
+    "compare": {
+      "title": "Compare the plans",
+      "headers": { "feature": "", "standard": "Standard", "premium": "Premium" },
+      "rows": [
+        { "feature": "30-minute consultations", "standard": "Unlimited", "premium": "Unlimited" },
+        { "feature": "Document review", "standard": "Up to 10 pages", "premium": "Up to 10 pages" },
+        { "feature": "Template base", "standard": "150+", "premium": "150+" },
+        { "feature": "Business legal check", "standard": "no", "premium": "1×/year" },
+        { "feature": "Copyright registration", "standard": "no", "premium": "1×/month" },
+        { "feature": "Family coverage", "standard": "Spouse", "premium": "Parents, spouse, children" },
+        { "feature": "Network service discount", "standard": "25%", "premium": "25%" }
+      ]
+    },
+    "testimonialsTitle": "What subscribers say",
+    "testimonials": [
+      { "text": "When my landlord dispute started, my lawyer was already assigned. Solved in a week without stress.", "name": "Aziz R.", "role": "Standard subscriber" },
+      { "text": "For my business the yearly legal check paid for the whole subscription. Contracts are reviewed fast.", "name": "Malika T.", "role": "Premium subscriber" },
+      { "text": "I gifted my parents a subscription. They call the lawyer instead of worrying. Worth every som.", "name": "Jasur K.", "role": "Gift subscriber" }
+    ]
+  },
+  "business": {
+    "metaTitle": "For business",
+    "kicker": "For business",
+    "title": "Entrepreneurs & organizations",
+    "lead": "Outsourced legal service, legal risk audit, company registration and an individual charter, a compliance system, HR documents, contract inventory and corporate governance.",
+    "features": [
+      "Outsourced legal service — an external legal department",
+      "Legal risk audit and compliance system",
+      "Company registration and an individual charter",
+      "HR documents and contract inventory",
+      "Trademark and intellectual property protection",
+      "Corporate governance and shareholder matters"
+    ],
+    "cta": "Request an offer",
+    "industriesTitle": "Industries we know",
+    "industries": [
+      { "title": "IT & startups", "text": "Product terms, IP, contractor agreements, residency and tax regimes." },
+      { "title": "Retail & e-commerce", "text": "Public offers, returns, consumer protection, marketplace contracts." },
+      { "title": "Manufacturing", "text": "Supply chains, quality claims, labor safety, industrial leases." },
+      { "title": "Construction & real estate", "text": "Contracts, permits, land, shared-construction and acceptance disputes." },
+      { "title": "Logistics & trade", "text": "Carriage, customs, incoterms, cross-border settlements and penalties." },
+      { "title": "Services & HoReCa", "text": "Licensing, staffing, sanitary rules, franchising and brand protection." }
+    ],
+    "packagesTitle": "Business packages",
+    "packages": [
+      { "name": "Start", "for": "For a new company finding its feet.", "price": "2,900,000", "priceUnit": "UZS / month", "features": ["Company registration and individual charter", "Up to 5 contract templates per month", "Monthly 2-hour consultation", "HR document pack"] },
+      { "name": "Growth", "for": "For a growing team and rising deal flow.", "price": "6,400,000", "priceUnit": "UZS / month", "features": ["Everything in Start", "Unlimited contract review", "Legal risk audit once per quarter", "Trademark and IP support", "Dedicated legal manager"] },
+      { "name": "Enterprise", "for": "For an outsourced legal department.", "price": "custom", "priceUnit": "on request", "features": ["Everything in Growth", "On-site presence and SLA", "Compliance system setup", "Litigation and representation", "24/7 priority line"] }
+    ],
+    "processTitle": "How we start",
+    "process": [
+      { "title": "Discovery call", "text": "We map your risks, deals and current legal setup." },
+      { "title": "Proposal", "text": "A fixed-scope package with transparent pricing." },
+      { "title": "Onboarding", "text": "Document audit, templates and a dedicated manager." },
+      { "title": "Ongoing work", "text": "Contracts, disputes and compliance handled inside LexGo." }
+    ]
+  },
+  "forLawyers": {
+    "metaTitle": "For lawyers",
+    "kicker": "For lawyers",
+    "title": "New clients and a case-management system in one app",
+    "lead": "The app's features also help with cases that didn't come through us: the calendar, document archive, client base and deadline reminders stay yours.",
+    "features": [
+      "Case Marketplace — a stream of new cases that match you",
+      "Case Command Center — stage, deadline, next action, payment",
+      "AI Legal Assistant — case summaries, chronology, missing documents",
+      "Calendar: court hearing, investigative action, appeal deadline",
+      "Conflict Check — conflict-of-interest warnings",
+      "Secure Chat — text, voice, documents, video calls"
+    ],
+    "register": "Register as a lawyer",
+    "courses": "Courses",
+    "dash": {
+      "today": "Today",
+      "badge": "Dashboard",
+      "kpi": {
+        "urgent": "Urgent cases",
+        "hearings": "Today's hearings",
+        "deadlines": "Near deadlines",
+        "messages": "New messages",
+        "toReview": "Docs to review",
+        "income": "Income this month"
+      },
+      "caseId": "CASE #LX-10245",
+      "active": "Active",
+      "caseText": "The client is accused of misappropriating funds under a contract. Preliminary investigation stage.",
+      "tags": ["1 consultation", "Document analysis", "1 court hearing"],
+      "accept": "Accept",
+      "requestInfo": "Request info"
+    },
+    "toolsTitle": "Tools in one workspace",
+    "tools": [
+      { "title": "Case Marketplace", "text": "A live stream of new cases matched to your area and region." },
+      { "title": "Case Command Center", "text": "Stage, deadline, next action and payment for every case." },
+      { "title": "AI Legal Assistant", "text": "Summaries, chronology and a list of missing documents." },
+      { "title": "Smart Calendar", "text": "Hearings, investigative actions and appeal deadlines with reminders." },
+      { "title": "Conflict Check", "text": "Automatic conflict-of-interest warnings before you take a case." },
+      { "title": "Secure Chat", "text": "Text, voice, documents and video calls, all encrypted." }
+    ],
+    "stepsTitle": "How to join",
+    "steps": [
+      { "title": "Apply", "text": "Register with your bar licence and higher-education diploma." },
+      { "title": "Get verified", "text": "We confirm your status, experience and case history." },
+      { "title": "Build your profile", "text": "Publish wins, pricing criteria and practice areas." },
+      { "title": "Start receiving cases", "text": "Accept matched cases and run them inside LexGo." }
+    ],
+    "earningsTitle": "What it means for you",
+    "earnings": [
+      { "value": "0%", "label": "Fee on your own clients" },
+      { "value": "48h", "label": "Average payout" },
+      { "value": "3×", "label": "More qualified leads" },
+      { "value": "24/7", "label": "Case access" }
+    ]
+  },
+  "warranty": {
+    "metaTitle": "LexGo Warranty",
+    "kicker": "LexGo Warranty",
+    "title": "Working directly with a lawyer, you don't get this protection",
+    "lead": "When you get a service through LexGo, the company guarantees the quality. When a problem arises, you're not left alone.",
+    "cards": [
+      { "title": "If the lawyer doesn't respond", "text": "If no reply comes within the set time, the case is transferred to another lawyer." },
+      { "title": "If the SLA is breached", "text": "If the agreed terms and deadlines are breached, the matter is escalated." },
+      { "title": "If a case is abandoned", "text": "A replacement lawyer is assigned so the process isn't interrupted." },
+      { "title": "If the service isn't delivered", "text": "Manager-level escalation and support from LexGo." }
+    ],
+    "rules": [
+      "All payments only through the platform. If paid outside, LexGo takes on no warranty obligation.",
+      "Until payment, the lawyer's and client's contact details are hidden from each other.",
+      "Sharing external contacts in platform chats is detected by AI and blocked.",
+      "Every 5 days the client is notified in writing of what was done and the next steps.",
+      "Every lawyer and client receives a personal ID number upon registration.",
+      "A 30-minute online discussion per case with 1 to 5 independent lawyers."
+    ],
+    "processTitle": "How the guarantee works",
+    "process": [
+      { "title": "You pay through the platform", "text": "Payment is escrowed and tied to the warranty — that is what makes it enforceable." },
+      { "title": "The lawyer is monitored", "text": "Deadlines and SLA are tracked; you get written updates every 5 days." },
+      { "title": "A problem is escalated", "text": "No response or an abandoned case is raised to a manager automatically." },
+      { "title": "You are made whole", "text": "A replacement lawyer is assigned or the matter is resolved by LexGo." }
+    ]
+  },
+  "appPage": {
+    "metaTitle": "Mobile app",
+    "kicker": "Mobile app",
+    "title": "Two roles, one app",
+    "lead": "You enter the app as a lawyer or as someone who needs legal protection — the interface is built accordingly.",
+    "clientRole": "Client",
+    "client": ["Search and order services", "My cases and documents", "Payments, subscription, discounts", "Correspondence with the lawyer"],
+    "lawyerRole": "Lawyer",
+    "lawyer": ["Dashboard and Case Marketplace", "My Cases and document archive", "Calendar and deadline reminders", "Financials and payments"],
+    "featuresTitle": "Everything in your pocket",
+    "features": [
+      { "title": "Instant AI answers", "text": "Ask LexGo.AI anytime and get a grounded answer in seconds." },
+      { "title": "Find & book lawyers", "text": "Filter by area, region and rating, then order in a few taps." },
+      { "title": "Documents on the go", "text": "Fill templates, sign and download DOCX or PDF from your phone." },
+      { "title": "Case tracking", "text": "Follow stage, deadlines, court dates and payments in one place." },
+      { "title": "Secure messaging", "text": "Chat with your lawyer, share files and hop on a video call." },
+      { "title": "Payments & subscription", "text": "Pay safely, manage your plan and track gift subscriptions." }
+    ],
+    "download": "Download",
+    "appStore": "App Store",
+    "googlePlay": "Google Play",
+    "courses": {
+      "kicker": "Courses",
+      "title": "Course to train professional lawyers",
+      "text": "Every lawyer with a higher education registers, chooses the number of courses and pays, then enrolls in the next online or offline group. The number of graduates is shown on the module dashboard — we select legal staff for organizations.",
+      "cta": "Enroll in the course"
+    }
+  },
+  "faq": {
+    "metaTitle": "FAQ",
+    "kicker": "Q&A",
+    "title": "Frequently asked questions",
+    "items": [
+      { "q": "Does LexGo.AI replace a lawyer?", "a": "No. The AI shortens the work, builds a chronology, compares documents and shows risks. The final legal decision always stays with the lawyer — that's why a lawyer option sits next to every AI service." },
+      { "q": "Why must payment only go through the platform?", "a": "The warranty is tied to payment. If payment goes through the platform, we replace the lawyer and escalate when they don't respond or abandon the case. If paid outside, LexGo takes on no warranty obligation." },
+      { "q": "When do I see the lawyer's contact?", "a": "The communication channel opens once the lawyer confirms your order and you pay 10% of the service fee. Before that, neither side sees the other's contacts." },
+      { "q": "How do I extend the subscription to my family?", "a": "Once subscribed, you add the details of the family members covered by your plan to your profile. On Standard — your spouse; on Premium — your parents, spouse and dependent children." },
+      { "q": "Does the lawyer set the price themselves?", "a": "The price is formed by open criteria: region, experience and rating. A regional TOP-3 lawyer can raise the price up to 30%, a lawyer with 10+ years in a narrow area up to 20% — the reason is shown to you. A lawyer may also lower the price." },
+      { "q": "What if I don't know which service to choose?", "a": "Describe your problem in plain words. LexGo.AI analyzes the text, identifies the direction and case stage, selects the right service types and packages, and filters lawyers in that area." },
+      { "q": "Is my data kept confidential?", "a": "Yes. Correspondence and documents are encrypted, and until payment the lawyer and client cannot see each other's contact details. Attempts to share external contacts in chat are detected and blocked." },
+      { "q": "Which regions does LexGo cover?", "a": "Lawyers are available across 14 regions of Uzbekistan. If there is no free lawyer in your region for a given area, the call center finds a suitable match within 30 minutes." },
+      { "q": "Can I pay in installments?", "a": "Many packages start with a 10% upfront payment to unlock the communication channel; the rest is scheduled by stage. Subscriptions can be paid monthly, or in full for an extra discount." },
+      { "q": "How are documents delivered?", "a": "Prepared documents are available as DOCX and PDF right after payment. You can add a lawyer review, and the written result reaches your app within 60 minutes." },
+      { "q": "Can businesses get an outsourced legal department?", "a": "Yes. Business packages cover contracts, risk audits, compliance, HR documents and representation — from a starter plan up to a full outsourced department with an SLA." },
+      { "q": "How do I become a lawyer on LexGo?", "a": "Register with your bar licence and diploma, pass verification, build your profile with wins and pricing, and start receiving matched cases. You pay no platform fee on your own clients." }
+    ]
+  },
+  "contactPage": {
+    "metaTitle": "Contact",
+    "kicker": "Contact",
+    "title": "Get in touch",
+    "lead": "Leave a request and the call center will get back to you, or select a service through the app.",
+    "phone": "Phone",
+    "phoneValue": "78 777 00 00",
+    "phoneNote": "Call center · calls are free",
+    "email": "Email",
+    "emailValue": "support@lexgo.uz",
+    "hours": "Working hours",
+    "hoursValue": "24/7 · every day",
+    "form": {
+      "name": "Your name",
+      "namePlaceholder": "Full name",
+      "contact": "Phone or email",
+      "contactPlaceholder": "+998 __ ___ __ __",
+      "message": "Your question",
+      "messagePlaceholder": "Briefly describe your matter…",
+      "submit": "Send the request",
+      "success": "Thank you! The call center will contact you shortly.",
+      "required": "Please fill in the required fields."
+    },
+    "officesTitle": "Offices",
+    "offices": [
+      { "city": "Tashkent", "address": "Amir Temur Ave. 108, Business Center", "phone": "+998 78 777 00 00" },
+      { "city": "Samarkand", "address": "Registan St. 15, 2nd floor", "phone": "+998 66 233 00 00" },
+      { "city": "Bukhara", "address": "Mustaqillik St. 7", "phone": "+998 65 224 00 00" }
+    ],
+    "departmentsTitle": "Departments",
+    "departments": [
+      { "title": "Clients", "text": "Orders, subscriptions and payments.", "contact": "help@lexgo.uz" },
+      { "title": "Lawyers", "text": "Onboarding, verification and cases.", "contact": "lawyers@lexgo.uz" },
+      { "title": "Business", "text": "Corporate packages and partnerships.", "contact": "business@lexgo.uz" }
+    ]
+  },
+  "chat": {
+    "title": "LexGo.AI",
+    "statusOnline": "Online · {left} free requests",
+    "greeting": "Hello! I'm LexGo.AI — trained on Uzbek legislation. Describe your problem in two or three sentences and I'll tell you the direction, the case stage and the right service.",
+    "greetingNote": "First 5 requests free · the final legal decision stays with the lawyer",
+    "inputPlaceholder": "Type your question…",
+    "quick": ["Called for questioning", "Contract breached, goods didn't arrive", "My wages aren't being paid", "Inheritance not divided", "Want to open an LLC", "How much is the subscription?"],
+    "seeLawyer": "See a matching lawyer",
+    "paywall": {
+      "title": "Free requests are over.",
+      "text": " For unlimited questions, document analysis and drafting, get a LexGo.AI subscription.",
+      "cta": "Subscription prices",
+      "inputDisabled": "A subscription is needed to continue"
+    },
+    "openLabel": "Chat with LexGo.AI",
+    "closeLabel": "Close",
+    "online": "Online",
+    "openFull": "Open full chat",
+    "responses": {
+      "greeting": { "text": "Hello! What legal matter can I help with? Just write your problem in two or three sentences.", "meta": "" },
+      "thanks": { "text": "You're welcome. If you have another question, write it — or I can help you pick a matching lawyer.", "meta": "" },
+      "subscription": { "text": "There are two plans.\n\nStandard — unlimited 30-minute consultations, document review up to 10 pages, 150+ templates, your spouse is covered too.\n\nPremium — plus a business-audit consultation, one copyright each month, coverage for parents and children.\n\nA 12-month plan is 10% cheaper, and paying in full is another 10% off.", "meta": "Lawyers and jurists get 50% off the LexGo.AI subscription" },
+      "price": { "text": "The price depends on the service type:\n\n• Express consultation — from 90,000 UZS\n• Document preparation — from 60,000 UZS\n• Document review — from 150,000 UZS\n• Lawyer packages — from 1,250,000 UZS\n\nWrite your matter so I can give an exact price.", "meta": "The price changes with region, experience and rating" },
+      "criminal": { "text": "This is a criminal-procedure matter, so every day counts.\n\n1. Don't go to questioning without a lawyer — that's your right.\n2. Every explanation you give can later be used as evidence.\n3. If a restraint measure is chosen, it must be appealed within a short deadline — don't miss it.\n\nThe \"full participation in the preliminary investigation\" package suits you.", "meta": "CPC arts. 48 and 53 · 128 similar cases" },
+      "administrative": { "text": "This falls under administrative offences.\n\n1. Request an official copy of the protocol and any video recording.\n2. The objection deadline is short — count from today.\n3. If a damage claim is filed alongside the fine, they are considered separately.\n\nFirst have the document checked: often a formal defect in the protocol is grounds to void the case.", "meta": "Objection deadlines are calculated by the system" },
+      "labor": { "text": "This is a labor dispute — usually resolved before court.\n\n1. Gather the employment contract, the order and payment documents.\n2. Send a written pre-claim to the employer and set a response deadline.\n3. If there's no reply, a claim for reinstatement or unpaid wages is filed.\n\nIn labor disputes the claim deadline is short, so don't delay.", "meta": "Labor Code · calculation of unpaid wages and compensation" },
+      "civil": { "text": "This is a civil-law dispute.\n\n1. Gather documents proving your right: contract, receipt, certificate.\n2. Send a written pre-trial settlement proposal — it works in your favor later.\n3. If there's no settlement, a claim is prepared; the state fee is based on the claim amount.\n\nThe \"claim + representation in court\" package suits you.", "meta": "Claim deadline and state fee calculated automatically" },
+      "economic": { "text": "This is a commercial (economic) dispute.\n\n1. Keep the contract clauses and correspondence — an email is evidence too.\n2. Even if no penalty is stated, you keep the right to claim for breach of obligation.\n3. Order: pre-claim letter → calculation annex → claim to the economic court.\n\nIf we check the contract first, you'll see which clauses work against you.", "meta": "CC arts. 324 and 333 · 41 similar cases" },
+      "corporate": { "text": "This is a corporate document matter — not a dispute, so it's resolved quickly.\n\n1. Choose the activity type and tax regime in advance; changing later is costly.\n2. Better to have the charter written individually, not from a template: shares, exit rules and management are decided there.\n3. The trademark is registered separately from the company.\n\nThe \"company registration + individual charter\" package suits you.", "meta": "Registration and patenting deadlines are shown separately" },
+      "generic": { "text": "I understand the matter, but to pin down the exact direction I need one or two details.\n\n1. What happened and when?\n2. Who is the other side — an individual, a company or a government body?\n3. What documents do you have?\n\nWrite these and I'll name both the service type and a matching lawyer.", "meta": "Express consultation to clarify — from 90,000 UZS" }
+    },
+    "analysisSuffix": "Identified direction: {dir} · {stage}.\nEstimated price: {price}."
+  },
+  "chatPage": {
+    "metaTitle": "LexGo.AI chat",
+    "title": "LexGo.AI",
+    "subtitle": "Trained on Uzbek law",
+    "newChat": "New chat",
+    "historyTitle": "Chats",
+    "untitled": "New chat",
+    "noChats": "No chats yet",
+    "menu": "Menu",
+    "emptyTitle": "How can I help?",
+    "emptyText": "Ask about your legal situation, a document or a case — LexGo.AI answers with references to the law.",
+    "suggestions": [
+      "I was called for questioning — what are my rights?",
+      "How do I draft a lease agreement?",
+      "My wages haven't been paid for 3 months.",
+      "I want to open an LLC and protect my trademark."
+    ],
+    "inputPlaceholder": "Message LexGo.AI…",
+    "send": "Send",
+    "you": "You",
+    "assistant": "LexGo.AI",
+    "offline": "Couldn't reach the server — this is an offline answer.",
+    "disclaimer": "LexGo.AI can make mistakes. The final legal decision stays with a lawyer."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "text": "The page you're looking for doesn't exist or has moved.",
+    "home": "Go home"
+  }
+}

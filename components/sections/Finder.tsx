@@ -1,0 +1,479 @@
+"use client";
+
+import { useRef, useState } from "react";
+import { useTranslations } from "next-intl";
+import {
+  LAWYERS,
+  initials,
+  AREA_KEYS,
+  REGION_KEYS,
+  type Lawyer,
+} from "@/lib/lawyers";
+import { fmtNumber } from "@/lib/lexai";
+import { useLexAi } from "@/components/chat/useLexAi";
+import Select, { type Option } from "@/components/Select";
+import {
+  IconUser,
+  IconFileText,
+  IconSparkle,
+  IconSearch,
+  IconArrowRight,
+} from "@/components/icons";
+
+type Tab = "lawyer" | "doc" | "ai";
+type Res =
+  | { kind: "lawyers"; area: string; region: string }
+  | { kind: "doc"; doc: string; who: string; ai: boolean }
+  | { kind: "ai"; text: string };
+
+const STAGES = [
+  "unknown",
+  "preInvestigation",
+  "investigation",
+  "firstInstance",
+  "appeal",
+  "cassation",
+];
+const DOC_TYPES = ["contract", "application", "complaint", "claim", "poa", "corporate"];
+const DOC_BASE: Record<string, number> = {
+  contract: 110000,
+  application: 70000,
+  complaint: 95000,
+  claim: 180000,
+  poa: 60000,
+  corporate: 320000,
+};
+
+const reduced = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+export default function Finder() {
+  const tf = useTranslations("finder");
+  const te = useTranslations("enums");
+  const { classifyForFinder } = useLexAi();
+
+  const [tab, setTab] = useState<Tab>("lawyer");
+  const [area, setArea] = useState("criminal");
+  const [region, setRegion] = useState("");
+  const [stage, setStage] = useState("unknown");
+  const [doc, setDoc] = useState("contract");
+  const [who, setWho] = useState("individual");
+  const [by, setBy] = useState("ai");
+  const [ask, setAsk] = useState("");
+  const [res, setRes] = useState<Res | null>(null);
+  const [loading, setLoading] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  const cur = te("currency");
+
+  const areaOpts: Option[] = AREA_KEYS.map((a) => ({
+    value: a,
+    label: te(`areas.${a}`),
+  }));
+  const regionOpts: Option[] = [
+    { value: "", label: te("regions.all") },
+    ...REGION_KEYS.map((r) => ({ value: r, label: te(`regions.${r}`) })),
+  ];
+  const stageOpts: Option[] = STAGES.map((s) => ({
+    value: s,
+    label: te(`stages.${s}.name`),
+  }));
+  const docOpts: Option[] = DOC_TYPES.map((d) => ({
+    value: d,
+    label: tf(`docTypes.${d}`),
+  }));
+  const whoOpts: Option[] = [
+    { value: "individual", label: tf("forWhom.individual") },
+    { value: "soleTrader", label: tf("forWhom.soleTrader") },
+    { value: "legalEntity", label: tf("forWhom.legalEntity") },
+  ];
+  const byOpts: Option[] = [
+    { value: "ai", label: tf("preparedBy.ai") },
+    { value: "lawyer", label: tf("preparedBy.lawyer") },
+  ];
+
+  function show(next: Res) {
+    setRes(next);
+    setLoading(true);
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => setLoading(false), reduced() ? 0 : 620);
+  }
+
+  function lawyerRow(l: Lawyer) {
+    return (
+      <button className="resrow" type="button" key={l.name}>
+        <div className="resrow__i">{initials(l.name)}</div>
+        <div>
+          <div className="resrow__n">
+            {l.name}
+            {l.super ? (
+              <span className="pill" style={{ fontSize: ".66rem" }}>
+                Super
+              </span>
+            ) : null}
+          </div>
+          <div className="resrow__m">
+            {te(`areas.${l.areaKey}`)} · {te(`regions.${l.regionKey}`)} · {l.exp}
+          </div>
+        </div>
+        <div className="resrow__r">
+          <b>{l.price}</b>
+          <span>
+            {tf("result.fromSom")} {cur} · {tf("result.ratingSuffix")}{" "}
+            {l.rate.toFixed(1)}
+          </span>
+        </div>
+      </button>
+    );
+  }
+
+  function renderBody() {
+    if (loading) {
+      return (
+        <div className="skel">
+          <div className="skel__r" />
+          <div className="skel__r" />
+          <div className="skel__r" />
+        </div>
+      );
+    }
+    if (!res) return null;
+
+    if (res.kind === "lawyers") {
+      const list = LAWYERS.filter(
+        (l) => l.areaKey === res.area && (!res.region || l.regionKey === res.region),
+      ).sort((a, b) => b.rate - a.rate);
+      if (!list.length) {
+        return (
+          <div className="aibox">
+            <div className="aibox__h">
+              <span className="dot" />
+              {tf("result.noLawyerTitle")}
+            </div>
+            <p style={{ margin: "0 0 14px", fontSize: ".9rem", color: "var(--gray)" }}>
+              {tf("result.noLawyerText")}
+            </p>
+          </div>
+        );
+      }
+      return (
+        <>
+          <div className="reslist">{list.map(lawyerRow)}</div>
+          <p className="disc">{tf("result.lawyerDisc")}</p>
+        </>
+      );
+    }
+
+    if (res.kind === "doc") {
+      const base = DOC_BASE[res.doc] ?? 100000;
+      const price = res.ai ? base : Math.round((base * 2.4) / 1000) * 1000;
+      return (
+        <div className="aibox">
+          <div className="aibox__h">
+            <span className="dot" />
+            {res.ai ? tf("result.byAi") : tf("result.byLawyer")}
+          </div>
+          <div className="kv">
+            <div className="kv__i">
+              <label>{tf("result.kvDocument")}</label>
+              <b>{tf(`docTypes.${res.doc}`)}</b>
+            </div>
+            <div className="kv__i">
+              <label>{tf("result.kvForWhom")}</label>
+              <b>{tf(`forWhom.${res.who}`)}</b>
+            </div>
+            <div className="kv__i">
+              <label>{tf("result.kvPrice")}</label>
+              <b style={{ color: "var(--b600)" }}>
+                {fmtNumber(price)} {cur}
+              </b>
+            </div>
+          </div>
+          <ul>
+            {(tf.raw("result.templateSteps") as string[]).map((s, i) => (
+              <li key={i}>{s}</li>
+            ))}
+          </ul>
+          <button className="btn btn--pri btn--sm" type="button">
+            {tf("result.startFilling")}
+          </button>
+        </div>
+      );
+    }
+
+    const r = classifyForFinder(res.text);
+    const top = LAWYERS.filter((l) => (r.area ? l.areaKey === r.area : true))
+      .sort((a, b) => b.rate - a.rate)
+      .slice(0, 2);
+    return (
+      <div className="aibox">
+        <div className="aibox__h">
+          <span className="dot" />
+          {tf("result.analysisDone")}
+        </div>
+        <div className="kv">
+          <div className="kv__i">
+            <label>{tf("result.kvDirection")}</label>
+            <b>{r.dir}</b>
+          </div>
+          <div className="kv__i">
+            <label>{tf("result.kvStage")}</label>
+            <b>{r.stageName}</b>
+          </div>
+          <div className="kv__i">
+            <label>{tf("result.kvEstPrice")}</label>
+            <b style={{ color: "var(--b600)" }}>{r.price}</b>
+          </div>
+        </div>
+        <ul>
+          {r.services.map((s, i) => (
+            <li key={i}>{s}</li>
+          ))}
+        </ul>
+        <div className="reslist">{top.map(lawyerRow)}</div>
+        <p className="disc">{tf("result.aiDisc")}</p>
+      </div>
+    );
+  }
+
+  const resultTitle = () => {
+    if (!res) return "";
+    if (res.kind === "lawyers") {
+      const count = LAWYERS.filter(
+        (l) => l.areaKey === res.area && (!res.region || l.regionKey === res.region),
+      ).length;
+      return tf("result.lawyersFound", { count });
+    }
+    if (res.kind === "doc")
+      return tf("result.templateReadyTitle", { doc: tf(`docTypes.${res.doc}`) });
+    return tf("result.aiAnalysisTitle");
+  };
+
+  const resultPill = () => {
+    if (!res) return "";
+    if (res.kind === "lawyers") return te(`areas.${res.area}`);
+    if (res.kind === "doc") return tf("result.templateTime");
+    return tf("result.ready");
+  };
+
+  return (
+    <div className="finder">
+      <div className="finder__c">
+        <div className="segs" role="tablist">
+          <button
+            className="seg"
+            role="tab"
+            aria-selected={tab === "lawyer"}
+            onClick={() => {
+              setTab("lawyer");
+              setRes(null);
+            }}
+          >
+            <IconUser />
+            {tf("tabs.lawyer")}
+          </button>
+          <button
+            className="seg"
+            role="tab"
+            aria-selected={tab === "doc"}
+            onClick={() => {
+              setTab("doc");
+              setRes(null);
+            }}
+          >
+            <IconFileText />
+            {tf("tabs.doc")}
+          </button>
+          <button
+            className="seg"
+            role="tab"
+            aria-selected={tab === "ai"}
+            onClick={() => {
+              setTab("ai");
+              setRes(null);
+            }}
+          >
+            <IconSparkle />
+            {tf("tabs.ai")}
+          </button>
+        </div>
+
+        {tab === "lawyer" ? (
+          <div className="fform on">
+            <div className="frow">
+              <div className="fld">
+                <label>{tf("labels.area")}</label>
+                <Select
+                  value={area}
+                  onChange={setArea}
+                  options={areaOpts}
+                  ariaLabel={tf("labels.area")}
+                />
+              </div>
+              <div className="fld">
+                <label>{tf("labels.region")}</label>
+                <Select
+                  value={region}
+                  onChange={setRegion}
+                  options={regionOpts}
+                  ariaLabel={tf("labels.region")}
+                />
+              </div>
+              <div className="fld">
+                <label>{tf("labels.stage")}</label>
+                <Select
+                  value={stage}
+                  onChange={setStage}
+                  options={stageOpts}
+                  ariaLabel={tf("labels.stage")}
+                />
+              </div>
+              <button
+                className="fgo"
+                type="button"
+                onClick={() => show({ kind: "lawyers", area, region })}
+              >
+                <IconSearch />
+                {tf("buttons.search")}
+              </button>
+            </div>
+            <div className="fhint">
+              <b>{tf("hints.popular")}</b>
+              {(tf.raw("quickLawyer") as { label: string; area: string }[]).map(
+                (q, i) => (
+                  <button
+                    key={i}
+                    className="qc"
+                    type="button"
+                    onClick={() => {
+                      setArea(q.area);
+                      show({ kind: "lawyers", area: q.area, region });
+                    }}
+                  >
+                    {q.label}
+                  </button>
+                ),
+              )}
+            </div>
+          </div>
+        ) : null}
+
+        {tab === "doc" ? (
+          <div className="fform on">
+            <div className="frow">
+              <div className="fld">
+                <label>{tf("labels.docType")}</label>
+                <Select
+                  value={doc}
+                  onChange={setDoc}
+                  options={docOpts}
+                  ariaLabel={tf("labels.docType")}
+                />
+              </div>
+              <div className="fld">
+                <label>{tf("labels.forWhom")}</label>
+                <Select
+                  value={who}
+                  onChange={setWho}
+                  options={whoOpts}
+                  ariaLabel={tf("labels.forWhom")}
+                />
+              </div>
+              <div className="fld">
+                <label>{tf("labels.preparedBy")}</label>
+                <Select
+                  value={by}
+                  onChange={setBy}
+                  options={byOpts}
+                  ariaLabel={tf("labels.preparedBy")}
+                />
+              </div>
+              <button
+                className="fgo"
+                type="button"
+                onClick={() => show({ kind: "doc", doc, who, ai: by === "ai" })}
+              >
+                <IconArrowRight />
+                {tf("buttons.openTemplate")}
+              </button>
+            </div>
+            <div className="fhint">
+              <b>{tf("hints.templates")}</b>
+              {(tf.raw("quickDoc") as { label: string; doc: string }[]).map(
+                (q, i) => (
+                  <button
+                    key={i}
+                    className="qc"
+                    type="button"
+                    onClick={() => {
+                      setDoc(q.doc);
+                      show({ kind: "doc", doc: q.doc, who, ai: by === "ai" });
+                    }}
+                  >
+                    {q.label}
+                  </button>
+                ),
+              )}
+            </div>
+          </div>
+        ) : null}
+
+        {tab === "ai" ? (
+          <div className="fform on">
+            <div className="frow" style={{ gridTemplateColumns: "1fr auto" }}>
+              <div className="fld fld--txt">
+                <label>{tf("labels.yourProblem")}</label>
+                <textarea
+                  rows={2}
+                  value={ask}
+                  onChange={(e) => setAsk(e.target.value)}
+                  placeholder={tf("askPlaceholder")}
+                />
+              </div>
+              <button
+                className="fgo"
+                type="button"
+                onClick={() => {
+                  if (ask.trim().length < 8) return;
+                  show({ kind: "ai", text: ask });
+                }}
+              >
+                <IconSparkle />
+                {tf("buttons.analyze")}
+              </button>
+            </div>
+            <div className="fhint">
+              <b>{tf("hints.examples")}</b>
+              {(tf.raw("quickAsk") as { label: string; text: string }[]).map(
+                (q, i) => (
+                  <button
+                    key={i}
+                    className="qc"
+                    type="button"
+                    onClick={() => {
+                      setAsk(q.text);
+                      show({ kind: "ai", text: q.text });
+                    }}
+                  >
+                    {q.label}
+                  </button>
+                ),
+              )}
+            </div>
+          </div>
+        ) : null}
+
+        {res ? (
+          <div className="sheetres on" aria-live="polite">
+            <div className="sheetres__t">
+              <b>{resultTitle()}</b>
+              <span className="pill pill--ok">{resultPill()}</span>
+            </div>
+            <div>{renderBody()}</div>
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}

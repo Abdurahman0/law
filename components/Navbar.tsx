@@ -1,0 +1,128 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { IconLogo } from "./icons";
+
+const MAIN = [
+  { href: "/chat", key: "chat" },
+  { href: "/ai", key: "ai" },
+  { href: "/lawyers", key: "lawyers" },
+  { href: "/services", key: "services" },
+  { href: "/subscription", key: "subscription" },
+  { href: "/for-lawyers", key: "forLawyers" },
+] as const;
+
+const SHEET = [
+  ...MAIN,
+  { href: "/business", key: "business" },
+  { href: "/warranty", key: "warranty" },
+  { href: "/app", key: "app" },
+  { href: "/faq", key: "faq" },
+  { href: "/contact", key: "contact" },
+] as const;
+
+// Routes with a dark full-bleed hero: the bar stays transparent until scroll.
+const OVER_HERO = new Set<string>(["/"]);
+
+export default function Navbar() {
+  const t = useTranslations("nav");
+  const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
+  const [sheet, setSheet] = useState(false);
+
+  useEffect(() => {
+    const on = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", on, { passive: true });
+    on();
+    return () => window.removeEventListener("scroll", on);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = sheet ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [sheet]);
+
+  useEffect(() => {
+    setSheet(false);
+  }, [pathname]);
+
+  const solid = scrolled || !OVER_HERO.has(pathname);
+
+  return (
+    <>
+      <header className={`bar${solid ? " on" : ""}`}>
+        <div className="wrap">
+          <div className="bar__in">
+            <Link href="/" className="logo">
+              <span className="logo__m">
+                <IconLogo />
+              </span>
+              LexGo
+            </Link>
+            <nav className="nav">
+              {MAIN.map((l) => (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  aria-current={pathname === l.href ? "page" : undefined}
+                >
+                  {t(l.key)}
+                </Link>
+              ))}
+            </nav>
+            <div className="bar__act">
+              <LanguageSwitcher />
+              <Link href="/contact" className="btn btn--glass btn--sm">
+                {t("login")}
+              </Link>
+              <Link href="/services" className="btn btn--pri btn--sm">
+                {t("start")}
+              </Link>
+              <button
+                className="burg"
+                aria-expanded={sheet}
+                aria-controls="sheet"
+                aria-label={t("menu")}
+                onClick={() => setSheet((v) => !v)}
+              >
+                <i />
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div
+        className={`sheet${sheet ? " on" : ""}`}
+        id="sheet"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) setSheet(false);
+        }}
+      >
+        <div className="sheet__c">
+          {SHEET.map((l) => (
+            <Link key={l.href} href={l.href} onClick={() => setSheet(false)}>
+              {t(l.key)}
+            </Link>
+          ))}
+          <div className="sheet__b">
+            <Link href="/contact" className="btn btn--line btn--full">
+              {t("login")}
+            </Link>
+            <Link href="/services" className="btn btn--grad btn--full">
+              {t("register")}
+            </Link>
+            <div style={{ marginTop: 6 }}>
+              <LanguageSwitcher />
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

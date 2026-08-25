@@ -1,0 +1,82 @@
+import type { Metadata, Viewport } from "next";
+import type { ReactNode } from "react";
+import { Inter, Onest } from "next/font/google";
+import { NextIntlClientProvider, hasLocale } from "next-intl";
+import {
+  getMessages,
+  getTranslations,
+  setRequestLocale,
+} from "next-intl/server";
+import { notFound } from "next/navigation";
+import { routing } from "@/i18n/routing";
+import "../globals.css";
+
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import MobileTabBar from "@/components/MobileTabBar";
+import AIChatDock from "@/components/AIChatDock";
+import ScrollProgress from "@/components/ScrollProgress";
+import RevealOnScroll from "@/components/RevealOnScroll";
+
+const inter = Inter({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-inter",
+  display: "swap",
+});
+const onest = Onest({
+  subsets: ["latin"],
+  variable: "--font-onest",
+  display: "swap",
+});
+
+type Props = {
+  children: ReactNode;
+  params: Promise<{ locale: string }>;
+};
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "meta" });
+  return {
+    metadataBase: new URL("https://lexgo.uz"),
+    title: { default: t("title"), template: t("titleTemplate") },
+    description: t("description"),
+  };
+}
+
+export const viewport: Viewport = {
+  themeColor: "#0B1F45",
+  width: "device-width",
+  initialScale: 1,
+};
+
+export default async function LocaleLayout({ children, params }: Props) {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) notFound();
+  setRequestLocale(locale);
+  const messages = await getMessages();
+
+  return (
+    <html lang={locale} className={`${inter.variable} ${onest.variable}`}>
+      <body>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <ScrollProgress />
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+          <MobileTabBar />
+          <AIChatDock />
+          <RevealOnScroll />
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  );
+}
