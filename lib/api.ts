@@ -1,6 +1,8 @@
 // Client for the LawProject AI backend (see FRONTEND_API.md).
+// Same-origin proxy path (see next.config.ts rewrites) to avoid browser CORS.
+// Override with NEXT_PUBLIC_API_BASE_URL to hit a backend directly.
 export const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://192.168.1.17:8000";
+  process.env.NEXT_PUBLIC_API_BASE_URL || "/api/backend";
 
 export type Source = {
   title?: string;
