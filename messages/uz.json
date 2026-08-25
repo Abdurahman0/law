@@ -208,6 +208,7 @@
     ],
     "askPlaceholder": "Masalan: 3 oydan beri ish haqim to'lanmayapti, ustiga ustak ishdan ham bo'shatishdi…",
     "askTooShort": "Bir-ikki gap yozing — nima bo'lgani va qachon bo'lgani muhim.",
+    "docSeed": "Menga {doc} tayyorlab bering ({who}). Kerakli ma'lumotlarni so'rang, so'ng hujjatni yarating.",
     "result": {
       "title": "Natija",
       "ready": "Tayyor",

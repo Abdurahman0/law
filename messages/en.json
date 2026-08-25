@@ -208,6 +208,7 @@
     ],
     "askPlaceholder": "For example: I haven't been paid for 3 months, and on top of that I was dismissed…",
     "askTooShort": "Write a sentence or two — what happened and when matters.",
+    "docSeed": "Please prepare a {doc} for me ({who}). Ask me for any details you need, then generate the document.",
     "result": {
       "title": "Result",
       "ready": "Ready",

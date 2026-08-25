@@ -35,7 +35,6 @@ export default function ChatPage() {
   const t = useTranslations("chatPage");
   const { reply } = useLexAi();
 
-  const [clientId, setClientId] = useState("");
   const [chats, setChats] = useState<ApiChat[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Msg[]>([]);
@@ -45,15 +44,22 @@ export default function ChatPage() {
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
+  const seeded = useRef(false);
   const suggestions = t.raw("suggestions") as string[];
 
   useEffect(() => {
-    const id = getClientId();
-    setClientId(id);
-    if (!id) return;
-    listChats(id)
-      .then(setChats)
-      .catch(() => setChats([]));
+    const cid = getClientId();
+    if (cid) listChats(cid).then(setChats).catch(() => setChats([]));
+    // Auto-send a message handed off from the finder via /chat?q=...
+    if (!seeded.current) {
+      const q = new URLSearchParams(window.location.search).get("q");
+      if (q && q.trim()) {
+        seeded.current = true;
+        window.history.replaceState(null, "", window.location.pathname);
+        send(q.trim());
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -73,7 +79,7 @@ export default function ChatPage() {
     setSideOpen(false);
     setMessages([]);
     try {
-      const msgs = await getChatMessages(clientId, id);
+      const msgs = await getChatMessages(getClientId(), id);
       setMessages(
         msgs.map((m) => ({
           role: m.role,
@@ -102,9 +108,10 @@ export default function ChatPage() {
     setMessages((m) => [...m, { role: "user", content }]);
     setSending(true);
     try {
+      const cid = getClientId();
       let id = activeId;
       if (!id) {
-        const chat = await createChat(clientId, content.slice(0, 48));
+        const chat = await createChat(cid, content.slice(0, 48));
         id = chat.id;
         setActiveId(id);
         setChats((cs) => [
@@ -112,7 +119,7 @@ export default function ChatPage() {
           ...cs,
         ]);
       }
-      const { assistant, contracts } = await postMessage(clientId, id, content);
+      const { assistant, contracts } = await postMessage(cid, id, content);
       setMessages((m) => [
         ...m,
         {
