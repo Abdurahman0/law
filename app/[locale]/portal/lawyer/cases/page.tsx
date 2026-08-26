@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { LAWYER_CASES, type CaseStatus } from "@/lib/portalData";
 import StatusPill from "@/components/portal/StatusPill";
+import FDate from "@/components/FDate";
 
 const FILTERS: (CaseStatus | "all")[] = [
   "all",
@@ -67,7 +68,7 @@ export default function LawyerCases() {
                 </td>
                 <td>{c.client}</td>
                 <td>{te(`stages.${c.stageKey}.name`)}</td>
-                <td>{c.deadline}</td>
+                <td><FDate v={c.deadline} /></td>
                 <td>{c.nextAction}</td>
                 <td>
                   <StatusPill kind="status" value={c.status} />

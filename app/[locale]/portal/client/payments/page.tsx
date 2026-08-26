@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { PAYMENTS } from "@/lib/portalData";
 import StatusPill from "@/components/portal/StatusPill";
+import FDate from "@/components/FDate";
 
 export default function ClientPayments() {
   const t = useTranslations("portal.client.payments");
@@ -35,7 +36,7 @@ export default function ClientPayments() {
                   <b>#{p.id}</b>
                 </td>
                 <td>{p.what}</td>
-                <td>{p.date}</td>
+                <td><FDate v={p.date} /></td>
                 <td>
                   {p.amount} {te("currency")}
                 </td>

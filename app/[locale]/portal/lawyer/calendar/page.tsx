@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { CALENDAR } from "@/lib/portalData";
 import { IconCalendar, IconClock, IconUsers, IconAlert } from "@/components/icons";
+import FDate from "@/components/FDate";
 
 const ICON = {
   hearing: IconCalendar,
@@ -34,7 +35,9 @@ export default function LawyerCalendar() {
                 </span>
               </div>
               <div style={{ textAlign: "right", flex: "none" }}>
-                <b style={{ display: "block", fontSize: ".9rem" }}>{e.date}</b>
+                <b style={{ display: "block", fontSize: ".9rem" }}>
+                  <FDate v={e.date} />
+                </b>
                 <span style={{ fontSize: ".8rem", color: "var(--gray2)" }}>
                   {e.time}
                 </span>

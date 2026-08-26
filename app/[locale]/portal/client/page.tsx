@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { useAuth } from "@/lib/auth";
 import { CLIENT_ORDERS } from "@/lib/portalData";
 import StatusPill from "@/components/portal/StatusPill";
+import FDate from "@/components/FDate";
 import { IconSparkle, IconShield } from "@/components/icons";
 
 export default function ClientDashboard() {
@@ -44,7 +45,7 @@ export default function ClientDashboard() {
               <div className="prow__m">
                 <b>{o.service}</b>
                 <span>
-                  {o.lawyer} · {o.date}
+                  {o.lawyer} · <FDate v={o.date} />
                 </span>
               </div>
               <StatusPill kind="status" value={o.status} />

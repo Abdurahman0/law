@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { GIFTS } from "@/lib/portalData";
+import FDate from "@/components/FDate";
 
 export default function ClientGifts() {
   const t = useTranslations("portal.client.gifts");
@@ -35,7 +36,7 @@ export default function ClientGifts() {
                 <td>
                   {g.term} {t("months")}
                 </td>
-                <td>{g.date}</td>
+                <td><FDate v={g.date} /></td>
                 <td>
                   <span className={`st st--${g.status}`}>{t(g.status)}</span>
                 </td>

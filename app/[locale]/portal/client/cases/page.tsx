@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { CLIENT_ORDERS } from "@/lib/portalData";
 import StatusPill from "@/components/portal/StatusPill";
+import FDate from "@/components/FDate";
 
 export default function ClientCases() {
   const t = useTranslations("portal.client.cases");
@@ -29,7 +30,9 @@ export default function ClientCases() {
               <tr key={o.id}>
                 <td>
                   <b>#{o.id}</b>
-                  <div style={{ color: "var(--gray2)", fontSize: ".8rem" }}>{o.date}</div>
+                  <div style={{ color: "var(--gray2)", fontSize: ".8rem" }}>
+                    <FDate v={o.date} />
+                  </div>
                 </td>
                 <td>{o.service}</td>
                 <td>{o.lawyer}</td>
