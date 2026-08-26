@@ -13,6 +13,7 @@ import {
   type Contract,
 } from "@/lib/api";
 import { useLexAi } from "./useLexAi";
+import { useAuth } from "@/lib/auth";
 import ContractCard from "../ContractCard";
 import {
   IconStar,
@@ -34,6 +35,7 @@ type Msg = {
 export default function ChatPage() {
   const t = useTranslations("chatPage");
   const { reply } = useLexAi();
+  const { session } = useAuth();
 
   const [chats, setChats] = useState<ApiChat[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -206,6 +208,9 @@ export default function ChatPage() {
               <span className="logo__m">
                 <IconStar />
               </span>
+              {session ? (
+                <p className="aichat__hi">{t("hi", { name: session.name })}</p>
+              ) : null}
               <h2>{t("emptyTitle")}</h2>
               <p>{t("emptyText")}</p>
               <div className="sugg">

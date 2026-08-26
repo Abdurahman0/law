@@ -782,6 +782,7 @@
     "menu": "Menu",
     "emptyTitle": "How can I help?",
     "emptyText": "Ask about your legal situation, a document or a case — LexGo.AI answers with references to the law.",
+    "hi": "Hello, {name}",
     "suggestions": [
       "I was called for questioning — what are my rights?",
       "How do I draft a lease agreement?",

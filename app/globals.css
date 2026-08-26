@@ -880,7 +880,7 @@ body:has(.plogin) .fab{display:none}
 .ptop__burger{display:none;width:38px;height:38px;border-radius:11px;background:var(--b100);border:0;cursor:pointer;align-items:center;justify-content:center;color:var(--b700);flex:none}
 .ptop__burger svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2}
 .pbody{flex:1;overflow-y:auto;padding:clamp(16px,2.6vw,40px)}
-.pbody__in{max-width:1560px;margin:0 auto;display:grid;gap:20px}
+.pbody__in{max-width:1560px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:20px}
 .psec-h{font-family:var(--fd);font-size:1.05rem;font-weight:700;letter-spacing:-.02em;margin:0}
 
 /* KPI */
@@ -960,3 +960,11 @@ body:has(.plogin) .fab{display:none}
 .pbody .sec{padding-block:0}
 .pbody .wrap{max-width:none;padding-inline:0}
 .pbody .sec .head{margin-bottom:clamp(18px,2.5vw,26px)}
+
+/* portal: keep reused marketing sections from overflowing horizontally */
+.pbody{overflow-x:hidden}
+.pbody .chiprow,.pbody .scroller{margin-inline:0;padding-inline:0}
+.advgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.advgrid .advcard{width:auto}
+
+.aichat__hi{color:var(--b600);font-weight:700;font-size:.86rem;margin:0 0 8px;text-transform:uppercase;letter-spacing:.05em}

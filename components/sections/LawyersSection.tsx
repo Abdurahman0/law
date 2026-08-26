@@ -18,10 +18,12 @@ export default function LawyersSection({
   initialArea = "",
   showFlow = true,
   standalone = false,
+  compact = false,
 }: {
   initialArea?: string;
   showFlow?: boolean;
   standalone?: boolean;
+  compact?: boolean;
 }) {
   const t = useTranslations("lawyers");
   const te = useTranslations("enums");
@@ -142,24 +144,26 @@ export default function LawyersSection({
             <h2 className="h2">{t("title")}</h2>
             <p className="lead">{t("lead")}</p>
           </div>
-          <div className="navbtns">
-            <button
-              className="nbtn"
-              onClick={() => scrollBy(-1)}
-              disabled={atStart}
-              aria-label="prev"
-            >
-              <IconChevronLeft />
-            </button>
-            <button
-              className="nbtn"
-              onClick={() => scrollBy(1)}
-              disabled={atEnd}
-              aria-label="next"
-            >
-              <IconChevronRight />
-            </button>
-          </div>
+          {!compact ? (
+            <div className="navbtns">
+              <button
+                className="nbtn"
+                onClick={() => scrollBy(-1)}
+                disabled={atStart}
+                aria-label="prev"
+              >
+                <IconChevronLeft />
+              </button>
+              <button
+                className="nbtn"
+                onClick={() => scrollBy(1)}
+                disabled={atEnd}
+                aria-label="next"
+              >
+                <IconChevronRight />
+              </button>
+            </div>
+          ) : null}
         </div>
 
         {standalone ? (
@@ -216,22 +220,27 @@ export default function LawyersSection({
           </div>
         ) : null}
 
-        <div className="scroller" ref={scroller} onScroll={syncNav}>
-          {list.length ? (
-            list.map(card)
-          ) : (
-            <div
-              style={{
-                padding: 36,
-                textAlign: "center",
-                color: "var(--gray)",
-                width: "100%",
-              }}
-            >
-              {t("empty")}
-            </div>
-          )}
-        </div>
+        {compact ? (
+          <div className="advgrid">
+            {list.length ? (
+              list.map(card)
+            ) : (
+              <div style={{ padding: 36, textAlign: "center", color: "var(--gray)", width: "100%" }}>
+                {t("empty")}
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="scroller" ref={scroller} onScroll={syncNav}>
+            {list.length ? (
+              list.map(card)
+            ) : (
+              <div style={{ padding: 36, textAlign: "center", color: "var(--gray)", width: "100%" }}>
+                {t("empty")}
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="info">
           <IconInfo />

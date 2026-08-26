@@ -782,6 +782,7 @@
     "menu": "Menyu",
     "emptyTitle": "Qanday yordam bera olaman?",
     "emptyText": "Huquqiy vaziyatingiz, hujjat yoki ish haqida so'rang — LexGo.AI qonunga havolalar bilan javob beradi.",
+    "hi": "Salom, {name}",
     "suggestions": [
       "Meni so'roqqa chaqirishdi — huquqlarim qanday?",
       "Ijara shartnomasini qanday tuzaman?",
