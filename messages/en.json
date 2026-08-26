@@ -144,7 +144,46 @@
       { "city": "Namangan", "text": "a statement of claim was filed with the court" },
       { "city": "Andijan", "text": "a company-registration package was ordered" },
       { "city": "Kashkadarya", "text": "a video consultation was completed" }
-    ]
+    ],
+    "funnelCta": {
+      "primary": "Get help now",
+      "secondary": "Find a lawyer"
+    },
+    "problem": {
+      "kicker": "Sound familiar?",
+      "title": "Getting legal help shouldn't be this hard",
+      "lead": "Most people lose time, money and sleep before they ever reach the right lawyer.",
+      "items": [
+        { "title": "You can't find the right lawyer", "text": "You rely on luck and word of mouth — with no way to compare real experience or wins." },
+        { "title": "Pricing is a black box", "text": "Fees are quoted behind closed doors and change without any explanation." },
+        { "title": "No safety net", "text": "If a lawyer goes silent or misses a deadline, you carry the loss alone." },
+        { "title": "Everything is scattered", "text": "Documents, payments, court dates and messages live in five different places." }
+      ]
+    },
+    "benefits": {
+      "kicker": "Why LexGo",
+      "title": "Everything you need to win — in one place",
+      "lead": "AI trained on Uzbek law, verified lawyers with open track records, transparent pricing and a platform guarantee.",
+      "items": [
+        { "title": "An answer in minutes", "text": "LexGo.AI replies with references to the exact article in force — your first 5 requests are free." },
+        { "title": "Verified lawyers", "text": "Filter by area, region, rating and real win record — and see transparent prices upfront." },
+        { "title": "Platform guarantee", "text": "Pay through LexGo and we replace the lawyer or escalate if anything goes wrong." },
+        { "title": "One workspace", "text": "Documents, chat, court dates and payments — all tracked in a single place." },
+        { "title": "Fair, open pricing", "text": "See exactly why a price is what it is: region, experience and rating." },
+        { "title": "Help everywhere", "text": "14 regions, a mobile app and three languages — support wherever you are." }
+      ]
+    },
+    "social": {
+      "kicker": "Trusted every day",
+      "title": "Real people resolve real cases on LexGo"
+    },
+    "finalCta": {
+      "kicker": "Start now",
+      "title": "Get legal help in the next 5 minutes",
+      "lead": "Describe your problem in plain words — LexGo.AI points you to the right service and lawyer. The first 5 requests are free.",
+      "primary": "Get help now",
+      "secondary": "Find a lawyer"
+    }
   },
   "finder": {
     "tabs": {

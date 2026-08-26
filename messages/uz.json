@@ -144,7 +144,46 @@
       { "city": "Namangan", "text": "da'vo arizasi sudga topshirildi" },
       { "city": "Andijon", "text": "kompaniya ochish paketi buyurtma qilindi" },
       { "city": "Qashqadaryo", "text": "video konsultatsiya yakunlandi" }
-    ]
+    ],
+    "funnelCta": {
+      "primary": "Hozir yordam oling",
+      "secondary": "Advokat topish"
+    },
+    "problem": {
+      "kicker": "Tanish holatmi?",
+      "title": "Yuridik yordam olish bunchalik qiyin bo'lmasligi kerak",
+      "lead": "Ko'pchilik kerakli advokatga yetib borgunicha vaqt, pul va tinchligini yo'qotadi.",
+      "items": [
+        { "title": "Kerakli advokatni topa olmaysiz", "text": "Faqat omad va tanish-bilishga suyanasiz — haqiqiy tajriba yoki g'alabalarni solishtirishning imkoni yo'q." },
+        { "title": "Narx — qorong'u quti", "text": "To'lovlar yopiq eshiklar ortida aytiladi va hech qanday izohsiz o'zgaradi." },
+        { "title": "Hech qanday kafolat yo'q", "text": "Advokat aloqaga chiqmasa yoki muddatni o'tkazib yuborsa, zararni yolg'iz o'zingiz ko'tarasiz." },
+        { "title": "Hammasi tarqoq", "text": "Hujjatlar, to'lovlar, sud sanalari va xabarlar besh xil joyda saqlanadi." }
+      ]
+    },
+    "benefits": {
+      "kicker": "Nega LexGo",
+      "title": "G'alaba uchun kerak bo'lgan hamma narsa — bir joyda",
+      "lead": "O'zbekiston qonunlari asosida o'rgatilgan sun'iy intellekt, ochiq natijalarga ega tasdiqlangan advokatlar, shaffof narx va platforma kafolati.",
+      "items": [
+        { "title": "Bir necha daqiqada javob", "text": "LexGo.AI amaldagi aniq moddaga havola bilan javob beradi — dastlabki 5 ta so'rovingiz bepul." },
+        { "title": "Tasdiqlangan advokatlar", "text": "Yo'nalish, hudud, reyting va haqiqiy g'alabalar bo'yicha saralang — shaffof narxlarni oldindan ko'ring." },
+        { "title": "Platforma kafolati", "text": "LexGo orqali to'lang — biror narsa noto'g'ri ketsa, advokatni almashtiramiz yoki masalani yuqoriga ko'taramiz." },
+        { "title": "Yagona ish maydoni", "text": "Hujjatlar, chat, sud sanalari va to'lovlar — barchasi bir joyda kuzatiladi." },
+        { "title": "Adolatli va ochiq narx", "text": "Narx nega aynan shunday ekanini aniq ko'ring: hudud, tajriba va reyting." },
+        { "title": "Hamma joyda yordam", "text": "14 ta hudud, mobil ilova va uch til — qayerda bo'lsangiz ham qo'llab-quvvatlash." }
+      ]
+    },
+    "social": {
+      "kicker": "Har kuni ishoniladi",
+      "title": "Haqiqiy odamlar LexGo'da haqiqiy ishlarni hal qiladi"
+    },
+    "finalCta": {
+      "kicker": "Hozir boshlang",
+      "title": "Keyingi 5 daqiqada yuridik yordam oling",
+      "lead": "Muammoingizni oddiy so'zlar bilan yozing — LexGo.AI sizni kerakli xizmat va advokatga yo'naltiradi. Dastlabki 5 ta so'rov bepul.",
+      "primary": "Hozir yordam oling",
+      "secondary": "Advokat topish"
+    }
   },
   "finder": {
     "tabs": {

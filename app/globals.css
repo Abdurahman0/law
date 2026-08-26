@@ -1051,3 +1051,27 @@ body:has(.plogin) .fab{display:none}
 .faqi__p>div{overflow:hidden}
 .faqi__p p{margin:0;padding:0 22px 21px;font-size:.91rem;color:var(--gray);line-height:1.62}
 @media (prefers-reduced-motion:reduce){.faqi__p{transition:none}}
+
+/* ═══════════════ SALES FUNNEL ═══════════════ */
+/* problem cards (warning tint) */
+.card--warn .card__i{background:#FDECEC}
+.card--warn .card__i svg{stroke:#C0392B}
+/* hero CTA row */
+.hero__cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:26px}
+@media (max-width:560px){.hero__cta{justify-content:flex-start}.hero__cta .btn{flex:1 1 auto}}
+/* final CTA (reuses appcta shell, centered) */
+.finalcta{text-align:center}
+.finalcta .appcta__g{grid-template-columns:1fr;justify-items:center;text-align:center}
+.finalcta .lead{margin-inline:auto}
+.finalcta .stores,.finalcta .roles{justify-content:center}
+
+/* ═══════════════ MOBILE PERF ═══════════════ */
+/* skip rendering off-screen marketing sections (big win on slow devices) */
+main > .sec{content-visibility:auto;contain-intrinsic-size:1px 640px}
+main > .sec:first-child{content-visibility:visible}
+@media (max-width:760px){
+  /* drop heavy hero blur animation + parallax on phones */
+  .hero__bg::before,.hero__bg::after{animation:none!important}
+  .hero__bg{transition:none!important}
+  .hero__mesh{display:none}
+}

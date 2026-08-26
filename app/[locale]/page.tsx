@@ -1,18 +1,18 @@
 import { setRequestLocale } from "next-intl/server";
 import Hero from "@/components/sections/Hero";
-import QuickServices from "@/components/sections/QuickServices";
-import Ticker from "@/components/sections/Ticker";
 import Stats from "@/components/sections/Stats";
+import ProblemSection from "@/components/sections/ProblemSection";
 import AiSection from "@/components/sections/AiSection";
-import LawyersSection from "@/components/sections/LawyersSection";
 import StagesSection from "@/components/sections/StagesSection";
 import ServicesSection from "@/components/sections/ServicesSection";
-import DirectionsSection from "@/components/sections/DirectionsSection";
-import SubscriptionSection from "@/components/sections/SubscriptionSection";
+import BenefitsSection from "@/components/sections/BenefitsSection";
+import LawyersSection from "@/components/sections/LawyersSection";
+import Ticker from "@/components/sections/Ticker";
+import SocialProofSection from "@/components/sections/SocialProofSection";
 import WarrantySection from "@/components/sections/WarrantySection";
-import ForLawyersSection from "@/components/sections/ForLawyersSection";
-import AppCourseSection from "@/components/sections/AppCourseSection";
+import SubscriptionSection from "@/components/sections/SubscriptionSection";
 import FaqSection from "@/components/sections/FaqSection";
+import FinalCtaSection from "@/components/sections/FinalCtaSection";
 
 export default async function HomePage({
   params,
@@ -24,20 +24,28 @@ export default async function HomePage({
 
   return (
     <>
+      {/* Attention */}
       <Hero />
-      <QuickServices />
-      <Ticker />
       <Stats />
+      {/* Problem / Need */}
+      <ProblemSection />
+      {/* Solution */}
       <AiSection />
-      <LawyersSection />
       <StagesSection />
       <ServicesSection />
-      <DirectionsSection />
-      <SubscriptionSection />
+      {/* Benefits */}
+      <BenefitsSection />
+      {/* Trust / Social proof */}
+      <LawyersSection />
+      <Ticker />
+      <SocialProofSection />
       <WarrantySection />
-      <ForLawyersSection />
-      <AppCourseSection />
+      {/* Offer */}
+      <SubscriptionSection />
+      {/* Objection handling */}
       <FaqSection />
+      {/* Main CTA */}
+      <FinalCtaSection />
     </>
   );
 }
