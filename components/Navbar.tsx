@@ -77,11 +77,9 @@ export default function Navbar() {
             </nav>
             <div className="bar__act">
               <LanguageSwitcher />
-              {/* Login disabled for now — no auth yet.
-              <Link href="/contact" className="btn btn--glass btn--sm">
+              <Link href="/login" className="btn btn--glass btn--sm">
                 {t("login")}
               </Link>
-              */}
               <Link href="/chat" className="btn btn--pri btn--sm">
                 {t("start")}
               </Link>
@@ -113,11 +111,9 @@ export default function Navbar() {
             </Link>
           ))}
           <div className="sheet__b">
-            {/* Login disabled for now — no auth yet.
-            <Link href="/contact" className="btn btn--line btn--full">
+            <Link href="/login" className="btn btn--line btn--full">
               {t("login")}
             </Link>
-            */}
             <Link href="/chat" className="btn btn--grad btn--full">
               {t("register")}
             </Link>

@@ -797,6 +797,196 @@
     "downloadPdf": "PDF yuklab olish",
     "open": "Ochish"
   },
+  "portal": {
+    "metaTitle": "Portal",
+    "login": {
+      "title": "LexGo ga kirish",
+      "subtitle": "Rolingizni tanlang va davom eting",
+      "roleClient": "Mijoz",
+      "roleLawyer": "Advokat",
+      "roleClientHint": "Advokatlarni toping, xizmatlarga buyurtma bering, ishlaringizni kuzating",
+      "roleLawyerHint": "Ishlar bozori, ishlaringiz, kalendar va mijozlar",
+      "name": "To'liq ism",
+      "namePh": "Ismingiz",
+      "phone": "Telefon",
+      "phonePh": "+998 __ ___ __ __",
+      "submit": "Davom etish",
+      "note": "Demo kirish — parolsiz. Haqiqiy autentifikatsiya backend bilan keladi.",
+      "required": "Davom etish uchun ismingizni kiriting."
+    },
+    "common": {
+      "logout": "Chiqish",
+      "back": "Orqaga",
+      "search": "Qidirish",
+      "viewAll": "Barchasini ko'rish",
+      "open": "Ochish",
+      "accept": "Qabul qilish",
+      "decline": "Rad etish",
+      "requestInfo": "Ma'lumot so'rash",
+      "roleClient": "Mijoz",
+      "roleLawyer": "Advokat",
+      "status": {
+        "active": "Faol",
+        "new": "Yangi",
+        "investigation": "Tergov",
+        "court": "Sud",
+        "appeal": "Apellyatsiya",
+        "completed": "Yakunlangan",
+        "archived": "Arxivlangan"
+      },
+      "payment": {
+        "paid": "To'langan",
+        "partial": "Qisman",
+        "unpaid": "To'lanmagan"
+      },
+      "cols": {
+        "client": "Mijoz",
+        "case": "Ish",
+        "stage": "Bosqich",
+        "deadline": "Muddat",
+        "nextAction": "Keyingi harakat",
+        "payment": "To'lov",
+        "value": "Qiymat",
+        "status": "Holat"
+      }
+    },
+    "sidebar": {
+      "lawyer": {
+        "dashboard": "Boshqaruv paneli",
+        "marketplace": "Ishlar bozori",
+        "cases": "Mening ishlarim",
+        "calendar": "Kalendar",
+        "clients": "Mijozlar",
+        "documents": "Hujjatlar",
+        "chat": "Xavfsiz chat",
+        "ai": "AI Yordamchi"
+      },
+      "client": {
+        "dashboard": "Boshqaruv paneli",
+        "cases": "Mening ishlarim",
+        "payments": "To'lovlar",
+        "lawyers": "Advokatlar",
+        "subscription": "Obuna",
+        "gifts": "Sovg'alar",
+        "ai": "LexGo.AI",
+        "profile": "Profil"
+      }
+    },
+    "lawyer": {
+      "dashboard": {
+        "title": "Boshqaruv paneli",
+        "today": "Bugun",
+        "urgent": "Shoshilinch ishlar",
+        "courts": "Bugungi sud majlislari",
+        "deadlines": "Yaqin muddatlar",
+        "messages": "Yangi xabarlar",
+        "toReview": "Ko'rib chiqiladigan hujjatlar",
+        "finance": "Moliya",
+        "incomeToday": "Bugungi daromad",
+        "incomeMonth": "Shu oy",
+        "pending": "Kutilayotgan to'lovlar",
+        "viaLexgo": "LexGo orqali",
+        "newCases": "Yangi ishlar",
+        "newCasesSub": "Sizga mos {n} ta yangi so'rov"
+      },
+      "marketplace": {
+        "title": "Ishlar bozori",
+        "lead": "Sizning yo'nalishlaringiz va hududlaringizga mos yangi ishlar."
+      },
+      "cases": { "title": "Mening ishlarim", "filterAll": "Barchasi" },
+      "calendar": {
+        "title": "Kalendar va muddatlar",
+        "hearing": "Sud majlisi",
+        "investigative": "Tergov harakati",
+        "meeting": "Uchrashuv",
+        "deadline": "Muddat"
+      },
+      "clients": {
+        "title": "Mijozlar",
+        "conflict": "Ziddiyat",
+        "casesCount": "{n} ta ish",
+        "conflictAlert": "Manfaatlar to'qnashuvi ehtimoli — qabul qilishdan oldin tekshiring"
+      },
+      "documents": {
+        "title": "Hujjatlar",
+        "lead": "Ish hujjatlarini yuklang, ko'rib chiqing, versiyalang va xavfsiz ulashing.",
+        "upload": "Hujjat yuklash",
+        "aiAnalyze": "AI tahlili",
+        "empty": "Hozircha hujjatlar yo'q",
+        "aiNote": "AI ushbu hujjatda ko'rib chiqish uchun 7 ta nuqta topdi."
+      },
+      "chat": {
+        "title": "Xavfsiz chat",
+        "lead": "Mijozingiz bilan shifrlangan chat — matn, ovoz, hujjatlar, video."
+      },
+      "ai": {
+        "title": "AI Huquqiy Yordamchi",
+        "lead": "Ishni umumlashtiring, xronologiya tuzing, yetishmayotgan hujjatlar va muddatlarni toping."
+      },
+      "caseDetail": {
+        "overview": "Ish umumiy ko'rinishi",
+        "caseType": "Ish turi",
+        "article": "Modda",
+        "body": "Tergov organi",
+        "court": "Sud",
+        "caseNo": "Ish №",
+        "nextHearing": "Keyingi sud majlisi",
+        "deadline": "Muddat",
+        "value": "Ish qiymati",
+        "paymentStatus": "To'lov holati"
+      }
+    },
+    "client": {
+      "dashboard": {
+        "title": "Boshqaruv paneli",
+        "hi": "Salom, {name}",
+        "quickHelp": "Muammoingizni tasvirlang — biz eng yaxshi xizmat va advokatni tanlaymiz",
+        "quickHelpCta": "Yordam olish",
+        "activeOrders": "Faol buyurtmalar",
+        "subscription": "Obuna",
+        "subActive": "Standard · faol",
+        "subNone": "Faol obuna yo'q",
+        "urgent": "Shoshilinch huquqiy yordam",
+        "urgentCta": "Shoshilinch advokat chaqirish",
+        "browse": "Xizmatlarni ko'rish"
+      },
+      "cases": { "title": "Mening ishlarim", "empty": "Hozircha ishlar yo'q" },
+      "payments": {
+        "title": "To'lovlar",
+        "pay": "To'lov qilish",
+        "history": "Tarix",
+        "id": "ID",
+        "what": "Xizmat",
+        "date": "Sana",
+        "amount": "Summa"
+      },
+      "gifts": {
+        "title": "Sovg'alar",
+        "give": "Obuna sovg'a qilish",
+        "recipient": "Qabul qiluvchi",
+        "term": "Muddat",
+        "date": "Sana",
+        "months": "oy",
+        "sent": "Yuborilgan",
+        "activated": "Faollashtirilgan",
+        "pending": "Kutilmoqda"
+      },
+      "profile": {
+        "title": "Profil",
+        "personal": "Shaxsiy ma'lumotlar",
+        "family": "Oila a'zolari",
+        "subscription": "Obuna",
+        "security": "Maxfiylik va xavfsizlik",
+        "notifications": "Bildirishnomalar",
+        "name": "Ism",
+        "phone": "Telefon",
+        "email": "Email",
+        "card": "Bank kartasi",
+        "addFamily": "Oila a'zosini qo'shish",
+        "noFamily": "Oila a'zolari qo'shilmagan"
+      }
+    }
+  },
   "notFound": {
     "title": "Sahifa topilmadi",
     "text": "Siz izlayotgan sahifa mavjud emas yoki ko'chirilgan.",

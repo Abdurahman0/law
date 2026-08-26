@@ -11,6 +11,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 
+import { AuthProvider } from "@/lib/auth";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import MobileTabBar from "@/components/MobileTabBar";
@@ -68,13 +69,15 @@ export default async function LocaleLayout({ children, params }: Props) {
     <html lang={locale} className={`${inter.variable} ${onest.variable}`}>
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <ScrollProgress />
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-          <MobileTabBar />
-          <AIChatDock />
-          <RevealOnScroll />
+          <AuthProvider>
+            <ScrollProgress />
+            <Navbar />
+            <main>{children}</main>
+            <Footer />
+            <MobileTabBar />
+            <AIChatDock />
+            <RevealOnScroll />
+          </AuthProvider>
         </NextIntlClientProvider>
       </body>
     </html>

@@ -249,6 +249,35 @@ export const IconMenu = (p: P) => (
   </svg>
 );
 
+export const IconCalendar = (p: P) => (
+  <svg {...base} {...p}>
+    <rect x="3" y="4.5" width="18" height="17" rx="3" />
+    <path d="M3 9h18M8 2.5v4M16 2.5v4" />
+  </svg>
+);
+
+export const IconUsers = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M16 20a5 5 0 00-10 0" />
+    <circle cx="11" cy="8" r="3.4" />
+    <path d="M18.5 19a4 4 0 00-3-3.7M17 9a3 3 0 000-4.5" />
+  </svg>
+);
+
+export const IconLogout = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M15 5H6a2 2 0 00-2 2v10a2 2 0 002 2h9" />
+    <path d="M14 12h7M18 8l4 4-4 4" />
+  </svg>
+);
+
+export const IconBriefcase = (p: P) => (
+  <svg {...base} {...p}>
+    <rect x="3" y="7" width="18" height="13" rx="2.5" />
+    <path d="M8 7V5.5A1.5 1.5 0 019.5 4h5A1.5 1.5 0 0116 5.5V7M3 12h18" />
+  </svg>
+);
+
 export const IconDownload = (p: P) => (
   <svg {...base} {...p}>
     <path d="M12 3v12M7 11l5 5 5-5" />

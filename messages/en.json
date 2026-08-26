@@ -797,6 +797,196 @@
     "downloadPdf": "Download PDF",
     "open": "Open"
   },
+  "portal": {
+    "metaTitle": "Portal",
+    "login": {
+      "title": "Log in to LexGo",
+      "subtitle": "Choose your role and continue",
+      "roleClient": "Client",
+      "roleLawyer": "Lawyer",
+      "roleClientHint": "Find lawyers, order services, track your cases",
+      "roleLawyerHint": "Case marketplace, your cases, calendar and clients",
+      "name": "Full name",
+      "namePh": "Your name",
+      "phone": "Phone",
+      "phonePh": "+998 __ ___ __ __",
+      "submit": "Continue",
+      "note": "Demo sign-in — no password. Real authentication arrives with the backend.",
+      "required": "Enter your name to continue."
+    },
+    "common": {
+      "logout": "Log out",
+      "back": "Back",
+      "search": "Search",
+      "viewAll": "View all",
+      "open": "Open",
+      "accept": "Accept",
+      "decline": "Decline",
+      "requestInfo": "Request info",
+      "roleClient": "Client",
+      "roleLawyer": "Lawyer",
+      "status": {
+        "active": "Active",
+        "new": "New",
+        "investigation": "Investigation",
+        "court": "Court",
+        "appeal": "Appeal",
+        "completed": "Completed",
+        "archived": "Archived"
+      },
+      "payment": {
+        "paid": "Paid",
+        "partial": "Partial",
+        "unpaid": "Unpaid"
+      },
+      "cols": {
+        "client": "Client",
+        "case": "Case",
+        "stage": "Stage",
+        "deadline": "Deadline",
+        "nextAction": "Next action",
+        "payment": "Payment",
+        "value": "Value",
+        "status": "Status"
+      }
+    },
+    "sidebar": {
+      "lawyer": {
+        "dashboard": "Dashboard",
+        "marketplace": "Case Marketplace",
+        "cases": "My Cases",
+        "calendar": "Calendar",
+        "clients": "Clients",
+        "documents": "Documents",
+        "chat": "Secure Chat",
+        "ai": "AI Assistant"
+      },
+      "client": {
+        "dashboard": "Dashboard",
+        "cases": "My Cases",
+        "payments": "Payments",
+        "lawyers": "Lawyers",
+        "subscription": "Subscription",
+        "gifts": "Gifts",
+        "ai": "LexGo.AI",
+        "profile": "Profile"
+      }
+    },
+    "lawyer": {
+      "dashboard": {
+        "title": "Dashboard",
+        "today": "Today",
+        "urgent": "Urgent cases",
+        "courts": "Today's hearings",
+        "deadlines": "Near deadlines",
+        "messages": "New messages",
+        "toReview": "Docs to review",
+        "finance": "Finances",
+        "incomeToday": "Income today",
+        "incomeMonth": "This month",
+        "pending": "Pending payments",
+        "viaLexgo": "Via LexGo",
+        "newCases": "New cases",
+        "newCasesSub": "{n} new requests matched to you"
+      },
+      "marketplace": {
+        "title": "Case Marketplace",
+        "lead": "New cases matched to your practice areas and regions."
+      },
+      "cases": { "title": "My Cases", "filterAll": "All" },
+      "calendar": {
+        "title": "Calendar & deadlines",
+        "hearing": "Hearing",
+        "investigative": "Investigative action",
+        "meeting": "Meeting",
+        "deadline": "Deadline"
+      },
+      "clients": {
+        "title": "Clients",
+        "conflict": "Conflict",
+        "casesCount": "{n} cases",
+        "conflictAlert": "Possible conflict of interest — check before accepting"
+      },
+      "documents": {
+        "title": "Documents",
+        "lead": "Upload, review, version and securely share case documents.",
+        "upload": "Upload document",
+        "aiAnalyze": "AI analysis",
+        "empty": "No documents yet",
+        "aiNote": "AI found 7 points to review in this document."
+      },
+      "chat": {
+        "title": "Secure Chat",
+        "lead": "Encrypted chat with your client — text, voice, documents, video."
+      },
+      "ai": {
+        "title": "AI Legal Assistant",
+        "lead": "Summarize a case, build a chronology, find missing documents and deadlines."
+      },
+      "caseDetail": {
+        "overview": "Case overview",
+        "caseType": "Case type",
+        "article": "Article",
+        "body": "Investigation body",
+        "court": "Court",
+        "caseNo": "Case №",
+        "nextHearing": "Next hearing",
+        "deadline": "Deadline",
+        "value": "Case value",
+        "paymentStatus": "Payment status"
+      }
+    },
+    "client": {
+      "dashboard": {
+        "title": "Dashboard",
+        "hi": "Hello, {name}",
+        "quickHelp": "Describe your problem — we'll pick the best service and lawyer",
+        "quickHelpCta": "Get help",
+        "activeOrders": "Active orders",
+        "subscription": "Subscription",
+        "subActive": "Standard · active",
+        "subNone": "No active subscription",
+        "urgent": "Urgent legal help",
+        "urgentCta": "Call an urgent lawyer",
+        "browse": "Browse services"
+      },
+      "cases": { "title": "My Cases", "empty": "No cases yet" },
+      "payments": {
+        "title": "Payments",
+        "pay": "Make a payment",
+        "history": "History",
+        "id": "ID",
+        "what": "Service",
+        "date": "Date",
+        "amount": "Amount"
+      },
+      "gifts": {
+        "title": "Gifts",
+        "give": "Gift a subscription",
+        "recipient": "Recipient",
+        "term": "Term",
+        "date": "Date",
+        "months": "months",
+        "sent": "Sent",
+        "activated": "Activated",
+        "pending": "Pending"
+      },
+      "profile": {
+        "title": "Profile",
+        "personal": "Personal info",
+        "family": "Family members",
+        "subscription": "Subscription",
+        "security": "Privacy & security",
+        "notifications": "Notifications",
+        "name": "Name",
+        "phone": "Phone",
+        "email": "Email",
+        "card": "Bank card",
+        "addFamily": "Add family member",
+        "noFamily": "No family members added"
+      }
+    }
+  },
   "notFound": {
     "title": "Page not found",
     "text": "The page you're looking for doesn't exist or has moved.",
