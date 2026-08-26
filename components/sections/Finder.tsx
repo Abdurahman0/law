@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
+import { useAuth } from "@/lib/auth";
 import {
   LAWYERS,
   initials,
@@ -39,6 +40,7 @@ export default function Finder() {
   const tf = useTranslations("finder");
   const te = useTranslations("enums");
   const router = useRouter();
+  const { session } = useAuth();
 
   const [tab, setTab] = useState<Tab>("lawyer");
   const [area, setArea] = useState("criminal");
@@ -71,9 +73,13 @@ export default function Finder() {
     { value: "lawyer", label: tf("preparedBy.lawyer") },
   ];
 
-  // Hand a message off to the full AI chat, which auto-sends it.
+  // Hand a message off to the AI chat, which auto-sends it. Logged-in users
+  // get their own portal chat; anonymous visitors get the public one.
   function goChat(text: string) {
-    router.push(`/chat?q=${encodeURIComponent(text)}`);
+    const t = text.trim();
+    if (!t) return;
+    const base = session ? `/portal/${session.role}/ai` : "/chat";
+    router.push(`${base}?q=${encodeURIComponent(t)}`);
   }
   function prepareDoc(docKey: string) {
     goChat(
@@ -252,7 +258,7 @@ export default function Finder() {
                   value={ask}
                   onChange={(e) => setAsk(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey && ask.trim().length >= 8) {
+                    if (e.key === "Enter" && !e.shiftKey && ask.trim()) {
                       e.preventDefault();
                       goChat(ask.trim());
                     }
@@ -263,10 +269,7 @@ export default function Finder() {
               <button
                 className="fgo"
                 type="button"
-                onClick={() => {
-                  if (ask.trim().length < 8) return;
-                  goChat(ask.trim());
-                }}
+                onClick={() => goChat(ask)}
               >
                 <IconSparkle />
                 {tf("buttons.analyze")}
