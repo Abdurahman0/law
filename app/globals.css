@@ -14,7 +14,7 @@
   --s2:0 10px 30px -12px rgba(11,31,69,.22);
   --s3:0 28px 70px -24px rgba(11,31,69,.35);
   --sblue:0 14px 34px -12px rgba(22,104,240,.55);
-  --wrap:1200px; --pad:clamp(16px,4vw,28px);
+  --wrap:1720px; --pad:clamp(16px,4.2vw,60px);
   --sec:clamp(56px,7.5vw,104px);
   --fd:var(--font-onest),"Onest",system-ui,sans-serif;
   --fb:var(--font-inter),"Inter",system-ui,-apple-system,sans-serif;
@@ -815,7 +815,7 @@ body:has(.aichat) .fab{display:none}
 }
 
 /* ═══════════════ WIDER HEADER ═══════════════ */
-.bar .wrap{max-width:1440px}
+.bar .wrap{max-width:var(--wrap)}
 
 /* ═══════════════ CONTRACT PDF DOWNLOAD ═══════════════ */
 .amsg__files{display:flex;flex-direction:column;gap:8px;margin-top:12px}
@@ -879,8 +879,8 @@ body:has(.plogin) .fab{display:none}
 .ptop__av{width:34px;height:34px;border-radius:50%;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.78rem;flex:none}
 .ptop__burger{display:none;width:38px;height:38px;border-radius:11px;background:var(--b100);border:0;cursor:pointer;align-items:center;justify-content:center;color:var(--b700);flex:none}
 .ptop__burger svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2}
-.pbody{flex:1;overflow-y:auto;padding:clamp(18px,3vw,30px)}
-.pbody__in{max-width:1120px;margin:0 auto;display:grid;gap:20px}
+.pbody{flex:1;overflow-y:auto;padding:clamp(16px,2.6vw,40px)}
+.pbody__in{max-width:1560px;margin:0 auto;display:grid;gap:20px}
 .psec-h{font-family:var(--fd);font-size:1.05rem;font-weight:700;letter-spacing:-.02em;margin:0}
 
 /* KPI */
@@ -946,4 +946,12 @@ body:has(.plogin) .fab{display:none}
   .psb__scrim{display:block;position:absolute;inset:0;background:rgba(3,16,43,.42);z-index:25;opacity:0;pointer-events:none;transition:.2s}
   .psb__scrim.on{opacity:1;pointer-events:auto}
   .pgrid2{grid-template-columns:1fr}
+}
+
+/* portal topbar: reclaim space on small phones */
+@media (max-width:560px){
+  .ptop{padding-inline:14px;gap:10px}
+  .ptop h1{font-size:1rem}
+  .ptop__user span{display:none}
+  .pbody__in{gap:16px}
 }
