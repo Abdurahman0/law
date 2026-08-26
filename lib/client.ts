@@ -1,5 +1,6 @@
-// Persistent anonymous client id for the AI API (no auth in the spec).
+// Persistent anonymous client id for the AI API (used when no user is logged in).
 const KEY = "lexgo_client_id";
+const TOKEN_KEY = "lexgo_token";
 
 export function getClientId(): string {
   if (typeof window === "undefined") return "";
@@ -12,4 +13,17 @@ export function getClientId(): string {
     localStorage.setItem(KEY, id);
   }
   return id;
+}
+
+// Bearer token for the authenticated backend (see FRONTEND_AUTH.md). Stored
+// separately so the non-React API layer can read it without the auth context.
+export function getToken(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem(TOKEN_KEY);
+}
+
+export function setToken(token: string | null): void {
+  if (typeof window === "undefined") return;
+  if (token) localStorage.setItem(TOKEN_KEY, token);
+  else localStorage.removeItem(TOKEN_KEY);
 }

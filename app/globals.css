@@ -867,6 +867,9 @@ body:has(.plogin) .fab{display:none}
 .prole b{display:block;font-family:var(--fd);font-size:1rem;margin-bottom:4px}
 .prole span{font-size:.78rem;color:var(--gray);line-height:1.4;display:block}
 .plogin__note{font-size:.78rem;color:var(--gray2);margin:16px 0 0;text-align:center}
+.plogin__tabs{display:flex;gap:4px;background:#F1F5FB;border-radius:14px;padding:4px;margin-top:18px}
+.plogin__tab{flex:1;border:0;background:transparent;border-radius:11px;padding:10px;font-weight:700;font-size:.9rem;color:var(--gray);cursor:pointer;transition:.16s}
+.plogin__tab.on{background:#fff;color:var(--ink);box-shadow:var(--s1)}
 
 /* portal shell */
 .portal{display:grid;grid-template-columns:252px 1fr;height:100dvh;background:var(--b50);position:relative}

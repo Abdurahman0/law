@@ -1,6 +1,8 @@
-// Client for the LawProject AI backend (see FRONTEND_API.md).
-// Same-origin proxy path (see next.config.ts rewrites) to avoid browser CORS.
+// Client for the LawProject AI backend (see FRONTEND_API.md, FRONTEND_AUTH.md).
+// Same-origin proxy path (see app/api/backend) to avoid browser CORS.
 // Override with NEXT_PUBLIC_API_BASE_URL to hit a backend directly.
+import { getToken } from "./client";
+
 export const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE_URL || "/api/backend";
 
@@ -53,16 +55,49 @@ const asDict = (v: unknown): Dict => (v && typeof v === "object" ? (v as Dict) :
 const asStr = (v: unknown, fallback = ""): string =>
   typeof v === "string" ? v : v == null ? fallback : String(v);
 
+export class ApiError extends Error {
+  status: number;
+  detail?: string;
+  constructor(status: number, detail?: string) {
+    super(detail || `HTTP ${status}`);
+    this.name = "ApiError";
+    this.status = status;
+    this.detail = detail;
+  }
+}
+
+// True when the backend refused an AI reply because the anonymous IP limit is
+// spent (see FRONTEND_AUTH.md — "AI limit tugadi. ... login qiling.").
+export function isLimitError(e: unknown): boolean {
+  if (!(e instanceof ApiError)) return false;
+  if (e.detail && /limit|лимит/i.test(e.detail)) return true;
+  return e.status === 401 || e.status === 402 || e.status === 429;
+}
+
 async function req(path: string, init?: RequestInit): Promise<unknown> {
+  const token = getToken();
   const res = await fetch(`${API_BASE}${path}`, {
     ...init,
     headers: {
       Accept: "application/json",
       ...(init?.body ? { "Content-Type": "application/json" } : {}),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(init?.headers || {}),
     },
   });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (!res.ok) {
+    let detail: string | undefined;
+    try {
+      const t = await res.text();
+      if (t) {
+        const j = JSON.parse(t);
+        if (typeof j?.detail === "string") detail = j.detail;
+      }
+    } catch {
+      /* non-JSON error body */
+    }
+    throw new ApiError(res.status, detail);
+  }
   const text = await res.text();
   return text ? JSON.parse(text) : null;
 }
@@ -132,6 +167,63 @@ function listFrom(data: unknown, ...keys: string[]): unknown[] {
   return [];
 }
 
+// ---- Auth (FRONTEND_AUTH.md) -------------------------------------------
+export type BackendRole = "client" | "advokat";
+export type AuthUser = {
+  id: string;
+  role: BackendRole;
+  name: string;
+  phone: string;
+};
+export type AuthResult = { token: string; user: AuthUser };
+
+function normAuthUser(v: unknown): AuthUser {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id ?? d.user_id, ""),
+    role: d.role === "advokat" ? "advokat" : "client",
+    name: asStr(d.name, ""),
+    phone: asStr(d.phone, ""),
+  };
+}
+
+function normAuthResult(v: unknown): AuthResult {
+  const d = asDict(v);
+  const user = d.user ? normAuthUser(d.user) : normAuthUser(d);
+  return { token: asStr(d.access_token ?? d.token, ""), user };
+}
+
+export async function apiRegister(input: {
+  role: BackendRole;
+  name: string;
+  phone: string;
+  password: string;
+}): Promise<AuthResult> {
+  const data = await req("/auth/register", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+  const result = normAuthResult(data);
+  // Some backends return only a success flag on register; log in to get a token.
+  if (!result.token) return apiLogin(input.phone, input.password);
+  return result;
+}
+
+export async function apiLogin(
+  phone: string,
+  password: string,
+): Promise<AuthResult> {
+  const data = await req("/auth/login", {
+    method: "POST",
+    body: JSON.stringify({ phone, password }),
+  });
+  return normAuthResult(data);
+}
+
+export async function apiMe(): Promise<AuthUser> {
+  return normAuthUser(await req("/auth/me"));
+}
+
 export async function listChats(clientId: string): Promise<ApiChat[]> {
   const data = await req(`/clients/${clientId}/chats`);
   return listFrom(data, "chats", "items", "data").map(normChat);
@@ -187,7 +279,12 @@ export async function postMessage(
   return { assistant: { ...assistant, sources }, sources, contracts };
 }
 
-export function chatSocketUrl(clientId: string, chatId: string): string {
+export function chatSocketUrl(
+  clientId: string,
+  chatId: string,
+  token?: string | null,
+): string {
   const base = API_BASE.replace(/^http/i, "ws");
-  return `${base}/ws/clients/${clientId}/chats/${chatId}`;
+  const q = token ? `?token=${encodeURIComponent(token)}` : "";
+  return `${base}/ws/clients/${clientId}/chats/${chatId}${q}`;
 }
