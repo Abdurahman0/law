@@ -824,6 +824,9 @@
       "accept": "Qabul qilish",
       "decline": "Rad etish",
       "requestInfo": "Ma'lumot so'rash",
+      "details": "Tafsilotlar",
+      "close": "Yopish",
+      "lawyer": "Advokat",
       "roleClient": "Mijoz",
       "roleLawyer": "Advokat",
       "status": {

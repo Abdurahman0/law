@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
-import { IconGlobe } from "./icons";
+import { FLAG } from "./flags";
 
 const LABELS: Record<string, string> = {
   uz: "O‘zbek",
@@ -33,6 +33,8 @@ export default function LanguageSwitcher() {
     if (code !== locale) router.replace(pathname, { locale: code });
   }
 
+  const CurrentFlag = FLAG[locale] ?? FLAG.uz;
+
   return (
     <div className="lang" ref={ref}>
       <button
@@ -42,22 +44,26 @@ export default function LanguageSwitcher() {
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >
-        <IconGlobe style={{ width: 16, height: 16 }} />
+        <CurrentFlag />
         {locale.toUpperCase()}
       </button>
       {open ? (
         <ul className="lang__menu" role="listbox">
-          {routing.locales.map((code) => (
-            <li key={code} role="option" aria-selected={code === locale}>
-              <button
-                type="button"
-                className={code === locale ? "on" : ""}
-                onClick={() => select(code)}
-              >
-                {LABELS[code]}
-              </button>
-            </li>
-          ))}
+          {routing.locales.map((code) => {
+            const Flag = FLAG[code] ?? FLAG.uz;
+            return (
+              <li key={code} role="option" aria-selected={code === locale}>
+                <button
+                  type="button"
+                  className={code === locale ? "on" : ""}
+                  onClick={() => select(code)}
+                >
+                  <Flag />
+                  {LABELS[code]}
+                </button>
+              </li>
+            );
+          })}
         </ul>
       ) : null}
     </div>

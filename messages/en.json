@@ -824,6 +824,9 @@
       "accept": "Accept",
       "decline": "Decline",
       "requestInfo": "Request info",
+      "details": "Details",
+      "close": "Close",
+      "lawyer": "Lawyer",
       "roleClient": "Client",
       "roleLawyer": "Lawyer",
       "status": {

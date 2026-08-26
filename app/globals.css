@@ -1011,3 +1011,21 @@ body:has(.plogin) .fab{display:none}
   .gcal__title{min-width:0;font-size:1rem}
   .gcal__top{padding:12px 12px;gap:8px}
 }
+
+/* flags in language switcher */
+.flag{display:inline-block;width:20px;height:14px;border-radius:3px;overflow:hidden;line-height:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);flex:none}
+.flag svg{display:block;width:100%;height:100%}
+.lang__menu button{display:flex;align-items:center;gap:9px}
+/* keep language switcher visible in the header on mobile */
+@media (max-width:980px){.bar__act .lang .btn--glass{display:inline-flex}}
+
+/* ═══════════════ DETAIL MODAL ═══════════════ */
+.pmodal{position:fixed;inset:0;z-index:120;background:rgba(3,16,43,.5);backdrop-filter:blur(3px);
+  display:flex;align-items:center;justify-content:center;padding:20px;animation:fade .2s ease both}
+.pmodal__c{background:#fff;border-radius:var(--rx);box-shadow:var(--s3);width:min(560px,100%);max-height:88vh;overflow:auto;padding:clamp(20px,3vw,28px)}
+.pmodal__h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.pmodal__h b{font-family:var(--fd);font-size:1.15rem;color:var(--b600)}
+.pmodal__x{width:34px;height:34px;border-radius:10px;border:0;background:var(--b50);color:var(--gray);cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;transition:.15s}
+.pmodal__x:hover{background:var(--b100);color:var(--ink)}
+.pmodal__x svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round}
+.ptable tbody tr[role=button]{cursor:pointer}
