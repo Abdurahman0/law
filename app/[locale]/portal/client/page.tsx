@@ -24,7 +24,7 @@ export default function ClientDashboard() {
           {t("quickHelp")}
         </p>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-          <Link href="/chat" className="btn btn--grad">
+          <Link href="/portal/client/ai" className="btn btn--grad">
             <IconSparkle />
             {t("quickHelpCta")}
           </Link>

@@ -32,7 +32,7 @@ type Msg = {
   offline?: boolean;
 };
 
-export default function ChatPage() {
+export default function ChatPage({ embedded = false }: { embedded?: boolean }) {
   const t = useTranslations("chatPage");
   const { reply } = useLexAi();
   const { session } = useAuth();
@@ -149,7 +149,7 @@ export default function ChatPage() {
   const empty = messages.length === 0;
 
   return (
-    <div className="aichat">
+    <div className={`aichat ${embedded ? "aichat--embed" : "aichat--full"}`}>
       <div
         className={`aichat__scrim${sideOpen ? " on" : ""}`}
         onClick={() => setSideOpen(false)}
