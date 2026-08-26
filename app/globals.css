@@ -236,7 +236,7 @@ h1,h2,h3,h4{font-family:var(--fd);margin:0;letter-spacing:-.03em;line-height:1.0
 .phone__f i svg{width:15px;height:15px;stroke:#fff;fill:none;stroke-width:2.4}
 
 /* ── ADVOKAT KARTALARI ── */
-.chiprow{display:flex;gap:8px;overflow-x:auto;padding-bottom:14px;scrollbar-width:none;margin-inline:calc(-1*var(--pad));padding-inline:var(--pad)}
+.chiprow{display:flex;gap:8px;overflow-x:auto;overflow-y:visible;padding-top:8px;padding-bottom:14px;scrollbar-width:none;margin-inline:calc(-1*var(--pad));padding-inline:var(--pad)}
 .chiprow::-webkit-scrollbar{display:none}
 .fchip{border:0;background:#F2F6FC;color:var(--gray);border-radius:var(--pill);padding:10px 17px;font-size:.88rem;font-weight:600;cursor:pointer;white-space:nowrap;flex:none;transition:.2s}
 .fchip:hover{background:var(--b100);color:var(--b600)}
@@ -721,11 +721,11 @@ main > .sec:first-child{padding-top:calc(70px + clamp(40px,5vw,64px))}
 .packs{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:8px}
 
 /* ═══════════════ ACTIVE STATES (redesigned — vivid) ═══════════════ */
-.seg[aria-selected=true]{background:var(--grad);color:#fff;box-shadow:var(--sblue)}
+.seg[aria-selected=true]{background:var(--grad);color:#fff;box-shadow:0 8px 20px -8px rgba(22,104,240,.5)}
 .seg[aria-selected=true] svg{stroke:#fff}
-.tab[aria-selected=true]{background:var(--grad);color:#fff;box-shadow:var(--sblue)}
+.tab[aria-selected=true]{background:var(--grad);color:#fff;box-shadow:0 8px 20px -8px rgba(22,104,240,.5)}
 .switch button[aria-pressed=true]{background:var(--grad);box-shadow:var(--sblue)}
-.fchip[aria-pressed=true]{background:var(--grad);box-shadow:var(--sblue);transform:translateY(-1px)}
+.fchip[aria-pressed=true]{background:var(--grad);box-shadow:0 8px 20px -8px rgba(22,104,240,.5)}
 /* active nav link (current page) */
 .nav a[aria-current=page]{background:rgba(255,255,255,.18);color:#fff}
 .bar.on .nav a[aria-current=page]{background:var(--b100);color:var(--b600)}
@@ -968,3 +968,44 @@ body:has(.plogin) .fab{display:none}
 .advgrid .advcard{width:auto}
 
 .aichat__hi{color:var(--b600);font-weight:700;font-size:.86rem;margin:0 0 8px;text-transform:uppercase;letter-spacing:.05em}
+
+/* ═══════════════ CALENDAR (month grid) ═══════════════ */
+.gcal{background:#fff;border-radius:var(--rl);box-shadow:inset 0 0 0 1.5px var(--line);overflow:hidden}
+.gcal__top{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.gcal__title{font-family:var(--fd);font-size:1.15rem;font-weight:800;letter-spacing:-.02em;min-width:170px}
+.gcal__nav{display:flex;gap:6px}
+.gcal__nav button{width:34px;height:34px;border-radius:10px;border:0;background:var(--b50);color:var(--b700);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
+.gcal__nav button:hover{background:var(--b100)}
+.gcal__nav svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.gcal__today{margin-left:auto;border:0;background:var(--b100);color:var(--b700);font-weight:700;font-size:.84rem;padding:9px 16px;border-radius:var(--pill);cursor:pointer;transition:.15s}
+.gcal__today:hover{background:var(--b200)}
+.gcal__wd{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--line);background:var(--b50)}
+.gcal__wd span{padding:9px 10px;text-align:right;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--gray2)}
+.gcal__grid{display:grid;grid-template-columns:repeat(7,1fr);grid-auto-rows:minmax(108px,1fr)}
+.gcal__cell{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:6px;display:flex;flex-direction:column;gap:4px;min-width:0;overflow:hidden}
+.gcal__cell:nth-child(7n){border-right:0}
+.gcal__cell--out{background:var(--b50)}
+.gcal__dn{align-self:flex-end;width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:.82rem;font-weight:600;color:var(--gray);flex:none}
+.gcal__dn--today{background:var(--b600);color:#fff}
+.gcal__ev{font-size:.72rem;line-height:1.3;padding:3px 7px;border-radius:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.gcal__ev b{font-weight:700;margin-right:2px}
+.gcal__ev--hearing{background:var(--b100);color:var(--b700)}
+.gcal__ev--investigative{background:#FFF1DE;color:#B26A00}
+.gcal__ev--meeting{background:#E1F6EE;color:var(--ok)}
+.gcal__ev--deadline{background:#FDECEC;color:#C0392B}
+.gcal__legend{display:flex;gap:16px;flex-wrap:wrap;padding:13px 18px;border-top:1px solid var(--line)}
+.gcal__legend span{display:inline-flex;align-items:center;gap:7px;font-size:.8rem;color:var(--gray);font-weight:600}
+.gcal__dot{width:11px;height:11px;border-radius:4px;display:inline-block;flex:none}
+.gcal__dot--hearing{background:var(--b500)}
+.gcal__dot--investigative{background:#E8912B}
+.gcal__dot--meeting{background:var(--ok)}
+.gcal__dot--deadline{background:#E05555}
+@media (max-width:760px){
+  .gcal__grid{grid-auto-rows:minmax(74px,1fr)}
+  .gcal__cell{padding:4px;gap:3px}
+  .gcal__dn{width:22px;height:22px;font-size:.76rem}
+  .gcal__ev{font-size:.6rem;padding:2px 5px;border-radius:5px}
+  .gcal__wd span{padding:7px 5px;font-size:.6rem}
+  .gcal__title{min-width:0;font-size:1rem}
+  .gcal__top{padding:12px 12px;gap:8px}
+}

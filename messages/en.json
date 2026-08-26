@@ -897,6 +897,7 @@
       "cases": { "title": "My Cases", "filterAll": "All" },
       "calendar": {
         "title": "Calendar & deadlines",
+        "today": "Today",
         "hearing": "Hearing",
         "investigative": "Investigative action",
         "meeting": "Meeting",

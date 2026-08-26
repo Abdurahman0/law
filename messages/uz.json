@@ -897,6 +897,7 @@
       "cases": { "title": "Mening ishlarim", "filterAll": "Barchasi" },
       "calendar": {
         "title": "Kalendar va muddatlar",
+        "today": "Bugun",
         "hearing": "Sud majlisi",
         "investigative": "Tergov harakati",
         "meeting": "Uchrashuv",

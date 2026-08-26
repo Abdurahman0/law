@@ -22,3 +22,29 @@ export function fmtDate(iso: string, locale: string): string {
   const months = MONTHS[locale] || MONTHS.uz;
   return `${d} ${months[m - 1]} ${y}`;
 }
+
+// Nominative month names (for headers like "Avgust 2026").
+const MONTHS_NOM: Record<string, string[]> = {
+  uz: MONTHS.uz,
+  ru: [
+    "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+    "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь",
+  ],
+  en: MONTHS.en,
+};
+
+// Short weekday names, Monday-first.
+const WEEKDAYS: Record<string, string[]> = {
+  uz: ["Du", "Se", "Ch", "Pa", "Ju", "Sh", "Ya"],
+  ru: ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
+  en: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+};
+
+export function monthTitle(year: number, month0: number, locale: string): string {
+  const months = MONTHS_NOM[locale] || MONTHS_NOM.uz;
+  return `${months[month0]} ${year}`;
+}
+
+export function weekdays(locale: string): string[] {
+  return WEEKDAYS[locale] || WEEKDAYS.uz;
+}

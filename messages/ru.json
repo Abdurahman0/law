@@ -897,6 +897,7 @@
       "cases": { "title": "Мои дела", "filterAll": "Все" },
       "calendar": {
         "title": "Календарь и сроки",
+        "today": "Сегодня",
         "hearing": "Заседание",
         "investigative": "Следственное действие",
         "meeting": "Встреча",
