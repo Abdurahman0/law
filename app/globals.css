@@ -955,3 +955,8 @@ body:has(.plogin) .fab{display:none}
   .ptop__user span{display:none}
   .pbody__in{gap:16px}
 }
+
+/* reused marketing sections inside the portal: drop the big section padding */
+.pbody .sec{padding-block:0}
+.pbody .wrap{max-width:none;padding-inline:0}
+.pbody .sec .head{margin-bottom:clamp(18px,2.5vw,26px)}
