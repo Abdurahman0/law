@@ -50,7 +50,7 @@ export default function ClientProfile() {
             <b>{t("subscription")}</b>
           </div>
           <p style={{ margin: 0, color: "var(--gray)", fontSize: ".9rem" }}>
-            Standard · active
+            {t("subActive")}
           </p>
         </div>
       </div>

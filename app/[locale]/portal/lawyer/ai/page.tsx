@@ -4,17 +4,9 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { IconSparkle, IconArrowRight } from "@/components/icons";
 
-const ACTIONS = [
-  "Summarize case",
-  "Build chronology",
-  "Compare documents",
-  "Find missing documents",
-  "Extract deadlines",
-  "Prepare question list",
-];
-
 export default function LawyerAi() {
   const t = useTranslations("portal.lawyer.ai");
+  const actions = t.raw("actions") as string[];
 
   return (
     <div className="ppanel">
@@ -25,7 +17,7 @@ export default function LawyerAi() {
         {t("lead")}
       </p>
       <div className="grid">
-        {ACTIONS.map((a) => (
+        {actions.map((a) => (
           <button
             key={a}
             className="card"

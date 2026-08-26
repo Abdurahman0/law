@@ -6,6 +6,7 @@ import { GIFTS } from "@/lib/portalData";
 
 export default function ClientGifts() {
   const t = useTranslations("portal.client.gifts");
+  const tc = useTranslations("portal.common");
 
   return (
     <div className="ppanel">
@@ -22,7 +23,7 @@ export default function ClientGifts() {
               <th>{t("recipient")}</th>
               <th>{t("term")}</th>
               <th>{t("date")}</th>
-              <th>Status</th>
+              <th>{tc("cols.status")}</th>
             </tr>
           </thead>
           <tbody>

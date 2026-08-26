@@ -921,7 +921,15 @@
       },
       "ai": {
         "title": "AI Huquqiy Yordamchi",
-        "lead": "Ishni umumlashtiring, xronologiya tuzing, yetishmayotgan hujjatlar va muddatlarni toping."
+        "lead": "Ishni umumlashtiring, xronologiya tuzing, yetishmayotgan hujjatlar va muddatlarni toping.",
+        "actions": [
+          "Ishni qisqacha bayon qilish",
+          "Xronologiya tuzish",
+          "Hujjatlarni taqqoslash",
+          "Yetishmayotgan hujjatlarni topish",
+          "Muddatlarni ajratish",
+          "Savollar ro'yxatini tayyorlash"
+        ]
       },
       "caseDetail": {
         "overview": "Ish umumiy ko'rinishi",
@@ -983,7 +991,8 @@
         "email": "Email",
         "card": "Bank kartasi",
         "addFamily": "Oila a'zosini qo'shish",
-        "noFamily": "Oila a'zolari qo'shilmagan"
+        "noFamily": "Oila a'zolari qo'shilmagan",
+        "subActive": "Standard · faol"
       }
     }
   },

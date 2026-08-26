@@ -921,7 +921,15 @@
       },
       "ai": {
         "title": "AI Legal Assistant",
-        "lead": "Summarize a case, build a chronology, find missing documents and deadlines."
+        "lead": "Summarize a case, build a chronology, find missing documents and deadlines.",
+        "actions": [
+          "Summarize case",
+          "Build chronology",
+          "Compare documents",
+          "Find missing documents",
+          "Extract deadlines",
+          "Prepare question list"
+        ]
       },
       "caseDetail": {
         "overview": "Case overview",
@@ -983,7 +991,8 @@
         "email": "Email",
         "card": "Bank card",
         "addFamily": "Add family member",
-        "noFamily": "No family members added"
+        "noFamily": "No family members added",
+        "subActive": "Standard · active"
       }
     }
   },
