@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { WorkEntry } from "@/lib/types";
+import MonthPicker from "../MonthPicker";
 import { IconPlus, IconBriefcase, IconClose } from "../icons";
 
 function uid(): string {
@@ -87,15 +88,23 @@ export default function WorkHistoryEditor({
           <div className="cform__row2">
             <div>
               <label>{t("start")}</label>
-              <input type="month" value={form.start} onChange={(e) => setForm({ ...form, start: e.target.value })} />
+              <MonthPicker
+                value={form.start}
+                onChange={(v) => setForm({ ...form, start: v })}
+                placeholder={t("pickPh")}
+                ariaLabel={t("start")}
+                clearLabel={t("clear")}
+              />
             </div>
             <div>
               <label>{t("end")}</label>
-              <input
-                type="month"
+              <MonthPicker
                 value={form.end}
+                onChange={(v) => setForm({ ...form, end: v })}
+                placeholder={form.current ? t("current") : t("pickPh")}
+                ariaLabel={t("end")}
                 disabled={form.current}
-                onChange={(e) => setForm({ ...form, end: e.target.value })}
+                clearLabel={t("clear")}
               />
             </div>
           </div>

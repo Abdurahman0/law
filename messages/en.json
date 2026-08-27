@@ -2109,7 +2109,9 @@
         "achievements": "Achievements",
         "achievementsPh": "Key results or achievements (optional)",
         "add": "Add experience",
-        "empty": "No experience added yet."
+        "empty": "No experience added yet.",
+        "pickPh": "Select month",
+        "clear": "Clear"
       },
       "expertiseTitle": "Professional expertise",
       "expertiseSubtitle": "Select the legal areas you practice in.",

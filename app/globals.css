@@ -1555,3 +1555,33 @@ body:has(.auth) .fab{display:none}
   .auth__brand{display:none}
   .auth__main{min-height:100dvh}
 }
+
+
+/* ═══════════════ MONTH PICKER ═══════════════ */
+.mpick{position:relative;width:100%}
+.mpick__btn{width:100%;display:flex;align-items:center;gap:10px;background:#F7FAFE;border:0;border-radius:14px;padding:13px 15px;
+  font-size:.95rem;font-weight:500;color:var(--ink);cursor:pointer;box-shadow:inset 0 0 0 1.5px var(--line);transition:.2s;text-align:left}
+.mpick__btn:hover:not(:disabled){box-shadow:inset 0 0 0 1.5px var(--b300)}
+.mpick[data-open="true"] .mpick__btn{box-shadow:inset 0 0 0 1.5px var(--b400);background:#fff}
+.mpick__btn:disabled{opacity:.55;cursor:not-allowed}
+.mpick__btn>svg{width:18px;height:18px;stroke:var(--gray2);flex:none}
+.mpick__val{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mpick__btn--ph .mpick__val{color:var(--gray2)}
+.mpick__cv{width:8px;height:8px;border-right:2px solid var(--b500);border-bottom:2px solid var(--b500);
+  transform:rotate(45deg);transition:transform .22s;flex:none;margin-bottom:3px}
+.mpick[data-open="true"] .mpick__cv{transform:rotate(-135deg);margin-bottom:-2px}
+.mpick__pop{position:absolute;top:calc(100% + 10px);left:0;right:0;z-index:130;background:#fff;border-radius:16px;
+  box-shadow:var(--s3);padding:12px;animation:fade .2s ease both;min-width:236px}
+.mpick__nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.mpick__nav b{font-family:var(--fd);font-size:1.05rem;letter-spacing:-.02em}
+.mpick__nav button{width:32px;height:32px;border-radius:10px;border:0;background:var(--b50);color:var(--b600);cursor:pointer;display:grid;place-items:center}
+.mpick__nav button:hover{background:var(--b100)}
+.mpick__nav button svg{width:16px;height:16px}
+.mpick__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.mpick__m{border:0;background:transparent;border-radius:10px;padding:11px 4px;font-weight:600;font-size:.86rem;color:var(--gray);cursor:pointer;transition:.14s}
+.mpick__m:hover{background:var(--b50);color:var(--b600)}
+.mpick__m.on{background:var(--grad);color:#fff;box-shadow:var(--sblue)}
+.mpick__clear{width:100%;margin-top:8px;border:0;background:transparent;color:var(--gray);font-size:.82rem;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px;border-radius:10px}
+.mpick__clear:hover{background:var(--b50);color:#C0392B}
+.mpick__clear svg{width:13px;height:13px}

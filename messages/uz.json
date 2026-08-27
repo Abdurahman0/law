@@ -2115,7 +2115,9 @@
         "achievements": "Yutuqlar",
         "achievementsPh": "Asosiy natijalar yoki yutuqlar (ixtiyoriy)",
         "add": "Tajriba qo'shish",
-        "empty": "Hali tajriba qo'shilmagan."
+        "empty": "Hali tajriba qo'shilmagan.",
+        "pickPh": "Oyni tanlang",
+        "clear": "Tozalash"
       },
       "expertiseTitle": "Kasbiy yo'nalishlar",
       "expertiseSubtitle": "Amaliyot olib boradigan yuridik sohalarni tanlang.",

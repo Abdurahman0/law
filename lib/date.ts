@@ -48,3 +48,8 @@ export function monthTitle(year: number, month0: number, locale: string): string
 export function weekdays(locale: string): string[] {
   return WEEKDAYS[locale] || WEEKDAYS.uz;
 }
+
+// Nominative month names for a given locale (e.g. month picker grid/header).
+export function monthNames(locale: string): string[] {
+  return MONTHS_NOM[locale] || MONTHS_NOM.uz;
+}
