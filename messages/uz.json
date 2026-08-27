@@ -33,35 +33,12 @@
       "navoi": "Navoiy"
     },
     "stages": {
-      "unknown": {
-        "code": "ANIQMAS",
-        "name": "Hali aniqlanmagan"
-      },
-      "preInvestigation": {
-        "code": "01 · TQT",
-        "name": "Tergovgacha tekshiruv",
-        "desc": "Materialni o'rganish, tushuntirish berishda ishtirok, ish qo'zg'atishga e'tiroz."
-      },
-      "investigation": {
-        "code": "02 · DT",
-        "name": "Dastlabki tergov",
-        "desc": "So'roqlarda qatnashish, ehtiyot chorasiga shikoyat, himoya pozitsiyasini shakllantirish."
-      },
-      "firstInstance": {
-        "code": "03 · SUD-1",
-        "name": "Birinchi instansiya",
-        "desc": "Sud majlislarida to'liq ishtirok, dalillarni taqdim etish, himoya nutqi."
-      },
-      "appeal": {
-        "code": "04 · APEL",
-        "name": "Apellyatsiya",
-        "desc": "Shikoyatni muddat ichida tayyorlash va majlisda uni himoya qilish."
-      },
-      "cassation": {
-        "code": "05 · KASS",
-        "name": "Kassatsiya va taftish",
-        "desc": "Oliy sudda taftish yakuniga qadar huquqiy himoya."
-      }
+      "unknown": { "code": "ANIQMAS", "name": "Hali aniqlanmagan" },
+      "preInvestigation": { "code": "01 · TQT", "name": "Tergovgacha tekshiruv", "desc": "Materialni o'rganish, tushuntirish berishda ishtirok, ish qo'zg'atishga e'tiroz." },
+      "investigation": { "code": "02 · DT", "name": "Dastlabki tergov", "desc": "So'roqlarda qatnashish, ehtiyot chorasiga shikoyat, himoya pozitsiyasini shakllantirish." },
+      "firstInstance": { "code": "03 · SUD-1", "name": "Birinchi instansiya", "desc": "Sud majlislarida to'liq ishtirok, dalillarni taqdim etish, himoya nutqi." },
+      "appeal": { "code": "04 · APEL", "name": "Apellyatsiya", "desc": "Shikoyatni muddat ichida tayyorlash va majlisda uni himoya qilish." },
+      "cassation": { "code": "05 · KASS", "name": "Kassatsiya va taftish", "desc": "Oliy sudda taftish yakuniga qadar huquqiy himoya." }
     }
   },
   "nav": {
@@ -129,43 +106,18 @@
       "titleLead": "Yuridik yordam endi",
       "titleAccent": "bir necha tegishda",
       "subtitle": "Advokat toping, hujjatni 5 daqiqada tayyorlang yoki LexGo.AI dan bepul javob oling. Hammasi bitta ilovada.",
-      "tags": [
-        "1 240+ advokat",
-        "14 hudud",
-        "Dastlabki 5 so'rov bepul"
-      ]
+      "tags": ["1 240+ advokat", "14 hudud", "Dastlabki 5 so'rov bepul"]
     },
     "quick": {
       "title": "Tez xizmatlar",
       "items": [
-        {
-          "title": "Ekspress konsultatsiya",
-          "sub": "15 daqiqa · 90 000 so'mdan"
-        },
-        {
-          "title": "Video konsultatsiya",
-          "sub": "Advokat bilan yuzma-yuz"
-        },
-        {
-          "title": "Shartnoma tayyorlash",
-          "sub": "200+ namuna"
-        },
-        {
-          "title": "Hujjat tekshiruvi",
-          "sub": "Xatolar va xavflar"
-        },
-        {
-          "title": "Tergovda himoya",
-          "sub": "Shoshilinch advokat"
-        },
-        {
-          "title": "Kompaniya ochish",
-          "sub": "Ustav bilan birga"
-        },
-        {
-          "title": "Obunani sovg'a qilish",
-          "sub": "3 / 6 / 12 oy"
-        }
+        { "title": "Ekspress konsultatsiya", "sub": "15 daqiqa · 90 000 so'mdan" },
+        { "title": "Video konsultatsiya", "sub": "Advokat bilan yuzma-yuz" },
+        { "title": "Shartnoma tayyorlash", "sub": "200+ namuna" },
+        { "title": "Hujjat tekshiruvi", "sub": "Xatolar va xavflar" },
+        { "title": "Tergovda himoya", "sub": "Shoshilinch advokat" },
+        { "title": "Kompaniya ochish", "sub": "Ustav bilan birga" },
+        { "title": "Obunani sovg'a qilish", "sub": "3 / 6 / 12 oy" }
       ]
     },
     "stats": {
@@ -184,38 +136,14 @@
       "subText": "Muammo chiqqanda advokat izlash o'rniga, u allaqachon sizniki. Obuna oilangizni ham qamrab oladi."
     },
     "ticker": [
-      {
-        "city": "Toshkent",
-        "text": "jinoiy ishni advokat 4 daqiqada qabul qildi"
-      },
-      {
-        "city": "Samarqand",
-        "text": "ijara shartnomasi tayyorlandi"
-      },
-      {
-        "city": "Farg'ona",
-        "text": "mehnat nizosi bo'yicha pretenziya yuborildi"
-      },
-      {
-        "city": "Toshkent",
-        "text": "LexGo.AI 12 ta hujjatni tahlil qildi"
-      },
-      {
-        "city": "Buxoro",
-        "text": "Premium obuna rasmiylashtirildi"
-      },
-      {
-        "city": "Namangan",
-        "text": "da'vo arizasi sudga topshirildi"
-      },
-      {
-        "city": "Andijon",
-        "text": "kompaniya ochish paketi buyurtma qilindi"
-      },
-      {
-        "city": "Qashqadaryo",
-        "text": "video konsultatsiya yakunlandi"
-      }
+      { "city": "Toshkent", "text": "jinoiy ishni advokat 4 daqiqada qabul qildi" },
+      { "city": "Samarqand", "text": "ijara shartnomasi tayyorlandi" },
+      { "city": "Farg'ona", "text": "mehnat nizosi bo'yicha pretenziya yuborildi" },
+      { "city": "Toshkent", "text": "LexGo.AI 12 ta hujjatni tahlil qildi" },
+      { "city": "Buxoro", "text": "Premium obuna rasmiylashtirildi" },
+      { "city": "Namangan", "text": "da'vo arizasi sudga topshirildi" },
+      { "city": "Andijon", "text": "kompaniya ochish paketi buyurtma qilindi" },
+      { "city": "Qashqadaryo", "text": "video konsultatsiya yakunlandi" }
     ],
     "funnelCta": {
       "primary": "Hozir yordam oling",
@@ -226,22 +154,10 @@
       "title": "Yuridik yordam olish bunchalik qiyin bo'lmasligi kerak",
       "lead": "Ko'pchilik kerakli advokatga yetib borgunicha vaqt, pul va tinchligini yo'qotadi.",
       "items": [
-        {
-          "title": "Kerakli advokatni topa olmaysiz",
-          "text": "Faqat omad va tanish-bilishga suyanasiz — haqiqiy tajriba yoki g'alabalarni solishtirishning imkoni yo'q."
-        },
-        {
-          "title": "Narx — qorong'u quti",
-          "text": "To'lovlar yopiq eshiklar ortida aytiladi va hech qanday izohsiz o'zgaradi."
-        },
-        {
-          "title": "Hech qanday kafolat yo'q",
-          "text": "Advokat aloqaga chiqmasa yoki muddatni o'tkazib yuborsa, zararni yolg'iz o'zingiz ko'tarasiz."
-        },
-        {
-          "title": "Hammasi tarqoq",
-          "text": "Hujjatlar, to'lovlar, sud sanalari va xabarlar besh xil joyda saqlanadi."
-        }
+        { "title": "Kerakli advokatni topa olmaysiz", "text": "Faqat omad va tanish-bilishga suyanasiz — haqiqiy tajriba yoki g'alabalarni solishtirishning imkoni yo'q." },
+        { "title": "Narx — qorong'u quti", "text": "To'lovlar yopiq eshiklar ortida aytiladi va hech qanday izohsiz o'zgaradi." },
+        { "title": "Hech qanday kafolat yo'q", "text": "Advokat aloqaga chiqmasa yoki muddatni o'tkazib yuborsa, zararni yolg'iz o'zingiz ko'tarasiz." },
+        { "title": "Hammasi tarqoq", "text": "Hujjatlar, to'lovlar, sud sanalari va xabarlar besh xil joyda saqlanadi." }
       ]
     },
     "benefits": {
@@ -249,30 +165,12 @@
       "title": "G'alaba uchun kerak bo'lgan hamma narsa — bir joyda",
       "lead": "O'zbekiston qonunlari asosida o'rgatilgan sun'iy intellekt, ochiq natijalarga ega tasdiqlangan advokatlar, shaffof narx va platforma kafolati.",
       "items": [
-        {
-          "title": "Bir necha daqiqada javob",
-          "text": "LexGo.AI amaldagi aniq moddaga havola bilan javob beradi — dastlabki 5 ta so'rovingiz bepul."
-        },
-        {
-          "title": "Tasdiqlangan advokatlar",
-          "text": "Yo'nalish, hudud, reyting va haqiqiy g'alabalar bo'yicha saralang — shaffof narxlarni oldindan ko'ring."
-        },
-        {
-          "title": "Platforma kafolati",
-          "text": "LexGo orqali to'lang — biror narsa noto'g'ri ketsa, advokatni almashtiramiz yoki masalani yuqoriga ko'taramiz."
-        },
-        {
-          "title": "Yagona ish maydoni",
-          "text": "Hujjatlar, chat, sud sanalari va to'lovlar — barchasi bir joyda kuzatiladi."
-        },
-        {
-          "title": "Adolatli va ochiq narx",
-          "text": "Narx nega aynan shunday ekanini aniq ko'ring: hudud, tajriba va reyting."
-        },
-        {
-          "title": "Hamma joyda yordam",
-          "text": "14 ta hudud, mobil ilova va uch til — qayerda bo'lsangiz ham qo'llab-quvvatlash."
-        }
+        { "title": "Bir necha daqiqada javob", "text": "LexGo.AI amaldagi aniq moddaga havola bilan javob beradi — dastlabki 5 ta so'rovingiz bepul." },
+        { "title": "Tasdiqlangan advokatlar", "text": "Yo'nalish, hudud, reyting va haqiqiy g'alabalar bo'yicha saralang — shaffof narxlarni oldindan ko'ring." },
+        { "title": "Platforma kafolati", "text": "LexGo orqali to'lang — biror narsa noto'g'ri ketsa, advokatni almashtiramiz yoki masalani yuqoriga ko'taramiz." },
+        { "title": "Yagona ish maydoni", "text": "Hujjatlar, chat, sud sanalari va to'lovlar — barchasi bir joyda kuzatiladi." },
+        { "title": "Adolatli va ochiq narx", "text": "Narx nega aynan shunday ekanini aniq ko'ring: hudud, tajriba va reyting." },
+        { "title": "Hamma joyda yordam", "text": "14 ta hudud, mobil ilova va uch til — qayerda bo'lsangiz ham qo'llab-quvvatlash." }
       ]
     },
     "social": {
@@ -330,58 +228,22 @@
       "lawyer": "Advokat — 60 daqiqada"
     },
     "quickLawyer": [
-      {
-        "label": "Tergovda himoya",
-        "area": "criminal"
-      },
-      {
-        "label": "Shartnoma nizosi",
-        "area": "economic"
-      },
-      {
-        "label": "Ajrashish",
-        "area": "family"
-      },
-      {
-        "label": "Ishdan bo'shatish",
-        "area": "labor"
-      }
+      { "label": "Tergovda himoya", "area": "criminal" },
+      { "label": "Shartnoma nizosi", "area": "economic" },
+      { "label": "Ajrashish", "area": "family" },
+      { "label": "Ishdan bo'shatish", "area": "labor" }
     ],
     "quickDoc": [
-      {
-        "label": "Ijara shartnomasi",
-        "doc": "contract"
-      },
-      {
-        "label": "Ishdan bo'shash arizasi",
-        "doc": "application"
-      },
-      {
-        "label": "Qarzni undirish da'vosi",
-        "doc": "claim"
-      },
-      {
-        "label": "Avtomobil ishonchnomasi",
-        "doc": "poa"
-      }
+      { "label": "Ijara shartnomasi", "doc": "contract" },
+      { "label": "Ishdan bo'shash arizasi", "doc": "application" },
+      { "label": "Qarzni undirish da'vosi", "doc": "claim" },
+      { "label": "Avtomobil ishonchnomasi", "doc": "poa" }
     ],
     "quickAsk": [
-      {
-        "label": "Tergovga chaqirishdi",
-        "text": "Meni tergovga chaqirishdi, jinoiy ish qo'zg'atilgan"
-      },
-      {
-        "label": "Shartnoma buzildi",
-        "text": "Yetkazib beruvchi shartnomani buzdi, tovar 40 kun kechikdi"
-      },
-      {
-        "label": "Meros bo'linmayapti",
-        "text": "Merosni bo'lishmayapti, sudga bermoqchiman"
-      },
-      {
-        "label": "Biznes ochish",
-        "text": "MChJ ochmoqchiman va tovar belgisini patentlamoqchiman"
-      }
+      { "label": "Tergovga chaqirishdi", "text": "Meni tergovga chaqirishdi, jinoiy ish qo'zg'atilgan" },
+      { "label": "Shartnoma buzildi", "text": "Yetkazib beruvchi shartnomani buzdi, tovar 40 kun kechikdi" },
+      { "label": "Meros bo'linmayapti", "text": "Merosni bo'lishmayapti, sudga bermoqchiman" },
+      { "label": "Biznes ochish", "text": "MChJ ochmoqchiman va tovar belgisini patentlamoqchiman" }
     ],
     "askPlaceholder": "Masalan: 3 oydan beri ish haqim to'lanmayapti, ustiga ustak ishdan ham bo'shatishdi…",
     "askTooShort": "Bir-ikki gap yozing — nima bo'lgani va qachon bo'lgani muhim.",
@@ -420,194 +282,53 @@
     "rules": {
       "criminal": {
         "dir": "Jinoiy ish",
-        "services": [
-          "Dastlabki tergovda to'liq ishtirok etish paketi",
-          "Ehtiyot chorasi ustidan shikoyat",
-          "Shoshilinch advokat chaqirish (24/7)"
-        ],
+        "services": ["Dastlabki tergovda to'liq ishtirok etish paketi", "Ehtiyot chorasi ustidan shikoyat", "Shoshilinch advokat chaqirish (24/7)"],
         "price": "3 500 000 – 6 200 000 so'm"
       },
       "administrative": {
         "dir": "Ma'muriy ish",
-        "services": [
-          "Protokol ustidan e'tiroz tayyorlash",
-          "Sudda vakillik qilish",
-          "Zararni undirish bo'yicha da'vo"
-        ],
+        "services": ["Protokol ustidan e'tiroz tayyorlash", "Sudda vakillik qilish", "Zararni undirish bo'yicha da'vo"],
         "price": "900 000 – 2 400 000 so'm"
       },
       "labor": {
         "dir": "Mehnat nizosi",
-        "services": [
-          "Ish beruvchiga pretenziya xati",
-          "Ishga qayta tiklash bo'yicha da'vo",
-          "To'lanmagan ish haqini undirish"
-        ],
+        "services": ["Ish beruvchiga pretenziya xati", "Ishga qayta tiklash bo'yicha da'vo", "To'lanmagan ish haqini undirish"],
         "price": "1 200 000 – 3 100 000 so'm"
       },
       "civil": {
         "dir": "Fuqarolik ishi",
-        "services": [
-          "Da'vo arizasini tayyorlash",
-          "Sudda vakillik qilish",
-          "Sud qarorini ijro etishda kuzatuv"
-        ],
+        "services": ["Da'vo arizasini tayyorlash", "Sudda vakillik qilish", "Sud qarorini ijro etishda kuzatuv"],
         "price": "1 800 000 – 4 500 000 so'm"
       },
       "economic": {
         "dir": "Iqtisodiy nizo",
-        "services": [
-          "Shartnoma tahlili va xavflar xulosasi",
-          "Pretenziya xati va hisob-kitob ilovasi",
-          "Xo'jalik sudiga da'vo tayyorlash"
-        ],
+        "services": ["Shartnoma tahlili va xavflar xulosasi", "Pretenziya xati va hisob-kitob ilovasi", "Xo'jalik sudiga da'vo tayyorlash"],
         "price": "2 200 000 – 5 400 000 so'm"
       },
       "corporate": {
         "dir": "Korporativ masala",
-        "services": [
-          "Kompaniya ochish va individual ustav",
-          "Savdo belgisini patentlash",
-          "Biznesning huquqiy xavflari auditi"
-        ],
+        "services": ["Kompaniya ochish va individual ustav", "Savdo belgisini patentlash", "Biznesning huquqiy xavflari auditi"],
         "price": "1 500 000 – 7 000 000 so'm"
       },
       "general": {
         "dir": "Umumiy huquqiy masala",
-        "services": [
-          "Ekspress konsultatsiya (15 daqiqa)",
-          "Chat orqali yurist bilan konsultatsiya",
-          "Hujjatlaringizni tekshirib berish"
-        ],
+        "services": ["Ekspress konsultatsiya (15 daqiqa)", "Chat orqali yurist bilan konsultatsiya", "Hujjatlaringizni tekshirib berish"],
         "price": "90 000 – 320 000 so'm"
       }
     },
     "keywords": {
-      "criminal": [
-        "tergov",
-        "tergovchi",
-        "jinoiy",
-        "jinoyat",
-        "ayblov",
-        "ayblanuvchi",
-        "soroq",
-        "qamoq",
-        "hibs",
-        "ushlab",
-        "militsiya",
-        "ichki ishlar",
-        "prokuratura",
-        "gumondor",
-        "sudlanuvchi",
-        "modda",
-        "hukm",
-        "jazo"
-      ],
-      "administrative": [
-        "jarima",
-        "protokol",
-        "yth",
-        "yol harakati",
-        "mamuriy",
-        "huquqbuzarlik",
-        "haydovchilik",
-        "tezlik",
-        "avtohalokat",
-        "dps"
-      ],
-      "labor": [
-        "ish haqi",
-        "oylik",
-        "ishdan boshat",
-        "boshatish",
-        "mehnat shartnoma",
-        "tatil",
-        "otpuska",
-        "ish beruvchi",
-        "qisqartir",
-        "maosh",
-        "ish joyi"
-      ],
-      "civil": [
-        "meros",
-        "vorislik",
-        "ajrashish",
-        "aliment",
-        "nikoh",
-        "uy",
-        "kvartira",
-        "kochmas mulk",
-        "qarz",
-        "garov",
-        "tilxat",
-        "bolinmayapti",
-        "bolishmayapti",
-        "yer",
-        "dala hovli"
-      ],
-      "economic": [
-        "shartnoma",
-        "yetkazib",
-        "kontragent",
-        "xojalik",
-        "bankrot",
-        "soliq",
-        "penya",
-        "pretenziya",
-        "tovar",
-        "tolov",
-        "kechik",
-        "buzdi",
-        "buzildi",
-        "hamkor",
-        "postavka"
-      ],
-      "corporate": [
-        "mchj",
-        "yatt",
-        "kompaniya och",
-        "biznes och",
-        "ustav",
-        "ulush",
-        "tasischi",
-        "tovar belgisi",
-        "patent",
-        "litsenziya",
-        "royxatdan otkaz",
-        "firma",
-        "compliance",
-        "filial"
-      ],
+      "criminal": ["tergov", "tergovchi", "jinoiy", "jinoyat", "ayblov", "ayblanuvchi", "soroq", "qamoq", "hibs", "ushlab", "militsiya", "ichki ishlar", "prokuratura", "gumondor", "sudlanuvchi", "modda", "hukm", "jazo"],
+      "administrative": ["jarima", "protokol", "yth", "yol harakati", "mamuriy", "huquqbuzarlik", "haydovchilik", "tezlik", "avtohalokat", "dps"],
+      "labor": ["ish haqi", "oylik", "ishdan boshat", "boshatish", "mehnat shartnoma", "tatil", "otpuska", "ish beruvchi", "qisqartir", "maosh", "ish joyi"],
+      "civil": ["meros", "vorislik", "ajrashish", "aliment", "nikoh", "uy", "kvartira", "kochmas mulk", "qarz", "garov", "tilxat", "bolinmayapti", "bolishmayapti", "yer", "dala hovli"],
+      "economic": ["shartnoma", "yetkazib", "kontragent", "xojalik", "bankrot", "soliq", "penya", "pretenziya", "tovar", "tolov", "kechik", "buzdi", "buzildi", "hamkor", "postavka"],
+      "corporate": ["mchj", "yatt", "kompaniya och", "biznes och", "ustav", "ulush", "tasischi", "tovar belgisi", "patent", "litsenziya", "royxatdan otkaz", "firma", "compliance", "filial"],
       "stages": {
-        "preInvestigation": [
-          "tergovgacha",
-          "tekshiruv",
-          "material yigil"
-        ],
-        "investigation": [
-          "tergov",
-          "soroq",
-          "ayblanuvchi",
-          "gumondor",
-          "hibs"
-        ],
-        "firstInstance": [
-          "sud",
-          "majlis",
-          "davo",
-          "sudga"
-        ],
-        "appeal": [
-          "apellyatsiya",
-          "apel",
-          "hukm ustidan",
-          "qaror ustidan"
-        ],
-        "cassation": [
-          "kassatsiya",
-          "taftish",
-          "oliy sud"
-        ]
+        "preInvestigation": ["tergovgacha", "tekshiruv", "material yigil"],
+        "investigation": ["tergov", "soroq", "ayblanuvchi", "gumondor", "hibs"],
+        "firstInstance": ["sud", "majlis", "davo", "sudga"],
+        "appeal": ["apellyatsiya", "apel", "hukm ustidan", "qaror ustidan"],
+        "cassation": ["kassatsiya", "taftish", "oliy sud"]
       }
     }
   },
@@ -625,22 +346,10 @@
       "sortPriceDesc": "Narx: qimmatdan arzonga"
     },
     "stats": [
-      {
-        "value": "1 240+",
-        "label": "Tasdiqlangan advokat"
-      },
-      {
-        "value": "63 000+",
-        "label": "Yopilgan ish"
-      },
-      {
-        "value": "4.8",
-        "label": "O'rtacha reyting"
-      },
-      {
-        "value": "30 daq",
-        "label": "O'rtacha javob"
-      }
+      { "value": "1 240+", "label": "Tasdiqlangan advokat" },
+      { "value": "63 000+", "label": "Yopilgan ish" },
+      { "value": "4.8", "label": "O'rtacha reyting" },
+      { "value": "30 daq", "label": "O'rtacha javob" }
     ],
     "filterAll": "Hammasi",
     "card": {
@@ -657,22 +366,10 @@
     "empty": "Bu yo'nalishda hozircha advokat yo'q. Arizangizni qoldiring — mos advokatni biz topamiz.",
     "priceInfo": "Narx ochiq mezonlar bo'yicha shakllanadi: hudud (yirik shaharlarda qimmatroq), staj (3–5 yil +10%, 6–10 yil +15%, 10+ yil +20%), reyting va super advokat maqomi (viloyat TOP-3 — 30% gacha, tor yo'nalishda 10+ yil tajriba — 20% gacha). Narx oshgan bo'lsa, sababi buyurtma oynasida yozib ko'rsatiladi.",
     "flow": [
-      {
-        "title": "Xizmat va advokatni tanlaysiz",
-        "text": "Paket, bosqich va advokat kartochkasi bitta ekranda."
-      },
-      {
-        "title": "Advokat 30 daqiqada javob beradi",
-        "text": "Ilova orqali tasdiqlaydi yoki rad etadi."
-      },
-      {
-        "title": "10% oldindan to'lov",
-        "text": "To'lovdan keyin aloqa kanali ochiladi."
-      },
-      {
-        "title": "Ish LexGo ichida yuritiladi",
-        "text": "Hujjat, chat, sud sanasi, to'lov — bitta joyda."
-      }
+      { "title": "Xizmat va advokatni tanlaysiz", "text": "Paket, bosqich va advokat kartochkasi bitta ekranda." },
+      { "title": "Advokat 30 daqiqada javob beradi", "text": "Ilova orqali tasdiqlaydi yoki rad etadi." },
+      { "title": "10% oldindan to'lov", "text": "To'lovdan keyin aloqa kanali ochiladi." },
+      { "title": "Ish LexGo ichida yuritiladi", "text": "Hujjat, chat, sud sanasi, to'lov — bitta joyda." }
     ]
   },
   "aiPage": {
@@ -688,30 +385,12 @@
     ],
     "capabilitiesTitle": "LexGo.AI nima qila oladi",
     "capabilities": [
-      {
-        "title": "Havolalar bilan javob",
-        "text": "Har bir javob aniq moddani va amaldagi normani keltiradi, mavhum xulosa emas."
-      },
-      {
-        "title": "Hujjat tayyorlash",
-        "text": "200+ namunadan shartnoma, ariza, shikoyat, da'vo va ishonchnoma."
-      },
-      {
-        "title": "Hujjat tahlili",
-        "text": "Xatolar, qonunga zid bandlar, yashirin xavflar va bir tomonlama shartlarni topadi."
-      },
-      {
-        "title": "Ish xronologiyasi",
-        "text": "Yuklagan fayllaringizdan voqealar va muddatlar tartibini tuzadi."
-      },
-      {
-        "title": "Yo'nalish va bosqichni aniqlash",
-        "text": "Muammoyingizni oddiy so'zlarda o'qib, yo'nalish va ish bosqichini aniqlaydi."
-      },
-      {
-        "title": "Advokat tanlash",
-        "text": "Advokatlarni yo'nalish, hudud va reyting bo'yicha filtrlab, eng mosini taklif qiladi."
-      }
+      { "title": "Havolalar bilan javob", "text": "Har bir javob aniq moddani va amaldagi normani keltiradi, mavhum xulosa emas." },
+      { "title": "Hujjat tayyorlash", "text": "200+ namunadan shartnoma, ariza, shikoyat, da'vo va ishonchnoma." },
+      { "title": "Hujjat tahlili", "text": "Xatolar, qonunga zid bandlar, yashirin xavflar va bir tomonlama shartlarni topadi." },
+      { "title": "Ish xronologiyasi", "text": "Yuklagan fayllaringizdan voqealar va muddatlar tartibini tuzadi." },
+      { "title": "Yo'nalish va bosqichni aniqlash", "text": "Muammoyingizni oddiy so'zlarda o'qib, yo'nalish va ish bosqichini aniqlaydi." },
+      { "title": "Advokat tanlash", "text": "Advokatlarni yo'nalish, hudud va reyting bo'yicha filtrlab, eng mosini taklif qiladi." }
     ],
     "sourcesTitle": "Nimaga o'qitilgan",
     "sources": [
@@ -722,18 +401,9 @@
     ],
     "examplesTitle": "Namunaviy savollar",
     "examples": [
-      {
-        "q": "Meni so'roqqa chaqirishdi — huquqlarim qanday?",
-        "a": "So'roqda advokat olish, jim turish va ehtiyot chorasi ustidan qisqa muddat ichida shikoyat qilish huquqingiz bor."
-      },
-      {
-        "q": "Yetkazib beruvchi tovarni 40 kun kechiktirib yetkazdi.",
-        "a": "Penya ko'rsatilmagan bo'lsa ham, buzilish uchun talab qilish huquqi saqlanadi. Tartib: pretenziya → hisob-kitob → xo'jalik sudiga da'vo."
-      },
-      {
-        "q": "MChJ ochib, savdo belgimni qanday himoya qilaman?",
-        "a": "Avval soliq rejimini tanlang, individual ustavdan foydalaning va savdo belgisini kompaniyadan alohida ro'yxatdan o'tkazing."
-      }
+      { "q": "Meni so'roqqa chaqirishdi — huquqlarim qanday?", "a": "So'roqda advokat olish, jim turish va ehtiyot chorasi ustidan qisqa muddat ichida shikoyat qilish huquqingiz bor." },
+      { "q": "Yetkazib beruvchi tovarni 40 kun kechiktirib yetkazdi.", "a": "Penya ko'rsatilmagan bo'lsa ham, buzilish uchun talab qilish huquqi saqlanadi. Tartib: pretenziya → hisob-kitob → xo'jalik sudiga da'vo." },
+      { "q": "MChJ ochib, savdo belgimni qanday himoya qilaman?", "a": "Avval soliq rejimini tanlang, individual ustavdan foydalaning va savdo belgisini kompaniyadan alohida ro'yxatdan o'tkazing." }
     ],
     "info": "Dastlabki 5 ta so'rov bepul. Keyingilari oylik obuna asosida. Platformada ro'yxatdan o'tgan advokatlarga obunaga 50% chegirma.",
     "phone": {
@@ -741,12 +411,7 @@
       "status": "Onlayn · {left} ta bepul so'rov qoldi",
       "greeting": "Salom! Men LexGo.AI. Muammoyingizni oddiy so'zlar bilan yozing — yo'nalishni, ish bosqichini va mos xizmatni aytib beraman.",
       "greetingNote": "Dastlabki 5 ta so'rov bepul",
-      "quick": [
-        "Tergovga chaqirishdi",
-        "Shartnoma buzildi",
-        "Ish haqi to'lanmadi",
-        "MChJ ochmoqchiman"
-      ],
+      "quick": ["Tergovga chaqirishdi", "Shartnoma buzildi", "Ish haqi to'lanmadi", "MChJ ochmoqchiman"],
       "inputPlaceholder": "Savolingizni yozing…"
     }
   },
@@ -762,167 +427,54 @@
     },
     "consultation": {
       "cards": [
-        {
-          "title": "Ekspress konsultatsiya",
-          "text": "Qisqa savolga qisqa javob. Navbatsiz, 15 daqiqagacha.",
-          "price": "90 000",
-          "unit": "so'mdan"
-        },
-        {
-          "title": "Video konsultatsiya",
-          "text": "Advokat bilan yuzma-yuz. Hujjatlarni ekranda birga ko'rasiz.",
-          "price": "240 000",
-          "unit": "so'mdan"
-        },
-        {
-          "title": "Chat konsultatsiya",
-          "text": "Fayl, rasm, ovozli xabar yuborasiz. Yozishma saqlanadi.",
-          "price": "140 000",
-          "unit": "so'mdan"
-        },
-        {
-          "title": "Ikkinchi huquqiy xulosa",
-          "text": "Second Opinion: boshqa advokat maslahatini mustaqil baholash.",
-          "price": "320 000",
-          "unit": "so'mdan"
-        }
+        { "title": "Ekspress konsultatsiya", "text": "Qisqa savolga qisqa javob. Navbatsiz, 15 daqiqagacha.", "price": "90 000", "unit": "so'mdan" },
+        { "title": "Video konsultatsiya", "text": "Advokat bilan yuzma-yuz. Hujjatlarni ekranda birga ko'rasiz.", "price": "240 000", "unit": "so'mdan" },
+        { "title": "Chat konsultatsiya", "text": "Fayl, rasm, ovozli xabar yuborasiz. Yozishma saqlanadi.", "price": "140 000", "unit": "so'mdan" },
+        { "title": "Ikkinchi huquqiy xulosa", "text": "Second Opinion: boshqa advokat maslahatini mustaqil baholash.", "price": "320 000", "unit": "so'mdan" }
       ],
       "info": "Qo'shimcha imkoniyat: natijani yozma huquqiy xulosa ko'rinishida rasmiylashtirib olish — to'lov oynasida alohida belgilanadi."
     },
     "docPrep": {
       "cards": [
-        {
-          "title": "Shartnoma",
-          "text": "Oldi-sotdi, ijara, xizmat ko'rsatish. Ikki tomon ma'lumotini kiritasiz.",
-          "price": "110 000",
-          "unit": "so'mdan"
-        },
-        {
-          "title": "Ariza",
-          "text": "Sudga, davlat organiga yoki ish beruvchiga. Bosqichma-bosqich to'ldiriladi.",
-          "price": "70 000",
-          "unit": "so'mdan"
-        },
-        {
-          "title": "Shikoyat",
-          "text": "Qaror va harakatlar ustidan. Muddatlar avtomatik hisoblanadi.",
-          "price": "95 000",
-          "unit": "so'mdan"
-        },
-        {
-          "title": "Da'vo arizasi",
-          "text": "Fuqarolik va xo'jalik da'volari. Davlat boji ham hisoblab beriladi.",
-          "price": "180 000",
-          "unit": "so'mdan"
-        },
-        {
-          "title": "Ishonchnoma",
-          "text": "Oddiy va notarial shakl. Vakolatlar ro'yxatini tanlaysiz.",
-          "price": "60 000",
-          "unit": "so'mdan"
-        },
-        {
-          "title": "Korporativ hujjatlar",
-          "text": "Ustav, qaror, bayonnoma. Ulush va boshqaruvga moslashtiriladi.",
-          "price": "320 000",
-          "unit": "so'mdan"
-        }
+        { "title": "Shartnoma", "text": "Oldi-sotdi, ijara, xizmat ko'rsatish. Ikki tomon ma'lumotini kiritasiz.", "price": "110 000", "unit": "so'mdan" },
+        { "title": "Ariza", "text": "Sudga, davlat organiga yoki ish beruvchiga. Bosqichma-bosqich to'ldiriladi.", "price": "70 000", "unit": "so'mdan" },
+        { "title": "Shikoyat", "text": "Qaror va harakatlar ustidan. Muddatlar avtomatik hisoblanadi.", "price": "95 000", "unit": "so'mdan" },
+        { "title": "Da'vo arizasi", "text": "Fuqarolik va xo'jalik da'volari. Davlat boji ham hisoblab beriladi.", "price": "180 000", "unit": "so'mdan" },
+        { "title": "Ishonchnoma", "text": "Oddiy va notarial shakl. Vakolatlar ro'yxatini tanlaysiz.", "price": "60 000", "unit": "so'mdan" },
+        { "title": "Korporativ hujjatlar", "text": "Ustav, qaror, bayonnoma. Ulush va boshqaruvga moslashtiriladi.", "price": "320 000", "unit": "so'mdan" }
       ],
       "flow": [
-        {
-          "title": "Namunani toping",
-          "text": "Qidiruv orqali yoki mavzular bo'yicha bo'limlardan."
-        },
-        {
-          "title": "Maydonlarni to'ldiring",
-          "text": "Qayerga qanday ma'lumot kerakligi ko'rsatib turiladi."
-        },
-        {
-          "title": "Natijani ko'ring",
-          "text": "Hujjat ko'z oldingizda shakllanadi, tahrirlash mumkin."
-        },
-        {
-          "title": "To'lab yuklab oling",
-          "text": "DOCX va PDF. Advokat ko'rigini qo'shish mumkin."
-        }
+        { "title": "Namunani toping", "text": "Qidiruv orqali yoki mavzular bo'yicha bo'limlardan." },
+        { "title": "Maydonlarni to'ldiring", "text": "Qayerga qanday ma'lumot kerakligi ko'rsatib turiladi." },
+        { "title": "Natijani ko'ring", "text": "Hujjat ko'z oldingizda shakllanadi, tahrirlash mumkin." },
+        { "title": "To'lab yuklab oling", "text": "DOCX va PDF. Advokat ko'rigini qo'shish mumkin." }
       ],
       "info": "Advokat ko'rigini tanlasangiz, ariza kol-markazdagi yurist-advokatlarga tushadi va ko'pi bilan 60 daqiqada yozma natija ilovangizga keladi."
     },
     "docReview": {
       "cards": [
-        {
-          "title": "Xatolar",
-          "text": "Amaldagi normaga zid yoki bekor deb topilishi mumkin bo'lgan bandlar ajratiladi."
-        },
-        {
-          "title": "Xavflar",
-          "text": "Bir tomonlama javobgarlik, noaniq muddatlar, yashirin jarimalar va to'lov tartibi."
-        },
-        {
-          "title": "Takliflar",
-          "text": "Har bir muammoli band uchun tayyor alternativ formulirovka beriladi.",
-          "price": "150 000",
-          "unit": "so'mdan"
-        }
+        { "title": "Xatolar", "text": "Amaldagi normaga zid yoki bekor deb topilishi mumkin bo'lgan bandlar ajratiladi." },
+        { "title": "Xavflar", "text": "Bir tomonlama javobgarlik, noaniq muddatlar, yashirin jarimalar va to'lov tartibi." },
+        { "title": "Takliflar", "text": "Har bir muammoli band uchun tayyor alternativ formulirovka beriladi.", "price": "150 000", "unit": "so'mdan" }
       ],
       "flow": [
-        {
-          "title": "Hujjatni yuklang",
-          "text": "PDF, DOCX yoki foto. Bir nechta fayl bo'lishi mumkin."
-        },
-        {
-          "title": "Turini belgilang",
-          "text": "Filtr yuristni tez topish uchun kerak."
-        },
-        {
-          "title": "Tekshiruvchini tanlang",
-          "text": "AI — tez va arzon. Advokat — chuqurroq."
-        },
-        {
-          "title": "Xulosani oling",
-          "text": "Xatolar, xavflar va aniq takliflar ro'yxati."
-        }
+        { "title": "Hujjatni yuklang", "text": "PDF, DOCX yoki foto. Bir nechta fayl bo'lishi mumkin." },
+        { "title": "Turini belgilang", "text": "Filtr yuristni tez topish uchun kerak." },
+        { "title": "Tekshiruvchini tanlang", "text": "AI — tez va arzon. Advokat — chuqurroq." },
+        { "title": "Xulosani oling", "text": "Xatolar, xavflar va aniq takliflar ro'yxati." }
       ]
     },
     "compare": {
       "title": "LexGo.AI yoki tirik advokat?",
       "lead": "Har bir xizmat ikkala variantni taklif qiladi. Tezlik va narxni yoki chuqurlik va inson imzosini tanlang.",
-      "headers": {
-        "feature": "",
-        "ai": "LexGo.AI",
-        "lawyer": "Advokat"
-      },
+      "headers": { "feature": "", "ai": "LexGo.AI", "lawyer": "Advokat" },
       "rows": [
-        {
-          "feature": "Bajarilish vaqti",
-          "ai": "1–5 daqiqa",
-          "lawyer": "60 daqiqagacha"
-        },
-        {
-          "feature": "Narx",
-          "ai": "60 000 so'mdan",
-          "lawyer": "140 000 so'mdan"
-        },
-        {
-          "feature": "Qonunga havolalar",
-          "ai": "bor",
-          "lawyer": "bor"
-        },
-        {
-          "feature": "Yozma huquqiy xulosa",
-          "ai": "Ixtiyoriy",
-          "lawyer": "bor"
-        },
-        {
-          "feature": "Sudda vakillik",
-          "ai": "yo'q",
-          "lawyer": "bor"
-        },
-        {
-          "feature": "24/7 mavjud",
-          "ai": "bor",
-          "lawyer": "Jadval bo'yicha"
-        }
+        { "feature": "Bajarilish vaqti", "ai": "1–5 daqiqa", "lawyer": "60 daqiqagacha" },
+        { "feature": "Narx", "ai": "60 000 so'mdan", "lawyer": "140 000 so'mdan" },
+        { "feature": "Qonunga havolalar", "ai": "bor", "lawyer": "bor" },
+        { "feature": "Yozma huquqiy xulosa", "ai": "Ixtiyoriy", "lawyer": "bor" },
+        { "feature": "Sudda vakillik", "ai": "yo'q", "lawyer": "bor" },
+        { "feature": "24/7 mavjud", "ai": "bor", "lawyer": "Jadval bo'yicha" }
       ]
     }
   },
@@ -937,18 +489,9 @@
     "title": "Kichik xizmatlar tayyor paketlarga birlashtirilgan",
     "lead": "Alohida xizmatlarni sanab chiqmasdan, bitta paketni tanlaysiz — masalan «dastlabki tergovda to'liq ishtirok etish».",
     "cards": [
-      {
-        "title": "Jinoiy va ma'muriy ishlar",
-        "text": "Ushlab turishdan Oliy suddagi taftishgacha — har bir bosqich uchun alohida paket: tergovda ishtirok, sudda himoya, apellyatsiya, shikoyat arizalari, shoshilinch advokat."
-      },
-      {
-        "title": "Fuqarolik va iqtisodiy ishlar",
-        "text": "Qarz, meros, mulk, oila va mehnat nizolari hamda kontragentlar bilan xo'jalik nizolari: pretenziya, da'vo, sudda vakillik, qarorni ijro etish."
-      },
-      {
-        "title": "Tadbirkorlar va tashkilotlar",
-        "text": "Autsors yuridik xizmat, huquqiy xavflar auditi, kompaniya ochish va individual ustav, Compliance, HR hujjatlari, shartnomalar xatlovi, korporativ boshqaruv."
-      }
+      { "title": "Jinoiy va ma'muriy ishlar", "text": "Ushlab turishdan Oliy suddagi taftishgacha — har bir bosqich uchun alohida paket: tergovda ishtirok, sudda himoya, apellyatsiya, shikoyat arizalari, shoshilinch advokat." },
+      { "title": "Fuqarolik va iqtisodiy ishlar", "text": "Qarz, meros, mulk, oila va mehnat nizolari hamda kontragentlar bilan xo'jalik nizolari: pretenziya, da'vo, sudda vakillik, qarorni ijro etish." },
+      { "title": "Tadbirkorlar va tashkilotlar", "text": "Autsors yuridik xizmat, huquqiy xavflar auditi, kompaniya ochish va individual ustav, Compliance, HR hujjatlari, shartnomalar xatlovi, korporativ boshqaruv." }
     ]
   },
   "subscription": {
@@ -1011,66 +554,22 @@
     "ratingInfo": "Har bir xizmatdan so'ng advokatni baholaysiz — bu uning reytingini shakllantiradi va keyingi mijozlarga to'g'ri tanlov qilishga yordam beradi.",
     "compare": {
       "title": "Tariflarni solishtiring",
-      "headers": {
-        "feature": "",
-        "standard": "Standart",
-        "premium": "Premium"
-      },
+      "headers": { "feature": "", "standard": "Standart", "premium": "Premium" },
       "rows": [
-        {
-          "feature": "30 daqiqalik konsultatsiyalar",
-          "standard": "Cheksiz",
-          "premium": "Cheksiz"
-        },
-        {
-          "feature": "Hujjat ko'rigi",
-          "standard": "10 sahifagacha",
-          "premium": "10 sahifagacha"
-        },
-        {
-          "feature": "Shablon bazasi",
-          "standard": "150+",
-          "premium": "150+"
-        },
-        {
-          "feature": "Biznesni huquqiy tekshirish",
-          "standard": "yo'q",
-          "premium": "1×/yil"
-        },
-        {
-          "feature": "Mualliflik huquqini ro'yxatga olish",
-          "standard": "yo'q",
-          "premium": "1×/oy"
-        },
-        {
-          "feature": "Oila qamrovi",
-          "standard": "Turmush o'rtoq",
-          "premium": "Ota-ona, turmush o'rtoq, farzandlar"
-        },
-        {
-          "feature": "Tarmoq xizmatiga chegirma",
-          "standard": "25%",
-          "premium": "25%"
-        }
+        { "feature": "30 daqiqalik konsultatsiyalar", "standard": "Cheksiz", "premium": "Cheksiz" },
+        { "feature": "Hujjat ko'rigi", "standard": "10 sahifagacha", "premium": "10 sahifagacha" },
+        { "feature": "Shablon bazasi", "standard": "150+", "premium": "150+" },
+        { "feature": "Biznesni huquqiy tekshirish", "standard": "yo'q", "premium": "1×/yil" },
+        { "feature": "Mualliflik huquqini ro'yxatga olish", "standard": "yo'q", "premium": "1×/oy" },
+        { "feature": "Oila qamrovi", "standard": "Turmush o'rtoq", "premium": "Ota-ona, turmush o'rtoq, farzandlar" },
+        { "feature": "Tarmoq xizmatiga chegirma", "standard": "25%", "premium": "25%" }
       ]
     },
     "testimonialsTitle": "Obunachilar nima deydi",
     "testimonials": [
-      {
-        "text": "Uy egasi bilan nizo boshlanganda advokatim allaqachon biriktirilgan edi. Bir haftada, keraksiz tashvishsiz hal bo'ldi.",
-        "name": "Aziz R.",
-        "role": "Standart obunachi"
-      },
-      {
-        "text": "Biznesim uchun yillik huquqiy tekshiruv butun obuna pulini oqladi. Shartnomalar tez ko'rib chiqiladi.",
-        "name": "Malika T.",
-        "role": "Premium obunachi"
-      },
-      {
-        "text": "Ota-onamga obuna sovg'a qildim. Tashvishlanish o'rniga advokatga qo'ng'iroq qilishadi. Har bir so'miga arziydi.",
-        "name": "Jasur K.",
-        "role": "Sovg'a obunachisi"
-      }
+      { "text": "Uy egasi bilan nizo boshlanganda advokatim allaqachon biriktirilgan edi. Bir haftada, keraksiz tashvishsiz hal bo'ldi.", "name": "Aziz R.", "role": "Standart obunachi" },
+      { "text": "Biznesim uchun yillik huquqiy tekshiruv butun obuna pulini oqladi. Shartnomalar tez ko'rib chiqiladi.", "name": "Malika T.", "role": "Premium obunachi" },
+      { "text": "Ota-onamga obuna sovg'a qildim. Tashvishlanish o'rniga advokatga qo'ng'iroq qilishadi. Har bir so'miga arziydi.", "name": "Jasur K.", "role": "Sovg'a obunachisi" }
     ]
   },
   "business": {
@@ -1089,90 +588,25 @@
     "cta": "Taklif so'rash",
     "industriesTitle": "Biz biladigan sohalar",
     "industries": [
-      {
-        "title": "IT va startaplar",
-        "text": "Mahsulot shartlari, IP, pudrat shartnomalari, rezidentlik va soliq rejimlari."
-      },
-      {
-        "title": "Chakana va e-tijorat",
-        "text": "Ommaviy oferta, qaytarish, iste'molchi himoyasi, marketplace shartnomalari."
-      },
-      {
-        "title": "Ishlab chiqarish",
-        "text": "Ta'minot zanjiri, sifat da'volari, mehnat xavfsizligi, sanoat ijaralari."
-      },
-      {
-        "title": "Qurilish va ko'chmas mulk",
-        "text": "Shartnomalar, ruxsatnomalar, yer, ulushli qurilish va qabul nizolari."
-      },
-      {
-        "title": "Logistika va savdo",
-        "text": "Tashish, bojxona, incoterms, chegara osha hisob-kitob va jarimalar."
-      },
-      {
-        "title": "Xizmatlar va HoReCa",
-        "text": "Litsenziyalash, kadrlar, sanitariya qoidalari, franchayzing va brend himoyasi."
-      }
+      { "title": "IT va startaplar", "text": "Mahsulot shartlari, IP, pudrat shartnomalari, rezidentlik va soliq rejimlari." },
+      { "title": "Chakana va e-tijorat", "text": "Ommaviy oferta, qaytarish, iste'molchi himoyasi, marketplace shartnomalari." },
+      { "title": "Ishlab chiqarish", "text": "Ta'minot zanjiri, sifat da'volari, mehnat xavfsizligi, sanoat ijaralari." },
+      { "title": "Qurilish va ko'chmas mulk", "text": "Shartnomalar, ruxsatnomalar, yer, ulushli qurilish va qabul nizolari." },
+      { "title": "Logistika va savdo", "text": "Tashish, bojxona, incoterms, chegara osha hisob-kitob va jarimalar." },
+      { "title": "Xizmatlar va HoReCa", "text": "Litsenziyalash, kadrlar, sanitariya qoidalari, franchayzing va brend himoyasi." }
     ],
     "packagesTitle": "Biznes paketlari",
     "packages": [
-      {
-        "name": "Start",
-        "for": "Endi oyoqqa turayotgan yangi kompaniya uchun.",
-        "price": "2 900 000",
-        "priceUnit": "so'm / oy",
-        "features": [
-          "Kompaniya ochish va individual ustav",
-          "Oyiga 5 tagacha shartnoma namunasi",
-          "Oylik 2 soatlik konsultatsiya",
-          "HR hujjatlar to'plami"
-        ]
-      },
-      {
-        "name": "Growth",
-        "for": "O'sib borayotgan jamoa va bitimlar oqimi uchun.",
-        "price": "6 400 000",
-        "priceUnit": "so'm / oy",
-        "features": [
-          "Start paketidagi barcha imkoniyatlar",
-          "Cheksiz shartnoma ko'rigi",
-          "Chorakda 1 marta huquqiy xavflar auditi",
-          "Savdo belgisi va IP qo'llab-quvvatlash",
-          "Shaxsiy yuridik menejer"
-        ]
-      },
-      {
-        "name": "Enterprise",
-        "for": "Autsors yuridik bo'lim uchun.",
-        "price": "kelishuv bo'yicha",
-        "priceUnit": "so'rov bo'yicha",
-        "features": [
-          "Growth paketidagi barcha imkoniyatlar",
-          "Joyda ishtirok va SLA",
-          "Compliance tizimini yo'lga qo'yish",
-          "Sud jarayonlari va vakillik",
-          "24/7 ustuvor liniya"
-        ]
-      }
+      { "name": "Start", "for": "Endi oyoqqa turayotgan yangi kompaniya uchun.", "price": "2 900 000", "priceUnit": "so'm / oy", "features": ["Kompaniya ochish va individual ustav", "Oyiga 5 tagacha shartnoma namunasi", "Oylik 2 soatlik konsultatsiya", "HR hujjatlar to'plami"] },
+      { "name": "Growth", "for": "O'sib borayotgan jamoa va bitimlar oqimi uchun.", "price": "6 400 000", "priceUnit": "so'm / oy", "features": ["Start paketidagi barcha imkoniyatlar", "Cheksiz shartnoma ko'rigi", "Chorakda 1 marta huquqiy xavflar auditi", "Savdo belgisi va IP qo'llab-quvvatlash", "Shaxsiy yuridik menejer"] },
+      { "name": "Enterprise", "for": "Autsors yuridik bo'lim uchun.", "price": "kelishuv bo'yicha", "priceUnit": "so'rov bo'yicha", "features": ["Growth paketidagi barcha imkoniyatlar", "Joyda ishtirok va SLA", "Compliance tizimini yo'lga qo'yish", "Sud jarayonlari va vakillik", "24/7 ustuvor liniya"] }
     ],
     "processTitle": "Qanday boshlaymiz",
     "process": [
-      {
-        "title": "Tanishuv qo'ng'irog'i",
-        "text": "Xavflaringiz, bitimlaringiz va joriy huquqiy holatingizni o'rganamiz."
-      },
-      {
-        "title": "Taklif",
-        "text": "Aniq hajmli paket va shaffof narx."
-      },
-      {
-        "title": "Ishga ulash",
-        "text": "Hujjatlar auditi, namunalar va shaxsiy menejer."
-      },
-      {
-        "title": "Doimiy ish",
-        "text": "Shartnoma, nizolar va Compliance LexGo ichida yuritiladi."
-      }
+      { "title": "Tanishuv qo'ng'irog'i", "text": "Xavflaringiz, bitimlaringiz va joriy huquqiy holatingizni o'rganamiz." },
+      { "title": "Taklif", "text": "Aniq hajmli paket va shaffof narx." },
+      { "title": "Ishga ulash", "text": "Hujjatlar auditi, namunalar va shaxsiy menejer." },
+      { "title": "Doimiy ish", "text": "Shartnoma, nizolar va Compliance LexGo ichida yuritiladi." }
     ]
   },
   "forLawyers": {
@@ -1204,78 +638,32 @@
       "caseId": "CASE #LX-10245",
       "active": "Active",
       "caseText": "Mijoz shartnoma bo'yicha mablag' o'zlashtirilganlikda ayblanmoqda. Dastlabki tergov bosqichi.",
-      "tags": [
-        "1 konsultatsiya",
-        "Hujjat tahlili",
-        "1 sud majlisi"
-      ],
+      "tags": ["1 konsultatsiya", "Hujjat tahlili", "1 sud majlisi"],
       "accept": "Qabul qilish",
       "requestInfo": "Ma'lumot so'rash"
     },
     "toolsTitle": "Bitta ish maydonidagi vositalar",
     "tools": [
-      {
-        "title": "Case Marketplace",
-        "text": "Yo'nalish va hududingizga mos yangi ishlar jonli oqimi."
-      },
-      {
-        "title": "Case Command Center",
-        "text": "Har bir ish uchun bosqich, deadline, keyingi harakat va to'lov."
-      },
-      {
-        "title": "AI Legal Assistant",
-        "text": "Qisqacha mazmun, xronologiya va yetishmayotgan hujjatlar ro'yxati."
-      },
-      {
-        "title": "Smart Calendar",
-        "text": "Sud majlislari, tergov harakatlari va apellyatsiya muddatlari eslatmalar bilan."
-      },
-      {
-        "title": "Conflict Check",
-        "text": "Ishni olishdan oldin manfaatlar to'qnashuvi haqida avtomatik ogohlantirish."
-      },
-      {
-        "title": "Secure Chat",
-        "text": "Matn, ovoz, hujjat va video qo'ng'iroqlar — barchasi shifrlangan."
-      }
+      { "title": "Case Marketplace", "text": "Yo'nalish va hududingizga mos yangi ishlar jonli oqimi." },
+      { "title": "Case Command Center", "text": "Har bir ish uchun bosqich, deadline, keyingi harakat va to'lov." },
+      { "title": "AI Legal Assistant", "text": "Qisqacha mazmun, xronologiya va yetishmayotgan hujjatlar ro'yxati." },
+      { "title": "Smart Calendar", "text": "Sud majlislari, tergov harakatlari va apellyatsiya muddatlari eslatmalar bilan." },
+      { "title": "Conflict Check", "text": "Ishni olishdan oldin manfaatlar to'qnashuvi haqida avtomatik ogohlantirish." },
+      { "title": "Secure Chat", "text": "Matn, ovoz, hujjat va video qo'ng'iroqlar — barchasi shifrlangan." }
     ],
     "stepsTitle": "Qanday qo'shilish mumkin",
     "steps": [
-      {
-        "title": "Ariza bering",
-        "text": "Advokatlik litsenziyasi va oliy ma'lumot diplomingiz bilan ro'yxatdan o'ting."
-      },
-      {
-        "title": "Tasdiqdan o'ting",
-        "text": "Maqomingiz, tajribangiz va ishlar tarixini tasdiqlaymiz."
-      },
-      {
-        "title": "Profilingizni to'ldiring",
-        "text": "G'alabalar, narx mezonlari va yo'nalishlarni e'lon qiling."
-      },
-      {
-        "title": "Ishlarni qabul qilishni boshlang",
-        "text": "Mos ishlarni qabul qiling va LexGo ichida yuriting."
-      }
+      { "title": "Ariza bering", "text": "Advokatlik litsenziyasi va oliy ma'lumot diplomingiz bilan ro'yxatdan o'ting." },
+      { "title": "Tasdiqdan o'ting", "text": "Maqomingiz, tajribangiz va ishlar tarixini tasdiqlaymiz." },
+      { "title": "Profilingizni to'ldiring", "text": "G'alabalar, narx mezonlari va yo'nalishlarni e'lon qiling." },
+      { "title": "Ishlarni qabul qilishni boshlang", "text": "Mos ishlarni qabul qiling va LexGo ichida yuriting." }
     ],
     "earningsTitle": "Bu siz uchun nimani anglatadi",
     "earnings": [
-      {
-        "value": "0%",
-        "label": "O'z mijozlaringizdan komissiya"
-      },
-      {
-        "value": "48 soat",
-        "label": "O'rtacha to'lov"
-      },
-      {
-        "value": "3×",
-        "label": "Ko'proq sifatli murojaat"
-      },
-      {
-        "value": "24/7",
-        "label": "Ishga kirish"
-      }
+      { "value": "0%", "label": "O'z mijozlaringizdan komissiya" },
+      { "value": "48 soat", "label": "O'rtacha to'lov" },
+      { "value": "3×", "label": "Ko'proq sifatli murojaat" },
+      { "value": "24/7", "label": "Ishga kirish" }
     ]
   },
   "warranty": {
@@ -1284,22 +672,10 @@
     "title": "Advokat bilan to'g'ridan-to'g'ri ishlaganda bu himoya bo'lmaydi",
     "lead": "LexGo orqali xizmat olsangiz, sifatni kompaniya kafolatlaydi. Muammo chiqqanda yolg'iz qolmaysiz.",
     "cards": [
-      {
-        "title": "Advokat javob bermasa",
-        "text": "Belgilangan vaqtda javob kelmasa, ish boshqa advokatga o'tkaziladi."
-      },
-      {
-        "title": "SLA buzilsa",
-        "text": "Kelishilgan muddat va shartlar buzilganda masala yuqori darajaga ko'tariladi."
-      },
-      {
-        "title": "Ish tashlab ketilsa",
-        "text": "Almashtiruvchi advokat tayinlanadi, jarayon uzilib qolmaydi."
-      },
-      {
-        "title": "Xizmat bajarilmasa",
-        "text": "Menejer darajasidagi eskalatsiya va LexGo tomonidan yordam."
-      }
+      { "title": "Advokat javob bermasa", "text": "Belgilangan vaqtda javob kelmasa, ish boshqa advokatga o'tkaziladi." },
+      { "title": "SLA buzilsa", "text": "Kelishilgan muddat va shartlar buzilganda masala yuqori darajaga ko'tariladi." },
+      { "title": "Ish tashlab ketilsa", "text": "Almashtiruvchi advokat tayinlanadi, jarayon uzilib qolmaydi." },
+      { "title": "Xizmat bajarilmasa", "text": "Menejer darajasidagi eskalatsiya va LexGo tomonidan yordam." }
     ],
     "rules": [
       "Barcha to'lovlar faqat platforma orqali. Tashqaridan to'lov qilinsa, LexGo kafolat majburiyatini o'z zimmasiga olmaydi.",
@@ -1311,22 +687,10 @@
     ],
     "processTitle": "Kafolat qanday ishlaydi",
     "process": [
-      {
-        "title": "Platforma orqali to'laysiz",
-        "text": "To'lov eskrouda saqlanadi va kafolatga bog'lanadi — aynan shu uni majburiy qiladi."
-      },
-      {
-        "title": "Advokat nazorat qilinadi",
-        "text": "Muddatlar va SLA kuzatiladi; har 5 kunda yozma yangilanish olasiz."
-      },
-      {
-        "title": "Muammo yuqoriga ko'tariladi",
-        "text": "Javob yo'qligi yoki tashlab ketilgan ish avtomatik menejerga ko'tariladi."
-      },
-      {
-        "title": "Zararingiz qoplanadi",
-        "text": "Almashtiruvchi advokat tayinlanadi yoki masala LexGo tomonidan hal qilinadi."
-      }
+      { "title": "Platforma orqali to'laysiz", "text": "To'lov eskrouda saqlanadi va kafolatga bog'lanadi — aynan shu uni majburiy qiladi." },
+      { "title": "Advokat nazorat qilinadi", "text": "Muddatlar va SLA kuzatiladi; har 5 kunda yozma yangilanish olasiz." },
+      { "title": "Muammo yuqoriga ko'tariladi", "text": "Javob yo'qligi yoki tashlab ketilgan ish avtomatik menejerga ko'tariladi." },
+      { "title": "Zararingiz qoplanadi", "text": "Almashtiruvchi advokat tayinlanadi yoki masala LexGo tomonidan hal qilinadi." }
     ]
   },
   "appPage": {
@@ -1335,45 +699,17 @@
     "title": "Ikki rol, bitta ilova",
     "lead": "Ilovaga advokat sifatida yoki huquqiy himoyaga ehtiyoji bor shaxs sifatida kirasiz — interfeys shunga qarab quriladi.",
     "clientRole": "Mijoz",
-    "client": [
-      "Xizmat qidirish va buyurtma",
-      "Mening ishlarim va hujjatlar",
-      "To'lovlar, obuna, chegirmalar",
-      "Advokat bilan yozishma"
-    ],
+    "client": ["Xizmat qidirish va buyurtma", "Mening ishlarim va hujjatlar", "To'lovlar, obuna, chegirmalar", "Advokat bilan yozishma"],
     "lawyerRole": "Advokat",
-    "lawyer": [
-      "Dashboard va Case Marketplace",
-      "My Cases va hujjat arxivi",
-      "Kalendar va deadline eslatmalari",
-      "Moliyaviy holat va to'lovlar"
-    ],
+    "lawyer": ["Dashboard va Case Marketplace", "My Cases va hujjat arxivi", "Kalendar va deadline eslatmalari", "Moliyaviy holat va to'lovlar"],
     "featuresTitle": "Hammasi cho'ntagingizda",
     "features": [
-      {
-        "title": "Bir zumda AI javoblari",
-        "text": "LexGo.AI ga istalgan vaqtda savol bering va soniyalarda asosli javob oling."
-      },
-      {
-        "title": "Advokat topish va buyurtma",
-        "text": "Yo'nalish, hudud va reyting bo'yicha filtrlab, bir necha tegishda buyurtma bering."
-      },
-      {
-        "title": "Hujjatlar yo'l-yo'lakay",
-        "text": "Namunalarni to'ldiring, imzolang va telefondan DOCX yoki PDF yuklab oling."
-      },
-      {
-        "title": "Ishni kuzatish",
-        "text": "Bosqich, muddatlar, sud sanalari va to'lovlarni bitta joyda kuzating."
-      },
-      {
-        "title": "Xavfsiz yozishma",
-        "text": "Advokatingiz bilan yozishing, fayl ulashing va video qo'ng'iroqqa ulaning."
-      },
-      {
-        "title": "To'lovlar va obuna",
-        "text": "Xavfsiz to'lang, tarifingizni boshqaring va sovg'a obunalarini kuzating."
-      }
+      { "title": "Bir zumda AI javoblari", "text": "LexGo.AI ga istalgan vaqtda savol bering va soniyalarda asosli javob oling." },
+      { "title": "Advokat topish va buyurtma", "text": "Yo'nalish, hudud va reyting bo'yicha filtrlab, bir necha tegishda buyurtma bering." },
+      { "title": "Hujjatlar yo'l-yo'lakay", "text": "Namunalarni to'ldiring, imzolang va telefondan DOCX yoki PDF yuklab oling." },
+      { "title": "Ishni kuzatish", "text": "Bosqich, muddatlar, sud sanalari va to'lovlarni bitta joyda kuzating." },
+      { "title": "Xavfsiz yozishma", "text": "Advokatingiz bilan yozishing, fayl ulashing va video qo'ng'iroqqa ulaning." },
+      { "title": "To'lovlar va obuna", "text": "Xavfsiz to'lang, tarifingizni boshqaring va sovg'a obunalarini kuzating." }
     ],
     "download": "Yuklab oling",
     "appStore": "App Store",
@@ -1390,54 +726,18 @@
     "kicker": "Savol-javob",
     "title": "Ko'p beriladigan savollar",
     "items": [
-      {
-        "q": "LexGo.AI advokat o'rnini bosadimi?",
-        "a": "Yo'q. AI ishni qisqartirib beradi, xronologiya tuzadi, hujjatlarni taqqoslaydi va xavflarni ko'rsatadi. Yakuniy huquqiy qaror har doim advokatda qoladi — shuning uchun har bir AI xizmatining yonida advokat varianti ham turadi."
-      },
-      {
-        "q": "Nima uchun to'lovni faqat platforma orqali qilish kerak?",
-        "a": "Kafolat to'lov bilan bog'langan. To'lov platforma orqali o'tsa, advokat javob bermaganda yoki ishni tashlab ketganda biz uni almashtiramiz va masalani yuqori darajaga ko'taramiz. Tashqaridan to'lov qilinsa, LexGo kafolat majburiyatini o'z zimmasiga olmaydi."
-      },
-      {
-        "q": "Advokatning kontaktini qachon ko'raman?",
-        "a": "Advokat buyurtmangizni tasdiqlagach va siz xizmat haqining 10% ini to'laganingizdan keyin aloqa kanali ochiladi. Undan oldin ikkala tomon ham bir-birining kontaktini ko'rmaydi."
-      },
-      {
-        "q": "Obunani oila a'zolarimga qanday tarqataman?",
-        "a": "Obuna bo'lgach, tarifingizga ko'ra qamrab olinadigan oila a'zolarining ma'lumotlarini profilingizga kiritasiz. Standartda — turmush o'rtog'ingiz; Premiumda — ota-onangiz, turmush o'rtog'ingiz va qaramog'ingizdagi farzandlar."
-      },
-      {
-        "q": "Advokat narxni o'zi belgilaydimi?",
-        "a": "Narx ochiq mezonlar bo'yicha shakllanadi: hudud, ish staji va reyting. Viloyat TOP-3 dagi advokat narxni 30% gacha, tor yo'nalishda 10+ yil tajribaga ega advokat 20% gacha oshirishi mumkin — sababi sizga ko'rsatiladi. Advokat narxni pasaytirishi ham mumkin."
-      },
-      {
-        "q": "Qaysi xizmatni tanlashni bilmasam-chi?",
-        "a": "Muammoyingizni oddiy so'zlar bilan yozing. LexGo.AI matnni tahlil qilib, yo'nalishni va ish bosqichini aniqlaydi, mos xizmat turlari hamda paketlarni tanlab beradi va shu yo'nalishdagi advokatlarni filtrlaydi."
-      },
-      {
-        "q": "Ma'lumotlarim maxfiy saqlanadimi?",
-        "a": "Ha. Yozishma va hujjatlar shifrlanadi, to'lovgacha esa advokat va mijoz bir-birining kontakt ma'lumotlarini ko'ra olmaydi. Chatda tashqi kontaktlarni ulashishga urinishlar aniqlanadi va bloklanadi."
-      },
-      {
-        "q": "LexGo qaysi hududlarni qamrab oladi?",
-        "a": "Advokatlar O'zbekistonning 14 hududida mavjud. Agar hududingizda ma'lum yo'nalish bo'yicha bo'sh advokat bo'lmasa, kol-markaz 30 daqiqada mos advokatni topib beradi."
-      },
-      {
-        "q": "To'lovni bo'lib-bo'lib qilsam bo'ladimi?",
-        "a": "Ko'pgina paketlar aloqa kanalini ochish uchun 10% oldindan to'lovdan boshlanadi; qolgani bosqichlar bo'yicha taqsimlanadi. Obunani oylik yoki bir yo'la to'liq — qo'shimcha chegirma bilan — to'lash mumkin."
-      },
-      {
-        "q": "Hujjatlar qanday yetkaziladi?",
-        "a": "Tayyor hujjatlar to'lovdan so'ng darhol DOCX va PDF ko'rinishida mavjud bo'ladi. Advokat ko'rigini qo'shishingiz mumkin va yozma natija 60 daqiqada ilovangizga keladi."
-      },
-      {
-        "q": "Biznes autsors yuridik bo'lim ola oladimi?",
-        "a": "Ha. Biznes paketlari shartnomalar, xavflar auditi, Compliance, HR hujjatlari va vakillikni qamrab oladi — boshlang'ich tarifdan to SLA bilan to'liq autsors bo'limgacha."
-      },
-      {
-        "q": "LexGo da qanday advokat bo'laman?",
-        "a": "Advokatlik litsenziyasi va diplomingiz bilan ro'yxatdan o'ting, tekshiruvdan o'ting, profilingizni g'alaba va narxlar bilan to'ldiring va mos ishlarni qabul qilishni boshlang. O'z mijozlaringizdan platforma komissiyasini to'lamaysiz."
-      }
+      { "q": "LexGo.AI advokat o'rnini bosadimi?", "a": "Yo'q. AI ishni qisqartirib beradi, xronologiya tuzadi, hujjatlarni taqqoslaydi va xavflarni ko'rsatadi. Yakuniy huquqiy qaror har doim advokatda qoladi — shuning uchun har bir AI xizmatining yonida advokat varianti ham turadi." },
+      { "q": "Nima uchun to'lovni faqat platforma orqali qilish kerak?", "a": "Kafolat to'lov bilan bog'langan. To'lov platforma orqali o'tsa, advokat javob bermaganda yoki ishni tashlab ketganda biz uni almashtiramiz va masalani yuqori darajaga ko'taramiz. Tashqaridan to'lov qilinsa, LexGo kafolat majburiyatini o'z zimmasiga olmaydi." },
+      { "q": "Advokatning kontaktini qachon ko'raman?", "a": "Advokat buyurtmangizni tasdiqlagach va siz xizmat haqining 10% ini to'laganingizdan keyin aloqa kanali ochiladi. Undan oldin ikkala tomon ham bir-birining kontaktini ko'rmaydi." },
+      { "q": "Obunani oila a'zolarimga qanday tarqataman?", "a": "Obuna bo'lgach, tarifingizga ko'ra qamrab olinadigan oila a'zolarining ma'lumotlarini profilingizga kiritasiz. Standartda — turmush o'rtog'ingiz; Premiumda — ota-onangiz, turmush o'rtog'ingiz va qaramog'ingizdagi farzandlar." },
+      { "q": "Advokat narxni o'zi belgilaydimi?", "a": "Narx ochiq mezonlar bo'yicha shakllanadi: hudud, ish staji va reyting. Viloyat TOP-3 dagi advokat narxni 30% gacha, tor yo'nalishda 10+ yil tajribaga ega advokat 20% gacha oshirishi mumkin — sababi sizga ko'rsatiladi. Advokat narxni pasaytirishi ham mumkin." },
+      { "q": "Qaysi xizmatni tanlashni bilmasam-chi?", "a": "Muammoyingizni oddiy so'zlar bilan yozing. LexGo.AI matnni tahlil qilib, yo'nalishni va ish bosqichini aniqlaydi, mos xizmat turlari hamda paketlarni tanlab beradi va shu yo'nalishdagi advokatlarni filtrlaydi." },
+      { "q": "Ma'lumotlarim maxfiy saqlanadimi?", "a": "Ha. Yozishma va hujjatlar shifrlanadi, to'lovgacha esa advokat va mijoz bir-birining kontakt ma'lumotlarini ko'ra olmaydi. Chatda tashqi kontaktlarni ulashishga urinishlar aniqlanadi va bloklanadi." },
+      { "q": "LexGo qaysi hududlarni qamrab oladi?", "a": "Advokatlar O'zbekistonning 14 hududida mavjud. Agar hududingizda ma'lum yo'nalish bo'yicha bo'sh advokat bo'lmasa, kol-markaz 30 daqiqada mos advokatni topib beradi." },
+      { "q": "To'lovni bo'lib-bo'lib qilsam bo'ladimi?", "a": "Ko'pgina paketlar aloqa kanalini ochish uchun 10% oldindan to'lovdan boshlanadi; qolgani bosqichlar bo'yicha taqsimlanadi. Obunani oylik yoki bir yo'la to'liq — qo'shimcha chegirma bilan — to'lash mumkin." },
+      { "q": "Hujjatlar qanday yetkaziladi?", "a": "Tayyor hujjatlar to'lovdan so'ng darhol DOCX va PDF ko'rinishida mavjud bo'ladi. Advokat ko'rigini qo'shishingiz mumkin va yozma natija 60 daqiqada ilovangizga keladi." },
+      { "q": "Biznes autsors yuridik bo'lim ola oladimi?", "a": "Ha. Biznes paketlari shartnomalar, xavflar auditi, Compliance, HR hujjatlari va vakillikni qamrab oladi — boshlang'ich tarifdan to SLA bilan to'liq autsors bo'limgacha." },
+      { "q": "LexGo da qanday advokat bo'laman?", "a": "Advokatlik litsenziyasi va diplomingiz bilan ro'yxatdan o'ting, tekshiruvdan o'ting, profilingizni g'alaba va narxlar bilan to'ldiring va mos ishlarni qabul qilishni boshlang. O'z mijozlaringizdan platforma komissiyasini to'lamaysiz." }
     ]
   },
   "contactPage": {
@@ -1465,39 +765,15 @@
     },
     "officesTitle": "Ofislar",
     "offices": [
-      {
-        "city": "Toshkent",
-        "address": "Amir Temur shoh ko'chasi 108, Biznes markaz",
-        "phone": "+998 78 777 00 00"
-      },
-      {
-        "city": "Samarqand",
-        "address": "Registon ko'chasi 15, 2-qavat",
-        "phone": "+998 66 233 00 00"
-      },
-      {
-        "city": "Buxoro",
-        "address": "Mustaqillik ko'chasi 7",
-        "phone": "+998 65 224 00 00"
-      }
+      { "city": "Toshkent", "address": "Amir Temur shoh ko'chasi 108, Biznes markaz", "phone": "+998 78 777 00 00" },
+      { "city": "Samarqand", "address": "Registon ko'chasi 15, 2-qavat", "phone": "+998 66 233 00 00" },
+      { "city": "Buxoro", "address": "Mustaqillik ko'chasi 7", "phone": "+998 65 224 00 00" }
     ],
     "departmentsTitle": "Bo'limlar",
     "departments": [
-      {
-        "title": "Mijozlar",
-        "text": "Buyurtmalar, obunalar va to'lovlar.",
-        "contact": "help@lexgo.uz"
-      },
-      {
-        "title": "Advokatlar",
-        "text": "Ishga ulash, tasdiqlash va ishlar.",
-        "contact": "lawyers@lexgo.uz"
-      },
-      {
-        "title": "Biznes",
-        "text": "Korporativ paketlar va hamkorlik.",
-        "contact": "business@lexgo.uz"
-      }
+      { "title": "Mijozlar", "text": "Buyurtmalar, obunalar va to'lovlar.", "contact": "help@lexgo.uz" },
+      { "title": "Advokatlar", "text": "Ishga ulash, tasdiqlash va ishlar.", "contact": "lawyers@lexgo.uz" },
+      { "title": "Biznes", "text": "Korporativ paketlar va hamkorlik.", "contact": "business@lexgo.uz" }
     ]
   },
   "chat": {
@@ -1506,14 +782,7 @@
     "greeting": "Assalomu alaykum! Men LexGo.AI — O'zbekiston qonunchiligiga o'qitilganman. Muammoyingizni ikki-uch gapda yozing, men yo'nalishni, ish bosqichini va mos xizmatni aytaman.",
     "greetingNote": "Dastlabki 5 ta so'rov bepul · yakuniy huquqiy qaror advokatda qoladi",
     "inputPlaceholder": "Savolingizni yozing…",
-    "quick": [
-      "Tergovga chaqirishdi",
-      "Shartnoma buzildi, tovar kelmadi",
-      "Ish haqim to'lanmayapti",
-      "Meros bo'linmayapti",
-      "MChJ ochmoqchiman",
-      "Obuna qancha turadi?"
-    ],
+    "quick": ["Tergovga chaqirishdi", "Shartnoma buzildi, tovar kelmadi", "Ish haqim to'lanmayapti", "Meros bo'linmayapti", "MChJ ochmoqchiman", "Obuna qancha turadi?"],
     "seeLawyer": "Mos advokatni ko'rish",
     "paywall": {
       "title": "Bepul so'rovlar tugadi.",
@@ -1527,54 +796,19 @@
     "openFull": "To'liq chatni ochish",
     "downloadPdf": "PDF yuklab olish",
     "responses": {
-      "greeting": {
-        "text": "Assalomu alaykum! Qanday huquqiy masala bo'yicha yordam kerak? Muammoni ikki-uch gapda yozsangiz kifoya.",
-        "meta": ""
-      },
-      "thanks": {
-        "text": "Arzimaydi. Yana savolingiz bo'lsa yozing — yoki mos advokatni tanlashga yordam beraman.",
-        "meta": ""
-      },
-      "subscription": {
-        "text": "Ikki tarif bor.\n\nStandart — cheksiz 30 daqiqalik konsultatsiyalar, hujjat ko'rigi 10 sahifagacha, 150+ shablon, turmush o'rtog'ingiz ham qamrab olinadi.\n\nPremium — bularga qo'shimcha biznes-audit konsultatsiyasi, har oy 1 ta mualliflik huquqi, ota-ona va farzandlar qamrovi.\n\n12 oylik olinsa 10%, to'lov bir yo'la qilinsa yana 10% arzon bo'ladi.",
-        "meta": "Advokat va yuristlarga LexGo.AI obunasiga 50% chegirma"
-      },
-      "price": {
-        "text": "Narx xizmat turiga bog'liq:\n\n• Ekspress konsultatsiya — 90 000 so'mdan\n• Hujjat tayyorlash — 60 000 so'mdan\n• Hujjat tekshiruvi — 150 000 so'mdan\n• Advokat paketlari — 1 250 000 so'mdan\n\nAniq narxni ayta olishim uchun masalangizni yozing.",
-        "meta": "Narx hudud, ish staji va reytingga qarab o'zgaradi"
-      },
-      "criminal": {
-        "text": "Bu — jinoiy-protsessual masala, shuning uchun har bir kun muhim.\n\n1. So'roqqa advokatsiz bormang — bu sizning huquqingiz.\n2. Bergan har bir tushuntirishingiz keyinchalik dalil sifatida ishlatiladi.\n3. Ehtiyot chorasi tanlansa, unga qisqa muddat ichida shikoyat qilinadi — muddatni o'tkazib yubormang.\n\nSizga «dastlabki tergovda to'liq ishtirok etish» paketi mos keladi.",
-        "meta": "JPK 48 va 53-moddalar · 128 ta o'xshash amaliyot"
-      },
-      "administrative": {
-        "text": "Bu ma'muriy huquqbuzarlik toifasiga kiradi.\n\n1. Protokol nusxasini va videoyozuvni rasmiy so'rov bilan oling.\n2. E'tiroz muddati qisqa — sanani bugundan hisoblang.\n3. Jarima bilan birga zarar undirish talabi qo'yilgan bo'lsa, ular alohida ko'riladi.\n\nAvval hujjatni tekshirtiring: ko'p hollarda protokoldagi rasmiy kamchilik ishni bekor qilishga asos bo'ladi.",
-        "meta": "E'tiroz muddatlari tizim tomonidan hisoblab beriladi"
-      },
-      "labor": {
-        "text": "Bu mehnat nizosi — odatda sudgacha hal bo'ladi.\n\n1. Mehnat shartnomasi, buyruq va to'lov hujjatlarini yig'ing.\n2. Ish beruvchiga yozma pretenziya yuboring, javob muddatini belgilang.\n3. Javob bo'lmasa, ishga qayta tiklash yoki ish haqini undirish bo'yicha da'vo beriladi.\n\nMehnat nizolarida da'vo muddati qisqa, kechiktirmaslik muhim.",
-        "meta": "Mehnat kodeksi · to'lanmagan ish haqi va kompensatsiya hisobi"
-      },
-      "civil": {
-        "text": "Bu fuqarolik-huquqiy nizo.\n\n1. Huquqingizni tasdiqlovchi hujjatlarni yig'ing: shartnoma, tilxat, guvohnoma.\n2. Sudgacha kelishuv taklifini yozma yuboring — bu keyin sudda foydangizga ishlaydi.\n3. Kelishuv bo'lmasa, da'vo arizasi tayyorlanadi; davlat boji da'vo summasidan hisoblanadi.\n\nSizga «da'vo arizasi + sudda vakillik» paketi mos keladi.",
-        "meta": "Da'vo muddati va davlat boji avtomatik hisoblanadi"
-      },
-      "economic": {
-        "text": "Bu xo'jalik (iqtisodiy) nizo.\n\n1. Shartnoma bandlari va yozishmalarni saqlang — elektron xat ham dalil bo'ladi.\n2. Penya ko'rsatilmagan bo'lsa ham, majburiyat buzilgani uchun talab qilish huquqi saqlanadi.\n3. Tartib: pretenziya xati → hisob-kitob ilovasi → xo'jalik sudiga da'vo.\n\nAvval shartnomani tekshirtirsak, qaysi bandlar sizga qarshi ishlayotgani ko'rinadi.",
-        "meta": "FK 324 va 333-moddalar · 41 ta o'xshash amaliyot"
-      },
-      "corporate": {
-        "text": "Bu korporativ hujjat masalasi — nizo emas, shuning uchun tez hal bo'ladi.\n\n1. Faoliyat turi va soliq rejimini oldindan tanlang, keyin o'zgartirish qimmatga tushadi.\n2. Ustavni namunaviy emas, individual yozdirgan ma'qul: ulushlar, chiqish tartibi va boshqaruv shu yerda hal bo'ladi.\n3. Savdo belgisi kompaniyadan alohida ro'yxatdan o'tkaziladi.\n\nSizga «kompaniya ochish + individual ustav» paketi mos keladi.",
-        "meta": "Ro'yxatdan o'tkazish va patentlash muddatlari alohida ko'rsatiladi"
-      },
-      "generic": {
-        "text": "Masalani tushundim, lekin aniq yo'nalishni belgilash uchun bir-ikki tafsilot kerak.\n\n1. Nima bo'ldi va qachon bo'ldi?\n2. Qarshi tomon kim — jismoniy shaxs, kompaniya yoki davlat organi?\n3. Qo'lingizda qanday hujjat bor?\n\nShularni yozsangiz, xizmat turini ham, mos advokatni ham aniq aytaman.",
-        "meta": "Aniqlik kiritish uchun ekspress konsultatsiya — 90 000 so'mdan"
-      }
+      "greeting": { "text": "Assalomu alaykum! Qanday huquqiy masala bo'yicha yordam kerak? Muammoni ikki-uch gapda yozsangiz kifoya.", "meta": "" },
+      "thanks": { "text": "Arzimaydi. Yana savolingiz bo'lsa yozing — yoki mos advokatni tanlashga yordam beraman.", "meta": "" },
+      "subscription": { "text": "Ikki tarif bor.\n\nStandart — cheksiz 30 daqiqalik konsultatsiyalar, hujjat ko'rigi 10 sahifagacha, 150+ shablon, turmush o'rtog'ingiz ham qamrab olinadi.\n\nPremium — bularga qo'shimcha biznes-audit konsultatsiyasi, har oy 1 ta mualliflik huquqi, ota-ona va farzandlar qamrovi.\n\n12 oylik olinsa 10%, to'lov bir yo'la qilinsa yana 10% arzon bo'ladi.", "meta": "Advokat va yuristlarga LexGo.AI obunasiga 50% chegirma" },
+      "price": { "text": "Narx xizmat turiga bog'liq:\n\n• Ekspress konsultatsiya — 90 000 so'mdan\n• Hujjat tayyorlash — 60 000 so'mdan\n• Hujjat tekshiruvi — 150 000 so'mdan\n• Advokat paketlari — 1 250 000 so'mdan\n\nAniq narxni ayta olishim uchun masalangizni yozing.", "meta": "Narx hudud, ish staji va reytingga qarab o'zgaradi" },
+      "criminal": { "text": "Bu — jinoiy-protsessual masala, shuning uchun har bir kun muhim.\n\n1. So'roqqa advokatsiz bormang — bu sizning huquqingiz.\n2. Bergan har bir tushuntirishingiz keyinchalik dalil sifatida ishlatiladi.\n3. Ehtiyot chorasi tanlansa, unga qisqa muddat ichida shikoyat qilinadi — muddatni o'tkazib yubormang.\n\nSizga «dastlabki tergovda to'liq ishtirok etish» paketi mos keladi.", "meta": "JPK 48 va 53-moddalar · 128 ta o'xshash amaliyot" },
+      "administrative": { "text": "Bu ma'muriy huquqbuzarlik toifasiga kiradi.\n\n1. Protokol nusxasini va videoyozuvni rasmiy so'rov bilan oling.\n2. E'tiroz muddati qisqa — sanani bugundan hisoblang.\n3. Jarima bilan birga zarar undirish talabi qo'yilgan bo'lsa, ular alohida ko'riladi.\n\nAvval hujjatni tekshirtiring: ko'p hollarda protokoldagi rasmiy kamchilik ishni bekor qilishga asos bo'ladi.", "meta": "E'tiroz muddatlari tizim tomonidan hisoblab beriladi" },
+      "labor": { "text": "Bu mehnat nizosi — odatda sudgacha hal bo'ladi.\n\n1. Mehnat shartnomasi, buyruq va to'lov hujjatlarini yig'ing.\n2. Ish beruvchiga yozma pretenziya yuboring, javob muddatini belgilang.\n3. Javob bo'lmasa, ishga qayta tiklash yoki ish haqini undirish bo'yicha da'vo beriladi.\n\nMehnat nizolarida da'vo muddati qisqa, kechiktirmaslik muhim.", "meta": "Mehnat kodeksi · to'lanmagan ish haqi va kompensatsiya hisobi" },
+      "civil": { "text": "Bu fuqarolik-huquqiy nizo.\n\n1. Huquqingizni tasdiqlovchi hujjatlarni yig'ing: shartnoma, tilxat, guvohnoma.\n2. Sudgacha kelishuv taklifini yozma yuboring — bu keyin sudda foydangizga ishlaydi.\n3. Kelishuv bo'lmasa, da'vo arizasi tayyorlanadi; davlat boji da'vo summasidan hisoblanadi.\n\nSizga «da'vo arizasi + sudda vakillik» paketi mos keladi.", "meta": "Da'vo muddati va davlat boji avtomatik hisoblanadi" },
+      "economic": { "text": "Bu xo'jalik (iqtisodiy) nizo.\n\n1. Shartnoma bandlari va yozishmalarni saqlang — elektron xat ham dalil bo'ladi.\n2. Penya ko'rsatilmagan bo'lsa ham, majburiyat buzilgani uchun talab qilish huquqi saqlanadi.\n3. Tartib: pretenziya xati → hisob-kitob ilovasi → xo'jalik sudiga da'vo.\n\nAvval shartnomani tekshirtirsak, qaysi bandlar sizga qarshi ishlayotgani ko'rinadi.", "meta": "FK 324 va 333-moddalar · 41 ta o'xshash amaliyot" },
+      "corporate": { "text": "Bu korporativ hujjat masalasi — nizo emas, shuning uchun tez hal bo'ladi.\n\n1. Faoliyat turi va soliq rejimini oldindan tanlang, keyin o'zgartirish qimmatga tushadi.\n2. Ustavni namunaviy emas, individual yozdirgan ma'qul: ulushlar, chiqish tartibi va boshqaruv shu yerda hal bo'ladi.\n3. Savdo belgisi kompaniyadan alohida ro'yxatdan o'tkaziladi.\n\nSizga «kompaniya ochish + individual ustav» paketi mos keladi.", "meta": "Ro'yxatdan o'tkazish va patentlash muddatlari alohida ko'rsatiladi" },
+      "generic": { "text": "Masalani tushundim, lekin aniq yo'nalishni belgilash uchun bir-ikki tafsilot kerak.\n\n1. Nima bo'ldi va qachon bo'ldi?\n2. Qarshi tomon kim — jismoniy shaxs, kompaniya yoki davlat organi?\n3. Qo'lingizda qanday hujjat bor?\n\nShularni yozsangiz, xizmat turini ham, mos advokatni ham aniq aytaman.", "meta": "Aniqlik kiritish uchun ekspress konsultatsiya — 90 000 so'mdan" }
     },
-    "analysisSuffix": "Aniqlangan yo'nalish: {dir} · {stage}.\nTaxminiy narx: {price}.",
-    "limitReached": "Bepul savollar limiti tugadi. Davom etish uchun kiring.",
-    "limitLogin": "Davom etish uchun kirish"
+    "analysisSuffix": "Aniqlangan yo'nalish: {dir} · {stage}.\nTaxminiy narx: {price}."
   },
   "chatPage": {
     "metaTitle": "LexGo.AI chat",
@@ -1601,37 +835,24 @@
     "offline": "Serverga ulanib bo'lmadi — bu oflayn javob.",
     "disclaimer": "LexGo.AI xato qilishi mumkin. Yakuniy huquqiy qaror advokatda qoladi.",
     "downloadPdf": "PDF yuklab olish",
-    "open": "Ochish",
-    "limitReached": "Anonim savollar uchun bepul limit tugadi. LexGo.AI bilan davom etish uchun tizimga kiring.",
-    "limitLogin": "Davom etish uchun kirish"
+    "open": "Ochish"
   },
   "portal": {
     "metaTitle": "Portal",
     "login": {
-      "title": "LexGo'ga kirish",
-      "titleLogin": "Qaytganingizdan xursandmiz",
-      "titleRegister": "Hisob yarating",
-      "subtitle": "Davom etish uchun kiring yoki hisob yarating",
-      "tabLogin": "Kirish",
-      "tabRegister": "Ro'yxatdan o'tish",
+      "title": "LexGo ga kirish",
+      "subtitle": "Rolingizni tanlang va davom eting",
       "roleClient": "Mijoz",
       "roleLawyer": "Advokat",
-      "roleClientHint": "Advokat toping, xizmat buyuring, ishlaringizni kuzating",
-      "roleLawyerHint": "Ishlar bozori, ishlaringiz, taqvim va mijozlar",
+      "roleClientHint": "Advokatlarni toping, xizmatlarga buyurtma bering, ishlaringizni kuzating",
+      "roleLawyerHint": "Ishlar bozori, ishlaringiz, kalendar va mijozlar",
       "name": "To'liq ism",
       "namePh": "Ismingiz",
       "phone": "Telefon",
       "phonePh": "+998 __ ___ __ __",
-      "password": "Parol",
-      "passwordPh": "Kamida 8 ta belgi",
-      "passwordShort": "Parol kamida 8 ta belgidan iborat bo'lishi kerak.",
-      "submitLogin": "Kirish",
-      "submitRegister": "Hisob yaratish",
-      "busy": "Iltimos, kuting…",
-      "failedLogin": "Telefon yoki parol noto'g'ri.",
-      "failedRegister": "Ro'yxatdan o'tib bo'lmadi. Bu telefon band bo'lishi mumkin.",
-      "required": "Barcha maydonlarni to'ldiring.",
-      "note": "Telefon va parolingiz faqat xavfsiz kirish uchun ishlatiladi."
+      "submit": "Davom etish",
+      "note": "Demo kirish — parolsiz. Haqiqiy autentifikatsiya backend bilan keladi.",
+      "required": "Davom etish uchun ismingizni kiriting."
     },
     "common": {
       "logout": "Chiqish",
@@ -1715,10 +936,7 @@
         "title": "Ishlar bozori",
         "lead": "Sizning yo'nalishlaringiz va hududlaringizga mos yangi ishlar."
       },
-      "cases": {
-        "title": "Mening ishlarim",
-        "filterAll": "Barchasi"
-      },
+      "cases": { "title": "Mening ishlarim", "filterAll": "Barchasi" },
       "calendar": {
         "title": "Kalendar va muddatlar",
         "today": "Bugun",
@@ -1784,10 +1002,7 @@
         "urgentCta": "Shoshilinch advokat chaqirish",
         "browse": "Xizmatlarni ko'rish"
       },
-      "cases": {
-        "title": "Mening ishlarim",
-        "empty": "Hozircha ishlar yo'q"
-      },
+      "cases": { "title": "Mening ishlarim", "empty": "Hozircha ishlar yo'q" },
       "payments": {
         "title": "To'lovlar",
         "pay": "To'lov qilish",

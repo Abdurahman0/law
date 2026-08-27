@@ -4,15 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { useLexAi } from "./useLexAi";
-import { useAuth } from "@/lib/auth";
 import { getClientId } from "@/lib/client";
-import {
-  createChat,
-  postMessage,
-  isLimitError,
-  type Source,
-  type Contract,
-} from "@/lib/api";
+import { createChat, postMessage, type Source, type Contract } from "@/lib/api";
 import ContractCard from "../ContractCard";
 import { IconSend, IconStar, IconClose, IconArrowRight } from "../icons";
 
@@ -23,7 +16,6 @@ type Msg = {
   area?: string | null;
   sources?: Source[];
   contracts?: Contract[];
-  limit?: boolean;
 };
 
 export default function ChatWidget({
@@ -35,9 +27,7 @@ export default function ChatWidget({
 }) {
   const t = useTranslations("chat");
   const { reply } = useLexAi();
-  const { session } = useAuth();
   const router = useRouter();
-  const cid = session?.id || getClientId();
 
   const quick = t.raw("quick") as string[];
   const [msgs, setMsgs] = useState<Msg[]>([
@@ -65,6 +55,7 @@ export default function ChatWidget({
     setMsgs((m) => [...m, { role: "u", content }]);
     setTyping(true);
     try {
+      const cid = getClientId();
       let id = chatId.current;
       if (!id) {
         const chat = await createChat(cid, content.slice(0, 48));
@@ -82,20 +73,13 @@ export default function ChatWidget({
           contracts,
         },
       ]);
-    } catch (e) {
+    } catch {
+      const r = reply(content);
       setTyping(false);
-      if (isLimitError(e) && !session) {
-        setMsgs((m) => [
-          ...m,
-          { role: "a", content: t("limitReached"), limit: true },
-        ]);
-      } else {
-        const r = reply(content);
-        setMsgs((m) => [
-          ...m,
-          { role: "a", content: r.text, meta: r.meta, area: r.area },
-        ]);
-      }
+      setMsgs((m) => [
+        ...m,
+        { role: "a", content: r.text, meta: r.meta, area: r.area },
+      ]);
     }
   }
 
@@ -167,15 +151,6 @@ export default function ChatWidget({
               >
                 {t("seeLawyer")}
               </button>
-            ) : null}
-            {m.limit ? (
-              <Link
-                href="/login"
-                className="cact"
-                onClick={onClose}
-              >
-                {t("limitLogin")}
-              </Link>
             ) : null}
           </div>
         ))}

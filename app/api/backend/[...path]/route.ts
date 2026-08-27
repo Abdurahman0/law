@@ -20,8 +20,6 @@ async function proxy(
   const headers: Record<string, string> = { Accept: "application/json" };
   const ct = req.headers.get("content-type");
   if (ct) headers["content-type"] = ct;
-  const auth = req.headers.get("authorization");
-  if (auth) headers["authorization"] = auth;
 
   const hasBody = req.method !== "GET" && req.method !== "HEAD";
   const body = hasBody ? await req.arrayBuffer() : undefined;
