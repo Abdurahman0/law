@@ -1836,7 +1836,11 @@
         "analysis": "Анализ",
         "specialist": "Специалист",
         "consultation": "Консультация",
-        "resolution": "Решение"
+        "resolution": "Решение",
+        "progress": "Шаг {done}/{total}",
+        "done": "Готово",
+        "current": "Текущий",
+        "upcoming": "Впереди"
       },
       "reqStatus": {
         "analyzing": "Анализ",

@@ -23,6 +23,9 @@ import {
   IconCheck,
 } from "@/components/icons";
 
+// Icon per journey stage (problem → analysis → specialist → consultation → resolution)
+const JOURNEY_ICONS = ["IconChatDots", "IconSparkle", "IconUser", "IconVideo", "IconAward"];
+
 const STAGE_OF: Record<RequestStatus, number> = {
   analyzing: 1,
   matching: 2,
@@ -98,21 +101,29 @@ export default function ClientDashboard() {
       </div>
 
       {/* Legal journey — signature visualization */}
-      <div className="ppanel">
-        <div className="ppanel__h">
-          <b>{tj("title")}</b>
-          {primary ? <span className="advmuted">{primary.title}</span> : null}
+      <div className="ppanel jcard">
+        <div className="jhead">
+          <div className="jhead__t">
+            <b>{tj("title")}</b>
+            {primary ? <span className="jsub">{primary.title}</span> : null}
+          </div>
+          <span className="jprog">
+            {tj("progress", { done: stage, total: JOURNEY_STAGES.length })}
+          </span>
         </div>
         <div className="journey">
-          {JOURNEY_STAGES.map((s, i) => (
-            <div
-              key={s}
-              className={`journey__s${i < stage ? " done" : ""}${i === stage ? " on" : ""}`}
-            >
-              <span className="journey__dot">{i < stage ? <IconCheck /> : i + 1}</span>
-              <span className="journey__lbl">{tj(s)}</span>
-            </div>
-          ))}
+          {JOURNEY_STAGES.map((s, i) => {
+            const state = i < stage ? "done" : i === stage ? "current" : "upcoming";
+            return (
+              <div key={s} className={`jstep jstep--${state}`}>
+                <span className="jstep__dot">
+                  {i < stage ? <IconCheck /> : <Icon name={JOURNEY_ICONS[i]} />}
+                </span>
+                <span className="jstep__lbl">{tj(s)}</span>
+                <span className="jstep__state">{tj(state)}</span>
+              </div>
+            );
+          })}
         </div>
       </div>
 

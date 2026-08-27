@@ -1842,7 +1842,11 @@
         "analysis": "Tahlil",
         "specialist": "Mutaxassis",
         "consultation": "Konsultatsiya",
-        "resolution": "Yechim"
+        "resolution": "Yechim",
+        "progress": "{done}/{total} bosqich",
+        "done": "Bajarildi",
+        "current": "Joriy",
+        "upcoming": "Keyingi"
       },
       "reqStatus": {
         "analyzing": "Tahlil qilinmoqda",

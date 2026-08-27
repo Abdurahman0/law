@@ -1836,7 +1836,11 @@
         "analysis": "Analysis",
         "specialist": "Specialist",
         "consultation": "Consultation",
-        "resolution": "Resolution"
+        "resolution": "Resolution",
+        "progress": "{done}/{total} steps",
+        "done": "Done",
+        "current": "Current",
+        "upcoming": "Upcoming"
       },
       "reqStatus": {
         "analyzing": "Analyzing",
