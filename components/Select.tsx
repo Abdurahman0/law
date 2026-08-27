@@ -9,11 +9,13 @@ export default function Select({
   onChange,
   options,
   ariaLabel,
+  placeholder,
 }: {
   value: string;
   onChange: (v: string) => void;
   options: Option[];
   ariaLabel?: string;
+  placeholder?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
@@ -21,7 +23,7 @@ export default function Select({
   const btn = useRef<HTMLButtonElement>(null);
   const optRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  const selected = options.find((o) => o.value === value) ?? options[0];
+  const selected = options.find((o) => o.value === value) ?? (placeholder ? undefined : options[0]);
 
   useEffect(() => {
     const onDoc = (e: MouseEvent) => {
@@ -84,7 +86,9 @@ export default function Select({
         aria-label={ariaLabel}
         onClick={() => setOpen((v) => !v)}
       >
-        <span className="dsel__val">{selected?.label}</span>
+        <span className={`dsel__val${selected ? "" : " dsel__val--ph"}`}>
+          {selected?.label ?? placeholder}
+        </span>
         <span className="dsel__cv" />
       </button>
       {open ? (

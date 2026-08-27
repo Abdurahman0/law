@@ -23,6 +23,8 @@ import {
   IconLogout,
   IconMenu,
   IconClose,
+  IconBolt,
+  IconStar,
 } from "../icons";
 
 type SvgC = ComponentType<{ className?: string }>;
@@ -37,6 +39,17 @@ const LAWYER_NAV: NavItem[] = [
   { href: "/portal/lawyer/documents", key: "documents", Icon: IconDocLines },
   { href: "/portal/lawyer/chat", key: "chat", Icon: IconChat },
   { href: "/portal/lawyer/ai", key: "ai", Icon: IconSparkle },
+  { href: "/portal/lawyer/promotion", key: "promotion", Icon: IconBolt },
+  { href: "/portal/lawyer/subscription", key: "subscription", Icon: IconStar },
+];
+
+const ADVOCATE_NAV: NavItem[] = [
+  { href: "/portal/advocate", key: "dashboard", Icon: IconGrid },
+  { href: "/portal/advocate/opportunities", key: "opportunities", Icon: IconBriefcase },
+  { href: "/portal/advocate/cases", key: "cases", Icon: IconFileText },
+  { href: "/portal/advocate/profile", key: "profile", Icon: IconUser },
+  { href: "/portal/advocate/promotion", key: "promotion", Icon: IconBolt },
+  { href: "/portal/advocate/subscription", key: "subscription", Icon: IconStar },
 ];
 
 const CLIENT_NAV: NavItem[] = [
@@ -77,7 +90,8 @@ export default function PortalShell({
 
   if (!ready || !session || session.role !== role) return null;
 
-  const nav = role === "lawyer" ? LAWYER_NAV : CLIENT_NAV;
+  const nav =
+    role === "advocate" ? ADVOCATE_NAV : role === "lawyer" ? LAWYER_NAV : CLIENT_NAV;
   const active = nav
     .slice()
     .sort((a, b) => b.href.length - a.href.length)
@@ -96,7 +110,11 @@ export default function PortalShell({
             <IconLogo />
           </span>
           LexGo
-          <span className="psb__role">{t(`common.role${role === "lawyer" ? "Lawyer" : "Client"}`)}</span>
+          <span className="psb__role">
+            {t(
+              `common.role${role === "advocate" ? "Advocate" : role === "lawyer" ? "Lawyer" : "Client"}`,
+            )}
+          </span>
         </div>
         <nav className="psb__nav">
           {nav.map(({ href, key, Icon }) => {

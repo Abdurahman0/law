@@ -1,4 +1,4 @@
-import type { SVGProps } from "react";
+import type { ComponentType, SVGProps } from "react";
 
 type P = SVGProps<SVGSVGElement>;
 
@@ -305,3 +305,118 @@ export const IconGooglePlay = (p: P) => (
     <path d="M15 12l4-2.3M15 12l4 2.3" />
   </svg>
 );
+
+export const IconCheck = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M20 6L9 17l-5-5" />
+  </svg>
+);
+
+export const IconMapPin = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0116 0z" />
+    <circle cx="12" cy="10" r="3" />
+  </svg>
+);
+
+export const IconPhone = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012 4.2 2 2 0 014 2h3a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L8 9.8a16 16 0 006 6l1.2-1.2a2 2 0 012.1-.5c.9.3 1.8.6 2.8.7a2 2 0 011.7 2z" />
+  </svg>
+);
+
+export const IconMail = (p: P) => (
+  <svg {...base} {...p}>
+    <rect x="2" y="4" width="20" height="16" rx="2" />
+    <path d="M2 7l10 6 10-6" />
+  </svg>
+);
+
+export const IconUpload = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+    <path d="M17 8l-5-5-5 5M12 3v13" />
+  </svg>
+);
+
+export const IconAward = (p: P) => (
+  <svg {...base} {...p}>
+    <circle cx="12" cy="8" r="6" />
+    <path d="M8.2 13.3L7 22l5-3 5 3-1.2-8.7" />
+  </svg>
+);
+
+export const IconTrendingUp = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M22 7l-8.5 8.5-5-5L2 17" />
+    <path d="M16 7h6v6" />
+  </svg>
+);
+
+export const IconEye = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" />
+    <circle cx="12" cy="12" r="3" />
+  </svg>
+);
+
+export const IconRocket = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M5 15c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.9.7-2.2-.1-3-.8-.8-2.1-.8-2.9 0z" />
+    <path d="M9 12a12 12 0 018-9c1 3.5.3 6.6-2 9-1.3 1.4-3 2.4-4.6 3L9 12z" />
+    <path d="M9 12l-3-1M12 15l1 3" />
+    <circle cx="15" cy="9" r="1" />
+  </svg>
+);
+
+export const IconTarget = (p: P) => (
+  <svg {...base} {...p}>
+    <circle cx="12" cy="12" r="9" />
+    <circle cx="12" cy="12" r="5" />
+    <circle cx="12" cy="12" r="1.5" />
+  </svg>
+);
+
+export const IconLanguage = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M4 5h9M9 4c0 6-3 11-6 13" />
+    <path d="M6 9c0 3 3 5 7 6" />
+    <path d="M13 20l4-9 4 9M14.5 17h5" />
+  </svg>
+);
+
+// Name → component registry so data files can reference icons by string.
+const ICON_MAP: Record<string, ComponentType<P>> = {
+  IconChatDots,
+  IconFileText,
+  IconBuilding,
+  IconDocLines,
+  IconUsers,
+  IconHome,
+  IconCard,
+  IconBriefcase,
+  IconScale,
+  IconShield,
+  IconShieldCheck,
+  IconSparkle,
+  IconGlobe,
+  IconGrid,
+  IconSearch,
+  IconVideo,
+  IconClipboardCheck,
+  IconDownload,
+  IconUser,
+  IconStar,
+  IconBolt,
+  IconAward,
+  IconTrendingUp,
+  IconEye,
+  IconRocket,
+  IconTarget,
+  IconGraduation,
+};
+
+export function Icon({ name, ...p }: { name: string } & P) {
+  const C = ICON_MAP[name] ?? IconGrid;
+  return <C {...p} />;
+}

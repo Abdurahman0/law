@@ -3,8 +3,10 @@
 import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import { useAuth, type Role } from "@/lib/auth";
-import { useRouter } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { IconLogo } from "../icons";
+
+const ROLES: Role[] = ["client", "lawyer", "advocate"];
 
 export default function LoginForm() {
   const t = useTranslations("portal.login");
@@ -40,23 +42,18 @@ export default function LoginForm() {
         <h1 style={{ marginTop: 18 }}>{t("title")}</h1>
         <p className="sub">{t("subtitle")}</p>
 
-        <div className="plogin__roles">
-          <button
-            type="button"
-            className={`prole${role === "client" ? " on" : ""}`}
-            onClick={() => setRole("client")}
-          >
-            <b>{t("roleClient")}</b>
-            <span>{t("roleClientHint")}</span>
-          </button>
-          <button
-            type="button"
-            className={`prole${role === "lawyer" ? " on" : ""}`}
-            onClick={() => setRole("lawyer")}
-          >
-            <b>{t("roleLawyer")}</b>
-            <span>{t("roleLawyerHint")}</span>
-          </button>
+        <div className="plogin__roles plogin__roles--3">
+          {ROLES.map((r) => (
+            <button
+              key={r}
+              type="button"
+              className={`prole${role === r ? " on" : ""}`}
+              onClick={() => setRole(r)}
+            >
+              <b>{t(`role${r === "advocate" ? "Advocate" : r === "lawyer" ? "Lawyer" : "Client"}`)}</b>
+              <span>{t(`role${r === "advocate" ? "Advocate" : r === "lawyer" ? "Lawyer" : "Client"}Hint`)}</span>
+            </button>
+          ))}
         </div>
 
         <div className="cform" style={{ maxWidth: "none" }}>
@@ -87,6 +84,12 @@ export default function LoginForm() {
             {t("submit")}
           </button>
         </div>
+        <p className="plogin__alt">
+          {t("noAccount")}{" "}
+          <Link href="/register" className="plogin__link">
+            {t("createAccount")}
+          </Link>
+        </p>
         <p className="plogin__note">{t("note")}</p>
       </form>
     </div>
