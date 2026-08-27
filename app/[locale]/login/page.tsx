@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import LoginForm from "@/components/portal/LoginForm";
+import AuthSplit from "@/components/auth/AuthSplit";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -13,5 +14,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <LoginForm />;
+  return (
+    <AuthSplit>
+      <LoginForm />
+    </AuthSplit>
+  );
 }

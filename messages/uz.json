@@ -2230,5 +2230,21 @@
     "activeMsg": "Targ'ibot {days} kun faol — ko'rinuvchanligingiz oshdi.",
     "popular": "Eng foydali",
     "boostNote": "Targ'ibot faqat ko'rinuvchanlikni oshiradi. Yuridik natijaga ta'sir qilmaydi."
+  },
+  "auth": {
+    "headline": "Yuridik yordam — yangicha.",
+    "sub": "LexGo bilan yuridik masalalarni tezroq hal qilayotgan minglab foydalanuvchilarga qo‘shiling — AI yo‘l-yo‘riq, tasdiqlangan mutaxassislar va haqiqiy natijalar.",
+    "features": [
+      "AI asosidagi yuridik yo‘l-yo‘riq",
+      "Tasdiqlangan yurist va advokatlar",
+      "Har bir so‘rovni boshdan-oxir kuzatish",
+      "O‘zbekiston bo‘ylab mijozlar ishonchi"
+    ],
+    "stat1n": "12k+",
+    "stat1l": "mijoz",
+    "stat2n": "1 200+",
+    "stat2l": "mutaxassis",
+    "stat3n": "4.9",
+    "stat3l": "o‘rtacha reyting"
   }
 }

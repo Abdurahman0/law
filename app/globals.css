@@ -1510,3 +1510,48 @@ body:has(.rf) .fab{display:none}
 .cmatch__pl{font-size:.68rem;color:var(--gray2);text-transform:uppercase;letter-spacing:.04em}
 
 .subs{display:flex;flex-direction:column;gap:6px}
+
+
+/* ═══════════════ AUTH SPLIT LAYOUT ═══════════════ */
+body:has(.auth){padding-bottom:0}
+body:has(.auth) .bar,
+body:has(.auth) .ftr,
+body:has(.auth) .tabbar,
+body:has(.auth) .fab{display:none}
+
+.auth{height:100dvh;overflow:hidden;display:grid;grid-template-columns:minmax(0,44%) minmax(0,1fr);background:#fff}
+.auth__brand{position:relative;overflow:hidden;background:var(--grad-dark);color:#fff;padding:clamp(30px,3.4vw,56px);display:flex}
+.auth__mesh{position:absolute;inset:0;pointer-events:none;background:
+  radial-gradient(48% 40% at 12% 8%,rgba(0,207,232,.24),transparent 60%),
+  radial-gradient(46% 46% at 100% 100%,rgba(22,104,240,.42),transparent 60%)}
+.auth__brand-in{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:space-between;gap:24px;width:100%;max-width:520px;margin:auto}
+.auth__logo{display:inline-flex;align-items:center;gap:10px;font-family:var(--fd);font-weight:800;font-size:1.3rem;color:#fff}
+.auth__logo .logo__m{width:34px;height:34px;border-radius:10px;flex:none}
+.auth__copy{margin:clamp(24px,4vh,52px) 0}
+.auth__h{font-family:var(--fd);font-size:clamp(1.8rem,2.6vw,2.65rem);letter-spacing:-.03em;line-height:1.08}
+.auth__p{color:#B7CDEC;margin:14px 0 28px;font-size:1.02rem;max-width:44ch;line-height:1.6}
+.auth__feats{list-style:none;padding:0;margin:0;display:grid;gap:14px}
+.auth__feats li{display:flex;gap:11px;align-items:flex-start;font-size:.98rem;color:#E6F0FF}
+.auth__feats svg{width:20px;height:20px;flex:none;margin-top:2px;stroke:var(--cy);stroke-width:2.6}
+.auth__stats{display:flex;gap:clamp(18px,2.5vw,34px);padding-top:26px;border-top:1px solid rgba(255,255,255,.14)}
+.auth__stats b{display:block;font-family:var(--fd);font-size:clamp(1.3rem,1.8vw,1.6rem);letter-spacing:-.02em}
+.auth__stats span{font-size:.8rem;color:#9FB4D4}
+
+.auth__main{overflow-y:auto;display:flex;padding:clamp(22px,3.4vw,56px)}
+.auth__main-in{margin:auto;width:100%;max-width:640px}
+.auth__main-in:has(.plogin){max-width:440px}
+.auth__main-in:has(.rf){max-width:700px}
+.auth__main-in:has(.rf__step--wide){max-width:920px}
+
+/* strip the standalone full-screen shells — the split provides the frame */
+.auth__main .plogin{min-height:auto;background:none;padding:0;display:block}
+.auth__main .plogin__c{box-shadow:none;background:transparent;width:100%;max-width:none;padding:0}
+.auth__main .rf{min-height:auto;background:none;padding:0;display:block;place-items:stretch}
+.auth__main .rf__bg{display:none}
+.auth__main .rf__card{box-shadow:none;background:transparent;width:100%!important;max-width:none;margin:0;padding:0}
+
+@media (max-width:980px){
+  .auth{grid-template-columns:1fr;height:auto;min-height:100dvh;overflow:visible}
+  .auth__brand{display:none}
+  .auth__main{min-height:100dvh}
+}

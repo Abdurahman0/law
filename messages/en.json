@@ -2224,5 +2224,21 @@
     "activeMsg": "Promotion active for {days} days — your visibility is boosted.",
     "popular": "Best value",
     "boostNote": "Promotion increases visibility only. It does not affect legal outcomes."
+  },
+  "auth": {
+    "headline": "Legal help, reimagined.",
+    "sub": "Join thousands who resolve legal matters faster with LexGo — AI guidance, verified specialists and real results.",
+    "features": [
+      "AI-powered legal guidance",
+      "Verified lawyers & advocates",
+      "Track every request end-to-end",
+      "Trusted by clients across Uzbekistan"
+    ],
+    "stat1n": "12k+",
+    "stat1l": "clients",
+    "stat2n": "1 200+",
+    "stat2l": "specialists",
+    "stat3n": "4.9",
+    "stat3l": "avg. rating"
   }
 }

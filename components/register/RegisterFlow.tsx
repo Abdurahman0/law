@@ -171,7 +171,7 @@ export default function RegisterFlow() {
           ) : null}
 
           {step === "type" ? (
-            <div className="rf__step">
+            <div className="rf__step rf__step--wide">
               <h1 className="rf__title">{t("type.title")}</h1>
               <p className="rf__sub">{t("type.subtitle")}</p>
               <AccountTypeCards onChoose={chooseType} />
