@@ -5,8 +5,10 @@ import { getSubscriptionPlans } from "@/lib/services/backend";
 import { createSubscriptionPlan } from "@/lib/services/admin";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
-import { AdminForm, useReload } from "@/components/admin/AdminBits";
+import { AdminForm, AdminItem, useReload } from "@/components/admin/AdminBits";
 import { IconStar } from "@/components/icons";
+
+const som = (n?: number) => (n ? n.toLocaleString("ru-RU").replace(/,/g, " ") : "—");
 
 const toList = (v: string | boolean) =>
   String(v || "")
@@ -30,11 +32,18 @@ export default function AdminPlans() {
           <EmptyState icon={<IconStar />} title={t("plans.empty")} />
         ) : (
           <div className="alist">
-            {plans.data.map((p) => (
-              <div className="arow" key={p.id}>
-                <b>{p.name}</b>
-                <span>{p.price ? p.price.toLocaleString("ru-RU").replace(/,/g, " ") : "—"}</span>
-              </div>
+            {plans.data.map((p, i) => (
+              <AdminItem
+                key={p.id}
+                index={i + 1}
+                title={p.name}
+                meta={p.slug}
+                right={som(p.price)}
+                tags={[
+                  ...(p.isGiftable ? [{ label: t("plans.giftable") }] : []),
+                  { label: p.isActive ? t("form.active") : t("form.inactive"), tone: (p.isActive ? "ok" : "muted") as "ok" | "muted" },
+                ]}
+              />
             ))}
           </div>
         )}

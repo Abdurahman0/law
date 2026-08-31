@@ -69,7 +69,9 @@ export async function apiMe(): Promise<AuthUser> {
 // ── Lawyer profiles ───────────────────────────────────────────────
 export type BackendLawyer = {
   id: string;
+  userId: string;
   name: string;
+  phone: string;
   region: string;
   district?: string;
   specializations: string[];
@@ -87,7 +89,9 @@ function normLawyer(v: unknown): BackendLawyer {
   const user = asDict(d.user);
   return {
     id: asStr(d.id ?? d.user_id ?? user.id),
+    userId: asStr(d.user_id ?? user.id ?? d.id),
     name: asStr(d.lawyer_name ?? d.name ?? user.name ?? d.full_name),
+    phone: asStr(d.phone ?? user.phone),
     region: asStr(d.region),
     district: asStr(d.district) || undefined,
     specializations: asArr(d.specializations).map((s) => asStr(s)),
@@ -154,20 +158,26 @@ export async function upsertMyLawyer(p: ProfessionalProfile): Promise<unknown> {
 export type BackendService = {
   id: string;
   name: string;
+  slug: string;
   categoryId?: string;
+  categoryTitle?: string;
   price?: number;
   description?: string;
+  isActive: boolean;
 };
-export type BackendCategory = { id: string; name: string };
+export type BackendCategory = { id: string; name: string; slug: string };
 
 function normService(v: unknown): BackendService {
   const d = asDict(v);
   return {
     id: asStr(d.id),
     name: asStr(d.title ?? d.name),
+    slug: asStr(d.slug),
     categoryId: asStr(d.category_id ?? d.categoryId) || undefined,
+    categoryTitle: asStr(d.category_title) || undefined,
     price: d.base_price != null ? asNum(d.base_price) : undefined,
     description: asStr(d.description) || undefined,
+    isActive: d.is_active !== false,
   };
 }
 
@@ -175,7 +185,7 @@ export async function getServiceCategories(): Promise<BackendCategory[]> {
   const data = await http("/service-categories");
   return listFrom(data, "categories", "items", "data").map((v) => {
     const d = asDict(v);
-    return { id: asStr(d.id), name: asStr(d.name ?? d.title) };
+    return { id: asStr(d.id), name: asStr(d.title ?? d.name), slug: asStr(d.slug) };
   });
 }
 
@@ -188,8 +198,11 @@ export async function getServices(): Promise<BackendService[]> {
 export type BackendPlan = {
   id: string;
   name: string;
+  slug: string;
   price: number;
   features: string[];
+  isGiftable: boolean;
+  isActive: boolean;
 };
 
 export async function getSubscriptionPlans(): Promise<BackendPlan[]> {
@@ -199,8 +212,11 @@ export async function getSubscriptionPlans(): Promise<BackendPlan[]> {
     return {
       id: asStr(d.id),
       name: asStr(d.title ?? d.name),
+      slug: asStr(d.slug),
       price: asNum(d.monthly_price ?? d.price),
       features: asArr(d.benefits ?? d.features).map((f) => asStr(f)),
+      isGiftable: Boolean(d.is_giftable),
+      isActive: d.is_active !== false,
     };
   });
 }
@@ -303,9 +319,11 @@ export async function createPayment(input: {
 export type BackendTemplate = {
   id: string;
   name: string;
+  slug: string;
   category: string;
   language: string;
   price: number;
+  isActive: boolean;
 };
 
 export async function getDocumentTemplates(): Promise<BackendTemplate[]> {
@@ -314,10 +332,12 @@ export async function getDocumentTemplates(): Promise<BackendTemplate[]> {
       const d = asDict(v);
       return {
         id: asStr(d.id),
-        name: asStr(d.name ?? d.title),
+        name: asStr(d.title ?? d.name),
+        slug: asStr(d.slug),
         category: asStr(d.category),
         language: asStr(d.language),
         price: asNum(d.price),
+        isActive: d.is_active !== false,
       };
     },
   );

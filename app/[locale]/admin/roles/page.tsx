@@ -10,7 +10,7 @@ import {
 } from "@/lib/services/admin";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
-import { Notice, useReload } from "@/components/admin/AdminBits";
+import { Notice, useReload, AdminItem, UserSelect } from "@/components/admin/AdminBits";
 import ChipMulti from "@/components/register/ChipMulti";
 import Select from "@/components/Select";
 import { IconShield } from "@/components/icons";
@@ -93,11 +93,14 @@ export default function AdminRoles() {
           <EmptyState icon={<IconShield />} title={t("roles.empty")} />
         ) : (
           <div className="alist">
-            {roles.data.map((r) => (
-              <div className="arow" key={r.id}>
-                <b>{r.title || r.name}</b>
-                <span>{t("roles.permCount", { n: r.permissions.length })}</span>
-              </div>
+            {roles.data.map((r, i) => (
+              <AdminItem
+                key={r.id}
+                index={i + 1}
+                title={r.title || r.name}
+                meta={r.name}
+                right={t("roles.permCount", { n: r.permissions.length })}
+              />
             ))}
           </div>
         )}
@@ -140,10 +143,12 @@ export default function AdminRoles() {
         <div className="ppanel__h"><b>{t("roles.assignTitle")}</b></div>
         <p className="advmuted" style={{ marginBottom: 16 }}>{t("roles.assignLead")}</p>
         <form className="cform" style={{ maxWidth: "none" }} onSubmit={submitAssign}>
-          <div>
-            <label>{t("roles.userId")}</label>
-            <input value={userId} onChange={(e) => setUserId(e.target.value)} placeholder="user uuid" />
-          </div>
+          <UserSelect
+            value={userId}
+            onChange={setUserId}
+            label={t("roles.user")}
+            placeholder={t("roles.selectUser")}
+          />
           <div>
             <label>{t("roles.role")}</label>
             <Select

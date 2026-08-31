@@ -2339,7 +2339,8 @@
       "basePrice": "Base price (so'm)",
       "deliveryMinutes": "Delivery (minutes)",
       "monthlyPrice": "Monthly price (so'm)",
-      "price": "Price (so'm)"
+      "price": "Price (so'm)",
+      "inactive": "Inactive"
     },
     "services": {
       "catTitle": "Service categories",
@@ -2377,7 +2378,9 @@
       "role": "Role",
       "selectRole": "Select role",
       "assign": "Assign",
-      "assigned": "Role assigned."
+      "assigned": "Role assigned.",
+      "user": "User (professional)",
+      "selectUser": "Select a user"
     },
     "notifications": {
       "title": "Send notification",
@@ -2389,7 +2392,9 @@
       "body": "Message",
       "send": "Send",
       "sending": "Sending…",
-      "sent": "Notification sent."
+      "sent": "Notification sent.",
+      "user": "User",
+      "selectUser": "Select a user"
     },
     "bootstrap": {
       "title": "Bootstrap superadmin",

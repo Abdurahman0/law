@@ -8,13 +8,14 @@ import {
 import { createServiceCategory, createService } from "@/lib/services/admin";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
-import { AdminForm, useReload } from "@/components/admin/AdminBits";
+import { AdminForm, AdminItem, useReload } from "@/components/admin/AdminBits";
 import { IconBriefcase } from "@/components/icons";
 
 function num(v: string | boolean): number {
   const n = parseInt(String(v || "0"), 10);
   return Number.isFinite(n) ? n : 0;
 }
+const som = (n?: number) => (n ? n.toLocaleString("ru-RU").replace(/,/g, " ") : "—");
 
 export default function AdminServices() {
   const t = useTranslations("admin");
@@ -34,11 +35,8 @@ export default function AdminServices() {
           <EmptyState icon={<IconBriefcase />} title={t("services.catEmpty")} />
         ) : (
           <div className="alist">
-            {cats.data.map((c) => (
-              <div className="arow" key={c.id}>
-                <b>{c.name}</b>
-                <span>{c.id}</span>
-              </div>
+            {cats.data.map((c, i) => (
+              <AdminItem key={c.id} index={i + 1} title={c.name} meta={c.slug} />
             ))}
           </div>
         )}
@@ -73,11 +71,15 @@ export default function AdminServices() {
           <EmptyState icon={<IconBriefcase />} title={t("services.svcEmpty")} />
         ) : (
           <div className="alist">
-            {svcs.data.map((s) => (
-              <div className="arow" key={s.id}>
-                <b>{s.name}</b>
-                <span>{s.price ? s.price.toLocaleString("ru-RU").replace(/,/g, " ") : "—"}</span>
-              </div>
+            {svcs.data.map((s, i) => (
+              <AdminItem
+                key={s.id}
+                index={i + 1}
+                title={s.name}
+                meta={[s.categoryTitle, s.slug].filter(Boolean).join(" · ")}
+                right={som(s.price)}
+                tags={[{ label: s.isActive ? t("form.active") : t("form.inactive"), tone: s.isActive ? "ok" : "muted" }]}
+              />
             ))}
           </div>
         )}

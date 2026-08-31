@@ -1607,3 +1607,18 @@ body:has(.auth) .fab{display:none}
 .anote{border-radius:12px;padding:11px 14px;font-size:.88rem;font-weight:600}
 .anote--ok{background:rgba(0,168,112,.12);color:var(--ok)}
 .anote--err{background:#FDECEC;color:#C0392B}
+
+
+/* admin list items (redesigned, no ids) */
+.alist{display:flex;flex-direction:column;gap:8px;margin-bottom:8px}
+.aitem{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;transition:border-color .15s,box-shadow .15s}
+.aitem:hover{border-color:var(--b200);box-shadow:var(--s1)}
+.aitem__n{width:26px;height:26px;border-radius:8px;flex:none;display:grid;place-items:center;background:var(--b50);color:var(--b600);font-weight:800;font-size:.8rem}
+.aitem__m{flex:1;min-width:0}
+.aitem__m b{display:block;font-weight:700;font-size:.94rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.aitem__meta{font-size:.8rem;color:var(--gray2)}
+.aitem__tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.atag{font-style:normal;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:3px 8px;border-radius:var(--pill);background:var(--b100);color:var(--b700)}
+.atag--ok{background:rgba(0,168,112,.12);color:var(--ok)}
+.atag--muted{background:#EEF2F7;color:var(--gray2)}
+.aitem__r{flex:none;font-family:var(--fd);font-weight:800;font-size:.95rem;color:var(--ink)}

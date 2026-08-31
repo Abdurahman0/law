@@ -13,7 +13,7 @@ export default function AdminNotifications() {
       <p className="advmuted" style={{ marginBottom: 16 }}>{t("notifications.lead")}</p>
       <AdminForm
         fields={[
-          { name: "user_id", label: t("notifications.userId"), required: true, placeholder: "user uuid" },
+          { name: "user_id", label: t("notifications.user"), type: "user", required: true, placeholder: t("notifications.selectUser") },
           {
             name: "channel",
             label: t("notifications.channel"),

@@ -2345,7 +2345,8 @@
       "basePrice": "Asosiy narx (so'm)",
       "deliveryMinutes": "Yetkazish (daqiqa)",
       "monthlyPrice": "Oylik narx (so'm)",
-      "price": "Narx (so'm)"
+      "price": "Narx (so'm)",
+      "inactive": "Nofaol"
     },
     "services": {
       "catTitle": "Xizmat kategoriyalari",
@@ -2383,7 +2384,9 @@
       "role": "Rol",
       "selectRole": "Rolni tanlang",
       "assign": "Biriktirish",
-      "assigned": "Rol biriktirildi."
+      "assigned": "Rol biriktirildi.",
+      "user": "Foydalanuvchi (mutaxassis)",
+      "selectUser": "Foydalanuvchini tanlang"
     },
     "notifications": {
       "title": "Bildirishnoma yuborish",
@@ -2395,7 +2398,9 @@
       "body": "Xabar",
       "send": "Yuborish",
       "sending": "Yuborilmoqda…",
-      "sent": "Bildirishnoma yuborildi."
+      "sent": "Bildirishnoma yuborildi.",
+      "user": "Foydalanuvchi",
+      "selectUser": "Foydalanuvchini tanlang"
     },
     "bootstrap": {
       "title": "Superadmin bootstrap",

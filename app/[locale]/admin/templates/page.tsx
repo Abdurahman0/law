@@ -5,8 +5,10 @@ import { getDocumentTemplates } from "@/lib/services/backend";
 import { createDocumentTemplate } from "@/lib/services/admin";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
-import { AdminForm, useReload } from "@/components/admin/AdminBits";
+import { AdminForm, AdminItem, useReload } from "@/components/admin/AdminBits";
 import { IconDocLines } from "@/components/icons";
+
+const som = (n?: number) => (n ? n.toLocaleString("ru-RU").replace(/,/g, " ") : "—");
 
 const num = (v: string | boolean) => parseInt(String(v || "0"), 10) || 0;
 
@@ -25,11 +27,15 @@ export default function AdminTemplates() {
           <EmptyState icon={<IconDocLines />} title={t("templates.empty")} />
         ) : (
           <div className="alist">
-            {tpls.data.map((d) => (
-              <div className="arow" key={d.id}>
-                <b>{d.name}</b>
-                <span>{[d.category, d.language].filter(Boolean).join(" · ")}</span>
-              </div>
+            {tpls.data.map((d, i) => (
+              <AdminItem
+                key={d.id}
+                index={i + 1}
+                title={d.name}
+                meta={[d.category, d.language, d.slug].filter(Boolean).join(" · ")}
+                right={d.price ? som(d.price) : undefined}
+                tags={[{ label: d.isActive ? t("form.active") : t("form.inactive"), tone: d.isActive ? "ok" : "muted" }]}
+              />
             ))}
           </div>
         )}
