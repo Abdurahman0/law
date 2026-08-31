@@ -87,7 +87,7 @@ function normLawyer(v: unknown): BackendLawyer {
   const user = asDict(d.user);
   return {
     id: asStr(d.id ?? d.user_id ?? user.id),
-    name: asStr(d.name ?? user.name ?? d.full_name),
+    name: asStr(d.lawyer_name ?? d.name ?? user.name ?? d.full_name),
     region: asStr(d.region),
     district: asStr(d.district) || undefined,
     specializations: asArr(d.specializations).map((s) => asStr(s)),

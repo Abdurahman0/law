@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 // Long-running LLM/contract calls must not be cut off.
 export const maxDuration = 300;
 
-const BACKEND = process.env.BACKEND_ORIGIN || "http://192.168.1.17:8000";
+const BACKEND = process.env.BACKEND_ORIGIN || "https://lexgo.api.cognilabs.org";
 
 // Same-origin proxy to the LawProject AI backend (avoids browser CORS and
 // private-network restrictions). Streams status/body/content-type through.
