@@ -1622,3 +1622,9 @@ body:has(.auth) .fab{display:none}
 .atag--ok{background:rgba(0,168,112,.12);color:var(--ok)}
 .atag--muted{background:#EEF2F7;color:var(--gray2)}
 .aitem__r{flex:none;font-family:var(--fd);font-weight:800;font-size:.95rem;color:var(--ink)}
+
+
+/* admin lists scroll inside the panel instead of growing the page */
+.alist{max-height:clamp(240px,46vh,460px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding-right:4px}
+.alist::-webkit-scrollbar{width:8px}
+.alist::-webkit-scrollbar-thumb{background:var(--b200);border-radius:8px}
