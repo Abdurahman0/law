@@ -9,10 +9,29 @@ import {
   REGION_KEYS,
   type Lawyer,
 } from "@/lib/lawyers";
+import { listLawyers, type BackendLawyer } from "@/lib/services/backend";
 import Select, { type Option } from "../Select";
 import { IconChevronLeft, IconChevronRight, IconInfo } from "../icons";
 
 const priceNum = (p: string) => Number(p.replace(/\s/g, "")) || 0;
+
+// Map a backend lawyer profile onto the directory card shape (best-effort;
+// missing fields default sanely). Only runs when the backend returns data.
+function toLawyer(b: BackendLawyer): Lawyer {
+  const r = b.region.toLowerCase();
+  return {
+    name: b.name || "—",
+    regionKey: REGION_KEYS.find((k) => r.includes(k)) || "tashkent",
+    areaKey: AREA_KEYS.find((a) => b.specializations.includes(a)) || b.specializations[0] || "civil",
+    exp: b.experienceYears,
+    rate: b.rating,
+    rev: b.reviews,
+    full: 0,
+    part: 0,
+    price: b.basePrice ? b.basePrice.toLocaleString("ru-RU").replace(/,/g, " ") : "—",
+    super: b.verified,
+  };
+}
 
 export default function LawyersSection({
   initialArea = "",
@@ -30,12 +49,26 @@ export default function LawyersSection({
   const [area, setArea] = useState(initialArea);
   const [region, setRegion] = useState("");
   const [sort, setSort] = useState("rating");
+  const [source, setSource] = useState<Lawyer[]>(LAWYERS);
+
+  // Pull the real directory when the backend is reachable; keep mock otherwise.
+  useEffect(() => {
+    let alive = true;
+    listLawyers()
+      .then((rows) => {
+        if (alive && rows.length) setSource(rows.map(toLawyer));
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, []);
   const scroller = useRef<HTMLDivElement>(null);
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
 
   const list = useMemo(() => {
-    const filtered = LAWYERS.filter(
+    const filtered = source.filter(
       (l) => (!area || l.areaKey === area) && (!region || l.regionKey === region),
     );
     const sorted = [...filtered];
@@ -46,7 +79,7 @@ export default function LawyersSection({
       return b.rate - a.rate;
     });
     return sorted;
-  }, [area, region, sort]);
+  }, [area, region, sort, source]);
 
   const syncNav = useCallback(() => {
     const el = scroller.current;

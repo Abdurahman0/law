@@ -69,6 +69,7 @@ export type RegistrationDraft = {
   accountType: AccountType | null;
   phone: string;
   phoneVerified: boolean;
+  password: string;
   profile: ProfessionalProfile;
 };
 
@@ -87,6 +88,7 @@ export function emptyDraft(): RegistrationDraft {
     accountType: null,
     phone: "",
     phoneVerified: false,
+    password: "",
     profile: emptyProfile(),
   };
 }

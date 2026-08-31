@@ -1566,7 +1566,9 @@
         "meta": "Express consultation to clarify — from 90,000 UZS"
       }
     },
-    "analysisSuffix": "Identified direction: {dir} · {stage}.\nEstimated price: {price}."
+    "analysisSuffix": "Identified direction: {dir} · {stage}.\nEstimated price: {price}.",
+    "limitReached": "Free question limit reached. Log in to continue.",
+    "limitLogin": "Log in to continue"
   },
   "chatPage": {
     "metaTitle": "LexGo.AI chat",
@@ -1593,7 +1595,9 @@
     "offline": "Couldn't reach the server — this is an offline answer.",
     "disclaimer": "LexGo.AI can make mistakes. The final legal decision stays with a lawyer.",
     "downloadPdf": "Download PDF",
-    "open": "Open"
+    "open": "Open",
+    "limitReached": "You have used the free limit for guest questions. Log in to keep chatting with LexGo.AI.",
+    "limitLogin": "Log in to continue"
   },
   "portal": {
     "metaTitle": "Portal",
@@ -1609,12 +1613,17 @@
       "phone": "Phone",
       "phonePh": "+998 __ ___ __ __",
       "submit": "Continue",
-      "note": "Demo sign-in — no password. Real authentication arrives with the backend.",
+      "note": "Your phone and password are used only to sign you in securely.",
       "required": "Enter your name to continue.",
       "roleAdvocate": "Advocate",
       "roleAdvocateHint": "Verified profile, business tools, priority visibility",
       "noAccount": "Don't have an account?",
-      "createAccount": "Create account"
+      "createAccount": "Create account",
+      "password": "Password",
+      "passwordPh": "At least 8 characters",
+      "failed": "Wrong phone or password.",
+      "busy": "Please wait…",
+      "nameOptional": "(optional)"
     },
     "common": {
       "logout": "Log out",
@@ -2057,7 +2066,10 @@
       "educationPh": "University, degree",
       "bio": "About me",
       "bioPh": "A short professional bio clients will see",
-      "phone": "Phone"
+      "phone": "Phone",
+      "password": "Password",
+      "passwordPh": "At least 8 characters",
+      "passwordHint": "Use at least 8 characters."
     },
     "lawyer": {
       "basicTitle": "Your professional profile",

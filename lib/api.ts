@@ -1,8 +1,14 @@
-// Client for the LawProject AI backend (see FRONTEND_API.md).
-// Same-origin proxy path (see next.config.ts rewrites) to avoid browser CORS.
-// Override with NEXT_PUBLIC_API_BASE_URL to hit a backend directly.
-export const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "/api/backend";
+// AI-chat client for the LexGo backend (see FRONTEND_API.md).
+import {
+  API_BASE,
+  absUrl,
+  asDict,
+  asStr,
+  http,
+  type Dict,
+} from "./http";
+
+export { API_BASE, ApiError, isLimitError } from "./http";
 
 export type Source = {
   title?: string;
@@ -30,12 +36,6 @@ export type Contract = {
   fileBase64?: string;
 };
 
-function absUrl(path: string): string {
-  if (!path) return "";
-  if (/^https?:\/\//i.test(path)) return path;
-  return `${API_BASE}${path.startsWith("/") ? "" : "/"}${path}`;
-}
-
 // Absolute URLs for a contract PDF (paths are backend-relative).
 export const contractDownloadUrl = (c: Contract): string => absUrl(c.downloadUrl);
 export const contractInlineUrl = (c: Contract): string =>
@@ -48,24 +48,7 @@ export type ApiChat = {
   updatedAt?: string;
 };
 
-type Dict = Record<string, unknown>;
-const asDict = (v: unknown): Dict => (v && typeof v === "object" ? (v as Dict) : {});
-const asStr = (v: unknown, fallback = ""): string =>
-  typeof v === "string" ? v : v == null ? fallback : String(v);
-
-async function req(path: string, init?: RequestInit): Promise<unknown> {
-  const res = await fetch(`${API_BASE}${path}`, {
-    ...init,
-    headers: {
-      Accept: "application/json",
-      ...(init?.body ? { "Content-Type": "application/json" } : {}),
-      ...(init?.headers || {}),
-    },
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const text = await res.text();
-  return text ? JSON.parse(text) : null;
-}
+const req = http;
 
 function normSources(v: unknown): Source[] {
   if (!Array.isArray(v)) return [];
@@ -187,7 +170,12 @@ export async function postMessage(
   return { assistant: { ...assistant, sources }, sources, contracts };
 }
 
-export function chatSocketUrl(clientId: string, chatId: string): string {
+export function chatSocketUrl(
+  clientId: string,
+  chatId: string,
+  token?: string | null,
+): string {
   const base = API_BASE.replace(/^http/i, "ws");
-  return `${base}/ws/clients/${clientId}/chats/${chatId}`;
+  const q = token ? `?token=${encodeURIComponent(token)}` : "";
+  return `${base}/ws/clients/${clientId}/chats/${chatId}${q}`;
 }

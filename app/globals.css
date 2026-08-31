@@ -1585,3 +1585,5 @@ body:has(.auth) .fab{display:none}
   cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px;border-radius:10px}
 .mpick__clear:hover{background:var(--b50);color:#C0392B}
 .mpick__clear svg{width:13px;height:13px}
+
+.rf__hint{margin:6px 0 0;font-size:.76rem;color:var(--gray2)}

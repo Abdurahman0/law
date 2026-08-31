@@ -7,6 +7,7 @@ import { Link, useRouter } from "@/i18n/navigation";
 import { IconLogo } from "../icons";
 
 const ROLES: Role[] = ["client", "lawyer", "advocate"];
+const cap = (r: Role) => (r === "advocate" ? "Advocate" : r === "lawyer" ? "Lawyer" : "Client");
 
 export default function LoginForm() {
   const t = useTranslations("portal.login");
@@ -15,16 +16,30 @@ export default function LoginForm() {
   const [role, setRole] = useState<Role>("client");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [err, setErr] = useState(false);
+  const [password, setPassword] = useState("");
+  const [err, setErr] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
 
-  function submit(e: FormEvent) {
+  async function submit(e: FormEvent) {
     e.preventDefault();
-    if (!name.trim()) {
-      setErr(true);
+    if (busy) return;
+    const p = phone.trim();
+    if (!p || !password) {
+      setErr(t("required"));
       return;
     }
-    login({ role, name: name.trim(), phone: phone.trim() });
-    router.replace(`/portal/${role}`);
+    setErr(null);
+    setBusy(true);
+    try {
+      const s = await login(p, password, {
+        role,
+        name: name.trim() || t(`role${cap(role)}`),
+      });
+      router.replace(`/portal/${s.role}`);
+    } catch {
+      setErr(t("failed"));
+      setBusy(false);
+    }
   }
 
   return (
@@ -50,38 +65,52 @@ export default function LoginForm() {
               className={`prole${role === r ? " on" : ""}`}
               onClick={() => setRole(r)}
             >
-              <b>{t(`role${r === "advocate" ? "Advocate" : r === "lawyer" ? "Lawyer" : "Client"}`)}</b>
-              <span>{t(`role${r === "advocate" ? "Advocate" : r === "lawyer" ? "Lawyer" : "Client"}Hint`)}</span>
+              <b>{t(`role${cap(r)}`)}</b>
+              <span>{t(`role${cap(r)}Hint`)}</span>
             </button>
           ))}
         </div>
 
         <div className="cform" style={{ maxWidth: "none" }}>
           <div>
-            <label htmlFor="l-name">{t("name")}</label>
+            <label htmlFor="l-name">
+              {t("name")} <span className="rf__opt">{t("nameOptional")}</span>
+            </label>
             <input
               id="l-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={t("namePh")}
+              autoComplete="name"
             />
           </div>
           <div>
             <label htmlFor="l-phone">{t("phone")}</label>
             <input
               id="l-phone"
+              type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder={t("phonePh")}
+              autoComplete="tel"
+            />
+          </div>
+          <div>
+            <label htmlFor="l-pw">{t("password")}</label>
+            <input
+              id="l-pw"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder={t("passwordPh")}
+              autoComplete="current-password"
             />
           </div>
           {err ? (
-            <p style={{ color: "#C0392B", fontSize: ".85rem", margin: 0 }}>
-              {t("required")}
-            </p>
+            <p style={{ color: "#C0392B", fontSize: ".85rem", margin: 0 }}>{err}</p>
           ) : null}
-          <button className="btn btn--pri btn--full" type="submit">
-            {t("submit")}
+          <button className="btn btn--pri btn--full" type="submit" disabled={busy}>
+            {busy ? t("busy") : t("submit")}
           </button>
         </div>
         <p className="plogin__alt">

@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { useAuth } from "@/lib/auth";
-import { registerAccount } from "@/lib/services/registration";
 import {
   emptyDraft,
   type AccountType,
@@ -56,6 +55,20 @@ export default function RegisterFlow() {
     setDraft((d) => ({ ...d, profile: { ...d.profile, ...patch } }));
   }
 
+  const pwField = (
+    <div>
+      <label>{t("fields.password")}</label>
+      <input
+        type="password"
+        value={draft.password}
+        onChange={(e) => setDraft((d) => ({ ...d, password: e.target.value }))}
+        placeholder={t("fields.passwordPh")}
+        autoComplete="new-password"
+      />
+      <p className="rf__hint">{t("fields.passwordHint")}</p>
+    </div>
+  );
+
   function next() {
     setIdx((i) => Math.min(i + 1, steps.length - 1));
   }
@@ -75,11 +88,11 @@ export default function RegisterFlow() {
   }
 
   async function submit() {
+    if (!draft.accountType) return;
     setCreating(true);
     try {
-      const acc = await registerAccount(draft);
-      register(draft, acc);
-      router.replace(`/portal/${acc.accountType}`);
+      const s = await register(draft, draft.password);
+      router.replace(`/portal/${s.role}`);
     } catch {
       setCreating(false);
     }
@@ -92,16 +105,17 @@ export default function RegisterFlow() {
   const langOpts = LANGUAGE_KEYS.map((l) => ({ value: l, label: tl(l) }));
   const areaOpts = AREA_KEYS.map((a) => ({ value: a, label: te(`areas.${a}`) }));
 
+  const pwOk = draft.password.length >= 8;
   function canContinue(): boolean {
     switch (step) {
       case "clientInfo":
-        return p.name.trim().length > 1;
+        return p.name.trim().length > 1 && pwOk;
       case "lawyerBasic":
-        return p.name.trim().length > 1 && !!p.region && p.languages.length > 0;
+        return p.name.trim().length > 1 && !!p.region && p.languages.length > 0 && pwOk;
       case "lawyerServices":
         return p.services.length > 0;
       case "personal":
-        return p.name.trim().length > 1 && !!p.region && p.languages.length > 0;
+        return p.name.trim().length > 1 && !!p.region && p.languages.length > 0 && pwOk;
       case "professional":
         return !!p.licenseNumber?.trim() && !!p.specialization?.trim();
       case "expertise":
@@ -193,6 +207,7 @@ export default function RegisterFlow() {
                   </label>
                   <input type="email" value={p.email ?? ""} onChange={(e) => setProfile({ email: e.target.value })} placeholder={t("fields.emailPh")} />
                 </div>
+                {pwField}
               </div>
               <p className="rf__wow">{t("client.wow")}</p>
             </div>
@@ -230,6 +245,7 @@ export default function RegisterFlow() {
                   <label>{t("fields.bio")}</label>
                   <textarea rows={3} value={p.bio ?? ""} onChange={(e) => setProfile({ bio: e.target.value })} placeholder={t("fields.bioPh")} />
                 </div>
+                {pwField}
               </div>
             </div>
           ) : null}
@@ -276,6 +292,7 @@ export default function RegisterFlow() {
                   <label>{t("fields.languages")}</label>
                   <ChipMulti options={langOpts} value={p.languages} onChange={(v) => setProfile({ languages: v })} />
                 </div>
+                {pwField}
               </div>
             </div>
           ) : null}

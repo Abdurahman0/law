@@ -1572,7 +1572,9 @@
         "meta": "Aniqlik kiritish uchun ekspress konsultatsiya — 90 000 so'mdan"
       }
     },
-    "analysisSuffix": "Aniqlangan yo'nalish: {dir} · {stage}.\nTaxminiy narx: {price}."
+    "analysisSuffix": "Aniqlangan yo'nalish: {dir} · {stage}.\nTaxminiy narx: {price}.",
+    "limitReached": "Bepul savollar limiti tugadi. Davom etish uchun kiring.",
+    "limitLogin": "Davom etish uchun kirish"
   },
   "chatPage": {
     "metaTitle": "LexGo.AI chat",
@@ -1599,7 +1601,9 @@
     "offline": "Serverga ulanib bo'lmadi — bu oflayn javob.",
     "disclaimer": "LexGo.AI xato qilishi mumkin. Yakuniy huquqiy qaror advokatda qoladi.",
     "downloadPdf": "PDF yuklab olish",
-    "open": "Ochish"
+    "open": "Ochish",
+    "limitReached": "Mehmonlar uchun bepul limit tugadi. LexGo.AI bilan davom etish uchun tizimga kiring.",
+    "limitLogin": "Davom etish uchun kirish"
   },
   "portal": {
     "metaTitle": "Portal",
@@ -1615,12 +1619,17 @@
       "phone": "Telefon",
       "phonePh": "+998 __ ___ __ __",
       "submit": "Davom etish",
-      "note": "Demo kirish — parolsiz. Haqiqiy autentifikatsiya backend bilan keladi.",
+      "note": "Telefon va parolingiz faqat xavfsiz kirish uchun ishlatiladi.",
       "required": "Davom etish uchun ismingizni kiriting.",
       "roleAdvocate": "Advokat",
       "roleAdvocateHint": "Tasdiqlangan profil, biznes vositalari, ustuvor ko'rinuvchanlik",
       "noAccount": "Hisobingiz yo'qmi?",
-      "createAccount": "Hisob yaratish"
+      "createAccount": "Hisob yaratish",
+      "password": "Parol",
+      "passwordPh": "Kamida 8 ta belgi",
+      "failed": "Telefon yoki parol noto‘g‘ri.",
+      "busy": "Iltimos, kuting…",
+      "nameOptional": "(ixtiyoriy)"
     },
     "common": {
       "logout": "Chiqish",
@@ -2063,7 +2072,10 @@
       "educationPh": "Universitet, daraja",
       "bio": "Men haqimda",
       "bioPh": "Mijozlar ko'radigan qisqa professional ma'lumot",
-      "phone": "Telefon"
+      "phone": "Telefon",
+      "password": "Parol",
+      "passwordPh": "Kamida 8 ta belgi",
+      "passwordHint": "Kamida 8 ta belgidan foydalaning."
     },
     "lawyer": {
       "basicTitle": "Professional profilingiz",

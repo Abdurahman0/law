@@ -8,12 +8,14 @@ import {
   createChat,
   getChatMessages,
   postMessage,
+  isLimitError,
   type ApiChat,
   type Source,
   type Contract,
 } from "@/lib/api";
 import { useLexAi } from "./useLexAi";
 import { useAuth } from "@/lib/auth";
+import { Link } from "@/i18n/navigation";
 import ContractCard from "../ContractCard";
 import {
   IconStar,
@@ -30,12 +32,15 @@ type Msg = {
   sources?: Source[];
   contracts?: Contract[];
   offline?: boolean;
+  limit?: boolean;
 };
 
 export default function ChatPage({ embedded = false }: { embedded?: boolean }) {
   const t = useTranslations("chatPage");
   const { reply } = useLexAi();
   const { session } = useAuth();
+  // Logged-in users get their own backend namespace; guests an id by IP.
+  const cid = session?.id || getClientId();
 
   const [chats, setChats] = useState<ApiChat[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -50,7 +55,6 @@ export default function ChatPage({ embedded = false }: { embedded?: boolean }) {
   const suggestions = t.raw("suggestions") as string[];
 
   useEffect(() => {
-    const cid = getClientId();
     if (cid) listChats(cid).then(setChats).catch(() => setChats([]));
     // Auto-send a message handed off from the finder via /chat?q=...
     if (!seeded.current) {
@@ -81,7 +85,7 @@ export default function ChatPage({ embedded = false }: { embedded?: boolean }) {
     setSideOpen(false);
     setMessages([]);
     try {
-      const msgs = await getChatMessages(getClientId(), id);
+      const msgs = await getChatMessages(cid, id);
       setMessages(
         msgs.map((m) => ({
           role: m.role,
@@ -110,7 +114,6 @@ export default function ChatPage({ embedded = false }: { embedded?: boolean }) {
     setMessages((m) => [...m, { role: "user", content }]);
     setSending(true);
     try {
-      const cid = getClientId();
       let id = activeId;
       if (!id) {
         const chat = await createChat(cid, content.slice(0, 48));
@@ -134,12 +137,19 @@ export default function ChatPage({ embedded = false }: { embedded?: boolean }) {
       setChats((cs) =>
         cs.map((c) => (c.id === id ? { ...c, lastMessage: assistant.content } : c)),
       );
-    } catch {
-      const r = reply(content);
-      setMessages((m) => [
-        ...m,
-        { role: "assistant", content: r.text, offline: true },
-      ]);
+    } catch (e) {
+      if (isLimitError(e) && !session) {
+        setMessages((m) => [
+          ...m,
+          { role: "assistant", content: t("limitReached"), limit: true },
+        ]);
+      } else {
+        const r = reply(content);
+        setMessages((m) => [
+          ...m,
+          { role: "assistant", content: r.text, offline: true },
+        ]);
+      }
     } finally {
       setSending(false);
       requestAnimationFrame(() => taRef.current?.focus());
@@ -267,6 +277,11 @@ export default function ChatPage({ embedded = false }: { embedded?: boolean }) {
                     ) : null}
                     {m.offline ? (
                       <div className="aichat__offline">{t("offline")}</div>
+                    ) : null}
+                    {m.limit ? (
+                      <Link href="/login" className="btn btn--pri btn--sm" style={{ marginTop: 10 }}>
+                        {t("limitLogin")}
+                      </Link>
                     ) : null}
                   </div>
                 </div>
