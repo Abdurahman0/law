@@ -4,14 +4,9 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { useAuth } from "@/lib/auth";
-import {
-  CLIENT_REQUESTS,
-  MATCHED_SPECIALISTS,
-  CLIENT_QUICK_ACTIONS,
-  JOURNEY_STAGES,
-} from "@/lib/mock/client";
-import { initials } from "@/lib/lawyers";
-import type { RequestStatus } from "@/lib/types";
+import { listCases } from "@/lib/services/backend";
+import { useResource } from "@/lib/useResource";
+import { Skeleton, EmptyState } from "@/components/portal/DataState";
 import {
   Icon,
   IconSparkle,
@@ -19,37 +14,27 @@ import {
   IconArrowRight,
   IconShieldCheck,
   IconClock,
-  IconStar,
   IconCheck,
 } from "@/components/icons";
 
-// Icon per journey stage (problem → analysis → specialist → consultation → resolution)
-const JOURNEY_ICONS = ["IconChatDots", "IconSparkle", "IconUser", "IconVideo", "IconAward"];
-
-const STAGE_OF: Record<RequestStatus, number> = {
-  analyzing: 1,
-  matching: 2,
-  consultation: 3,
-  inProgress: 3,
-  resolved: 4,
-};
+// Static quick-action shortcuts (navigation, not backend data).
+const QUICK_ACTIONS = [
+  { key: "describe", icon: "IconChatDots", href: "/portal/client/ai", primary: true },
+  { key: "findSpecialist", icon: "IconSearch", href: "/portal/client/lawyers" },
+  { key: "consultation", icon: "IconVideo", href: "/portal/client/lawyers" },
+  { key: "track", icon: "IconClipboardCheck", href: "/portal/client/cases" },
+  { key: "askAi", icon: "IconSparkle", href: "/portal/client/ai" },
+  { key: "upload", icon: "IconDownload", href: "/portal/client/ai" },
+];
 
 export default function ClientDashboard() {
   const t = useTranslations("portal.client.dashboard");
-  const tj = useTranslations("portal.client.journey");
-  const tr = useTranslations("portal.client.reqStatus");
-  const tn = useTranslations("portal.client.nextActions");
   const ta = useTranslations("portal.client.actions");
   const tc = useTranslations("portal.common");
-  const te = useTranslations("enums");
-  const tcat = useTranslations("catalog");
   const { session } = useAuth();
   const router = useRouter();
   const [ask, setAsk] = useState("");
-
-  const active = CLIENT_REQUESTS.filter((r) => r.status !== "resolved");
-  const primary = active[0] ?? CLIENT_REQUESTS[0];
-  const stage = primary ? STAGE_OF[primary.status] : 0;
+  const res = useResource(listCases, []);
 
   function describe() {
     const q = ask.trim();
@@ -88,7 +73,7 @@ export default function ClientDashboard() {
 
       {/* Quick actions */}
       <div className="cdact">
-        {CLIENT_QUICK_ACTIONS.map((a) => (
+        {QUICK_ACTIONS.map((a) => (
           <Link
             href={a.href}
             key={a.key}
@@ -100,97 +85,36 @@ export default function ClientDashboard() {
         ))}
       </div>
 
-      {/* Legal journey — signature visualization */}
-      <div className="ppanel jcard">
-        <div className="jhead">
-          <div className="jhead__t">
-            <b>{tj("title")}</b>
-            {primary ? <span className="jsub">{primary.title}</span> : null}
-          </div>
-          <span className="jprog">
-            {tj("progress", { done: stage, total: JOURNEY_STAGES.length })}
-          </span>
+      {/* Active requests (backend) */}
+      <div className="ppanel">
+        <div className="ppanel__h">
+          <b>{t("requests")}</b>
+          <Link href="/portal/client/cases">{tc("viewAll")}</Link>
         </div>
-        <div className="journey">
-          {JOURNEY_STAGES.map((s, i) => {
-            const state = i < stage ? "done" : i === stage ? "current" : "upcoming";
-            return (
-              <div key={s} className={`jstep jstep--${state}`}>
-                <span className="jstep__dot">
-                  {i < stage ? <IconCheck /> : <Icon name={JOURNEY_ICONS[i]} />}
-                </span>
-                <span className="jstep__lbl">{tj(s)}</span>
-                <span className="jstep__state">{tj(state)}</span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="pgrid2">
-        {/* Active requests */}
-        <div className="ppanel">
-          <div className="ppanel__h">
-            <b>{t("requests")}</b>
-            <Link href="/portal/client/cases">{tc("viewAll")}</Link>
-          </div>
-          {active.length ? (
-            active.map((r) => (
-              <div className="creq" key={r.id}>
-                <span className={`creq__st creq__st--${r.status}`} />
-                <div className="creq__m">
-                  <b>{r.title}</b>
-                  <span>
-                    {tcat(`${r.categoryKey}.name`)}
-                    {r.specialist ? ` · ${r.specialist}` : ""}
-                  </span>
+        {res.status === "loading" ? (
+          <Skeleton rows={3} />
+        ) : !res.data.length ? (
+          <EmptyState icon={<IconSparkle />} title={t("emptyTitle")} text={t("emptyText")} />
+        ) : (
+          res.data.map((c) => (
+            <div className="creq" key={c.id}>
+              <span className="creq__st" />
+              <div className="creq__m">
+                <b>{c.caseType || c.caseNumber}</b>
+                <span>{[c.stage, c.caseNumber].filter(Boolean).join(" · ")}</span>
+                {c.nextAction ? (
                   <em className="creq__next">
                     <IconArrowRight />
-                    {tn(r.nextActionKey)}
+                    {c.nextAction}
                   </em>
-                </div>
-                <div className="creq__side">
-                  <span className="creq__badge">{tr(r.status)}</span>
-                  {r.unread ? <span className="creq__unread">{r.unread}</span> : null}
-                </div>
+                ) : null}
               </div>
-            ))
-          ) : (
-            <div className="pempty">
-              <IconSparkle />
-              <b>{t("emptyTitle")}</b>
-              <p>{t("emptyText")}</p>
-            </div>
-          )}
-        </div>
-
-        {/* Smart specialist matching */}
-        <div className="ppanel">
-          <div className="ppanel__h">
-            <b>{t("matchTitle")}</b>
-            <Link href="/portal/client/lawyers">{tc("viewAll")}</Link>
-          </div>
-          <p className="advmuted" style={{ marginBottom: 12 }}>{t("matchSub")}</p>
-          {MATCHED_SPECIALISTS.map((s) => (
-            <div className="cmatch" key={s.id}>
-              <span className="cmatch__av">{initials(s.name)}</span>
-              <div className="cmatch__m">
-                <b>
-                  {s.name}
-                  {s.verified ? <span className="cmatch__v"><IconShieldCheck /></span> : null}
-                </b>
-                <span>
-                  {te(`areas.${s.areaKey}`)} · <IconStar className="cmatch__star" />
-                  {s.rating.toFixed(1)} ({s.reviews})
-                </span>
-              </div>
-              <div className="cmatch__side">
-                <span className="cmatch__pct">{s.matchPct}%</span>
-                <span className="cmatch__pl">{t("match")}</span>
+              <div className="creq__side">
+                <span className="creq__badge">{c.status}</span>
               </div>
             </div>
-          ))}
-        </div>
+          ))
+        )}
       </div>
     </>
   );

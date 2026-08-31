@@ -1587,3 +1587,8 @@ body:has(.auth) .fab{display:none}
 .mpick__clear svg{width:13px;height:13px}
 
 .rf__hint{margin:6px 0 0;font-size:.76rem;color:var(--gray2)}
+
+/* data loading skeleton */
+.pskel{display:grid;gap:10px;padding:6px 0}
+.pskel__row{height:56px;border-radius:14px;background:linear-gradient(90deg,var(--b50) 25%,#EEF4FE 37%,var(--b50) 63%);background-size:400% 100%;animation:pshim 1.4s ease infinite}
+@keyframes pshim{0%{background-position:100% 0}100%{background-position:0 0}}

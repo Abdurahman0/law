@@ -1663,7 +1663,9 @@
         "value": "Value",
         "status": "Status"
       },
-      "roleAdvocate": "Advocate"
+      "roleAdvocate": "Advocate",
+      "loadError": "Couldn't load data",
+      "loadErrorText": "Please check your connection and try again."
     },
     "sidebar": {
       "lawyer": {
@@ -1712,15 +1714,25 @@
         "pending": "Pending payments",
         "viaLexgo": "Via LexGo",
         "newCases": "New cases",
-        "newCasesSub": "{n} new requests matched to you"
+        "newCasesSub": "{n} new requests matched to you",
+        "kpisEmpty": "No stats yet",
+        "kpisEmptyText": "Your workload and finance summary will appear here.",
+        "newCasesEmpty": "No new requests",
+        "newCasesEmptyText": "New client requests matched to you will appear here."
       },
       "marketplace": {
-        "title": "Case Marketplace",
-        "lead": "New cases matched to your practice areas and regions."
+        "title": "Case marketplace",
+        "lead": "New cases matched to your practice areas and regions.",
+        "count": "{n} open",
+        "empty": "No open requests",
+        "emptyText": "New client requests will appear here."
       },
       "cases": {
-        "title": "My Cases",
-        "filterAll": "All"
+        "title": "My cases",
+        "filterAll": "All",
+        "count": "{n} cases",
+        "empty": "No cases yet",
+        "emptyText": "Your cases will appear here."
       },
       "calendar": {
         "title": "Calendar & deadlines",
@@ -1728,13 +1740,17 @@
         "hearing": "Hearing",
         "investigative": "Investigative action",
         "meeting": "Meeting",
-        "deadline": "Deadline"
+        "deadline": "Deadline",
+        "empty": "No events yet",
+        "emptyText": "Hearings, meetings and deadlines will appear here."
       },
       "clients": {
         "title": "Clients",
         "conflict": "Conflict",
         "casesCount": "{n} cases",
-        "conflictAlert": "Possible conflict of interest — check before accepting"
+        "conflictAlert": "Possible conflict of interest — check before accepting",
+        "empty": "No clients yet",
+        "emptyText": "Your clients will appear here once you take on cases."
       },
       "documents": {
         "title": "Documents",
@@ -1742,7 +1758,8 @@
         "upload": "Upload document",
         "aiAnalyze": "AI analysis",
         "empty": "No documents yet",
-        "aiNote": "AI found 7 points to review in this document."
+        "aiNote": "AI found 7 points to review in this document.",
+        "emptyText": "Available document templates will appear here."
       },
       "chat": {
         "title": "Secure Chat",
@@ -1801,8 +1818,10 @@
         "emptyText": "Describe a problem above to get started."
       },
       "cases": {
-        "title": "My Cases",
-        "empty": "No cases yet"
+        "title": "My requests",
+        "empty": "No requests yet",
+        "count": "{n} total",
+        "emptyText": "Describe a legal problem to create your first request."
       },
       "payments": {
         "title": "Payments",
@@ -1811,7 +1830,9 @@
         "id": "ID",
         "what": "Service",
         "date": "Date",
-        "amount": "Amount"
+        "amount": "Amount",
+        "empty": "No payments yet",
+        "emptyText": "Your payments and receipts will appear here."
       },
       "gifts": {
         "title": "Gifts",
@@ -1822,7 +1843,9 @@
         "months": "months",
         "sent": "Sent",
         "activated": "Activated",
-        "pending": "Pending"
+        "pending": "Pending",
+        "empty": "No gifts yet",
+        "emptyText": "Gift subscriptions you send or receive will appear here."
       },
       "profile": {
         "title": "Profile",
@@ -1894,7 +1917,13 @@
         "currentRank": "Current search rank",
         "responseRate": "Response rate {pct}%",
         "boostCta": "Boost my visibility",
-        "upgradeCta": "Upgrade plan"
+        "upgradeCta": "Upgrade plan",
+        "performance": "Profile performance",
+        "performanceEmpty": "No performance data yet",
+        "performanceEmptyText": "Your views, contacts and ranking will appear here.",
+        "opportunitiesEmpty": "No opportunities yet",
+        "opportunitiesEmptyText": "Matching client requests will appear here.",
+        "boostSub": "Improve your visibility and reach more clients."
       },
       "opportunities": {
         "title": "New opportunities",
@@ -1906,12 +1935,16 @@
       },
       "cases": {
         "title": "My cases",
-        "count": "{n} cases"
+        "count": "{n} cases",
+        "emptyTitle": "No cases yet",
+        "emptyText": "Your cases will appear here."
       },
       "profile": {
         "title": "My professional profile",
         "visibility": "{pct}% complete",
-        "previewNote": "This is how clients see your profile."
+        "previewNote": "This is how clients see your profile.",
+        "emptyTitle": "Profile not set up",
+        "emptyText": "Complete your registration to build your professional profile."
       }
     }
   },
@@ -2080,7 +2113,9 @@
     },
     "services": {
       "search": "Search services",
-      "selected": "{n} selected"
+      "selected": "{n} selected",
+      "empty": "No services available",
+      "emptyText": "The service catalog will load from the backend."
     },
     "advocate": {
       "steps": {
@@ -2184,7 +2219,9 @@
       "invoice": "Invoice",
       "date": "Date",
       "amount": "Amount",
-      "status": "Status"
+      "status": "Status",
+      "empty": "No billing history",
+      "emptyText": "Your invoices will appear here."
     },
     "states": {
       "paid": "Paid",
@@ -2214,7 +2251,10 @@
         "Detailed analytics"
       ]
     },
-    "freeLabel": "Free"
+    "freeLabel": "Free",
+    "choose": "Choose plan",
+    "empty": "No plans available",
+    "emptyText": "Subscription plans will load from the backend."
   },
   "promotion": {
     "kicker": "Visibility tool",
@@ -2237,7 +2277,9 @@
     "activeShort": "Active",
     "activeMsg": "Promotion active for {days} days — your visibility is boosted.",
     "popular": "Best value",
-    "boostNote": "Promotion increases visibility only. It does not affect legal outcomes."
+    "boostNote": "Promotion increases visibility only. It does not affect legal outcomes.",
+    "empty": "Promotion coming soon",
+    "emptyText": "Visibility packages and reach analytics will appear here."
   },
   "auth": {
     "headline": "Legal help, reimagined.",

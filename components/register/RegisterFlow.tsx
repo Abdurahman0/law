@@ -7,11 +7,11 @@ import { useAuth } from "@/lib/auth";
 import {
   emptyDraft,
   type AccountType,
+  type AdvocateStats,
   type ProfessionalProfile,
   type RegistrationDraft,
 } from "@/lib/types";
 import { LANGUAGE_KEYS, AREA_KEYS, REGION_KEYS } from "@/lib/mock/catalog";
-import { ADVOCATE_DEFAULT_STATS } from "@/lib/mock/advocate";
 import Select, { type Option } from "@/components/Select";
 import { IconLogo, IconChevronLeft, IconArrowRight, IconCheck } from "../icons";
 import PhoneStep from "./PhoneStep";
@@ -23,6 +23,14 @@ import ServiceSelector from "./ServiceSelector";
 import WorkHistoryEditor from "./WorkHistoryEditor";
 import StatsEditor from "./StatsEditor";
 import ProfilePreview from "./ProfilePreview";
+
+const ZERO_STATS: AdvocateStats = {
+  totalCases: 0,
+  casesWon: 0,
+  successRate: 0,
+  yearsPractice: 0,
+  clientsRepresented: 0,
+};
 
 const STEPS_BY_TYPE: Record<AccountType, string[]> = {
   client: ["clientInfo"],
@@ -81,7 +89,7 @@ export default function RegisterFlow() {
       accountType: type,
       profile: {
         ...d.profile,
-        stats: type === "advocate" ? { ...ADVOCATE_DEFAULT_STATS, casesWon: 0, totalCases: 0, clientsRepresented: 0, yearsPractice: 0, successRate: 0 } : d.profile.stats,
+        stats: type === "advocate" ? ZERO_STATS : d.profile.stats,
       },
     }));
     setIdx(3);
@@ -350,7 +358,7 @@ export default function RegisterFlow() {
             <div className="rf__step rf__step--wide">
               <h1 className="rf__title">{t("advocate.stats.title")}</h1>
               <p className="rf__sub">{t("advocate.stats.subtitle")}</p>
-              <StatsEditor value={p.stats ?? ADVOCATE_DEFAULT_STATS} onChange={(v) => setProfile({ stats: v })} />
+              <StatsEditor value={p.stats ?? ZERO_STATS} onChange={(v) => setProfile({ stats: v })} />
             </div>
           ) : null}
 

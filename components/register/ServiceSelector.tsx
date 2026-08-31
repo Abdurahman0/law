@@ -2,34 +2,35 @@
 
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { SERVICE_CATALOG } from "@/lib/mock/catalog";
-import type { ServiceKey } from "@/lib/types";
-import { Icon, IconSearch, IconCheck } from "../icons";
+import { getServices } from "@/lib/services/backend";
+import { useResource } from "@/lib/useResource";
+import { Skeleton, EmptyState } from "../portal/DataState";
+import { IconSearch, IconCheck, IconGrid } from "../icons";
 
 export default function ServiceSelector({
   value,
   onChange,
 }: {
-  value: ServiceKey[];
-  onChange: (next: ServiceKey[]) => void;
+  value: string[];
+  onChange: (next: string[]) => void;
 }) {
-  const tc = useTranslations("catalog");
   const t = useTranslations("register.services");
+  const res = useResource(getServices, []);
   const [q, setQ] = useState("");
 
   const list = useMemo(() => {
     const query = q.trim().toLowerCase();
-    if (!query) return SERVICE_CATALOG;
-    return SERVICE_CATALOG.filter(
-      (s) =>
-        tc(`${s.key}.name`).toLowerCase().includes(query) ||
-        tc(`${s.key}.desc`).toLowerCase().includes(query),
-    );
-  }, [q, tc]);
+    if (!query) return res.data;
+    return res.data.filter((s) => s.name.toLowerCase().includes(query));
+  }, [q, res.data]);
 
-  function toggle(k: ServiceKey) {
-    onChange(value.includes(k) ? value.filter((x) => x !== k) : [...value, k]);
+  function toggle(id: string) {
+    onChange(value.includes(id) ? value.filter((x) => x !== id) : [...value, id]);
   }
+
+  if (res.status === "loading") return <Skeleton rows={4} />;
+  if (res.status === "error" || !res.data.length)
+    return <EmptyState title={t("empty")} text={t("emptyText")} />;
 
   return (
     <div className="svsel">
@@ -47,21 +48,20 @@ export default function ServiceSelector({
       </div>
       <div className="svsel__grid">
         {list.map((s) => {
-          const on = value.includes(s.key);
+          const on = value.includes(s.id);
           return (
             <button
-              key={s.key}
+              key={s.id}
               type="button"
               className={`svcard${on ? " on" : ""}`}
               aria-pressed={on}
-              onClick={() => toggle(s.key)}
+              onClick={() => toggle(s.id)}
             >
               <span className="svcard__i">
-                <Icon name={s.icon} />
+                <IconGrid />
               </span>
               <span className="svcard__t">
-                <b>{tc(`${s.key}.name`)}</b>
-                <small>{tc(`${s.key}.desc`)}</small>
+                <b>{s.name}</b>
               </span>
               <span className="svcard__c">{on ? <IconCheck /> : null}</span>
             </button>

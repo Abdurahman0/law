@@ -1,16 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { useAuth } from "@/lib/auth";
-import {
-  LAWYERS,
-  initials,
-  AREA_KEYS,
-  REGION_KEYS,
-  type Lawyer,
-} from "@/lib/lawyers";
+import { initials, AREA_KEYS, REGION_KEYS } from "@/lib/lawyers";
+import { listLawyers, type BackendLawyer } from "@/lib/services/backend";
 import Select, { type Option } from "@/components/Select";
 import {
   IconUser,
@@ -32,10 +27,6 @@ const STAGES = [
 ];
 const DOC_TYPES = ["contract", "application", "complaint", "claim", "poa", "corporate"];
 
-const reduced = () =>
-  typeof window !== "undefined" &&
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
 export default function Finder() {
   const tf = useTranslations("finder");
   const te = useTranslations("enums");
@@ -52,7 +43,7 @@ export default function Finder() {
   const [ask, setAsk] = useState("");
   const [res, setRes] = useState<{ area: string; region: string } | null>(null);
   const [loading, setLoading] = useState(false);
-  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const [rows, setRows] = useState<BackendLawyer[]>([]);
 
   const cur = te("currency");
 
@@ -90,43 +81,47 @@ export default function Finder() {
   function searchLawyers(a: string, r: string) {
     setRes({ area: a, region: r });
     setLoading(true);
-    clearTimeout(timer.current);
-    timer.current = setTimeout(() => setLoading(false), reduced() ? 0 : 620);
+    setRows([]);
+    listLawyers({ specialization: a, region: r })
+      .then((data) => setRows(data))
+      .catch(() => setRows([]))
+      .finally(() => setLoading(false));
   }
 
-  function lawyerRow(l: Lawyer) {
+  function areaLabel(b: BackendLawyer): string {
+    const key = b.specializations.find((s) => AREA_KEYS.includes(s));
+    return key ? te(`areas.${key}`) : b.specializations[0] || "";
+  }
+
+  function lawyerRow(b: BackendLawyer) {
     return (
-      <button className="resrow" type="button" key={l.name}>
-        <div className="resrow__i">{initials(l.name)}</div>
+      <button className="resrow" type="button" key={b.id || b.name}>
+        <div className="resrow__i">{initials(b.name || "?")}</div>
         <div>
           <div className="resrow__n">
-            {l.name}
-            {l.super ? (
+            {b.name}
+            {b.verified ? (
               <span className="pill" style={{ fontSize: ".66rem" }}>
                 Super
               </span>
             ) : null}
           </div>
           <div className="resrow__m">
-            {te(`areas.${l.areaKey}`)} · {te(`regions.${l.regionKey}`)} · {l.exp}
+            {areaLabel(b)} · {b.region} · {b.experienceYears}
           </div>
         </div>
         <div className="resrow__r">
-          <b>{l.price}</b>
+          <b>{b.basePrice ? b.basePrice.toLocaleString("ru-RU").replace(/,/g, " ") : "—"}</b>
           <span>
             {tf("result.fromSom")} {cur} · {tf("result.ratingSuffix")}{" "}
-            {l.rate.toFixed(1)}
+            {b.rating.toFixed(1)}
           </span>
         </div>
       </button>
     );
   }
 
-  const list = res
-    ? LAWYERS.filter(
-        (l) => l.areaKey === res.area && (!res.region || l.regionKey === res.region),
-      ).sort((a, b) => b.rate - a.rate)
-    : [];
+  const list = res ? rows : [];
 
   return (
     <div className="finder">

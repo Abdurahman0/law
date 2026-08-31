@@ -3,13 +3,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
-  LAWYERS,
   initials,
   AREA_KEYS,
   REGION_KEYS,
   type Lawyer,
 } from "@/lib/lawyers";
 import { listLawyers, type BackendLawyer } from "@/lib/services/backend";
+import { useResource } from "@/lib/useResource";
+import { Skeleton, EmptyState } from "../portal/DataState";
 import Select, { type Option } from "../Select";
 import { IconChevronLeft, IconChevronRight, IconInfo } from "../icons";
 
@@ -49,20 +50,8 @@ export default function LawyersSection({
   const [area, setArea] = useState(initialArea);
   const [region, setRegion] = useState("");
   const [sort, setSort] = useState("rating");
-  const [source, setSource] = useState<Lawyer[]>(LAWYERS);
-
-  // Pull the real directory when the backend is reachable; keep mock otherwise.
-  useEffect(() => {
-    let alive = true;
-    listLawyers()
-      .then((rows) => {
-        if (alive && rows.length) setSource(rows.map(toLawyer));
-      })
-      .catch(() => {});
-    return () => {
-      alive = false;
-    };
-  }, []);
+  const res = useResource<BackendLawyer>(() => listLawyers(), []);
+  const source = useMemo(() => res.data.map(toLawyer), [res.data]);
   const scroller = useRef<HTMLDivElement>(null);
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
@@ -253,25 +242,15 @@ export default function LawyersSection({
           </div>
         ) : null}
 
-        {compact ? (
-          <div className="advgrid">
-            {list.length ? (
-              list.map(card)
-            ) : (
-              <div style={{ padding: 36, textAlign: "center", color: "var(--gray)", width: "100%" }}>
-                {t("empty")}
-              </div>
-            )}
-          </div>
+        {res.status === "loading" ? (
+          <Skeleton rows={3} />
+        ) : !list.length ? (
+          <EmptyState title={t("empty")} />
+        ) : compact ? (
+          <div className="advgrid">{list.map(card)}</div>
         ) : (
           <div className="scroller" ref={scroller} onScroll={syncNav}>
-            {list.length ? (
-              list.map(card)
-            ) : (
-              <div style={{ padding: 36, textAlign: "center", color: "var(--gray)", width: "100%" }}>
-                {t("empty")}
-              </div>
-            )}
+            {list.map(card)}
           </div>
         )}
 

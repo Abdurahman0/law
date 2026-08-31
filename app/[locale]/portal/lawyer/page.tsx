@@ -1,59 +1,24 @@
 "use client";
 
-import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { LAWYER_KPIS, MARKETPLACE } from "@/lib/portalData";
-import StatusPill from "@/components/portal/StatusPill";
+import { listOrders } from "@/lib/services/backend";
+import { useResource } from "@/lib/useResource";
+import { Skeleton, EmptyState } from "@/components/portal/DataState";
+import { IconTrendingUp, IconBriefcase, IconClock, IconMapPin } from "@/components/icons";
 
 export default function LawyerDashboard() {
   const t = useTranslations("portal.lawyer.dashboard");
   const tc = useTranslations("portal.common");
-  const te = useTranslations("enums");
-  const [cases, setCases] = useState(MARKETPLACE);
-
-  const kpis = [
-    { v: LAWYER_KPIS.urgent, k: "urgent" },
-    { v: LAWYER_KPIS.courts, k: "courts" },
-    { v: LAWYER_KPIS.deadlines, k: "deadlines" },
-    { v: LAWYER_KPIS.messages, k: "messages" },
-    { v: LAWYER_KPIS.toReview, k: "toReview" },
-  ];
-  const fin = [
-    { v: LAWYER_KPIS.incomeToday, k: "incomeToday" },
-    { v: LAWYER_KPIS.incomeMonth, k: "incomeMonth" },
-    { v: LAWYER_KPIS.pending, k: "pending" },
-    { v: LAWYER_KPIS.viaLexgo, k: "viaLexgo" },
-  ];
+  const res = useResource(listOrders, []);
 
   return (
     <>
-      <div>
-        <h2 className="psec-h" style={{ marginBottom: 12 }}>
-          {t("today")}
-        </h2>
-        <div className="pk">
-          {kpis.map((x) => (
-            <div className="pk__i" key={x.k}>
-              <b>{x.v}</b>
-              <span>{t(x.k)}</span>
-            </div>
-          ))}
+      <div className="ppanel">
+        <div className="ppanel__h">
+          <b>{t("today")}</b>
         </div>
-      </div>
-
-      <div>
-        <h2 className="psec-h" style={{ marginBottom: 12 }}>
-          {t("finance")}
-        </h2>
-        <div className="pk">
-          {fin.map((x) => (
-            <div className="pk__i" key={x.k}>
-              <b className="cy">{x.v}</b>
-              <span>{t(x.k)}</span>
-            </div>
-          ))}
-        </div>
+        <EmptyState icon={<IconTrendingUp />} title={t("kpisEmpty")} text={t("kpisEmptyText")} />
       </div>
 
       <div className="ppanel">
@@ -62,41 +27,39 @@ export default function LawyerDashboard() {
           <Link href="/portal/lawyer/marketplace">{tc("viewAll")}</Link>
         </div>
         <p style={{ margin: "0 0 14px", color: "var(--gray)", fontSize: ".88rem" }}>
-          {t("newCasesSub", { n: cases.length })}
+          {t("newCasesSub", { n: res.data.length })}
         </p>
-        <div className="pcards">
-          {cases.map((c) => (
-            <div className="pcase" key={c.id}>
-              <div className="pcase__h">
-                <span className="pcase__id">CASE #{c.id}</span>
-                <StatusPill kind="status" value={c.status} />
+        {res.status === "loading" ? (
+          <Skeleton rows={3} />
+        ) : !res.data.length ? (
+          <EmptyState icon={<IconBriefcase />} title={t("newCasesEmpty")} text={t("newCasesEmptyText")} />
+        ) : (
+          <div className="pcards">
+            {res.data.map((o) => (
+              <div className="pcase" key={o.id}>
+                <div className="pcase__h">
+                  <span className="pcase__id">#{o.id}</span>
+                  <span className="advmuted">{o.status}</span>
+                </div>
+                <p>{o.title}</p>
+                <small>
+                  <IconMapPin />
+                  {[o.region, o.budget].filter(Boolean).join(" · ")}
+                  {o.createdAt ? (
+                    <>
+                      {" "}
+                      · <IconClock style={{ width: 13, height: 13 }} /> {o.createdAt}
+                    </>
+                  ) : null}
+                </small>
+                <div className="pcase__act">
+                  <button className="btn btn--pri btn--sm" type="button">{tc("accept")}</button>
+                  <button className="btn btn--line btn--sm" type="button">{tc("decline")}</button>
+                </div>
               </div>
-              <p>{c.title}</p>
-              <small>
-                {te(`areas.${c.areaKey}`)} · {c.nextAction} · {c.value} {te("currency")}
-              </small>
-              <div className="pcase__act">
-                <button
-                  className="btn btn--pri btn--sm"
-                  type="button"
-                  onClick={() => setCases((cs) => cs.filter((x) => x.id !== c.id))}
-                >
-                  {tc("accept")}
-                </button>
-                <button
-                  className="btn btn--line btn--sm"
-                  type="button"
-                  onClick={() => setCases((cs) => cs.filter((x) => x.id !== c.id))}
-                >
-                  {tc("decline")}
-                </button>
-                <button className="btn btn--soft btn--sm" type="button">
-                  {tc("requestInfo")}
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </>
   );

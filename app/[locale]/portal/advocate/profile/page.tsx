@@ -2,16 +2,19 @@
 
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/lib/auth";
-import { SAMPLE_ADVOCATE } from "@/lib/mock/advocate";
 import ProfilePreview from "@/components/register/ProfilePreview";
-import { IconInfo } from "@/components/icons";
+import { EmptyState } from "@/components/portal/DataState";
+import { IconInfo, IconUser } from "@/components/icons";
 
 export default function AdvocateProfile() {
   const t = useTranslations("portal.advocate.profile");
   const { session } = useAuth();
-  const profile =
-    session?.profile && session.profile.name ? session.profile : SAMPLE_ADVOCATE;
-  const completeness = session?.completeness ?? 78;
+  const profile = session?.profile;
+  const completeness = session?.completeness ?? 0;
+
+  if (!profile || !profile.name) {
+    return <EmptyState icon={<IconUser />} title={t("emptyTitle")} text={t("emptyText")} />;
+  }
 
   return (
     <div className="advprofile">

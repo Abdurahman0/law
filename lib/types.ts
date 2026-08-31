@@ -52,7 +52,7 @@ export type ProfessionalProfile = {
   education?: string;
   experienceYears?: number;
   bio?: string;
-  services: ServiceKey[]; // lawyer service offering
+  services: string[]; // lawyer service offering (backend service ids)
   // advocate-only
   email?: string;
   licenseNumber?: string;

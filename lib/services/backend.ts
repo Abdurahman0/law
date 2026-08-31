@@ -211,8 +211,37 @@ function normCase(v: unknown): BackendCase {
   };
 }
 
-export async function listOrders(): Promise<unknown[]> {
-  return listFrom(await http("/orders"), "orders", "items", "data");
+export type BackendOrder = {
+  id: string;
+  title: string;
+  serviceName: string;
+  status: string;
+  areaKey: string;
+  region: string;
+  budget: string;
+  createdAt: string;
+  lawyerName?: string;
+};
+
+function normOrder(v: unknown): BackendOrder {
+  const d = asDict(v);
+  const details = asDict(d.details);
+  const service = asDict(d.service);
+  return {
+    id: asStr(d.id),
+    title: asStr(details.question ?? d.title ?? service.name),
+    serviceName: asStr(service.name ?? d.service_name),
+    status: asStr(d.status),
+    areaKey: asStr(d.area ?? service.category ?? details.area),
+    region: asStr(d.region ?? details.region),
+    budget: asStr(d.amount ?? d.price ?? details.budget),
+    createdAt: asStr(d.created_at ?? d.createdAt),
+    lawyerName: asStr(d.lawyer_name ?? asDict(d.lawyer).name) || undefined,
+  };
+}
+
+export async function listOrders(): Promise<BackendOrder[]> {
+  return listFrom(await http("/orders"), "orders", "items", "data").map(normOrder);
 }
 
 export async function createOrder(input: {
@@ -253,8 +282,27 @@ export async function createPayment(input: {
 }
 
 // ── Document templates ────────────────────────────────────────────
-export async function getDocumentTemplates(): Promise<unknown[]> {
-  return listFrom(await http("/document-templates"), "templates", "items", "data");
+export type BackendTemplate = {
+  id: string;
+  name: string;
+  category: string;
+  language: string;
+  price: number;
+};
+
+export async function getDocumentTemplates(): Promise<BackendTemplate[]> {
+  return listFrom(await http("/document-templates"), "templates", "items", "data").map(
+    (v) => {
+      const d = asDict(v);
+      return {
+        id: asStr(d.id),
+        name: asStr(d.name ?? d.title),
+        category: asStr(d.category),
+        language: asStr(d.language),
+        price: asNum(d.price),
+      };
+    },
+  );
 }
 
 // ── helpers ───────────────────────────────────────────────────────

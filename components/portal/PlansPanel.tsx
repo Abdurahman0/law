@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { useAuth } from "@/lib/auth";
-import { PLANS, INVOICES } from "@/lib/mock/plans";
-import { subscribe } from "@/lib/services/billing";
-import type { PlanTier } from "@/lib/types";
-import FDate from "@/components/FDate";
-import { IconCheck, IconStar, IconShieldCheck } from "@/components/icons";
+import { getSubscriptionPlans, type BackendPlan } from "@/lib/services/backend";
+import { checkout } from "@/lib/services/billing";
+import { useResource } from "@/lib/useResource";
+import { Skeleton, EmptyState } from "./DataState";
+import { IconCheck, IconCard } from "@/components/icons";
 
 function som(n: number): string {
   return n.toLocaleString("ru-RU").replace(/,/g, " ");
@@ -15,21 +14,17 @@ function som(n: number): string {
 
 export default function PlansPanel() {
   const t = useTranslations("plans");
-  const { session, update } = useAuth();
-  const [busy, setBusy] = useState<PlanTier | null>(null);
-  const [done, setDone] = useState<PlanTier | null>(null);
-  const current = session?.plan ?? "free";
+  const res = useResource<BackendPlan>(getSubscriptionPlans, []);
+  const [busy, setBusy] = useState<string | null>(null);
+  const [done, setDone] = useState<string | null>(null);
 
-  async function choose(tier: PlanTier) {
-    if (tier === current || busy) return;
-    setBusy(tier);
+  async function choose(plan: BackendPlan) {
+    if (busy) return;
+    setBusy(plan.id);
     setDone(null);
-    const res = await subscribe(tier);
+    const r = await checkout(plan.price);
     setBusy(null);
-    if (res.ok) {
-      update({ plan: tier });
-      setDone(tier);
-    }
+    if (r.ok) setDone(plan.name);
   }
 
   return (
@@ -39,44 +34,34 @@ export default function PlansPanel() {
           <h2 className="psec-h">{t("title")}</h2>
           <p className="plans__sub">{t("subtitle")}</p>
         </div>
-        <span className="plans__current">
-          <IconShieldCheck />
-          {t("currentPlan", { plan: t(`${current}.name`) })}
-        </span>
       </div>
 
-      {done ? <div className="plans__toast">{t("activated", { plan: t(`${done}.name`) })}</div> : null}
+      {done ? <div className="plans__toast">{t("activated", { plan: done })}</div> : null}
 
-      <div className="plans__grid">
-        {PLANS.map((plan) => {
-          const isCurrent = plan.tier === current;
-          const features = t.raw(`${plan.tier}.features`) as string[];
-          return (
-            <div
-              key={plan.tier}
-              className={`splan${plan.featured ? " splan--feat" : ""}${isCurrent ? " splan--current" : ""}`}
-            >
-              {plan.featured ? <span className="splan__ribbon">{t("mostPopular")}</span> : null}
+      {res.status === "loading" ? (
+        <Skeleton rows={3} />
+      ) : !res.data.length ? (
+        <EmptyState icon={<IconCard />} title={t("empty")} text={t("emptyText")} />
+      ) : (
+        <div className="plans__grid">
+          {res.data.map((plan, i) => (
+            <div key={plan.id} className={`splan${i === 1 ? " splan--feat" : ""}`}>
               <div className="splan__h">
-                <b className="splan__name">
-                  {plan.badge ? <IconStar /> : null}
-                  {t(`${plan.tier}.name`)}
-                </b>
-                <span className="splan__tag">{t(`${plan.tier}.tagline`)}</span>
+                <b className="splan__name">{plan.name}</b>
               </div>
               <div className="splan__price">
-                {plan.monthly === 0 ? (
+                {plan.price === 0 ? (
                   <b>{t("freeLabel")}</b>
                 ) : (
                   <>
-                    <b>{som(plan.monthly)}</b>
+                    <b>{som(plan.price)}</b>
                     <span>{t("perMonth")}</span>
                   </>
                 )}
               </div>
               <ul className="splan__feats">
-                {features.map((f, i) => (
-                  <li key={i}>
+                {plan.features.map((f, k) => (
+                  <li key={k}>
                     <IconCheck />
                     {f}
                   </li>
@@ -84,47 +69,22 @@ export default function PlansPanel() {
               </ul>
               <button
                 type="button"
-                className={`btn ${plan.featured ? "btn--grad" : "btn--line"} btn--full`}
-                disabled={isCurrent || busy === plan.tier}
-                onClick={() => choose(plan.tier)}
+                className={`btn ${i === 1 ? "btn--grad" : "btn--line"} btn--full`}
+                disabled={busy === plan.id}
+                onClick={() => choose(plan)}
               >
-                {isCurrent
-                  ? t("current")
-                  : busy === plan.tier
-                    ? t("processing")
-                    : plan.monthly === 0
-                      ? t("downgrade")
-                      : t("upgrade")}
+                {busy === plan.id ? t("processing") : t("choose")}
               </button>
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="ppanel">
-        <div className="ppanel__h">
-          <b>{t("billing.title")}</b>
-        </div>
-        <div className="ptable">
-          <div className="ptable__head">
-            <span>{t("billing.invoice")}</span>
-            <span>{t("billing.date")}</span>
-            <span>{t("billing.amount")}</span>
-            <span>{t("billing.status")}</span>
-          </div>
-          {INVOICES.map((inv) => (
-            <div className="ptable__row" key={inv.id}>
-              <span data-l={t("billing.invoice")}>{inv.id}</span>
-              <span data-l={t("billing.date")}>
-                <FDate v={inv.date} />
-              </span>
-              <span data-l={t("billing.amount")}>{som(inv.amount)}</span>
-              <span data-l={t("billing.status")}>
-                <em className={`pstate pstate--${inv.state}`}>{t(`states.${inv.state}`)}</em>
-              </span>
             </div>
           ))}
         </div>
+      )}
+
+      <div className="ppanel" style={{ marginTop: 22 }}>
+        <div className="ppanel__h">
+          <b>{t("billing.title")}</b>
+        </div>
+        <EmptyState icon={<IconCard />} title={t("billing.empty")} text={t("billing.emptyText")} />
       </div>
     </div>
   );

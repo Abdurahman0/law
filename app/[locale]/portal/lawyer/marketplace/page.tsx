@@ -1,57 +1,47 @@
 "use client";
 
-import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { MARKETPLACE } from "@/lib/portalData";
-import StatusPill from "@/components/portal/StatusPill";
+import { listOrders } from "@/lib/services/backend";
+import { useResource } from "@/lib/useResource";
+import { Skeleton, EmptyState } from "@/components/portal/DataState";
+import { IconBriefcase, IconMapPin, IconClock } from "@/components/icons";
 
-export default function Marketplace() {
+export default function LawyerMarketplace() {
   const t = useTranslations("portal.lawyer.marketplace");
   const tc = useTranslations("portal.common");
-  const te = useTranslations("enums");
-  const [cases, setCases] = useState(MARKETPLACE);
+  const res = useResource(listOrders, []);
 
   return (
     <div className="ppanel">
       <div className="ppanel__h">
         <b>{t("title")}</b>
+        <span className="advmuted">{t("count", { n: res.data.length })}</span>
       </div>
-      <p style={{ margin: "0 0 16px", color: "var(--gray)", fontSize: ".9rem" }}>
-        {t("lead")}
-      </p>
-      <div className="pcards">
-        {cases.map((c) => (
-          <div className="pcase" key={c.id}>
-            <div className="pcase__h">
-              <span className="pcase__id">CASE #{c.id}</span>
-              <StatusPill kind="status" value={c.status} />
+      {res.status === "loading" ? (
+        <Skeleton rows={3} />
+      ) : !res.data.length ? (
+        <EmptyState icon={<IconBriefcase />} title={t("empty")} text={t("emptyText")} />
+      ) : (
+        <div className="pcards">
+          {res.data.map((o) => (
+            <div className="oppc oppc--full" key={o.id}>
+              <div className="oppc__h">
+                <span className="oppc__match">{o.status}</span>
+                <span className="oppc__ago"><IconClock />{o.createdAt}</span>
+              </div>
+              <b>{o.title}</b>
+              <small>
+                <IconMapPin />
+                {[o.region, o.budget].filter(Boolean).join(" · ")}
+              </small>
+              <div className="pcase__act">
+                <button className="btn btn--pri btn--sm" type="button">{tc("accept")}</button>
+                <button className="btn btn--line btn--sm" type="button">{tc("decline")}</button>
+              </div>
             </div>
-            <p>{c.title}</p>
-            <small>
-              {te(`areas.${c.areaKey}`)} · {c.nextAction} · {c.value} {te("currency")}
-            </small>
-            <div className="pcase__act">
-              <button
-                className="btn btn--pri btn--sm"
-                type="button"
-                onClick={() => setCases((cs) => cs.filter((x) => x.id !== c.id))}
-              >
-                {tc("accept")}
-              </button>
-              <button
-                className="btn btn--line btn--sm"
-                type="button"
-                onClick={() => setCases((cs) => cs.filter((x) => x.id !== c.id))}
-              >
-                {tc("decline")}
-              </button>
-              <button className="btn btn--soft btn--sm" type="button">
-                {tc("requestInfo")}
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

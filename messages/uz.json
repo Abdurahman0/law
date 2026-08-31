@@ -1669,7 +1669,9 @@
         "value": "Qiymat",
         "status": "Holat"
       },
-      "roleAdvocate": "Advokat"
+      "roleAdvocate": "Advokat",
+      "loadError": "Ma'lumot yuklanmadi",
+      "loadErrorText": "Internet aloqasini tekshirib, qayta urinib ko'ring."
     },
     "sidebar": {
       "lawyer": {
@@ -1718,15 +1720,25 @@
         "pending": "Kutilayotgan to'lovlar",
         "viaLexgo": "LexGo orqali",
         "newCases": "Yangi ishlar",
-        "newCasesSub": "Sizga mos {n} ta yangi so'rov"
+        "newCasesSub": "Sizga mos {n} ta yangi so'rov",
+        "kpisEmpty": "Hozircha statistika yo'q",
+        "kpisEmptyText": "Yuklama va moliya xulosasi shu yerda ko'rinadi.",
+        "newCasesEmpty": "Yangi so'rov yo'q",
+        "newCasesEmptyText": "Sizga mos yangi mijoz so'rovlari shu yerda ko'rinadi."
       },
       "marketplace": {
         "title": "Ishlar bozori",
-        "lead": "Sizning yo'nalishlaringiz va hududlaringizga mos yangi ishlar."
+        "lead": "Sizning yo'nalishlaringiz va hududlaringizga mos yangi ishlar.",
+        "count": "{n} ta ochiq",
+        "empty": "Ochiq so'rov yo'q",
+        "emptyText": "Yangi mijoz so'rovlari shu yerda paydo bo'ladi."
       },
       "cases": {
         "title": "Mening ishlarim",
-        "filterAll": "Barchasi"
+        "filterAll": "Barchasi",
+        "count": "{n} ta ish",
+        "empty": "Hozircha ish yo'q",
+        "emptyText": "Ishlaringiz shu yerda ko'rinadi."
       },
       "calendar": {
         "title": "Kalendar va muddatlar",
@@ -1734,21 +1746,26 @@
         "hearing": "Sud majlisi",
         "investigative": "Tergov harakati",
         "meeting": "Uchrashuv",
-        "deadline": "Muddat"
+        "deadline": "Muddat",
+        "empty": "Hozircha tadbir yo'q",
+        "emptyText": "Sud majlislari, uchrashuvlar va muddatlar shu yerda ko'rinadi."
       },
       "clients": {
         "title": "Mijozlar",
         "conflict": "Ziddiyat",
         "casesCount": "{n} ta ish",
-        "conflictAlert": "Manfaatlar to'qnashuvi ehtimoli — qabul qilishdan oldin tekshiring"
+        "conflictAlert": "Manfaatlar to'qnashuvi ehtimoli — qabul qilishdan oldin tekshiring",
+        "empty": "Hozircha mijoz yo'q",
+        "emptyText": "Ish olganingizdan so'ng mijozlar shu yerda ko'rinadi."
       },
       "documents": {
         "title": "Hujjatlar",
         "lead": "Ish hujjatlarini yuklang, ko'rib chiqing, versiyalang va xavfsiz ulashing.",
         "upload": "Hujjat yuklash",
         "aiAnalyze": "AI tahlili",
-        "empty": "Hozircha hujjatlar yo'q",
-        "aiNote": "AI ushbu hujjatda ko'rib chiqish uchun 7 ta nuqta topdi."
+        "empty": "Hozircha hujjat yo'q",
+        "aiNote": "AI ushbu hujjatda ko'rib chiqish uchun 7 ta nuqta topdi.",
+        "emptyText": "Mavjud hujjat namunalari shu yerda ko'rinadi."
       },
       "chat": {
         "title": "Xavfsiz chat",
@@ -1807,8 +1824,10 @@
         "emptyText": "Boshlash uchun yuqorida muammoni yozing."
       },
       "cases": {
-        "title": "Mening ishlarim",
-        "empty": "Hozircha ishlar yo'q"
+        "title": "So'rovlarim",
+        "empty": "Hozircha so'rov yo'q",
+        "count": "Jami {n}",
+        "emptyText": "Birinchi so'rovni yaratish uchun muammoni yozing."
       },
       "payments": {
         "title": "To'lovlar",
@@ -1817,7 +1836,9 @@
         "id": "ID",
         "what": "Xizmat",
         "date": "Sana",
-        "amount": "Summa"
+        "amount": "Summa",
+        "empty": "Hozircha to'lov yo'q",
+        "emptyText": "To'lovlar va cheklar shu yerda ko'rinadi."
       },
       "gifts": {
         "title": "Sovg'alar",
@@ -1828,7 +1849,9 @@
         "months": "oy",
         "sent": "Yuborilgan",
         "activated": "Faollashtirilgan",
-        "pending": "Kutilmoqda"
+        "pending": "Kutilmoqda",
+        "empty": "Hozircha sovg'a yo'q",
+        "emptyText": "Yuborgan yoki olgan sovg'a obunalaringiz shu yerda ko'rinadi."
       },
       "profile": {
         "title": "Profil",
@@ -1900,7 +1923,13 @@
         "currentRank": "Joriy qidiruv o'rni",
         "responseRate": "Javob darajasi {pct}%",
         "boostCta": "Ko'rinuvchanlikni oshirish",
-        "upgradeCta": "Rejani yangilash"
+        "upgradeCta": "Rejani yangilash",
+        "performance": "Profil samaradorligi",
+        "performanceEmpty": "Hozircha ma'lumot yo'q",
+        "performanceEmptyText": "Ko'rishlar, bog'lanishlar va reyting shu yerda ko'rinadi.",
+        "opportunitiesEmpty": "Hozircha imkoniyat yo'q",
+        "opportunitiesEmptyText": "Mos mijoz so'rovlari shu yerda paydo bo'ladi.",
+        "boostSub": "Ko'rinuvchanligingizni oshiring va ko'proq mijozga yeting."
       },
       "opportunities": {
         "title": "Yangi imkoniyatlar",
@@ -1912,12 +1941,16 @@
       },
       "cases": {
         "title": "Mening ishlarim",
-        "count": "{n} ta ish"
+        "count": "{n} ta ish",
+        "emptyTitle": "Hozircha ish yo'q",
+        "emptyText": "Ishlaringiz shu yerda ko'rinadi."
       },
       "profile": {
         "title": "Professional profilim",
         "visibility": "{pct}% to'ldirilgan",
-        "previewNote": "Mijozlar profilingizni shunday ko'radi."
+        "previewNote": "Mijozlar profilingizni shunday ko'radi.",
+        "emptyTitle": "Profil to'ldirilmagan",
+        "emptyText": "Professional profilingizni yaratish uchun ro'yxatdan o'tishni yakunlang."
       }
     }
   },
@@ -2086,7 +2119,9 @@
     },
     "services": {
       "search": "Xizmatlarni qidirish",
-      "selected": "{n} ta tanlandi"
+      "selected": "{n} ta tanlandi",
+      "empty": "Xizmatlar mavjud emas",
+      "emptyText": "Xizmatlar katalogi backenddan yuklanadi."
     },
     "advocate": {
       "steps": {
@@ -2190,7 +2225,9 @@
       "invoice": "Hisob",
       "date": "Sana",
       "amount": "Summa",
-      "status": "Holat"
+      "status": "Holat",
+      "empty": "To'lovlar tarixi yo'q",
+      "emptyText": "Hisob-fakturalaringiz shu yerda ko'rinadi."
     },
     "states": {
       "paid": "To'langan",
@@ -2220,7 +2257,10 @@
         "Batafsil tahlil"
       ]
     },
-    "freeLabel": "Bepul"
+    "freeLabel": "Bepul",
+    "choose": "Rejani tanlash",
+    "empty": "Rejalar mavjud emas",
+    "emptyText": "Obuna rejalari backenddan yuklanadi."
   },
   "promotion": {
     "kicker": "Ko'rinuvchanlik vositasi",
@@ -2243,7 +2283,9 @@
     "activeShort": "Faol",
     "activeMsg": "Targ'ibot {days} kun faol — ko'rinuvchanligingiz oshdi.",
     "popular": "Eng foydali",
-    "boostNote": "Targ'ibot faqat ko'rinuvchanlikni oshiradi. Yuridik natijaga ta'sir qilmaydi."
+    "boostNote": "Targ'ibot faqat ko'rinuvchanlikni oshiradi. Yuridik natijaga ta'sir qilmaydi.",
+    "empty": "Targ'ibot tez orada",
+    "emptyText": "Ko'rinuvchanlik paketlari va qamrov tahlili shu yerda ko'rinadi."
   },
   "auth": {
     "headline": "Yuridik yordam — yangicha.",
