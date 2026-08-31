@@ -3,7 +3,7 @@
 import { useEffect, useState, type ComponentType, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
-import { useAuth, type Role } from "@/lib/auth";
+import { useAuth, hasAdminAccess, type Role } from "@/lib/auth";
 import { initials } from "@/lib/lawyers";
 import LanguageSwitcher from "../LanguageSwitcher";
 import {
@@ -128,6 +128,12 @@ export default function PortalShell({
           })}
         </nav>
         <div className="psb__foot">
+          {hasAdminAccess(session) ? (
+            <Link href="/admin" className="psb__link">
+              <IconShield />
+              {t("common.admin")}
+            </Link>
+          ) : null}
           <button className="psb__link" type="button" onClick={logout}>
             <IconLogout />
             {t("common.logout")}

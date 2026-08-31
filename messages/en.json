@@ -1665,7 +1665,8 @@
       },
       "roleAdvocate": "Advocate",
       "loadError": "Couldn't load data",
-      "loadErrorText": "Please check your connection and try again."
+      "loadErrorText": "Please check your connection and try again.",
+      "admin": "Admin"
     },
     "sidebar": {
       "lawyer": {
@@ -2296,5 +2297,109 @@
     "stat2l": "specialists",
     "stat3n": "4.9",
     "stat3l": "avg. rating"
+  },
+  "admin": {
+    "title": "Admin",
+    "badge": "Admin",
+    "backToPortal": "Back to portal",
+    "logout": "Log out",
+    "nav": {
+      "overview": "Overview",
+      "services": "Services",
+      "plans": "Plans",
+      "templates": "Templates",
+      "roles": "Roles & access",
+      "notifications": "Notifications",
+      "bootstrap": "Bootstrap"
+    },
+    "overview": {
+      "kicker": "Admin console",
+      "hi": "Welcome, {name}",
+      "sub": "Manage the LexGo catalog, plans, access and more.",
+      "services": "Services",
+      "categories": "Categories",
+      "plans": "Plans",
+      "templates": "Templates",
+      "lawyers": "Lawyers",
+      "orders": "Orders",
+      "cases": "Cases",
+      "roles": "Roles"
+    },
+    "form": {
+      "title": "Title",
+      "slug": "Slug",
+      "description": "Description",
+      "save": "Save",
+      "saving": "Saving…",
+      "created": "Created successfully.",
+      "error": "Something went wrong. Check the fields.",
+      "active": "Active",
+      "category": "Category",
+      "selectCategory": "Select category",
+      "basePrice": "Base price (so'm)",
+      "deliveryMinutes": "Delivery (minutes)",
+      "monthlyPrice": "Monthly price (so'm)",
+      "price": "Price (so'm)"
+    },
+    "services": {
+      "catTitle": "Service categories",
+      "catCreate": "New category",
+      "catEmpty": "No categories yet",
+      "svcTitle": "Services",
+      "svcCreate": "New service",
+      "svcEmpty": "No services yet"
+    },
+    "plans": {
+      "listTitle": "Subscription plans",
+      "create": "New plan",
+      "empty": "No plans yet",
+      "benefits": "Benefits",
+      "benefitsPh": "One per line",
+      "giftable": "Giftable"
+    },
+    "templates": {
+      "listTitle": "Document templates",
+      "create": "New template",
+      "empty": "No templates yet",
+      "language": "Language",
+      "templateText": "Template text"
+    },
+    "roles": {
+      "listTitle": "Roles",
+      "create": "New role",
+      "empty": "No roles yet",
+      "name": "Name (code)",
+      "permissions": "Permissions",
+      "permCount": "{n} permissions",
+      "assignTitle": "Assign role",
+      "assignLead": "Grant a role to a user by their id.",
+      "userId": "User id",
+      "role": "Role",
+      "selectRole": "Select role",
+      "assign": "Assign",
+      "assigned": "Role assigned."
+    },
+    "notifications": {
+      "title": "Send notification",
+      "lead": "Send a push or SMS notification to a user.",
+      "userId": "User id",
+      "channel": "Channel",
+      "push": "Push",
+      "sms": "SMS",
+      "body": "Message",
+      "send": "Send",
+      "sending": "Sending…",
+      "sent": "Notification sent."
+    },
+    "bootstrap": {
+      "title": "Bootstrap superadmin",
+      "lead": "Grant superadmin to a phone using the server bootstrap key.",
+      "phone": "Phone",
+      "key": "Bootstrap key",
+      "keyPh": "Server bootstrap key",
+      "submit": "Bootstrap",
+      "done": "Superadmin granted. Log out and back in to refresh access.",
+      "note": "This is a one-time setup action protected by a server-side key."
+    }
   }
 }

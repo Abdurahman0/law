@@ -1592,3 +1592,18 @@ body:has(.auth) .fab{display:none}
 .pskel{display:grid;gap:10px;padding:6px 0}
 .pskel__row{height:56px;border-radius:14px;background:linear-gradient(90deg,var(--b50) 25%,#EEF4FE 37%,var(--b50) 63%);background-size:400% 100%;animation:pshim 1.4s ease infinite}
 @keyframes pshim{0%{background-position:100% 0}100%{background-position:0 0}}
+
+
+/* ═══════════════ ADMIN PANEL ═══════════════ */
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+@media (max-width:1000px){.agrid{grid-template-columns:1fr}}
+.alist{display:grid;gap:2px;margin-bottom:6px}
+.arow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 2px;border-bottom:1px solid var(--line);font-size:.92rem}
+.arow:last-child{border-bottom:0}
+.arow b{font-weight:700}
+.arow span{color:var(--gray2);font-size:.82rem;max-width:50%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.afh{font-family:var(--fd);font-size:1rem;margin:20px 0 12px;padding-top:16px;border-top:1px solid var(--line)}
+.afield--check{padding:2px 0}
+.anote{border-radius:12px;padding:11px 14px;font-size:.88rem;font-weight:600}
+.anote--ok{background:rgba(0,168,112,.12);color:var(--ok)}
+.anote--err{background:#FDECEC;color:#C0392B}

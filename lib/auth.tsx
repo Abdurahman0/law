@@ -223,3 +223,11 @@ export function useAuth(): AuthCtx {
   if (!c) throw new Error("useAuth must be used within AuthProvider");
   return c;
 }
+
+// Admin access = an admin/superadmin role or any granted permission.
+export function hasAdminAccess(s: Session | null): boolean {
+  if (!s) return false;
+  const roles = (s.roles ?? []).map((r) => r.toLowerCase());
+  if (roles.some((r) => r === "superadmin" || r === "admin")) return true;
+  return (s.permissions ?? []).length > 0;
+}

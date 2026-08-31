@@ -1671,7 +1671,8 @@
       },
       "roleAdvocate": "Advokat",
       "loadError": "Ma'lumot yuklanmadi",
-      "loadErrorText": "Internet aloqasini tekshirib, qayta urinib ko'ring."
+      "loadErrorText": "Internet aloqasini tekshirib, qayta urinib ko'ring.",
+      "admin": "Admin"
     },
     "sidebar": {
       "lawyer": {
@@ -2302,5 +2303,109 @@
     "stat2l": "mutaxassis",
     "stat3n": "4.9",
     "stat3l": "o‘rtacha reyting"
+  },
+  "admin": {
+    "title": "Admin",
+    "badge": "Admin",
+    "backToPortal": "Portalga qaytish",
+    "logout": "Chiqish",
+    "nav": {
+      "overview": "Umumiy",
+      "services": "Xizmatlar",
+      "plans": "Rejalar",
+      "templates": "Namunalar",
+      "roles": "Rollar va ruxsatlar",
+      "notifications": "Bildirishnomalar",
+      "bootstrap": "Bootstrap"
+    },
+    "overview": {
+      "kicker": "Admin konsoli",
+      "hi": "Xush kelibsiz, {name}",
+      "sub": "LexGo katalogi, rejalar, ruxsatlar va boshqalarni boshqaring.",
+      "services": "Xizmatlar",
+      "categories": "Kategoriyalar",
+      "plans": "Rejalar",
+      "templates": "Namunalar",
+      "lawyers": "Yuristlar",
+      "orders": "Buyurtmalar",
+      "cases": "Ishlar",
+      "roles": "Rollar"
+    },
+    "form": {
+      "title": "Nomi",
+      "slug": "Slug",
+      "description": "Tavsif",
+      "save": "Saqlash",
+      "saving": "Saqlanmoqda…",
+      "created": "Muvaffaqiyatli yaratildi.",
+      "error": "Xatolik yuz berdi. Maydonlarni tekshiring.",
+      "active": "Faol",
+      "category": "Kategoriya",
+      "selectCategory": "Kategoriyani tanlang",
+      "basePrice": "Asosiy narx (so'm)",
+      "deliveryMinutes": "Yetkazish (daqiqa)",
+      "monthlyPrice": "Oylik narx (so'm)",
+      "price": "Narx (so'm)"
+    },
+    "services": {
+      "catTitle": "Xizmat kategoriyalari",
+      "catCreate": "Yangi kategoriya",
+      "catEmpty": "Kategoriyalar yo'q",
+      "svcTitle": "Xizmatlar",
+      "svcCreate": "Yangi xizmat",
+      "svcEmpty": "Xizmatlar yo'q"
+    },
+    "plans": {
+      "listTitle": "Obuna rejalari",
+      "create": "Yangi reja",
+      "empty": "Rejalar yo'q",
+      "benefits": "Imkoniyatlar",
+      "benefitsPh": "Har birini yangi qatorda",
+      "giftable": "Sovg'a qilsa bo'ladi"
+    },
+    "templates": {
+      "listTitle": "Hujjat namunalari",
+      "create": "Yangi namuna",
+      "empty": "Namunalar yo'q",
+      "language": "Til",
+      "templateText": "Namuna matni"
+    },
+    "roles": {
+      "listTitle": "Rollar",
+      "create": "Yangi rol",
+      "empty": "Rollar yo'q",
+      "name": "Nomi (kod)",
+      "permissions": "Ruxsatlar",
+      "permCount": "{n} ta ruxsat",
+      "assignTitle": "Rol biriktirish",
+      "assignLead": "Foydalanuvchiga id orqali rol bering.",
+      "userId": "Foydalanuvchi id",
+      "role": "Rol",
+      "selectRole": "Rolni tanlang",
+      "assign": "Biriktirish",
+      "assigned": "Rol biriktirildi."
+    },
+    "notifications": {
+      "title": "Bildirishnoma yuborish",
+      "lead": "Foydalanuvchiga push yoki SMS bildirishnoma yuboring.",
+      "userId": "Foydalanuvchi id",
+      "channel": "Kanal",
+      "push": "Push",
+      "sms": "SMS",
+      "body": "Xabar",
+      "send": "Yuborish",
+      "sending": "Yuborilmoqda…",
+      "sent": "Bildirishnoma yuborildi."
+    },
+    "bootstrap": {
+      "title": "Superadmin bootstrap",
+      "lead": "Server bootstrap kaliti orqali telefonga superadmin bering.",
+      "phone": "Telefon",
+      "key": "Bootstrap kaliti",
+      "keyPh": "Server bootstrap kaliti",
+      "submit": "Bootstrap",
+      "done": "Superadmin berildi. Ruxsatlarni yangilash uchun qayta kiring.",
+      "note": "Bu server kaliti bilan himoyalangan bir martalik sozlash amali."
+    }
   }
 }
