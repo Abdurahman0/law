@@ -113,6 +113,22 @@ export async function listLawyers(filters?: {
   return listFrom(data, "lawyers", "items", "data").map(normLawyer);
 }
 
+// My offered services (GET/PUT /lawyers/me/services). Stored as service ids.
+export async function getMyServices(): Promise<string[]> {
+  const d = asDict(await http("/lawyers/me/services"));
+  return asArr(d.services).map((v) => {
+    const s = asDict(v);
+    return asStr(s.id ?? s.service_id ?? v);
+  });
+}
+
+export async function putMyServices(serviceIds: string[]): Promise<void> {
+  await http("/lawyers/me/services", {
+    method: "PUT",
+    body: JSON.stringify({ service_ids: serviceIds }),
+  });
+}
+
 // Build the PUT /lawyers/me body from our onboarding profile.
 export async function upsertMyLawyer(p: ProfessionalProfile): Promise<unknown> {
   return http("/lawyers/me", {
@@ -140,6 +156,7 @@ export type BackendService = {
   name: string;
   categoryId?: string;
   price?: number;
+  description?: string;
 };
 export type BackendCategory = { id: string; name: string };
 
@@ -147,9 +164,10 @@ function normService(v: unknown): BackendService {
   const d = asDict(v);
   return {
     id: asStr(d.id),
-    name: asStr(d.name ?? d.title),
+    name: asStr(d.title ?? d.name),
     categoryId: asStr(d.category_id ?? d.categoryId) || undefined,
-    price: d.price != null ? asNum(d.price) : undefined,
+    price: d.base_price != null ? asNum(d.base_price) : undefined,
+    description: asStr(d.description) || undefined,
   };
 }
 
@@ -180,9 +198,9 @@ export async function getSubscriptionPlans(): Promise<BackendPlan[]> {
     const d = asDict(v);
     return {
       id: asStr(d.id),
-      name: asStr(d.name ?? d.title),
-      price: asNum(d.price ?? d.monthly_price),
-      features: asArr(d.features).map((f) => asStr(f)),
+      name: asStr(d.title ?? d.name),
+      price: asNum(d.monthly_price ?? d.price),
+      features: asArr(d.benefits ?? d.features).map((f) => asStr(f)),
     };
   });
 }
@@ -203,7 +221,7 @@ function normCase(v: unknown): BackendCase {
   return {
     id: asStr(d.id),
     caseNumber: asStr(d.case_number ?? d.caseNumber),
-    caseType: asStr(d.case_type ?? d.caseType),
+    caseType: asStr(d.title ?? d.case_type ?? d.caseType),
     stage: asStr(d.stage),
     status: asStr(d.status),
     nextAction: asStr(d.next_action ?? d.nextAction),

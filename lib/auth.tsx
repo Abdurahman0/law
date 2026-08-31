@@ -17,6 +17,7 @@ import {
   apiRegister,
   apiMe,
   upsertMyLawyer,
+  putMyServices,
   type BackendRole,
 } from "./services/backend";
 
@@ -158,6 +159,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (role !== "client") {
           try {
             await upsertMyLawyer(draft.profile);
+            if (draft.profile.services.length) {
+              await putMyServices(draft.profile.services);
+            }
           } catch {
             /* profile upsert is best-effort */
           }
