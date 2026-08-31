@@ -1,15 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { getSubscriptionPlans } from "@/lib/services/backend";
 import { createSubscriptionPlan } from "@/lib/services/admin";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
 import { AdminForm, AdminItem, useReload } from "@/components/admin/AdminBits";
-import { IconStar } from "@/components/icons";
+import Modal from "@/components/admin/Modal";
+import { IconStar, IconPlus } from "@/components/icons";
 
 const som = (n?: number) => (n ? n.toLocaleString("ru-RU").replace(/,/g, " ") : "—");
-
 const toList = (v: string | boolean) =>
   String(v || "")
     .split(/[\n,]/)
@@ -21,35 +22,43 @@ export default function AdminPlans() {
   const t = useTranslations("admin");
   const [key, reload] = useReload();
   const plans = useResource(getSubscriptionPlans, [key]);
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="agrid">
-      <div className="ppanel">
-        <div className="ppanel__h"><b>{t("plans.listTitle")}</b><span className="advmuted">{plans.data.length}</span></div>
-        {plans.status === "loading" ? (
-          <Skeleton rows={2} />
-        ) : !plans.data.length ? (
-          <EmptyState icon={<IconStar />} title={t("plans.empty")} />
-        ) : (
-          <div className="alist">
-            {plans.data.map((p, i) => (
-              <AdminItem
-                key={p.id}
-                index={i + 1}
-                title={p.name}
-                meta={p.slug}
-                right={som(p.price)}
-                tags={[
-                  ...(p.isGiftable ? [{ label: t("plans.giftable") }] : []),
-                  { label: p.isActive ? t("form.active") : t("form.inactive"), tone: (p.isActive ? "ok" : "muted") as "ok" | "muted" },
-                ]}
-              />
-            ))}
-          </div>
-        )}
+    <div className="ppanel">
+      <div className="ppanel__h">
+        <b>{t("plans.listTitle")}</b>
+        <span className="ahdr">
+          <span className="advmuted">{plans.data.length}</span>
+          <button className="btn btn--pri btn--sm" type="button" onClick={() => setOpen(true)}>
+            <IconPlus />
+            {t("form.add")}
+          </button>
+        </span>
       </div>
-      <div className="ppanel">
-        <div className="ppanel__h"><b>{t("plans.create")}</b></div>
+      {plans.status === "loading" ? (
+        <Skeleton rows={3} />
+      ) : !plans.data.length ? (
+        <EmptyState icon={<IconStar />} title={t("plans.empty")} />
+      ) : (
+        <div className="alist">
+          {plans.data.map((p, i) => (
+            <AdminItem
+              key={p.id}
+              index={i + 1}
+              title={p.name}
+              meta={p.slug}
+              right={som(p.price)}
+              tags={[
+                ...(p.isGiftable ? [{ label: t("plans.giftable") }] : []),
+                { label: p.isActive ? t("form.active") : t("form.inactive"), tone: (p.isActive ? "ok" : "muted") as "ok" | "muted" },
+              ]}
+            />
+          ))}
+        </div>
+      )}
+
+      <Modal open={open} onClose={() => setOpen(false)} title={t("plans.create")}>
         <AdminForm
           fields={[
             { name: "title", label: t("form.title"), required: true },
@@ -75,9 +84,12 @@ export default function AdminPlans() {
           busyLabel={t("form.saving")}
           okMsg={t("form.created")}
           errMsg={t("form.error")}
-          onDone={reload}
+          onDone={() => {
+            reload();
+            setOpen(false);
+          }}
         />
-      </div>
+      </Modal>
     </div>
   );
 }

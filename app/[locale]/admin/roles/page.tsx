@@ -2,24 +2,21 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import {
-  getRoles,
-  getPermissions,
-  createRole,
-  assignRole,
-} from "@/lib/services/admin";
+import { getRoles, getPermissions, createRole, assignRole } from "@/lib/services/admin";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
 import { Notice, useReload, AdminItem, UserSelect } from "@/components/admin/AdminBits";
+import Modal from "@/components/admin/Modal";
 import ChipMulti from "@/components/register/ChipMulti";
 import Select from "@/components/Select";
-import { IconShield } from "@/components/icons";
+import { IconShield, IconPlus } from "@/components/icons";
 
 export default function AdminRoles() {
   const t = useTranslations("admin");
   const [key, reload] = useReload();
   const roles = useResource(getRoles, [key]);
   const perms = useResource(getPermissions, []);
+  const [open, setOpen] = useState(false);
 
   // create-role form
   const [name, setName] = useState("");
@@ -35,6 +32,9 @@ export default function AdminRoles() {
   const [aBusy, setABusy] = useState(false);
   const [aNote, setANote] = useState<{ ok: boolean; msg: string } | null>(null);
 
+  const detailOf = (err: unknown) =>
+    err && typeof err === "object" && "detail" in err ? String((err as { detail?: string }).detail) : "";
+
   async function submitRole(e: React.FormEvent) {
     e.preventDefault();
     if (cBusy) return;
@@ -46,15 +46,14 @@ export default function AdminRoles() {
     setCNote(null);
     try {
       await createRole({ name: name.trim(), title: title.trim(), description: desc.trim(), permissions: picked });
-      setCNote({ ok: true, msg: t("form.created") });
       setName("");
       setTitle("");
       setDesc("");
       setPicked([]);
       reload();
+      setOpen(false);
     } catch (err) {
-      const detail = err && typeof err === "object" && "detail" in err ? String((err as { detail?: string }).detail) : "";
-      setCNote({ ok: false, msg: detail || t("form.error") });
+      setCNote({ ok: false, msg: detailOf(err) || t("form.error") });
     } finally {
       setCBusy(false);
     }
@@ -63,20 +62,19 @@ export default function AdminRoles() {
   async function submitAssign(e: React.FormEvent) {
     e.preventDefault();
     if (aBusy) return;
-    if (!userId.trim() || !roleId) {
+    if (!userId || !roleId) {
       setANote({ ok: false, msg: t("form.error") });
       return;
     }
     setABusy(true);
     setANote(null);
     try {
-      await assignRole(userId.trim(), roleId);
+      await assignRole(userId, roleId);
       setANote({ ok: true, msg: t("roles.assigned") });
       setUserId("");
       setRoleId("");
     } catch (err) {
-      const detail = err && typeof err === "object" && "detail" in err ? String((err as { detail?: string }).detail) : "";
-      setANote({ ok: false, msg: detail || t("form.error") });
+      setANote({ ok: false, msg: detailOf(err) || t("form.error") });
     } finally {
       setABusy(false);
     }
@@ -84,11 +82,20 @@ export default function AdminRoles() {
 
   return (
     <div className="agrid">
-      {/* Roles list + create */}
+      {/* Roles list */}
       <div className="ppanel">
-        <div className="ppanel__h"><b>{t("roles.listTitle")}</b><span className="advmuted">{roles.data.length}</span></div>
+        <div className="ppanel__h">
+          <b>{t("roles.listTitle")}</b>
+          <span className="ahdr">
+            <span className="advmuted">{roles.data.length}</span>
+            <button className="btn btn--pri btn--sm" type="button" onClick={() => setOpen(true)}>
+              <IconPlus />
+              {t("form.add")}
+            </button>
+          </span>
+        </div>
         {roles.status === "loading" ? (
-          <Skeleton rows={2} />
+          <Skeleton rows={3} />
         ) : !roles.data.length ? (
           <EmptyState icon={<IconShield />} title={t("roles.empty")} />
         ) : (
@@ -104,8 +111,32 @@ export default function AdminRoles() {
             ))}
           </div>
         )}
+      </div>
 
-        <h3 className="afh">{t("roles.create")}</h3>
+      {/* Assign role */}
+      <div className="ppanel">
+        <div className="ppanel__h"><b>{t("roles.assignTitle")}</b></div>
+        <p className="advmuted" style={{ marginBottom: 16 }}>{t("roles.assignLead")}</p>
+        <form className="cform" style={{ maxWidth: "none" }} onSubmit={submitAssign}>
+          <UserSelect value={userId} onChange={setUserId} label={t("roles.user")} placeholder={t("roles.selectUser")} />
+          <div>
+            <label>{t("roles.role")}</label>
+            <Select
+              value={roleId}
+              onChange={setRoleId}
+              options={roles.data.map((r) => ({ value: r.id, label: r.title || r.name }))}
+              ariaLabel={t("roles.role")}
+              placeholder={t("roles.selectRole")}
+            />
+          </div>
+          {aNote ? <Notice ok={aNote.ok} msg={aNote.msg} /> : null}
+          <button className="btn btn--pri" type="submit" disabled={aBusy}>
+            {aBusy ? t("form.saving") : t("roles.assign")}
+          </button>
+        </form>
+      </div>
+
+      <Modal open={open} onClose={() => setOpen(false)} title={t("roles.create")}>
         <form className="cform" style={{ maxWidth: "none" }} onSubmit={submitRole}>
           <div>
             <label>{t("roles.name")}</label>
@@ -136,35 +167,7 @@ export default function AdminRoles() {
             {cBusy ? t("form.saving") : t("form.save")}
           </button>
         </form>
-      </div>
-
-      {/* Assign role */}
-      <div className="ppanel">
-        <div className="ppanel__h"><b>{t("roles.assignTitle")}</b></div>
-        <p className="advmuted" style={{ marginBottom: 16 }}>{t("roles.assignLead")}</p>
-        <form className="cform" style={{ maxWidth: "none" }} onSubmit={submitAssign}>
-          <UserSelect
-            value={userId}
-            onChange={setUserId}
-            label={t("roles.user")}
-            placeholder={t("roles.selectUser")}
-          />
-          <div>
-            <label>{t("roles.role")}</label>
-            <Select
-              value={roleId}
-              onChange={setRoleId}
-              options={roles.data.map((r) => ({ value: r.id, label: r.title || r.name }))}
-              ariaLabel={t("roles.role")}
-              placeholder={t("roles.selectRole")}
-            />
-          </div>
-          {aNote ? <Notice ok={aNote.ok} msg={aNote.msg} /> : null}
-          <button className="btn btn--pri" type="submit" disabled={aBusy}>
-            {aBusy ? t("form.saving") : t("roles.assign")}
-          </button>
-        </form>
-      </div>
+      </Modal>
     </div>
   );
 }

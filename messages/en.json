@@ -2340,7 +2340,8 @@
       "deliveryMinutes": "Delivery (minutes)",
       "monthlyPrice": "Monthly price (so'm)",
       "price": "Price (so'm)",
-      "inactive": "Inactive"
+      "inactive": "Inactive",
+      "add": "Add"
     },
     "services": {
       "catTitle": "Service categories",

@@ -2340,7 +2340,8 @@
       "deliveryMinutes": "Срок (минуты)",
       "monthlyPrice": "Цена в месяц (сум)",
       "price": "Цена (сум)",
-      "inactive": "Неактивно"
+      "inactive": "Неактивно",
+      "add": "Добавить"
     },
     "services": {
       "catTitle": "Категории услуг",

@@ -2346,7 +2346,8 @@
       "deliveryMinutes": "Yetkazish (daqiqa)",
       "monthlyPrice": "Oylik narx (so'm)",
       "price": "Narx (so'm)",
-      "inactive": "Nofaol"
+      "inactive": "Nofaol",
+      "add": "Qo‘shish"
     },
     "services": {
       "catTitle": "Xizmat kategoriyalari",

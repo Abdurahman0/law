@@ -1,15 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
-import {
-  getServiceCategories,
-  getServices,
-} from "@/lib/services/backend";
+import { getServiceCategories, getServices } from "@/lib/services/backend";
 import { createServiceCategory, createService } from "@/lib/services/admin";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
 import { AdminForm, AdminItem, useReload } from "@/components/admin/AdminBits";
-import { IconBriefcase } from "@/components/icons";
+import Modal from "@/components/admin/Modal";
+import { IconBriefcase, IconPlus } from "@/components/icons";
 
 function num(v: string | boolean): number {
   const n = parseInt(String(v || "0"), 10);
@@ -23,14 +22,25 @@ export default function AdminServices() {
   const [svcKey, reloadSvcs] = useReload();
   const cats = useResource(getServiceCategories, [catKey]);
   const svcs = useResource(getServices, [svcKey]);
+  const [catOpen, setCatOpen] = useState(false);
+  const [svcOpen, setSvcOpen] = useState(false);
 
   return (
     <div className="agrid">
       {/* Categories */}
       <div className="ppanel">
-        <div className="ppanel__h"><b>{t("services.catTitle")}</b><span className="advmuted">{cats.data.length}</span></div>
+        <div className="ppanel__h">
+          <b>{t("services.catTitle")}</b>
+          <span className="ahdr">
+            <span className="advmuted">{cats.data.length}</span>
+            <button className="btn btn--pri btn--sm" type="button" onClick={() => setCatOpen(true)}>
+              <IconPlus />
+              {t("form.add")}
+            </button>
+          </span>
+        </div>
         {cats.status === "loading" ? (
-          <Skeleton rows={2} />
+          <Skeleton rows={3} />
         ) : !cats.data.length ? (
           <EmptyState icon={<IconBriefcase />} title={t("services.catEmpty")} />
         ) : (
@@ -40,33 +50,22 @@ export default function AdminServices() {
             ))}
           </div>
         )}
-        <h3 className="afh">{t("services.catCreate")}</h3>
-        <AdminForm
-          fields={[
-            { name: "title", label: t("form.title"), required: true },
-            { name: "slug", label: t("form.slug"), required: true, placeholder: "criminal" },
-            { name: "description", label: t("form.description"), type: "textarea" },
-          ]}
-          onSubmit={async (v) =>
-            void (await createServiceCategory({
-              slug: String(v.slug),
-              title: String(v.title),
-              description: String(v.description),
-            }))
-          }
-          submitLabel={t("form.save")}
-          busyLabel={t("form.saving")}
-          okMsg={t("form.created")}
-          errMsg={t("form.error")}
-          onDone={reloadCats}
-        />
       </div>
 
       {/* Services */}
       <div className="ppanel">
-        <div className="ppanel__h"><b>{t("services.svcTitle")}</b><span className="advmuted">{svcs.data.length}</span></div>
+        <div className="ppanel__h">
+          <b>{t("services.svcTitle")}</b>
+          <span className="ahdr">
+            <span className="advmuted">{svcs.data.length}</span>
+            <button className="btn btn--pri btn--sm" type="button" onClick={() => setSvcOpen(true)}>
+              <IconPlus />
+              {t("form.add")}
+            </button>
+          </span>
+        </div>
         {svcs.status === "loading" ? (
-          <Skeleton rows={2} />
+          <Skeleton rows={3} />
         ) : !svcs.data.length ? (
           <EmptyState icon={<IconBriefcase />} title={t("services.svcEmpty")} />
         ) : (
@@ -83,7 +82,30 @@ export default function AdminServices() {
             ))}
           </div>
         )}
-        <h3 className="afh">{t("services.svcCreate")}</h3>
+      </div>
+
+      <Modal open={catOpen} onClose={() => setCatOpen(false)} title={t("services.catCreate")}>
+        <AdminForm
+          fields={[
+            { name: "title", label: t("form.title"), required: true },
+            { name: "slug", label: t("form.slug"), required: true, placeholder: "criminal" },
+            { name: "description", label: t("form.description"), type: "textarea" },
+          ]}
+          onSubmit={async (v) =>
+            void (await createServiceCategory({ slug: String(v.slug), title: String(v.title), description: String(v.description) }))
+          }
+          submitLabel={t("form.save")}
+          busyLabel={t("form.saving")}
+          okMsg={t("form.created")}
+          errMsg={t("form.error")}
+          onDone={() => {
+            reloadCats();
+            setCatOpen(false);
+          }}
+        />
+      </Modal>
+
+      <Modal open={svcOpen} onClose={() => setSvcOpen(false)} title={t("services.svcCreate")}>
         <AdminForm
           fields={[
             {
@@ -117,9 +139,12 @@ export default function AdminServices() {
           busyLabel={t("form.saving")}
           okMsg={t("form.created")}
           errMsg={t("form.error")}
-          onDone={reloadSvcs}
+          onDone={() => {
+            reloadSvcs();
+            setSvcOpen(false);
+          }}
         />
-      </div>
+      </Modal>
     </div>
   );
 }

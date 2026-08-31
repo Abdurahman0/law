@@ -1628,3 +1628,16 @@ body:has(.auth) .fab{display:none}
 .alist{max-height:clamp(240px,46vh,460px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding-right:4px}
 .alist::-webkit-scrollbar{width:8px}
 .alist::-webkit-scrollbar-thumb{background:var(--b200);border-radius:8px}
+
+
+/* admin header action row + modal */
+.ahdr{display:flex;align-items:center;gap:12px}
+.amodal{position:fixed;inset:0;z-index:200;background:rgba(3,16,43,.55);backdrop-filter:blur(4px);display:grid;place-items:center;padding:20px;animation:fade .2s ease both}
+.amodal__c{width:min(560px,100%);max-height:90vh;overflow-y:auto;background:#fff;border-radius:var(--rl);box-shadow:var(--s3);animation:pop .22s cubic-bezier(.2,.8,.3,1) both}
+.amodal__h{position:sticky;top:0;background:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line);z-index:1}
+.amodal__h b{font-family:var(--fd);font-size:1.1rem}
+.amodal__x{width:32px;height:32px;border-radius:9px;border:0;background:var(--b50);color:var(--gray);cursor:pointer;display:grid;place-items:center}
+.amodal__x:hover{background:var(--b100);color:var(--ink)}
+.amodal__x svg{width:16px;height:16px}
+.amodal__b{padding:22px}
+@keyframes pop{from{transform:translateY(12px) scale(.98);opacity:0}to{transform:none;opacity:1}}
