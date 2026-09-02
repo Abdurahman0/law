@@ -2,11 +2,19 @@
 // Every function talks to the same-origin proxy with the bearer token attached.
 // UI callers wrap reads in `withFallback(...)` so the app keeps working on local
 // mock data until the backend is reachable.
-import { http, asDict, asStr, asNum, asArr } from "@/lib/http";
+import { http, asDict, asStr, asNum, asArr, type Dict } from "@/lib/http";
 import type { ProfessionalProfile } from "@/lib/types";
 
 // ── Auth ──────────────────────────────────────────────────────────
-export type BackendRole = "client" | "advokat";
+export type BackendRole =
+  | "client"
+  | "yurist"
+  | "advokat"
+  | "advokat_tashkiloti"
+  | "admin"
+  | "manager"
+  | "call_center"
+  | "sales";
 export type AuthUser = {
   id: string;
   role: BackendRole;
@@ -17,11 +25,15 @@ export type AuthUser = {
 };
 export type AuthResult = { token: string; user: AuthUser };
 
+const ROLE_SET: BackendRole[] = [
+  "client", "yurist", "advokat", "advokat_tashkiloti", "admin", "manager", "call_center", "sales",
+];
 function normUser(v: unknown): AuthUser {
   const d = asDict(v);
+  const rawRole = asStr(d.role) as BackendRole;
   return {
     id: asStr(d.id ?? d.user_id),
-    role: d.role === "advokat" ? "advokat" : "client",
+    role: ROLE_SET.includes(rawRole) ? rawRole : "client",
     name: asStr(d.name),
     phone: asStr(d.phone),
     roles: asArr(d.roles).map((r) => asStr(r)),
@@ -126,18 +138,25 @@ export async function getMyServices(): Promise<string[]> {
   });
 }
 
-export async function putMyServices(serviceIds: string[]): Promise<void> {
+export async function putMyServices(
+  serviceIds: string[],
+  selectedPrices: Record<string, number> = {},
+): Promise<void> {
   await http("/lawyers/me/services", {
     method: "PUT",
-    body: JSON.stringify({ service_ids: serviceIds }),
+    body: JSON.stringify({ service_ids: serviceIds, selected_prices: selectedPrices }),
   });
 }
 
 // Build the PUT /lawyers/me body from our onboarding profile.
-export async function upsertMyLawyer(p: ProfessionalProfile): Promise<unknown> {
+export async function upsertMyLawyer(
+  p: ProfessionalProfile,
+  sellerType?: "yurist" | "advokat" | "advokat_tashkiloti",
+): Promise<unknown> {
   return http("/lawyers/me", {
     method: "PUT",
     body: JSON.stringify({
+      seller_type: sellerType,
       region: p.region ?? "",
       district: "",
       license_number: p.licenseNumber ?? "",
@@ -164,22 +183,49 @@ export type BackendService = {
   price?: number;
   description?: string;
   isActive: boolean;
+  // LexGo catalog metadata
+  catalogCode?: string;
+  executorType?: string;
+  advokatRequired: boolean;
+  pricingTier?: string;
 };
 export type BackendCategory = { id: string; name: string; slug: string };
 
-function normService(v: unknown): BackendService {
+// Prefer a localized catalog title for the current UI language.
+function serviceTitle(d: Dict, locale: string): string {
+  const byLocale =
+    locale === "ru"
+      ? d.title_ru
+      : locale === "en"
+        ? d.title_uz_latn // no EN catalog title; latin is the closest neutral
+        : d.title_uz_latn;
+  return asStr(byLocale ?? d.title ?? d.name);
+}
+
+function normService(v: unknown, locale = "uz"): BackendService {
   const d = asDict(v);
   return {
     id: asStr(d.id),
-    name: asStr(d.title ?? d.name),
+    name: serviceTitle(d, locale),
     slug: asStr(d.slug),
     categoryId: asStr(d.category_id ?? d.categoryId) || undefined,
     categoryTitle: asStr(d.category_title) || undefined,
-    price: d.base_price != null ? asNum(d.base_price) : undefined,
+    price: d.standard_price != null ? asNum(d.standard_price) : d.base_price != null ? asNum(d.base_price) : undefined,
     description: asStr(d.description) || undefined,
     isActive: d.is_active !== false,
+    catalogCode: asStr(d.catalog_code) || undefined,
+    executorType: asStr(d.executor_type) || undefined,
+    advokatRequired: Boolean(d.advokat_required),
+    pricingTier: asStr(d.pricing_tier) || undefined,
   };
 }
+
+export type ServiceFilters = {
+  category_id?: string;
+  q?: string;
+  executor_type?: string;
+  catalog_only?: boolean;
+};
 
 export async function getServiceCategories(): Promise<BackendCategory[]> {
   const data = await http("/service-categories");
@@ -189,9 +235,41 @@ export async function getServiceCategories(): Promise<BackendCategory[]> {
   });
 }
 
-export async function getServices(): Promise<BackendService[]> {
-  const data = await http("/services");
-  return listFrom(data, "services", "items", "data").map(normService);
+export async function getServices(filters?: ServiceFilters, locale = "uz"): Promise<BackendService[]> {
+  const qs = new URLSearchParams();
+  if (filters?.category_id) qs.set("category_id", filters.category_id);
+  if (filters?.q) qs.set("q", filters.q);
+  if (filters?.executor_type) qs.set("executor_type", filters.executor_type);
+  if (filters?.catalog_only != null) qs.set("catalog_only", String(filters.catalog_only));
+  const q = qs.toString();
+  const data = await http(`/services${q ? `?${q}` : ""}`);
+  return listFrom(data, "services", "items", "data").map((v) => normService(v, locale));
+}
+
+// Package tariffs (GET /service-packages).
+export type BackendPackage = {
+  id: string;
+  code: string;
+  title: string;
+  tariff: string;
+  price: number;
+};
+export async function getServicePackages(params?: { package_code?: string; tariff?: string }): Promise<BackendPackage[]> {
+  const qs = new URLSearchParams();
+  if (params?.package_code) qs.set("package_code", params.package_code);
+  if (params?.tariff) qs.set("tariff", params.tariff);
+  const q = qs.toString();
+  const data = await http(`/service-packages${q ? `?${q}` : ""}`);
+  return listFrom(data, "packages", "items", "data").map((v) => {
+    const d = asDict(v);
+    return {
+      id: asStr(d.id),
+      code: asStr(d.package_code ?? d.code),
+      title: asStr(d.title ?? d.name),
+      tariff: asStr(d.tariff),
+      price: asNum(d.price ?? d.standard_price),
+    };
+  });
 }
 
 // ── Subscription plans ────────────────────────────────────────────
@@ -250,6 +328,8 @@ export type BackendOrder = {
   title: string;
   serviceName: string;
   status: string;
+  paymentStatus: string;
+  contactUnlocked: boolean;
   areaKey: string;
   region: string;
   budget: string;
@@ -266,9 +346,11 @@ function normOrder(v: unknown): BackendOrder {
     title: asStr(details.question ?? d.title ?? service.name),
     serviceName: asStr(service.name ?? d.service_name),
     status: asStr(d.status),
+    paymentStatus: asStr(d.payment_status),
+    contactUnlocked: Boolean(d.contact_unlocked),
     areaKey: asStr(d.area ?? service.category ?? details.area),
     region: asStr(d.region ?? details.region),
-    budget: asStr(d.amount ?? d.price ?? details.budget),
+    budget: asStr(d.price ?? d.amount ?? details.budget),
     createdAt: asStr(d.created_at ?? d.createdAt),
     lawyerName: asStr(d.lawyer_name ?? asDict(d.lawyer).name) || undefined,
   };
@@ -280,6 +362,7 @@ export async function listOrders(): Promise<BackendOrder[]> {
 
 export async function createOrder(input: {
   service_id: string;
+  package_id?: string;
   lawyer_user_id?: string;
   source?: string;
   details?: Record<string, unknown>;
@@ -341,6 +424,237 @@ export async function getDocumentTemplates(): Promise<BackendTemplate[]> {
       };
     },
   );
+}
+
+// ── Document requests (contract/application flow) ─────────────────
+export type ContractFile = {
+  id: string;
+  fileName: string;
+  mimeType: string;
+  fileBase64: string;
+  inlineUrl: string;
+  downloadUrl: string;
+};
+export type DocumentRequest = {
+  id: string;
+  title: string;
+  documentType: string;
+  status: string; // draft | awaiting_payment | file_ready | ...
+  price: number;
+  currency: string;
+  questionnaire: { name: string; label: string; required?: boolean }[];
+  answers: Record<string, unknown>;
+  contractFile?: ContractFile;
+};
+
+function normDocRequest(v: unknown): DocumentRequest {
+  const d = asDict(v);
+  const cf = d.contract_file ? asDict(d.contract_file) : null;
+  return {
+    id: asStr(d.id),
+    title: asStr(d.title),
+    documentType: asStr(d.document_type ?? d.documentType),
+    status: asStr(d.status),
+    price: asNum(d.price),
+    currency: asStr(d.currency, "UZS"),
+    questionnaire: asArr(d.questionnaire).map((q) => {
+      const x = asDict(q);
+      return { name: asStr(x.name), label: asStr(x.label), required: Boolean(x.required) };
+    }),
+    answers: (d.answers as Record<string, unknown>) ?? {},
+    contractFile: cf
+      ? {
+          id: asStr(cf.id),
+          fileName: asStr(cf.file_name),
+          mimeType: asStr(cf.mime_type, "application/pdf"),
+          fileBase64: asStr(cf.file_base64),
+          inlineUrl: asStr(cf.inline_url),
+          downloadUrl: asStr(cf.download_url),
+        }
+      : undefined,
+  };
+}
+
+export async function createDocumentRequest(input: {
+  template_id?: string;
+  order_id?: string;
+  document_type: string;
+  title: string;
+  questionnaire?: { name: string; label: string; required?: boolean }[];
+  answers?: Record<string, unknown>;
+  price?: number;
+  currency?: string;
+}): Promise<DocumentRequest> {
+  return normDocRequest(
+    await http("/document-requests", { method: "POST", body: JSON.stringify({ currency: "UZS", ...input }) }),
+  );
+}
+export async function updateDocumentAnswers(
+  requestId: string,
+  answers: Record<string, unknown>,
+): Promise<DocumentRequest> {
+  return normDocRequest(
+    await http(`/document-requests/${requestId}/answers`, { method: "PUT", body: JSON.stringify({ answers }) }),
+  );
+}
+export async function payDocumentRequest(
+  requestId: string,
+  provider: "payme" | "click",
+): Promise<DocumentRequest> {
+  return normDocRequest(
+    await http(`/document-requests/${requestId}/payments`, { method: "POST", body: JSON.stringify({ provider }) }),
+  );
+}
+export async function getDocumentRequest(requestId: string): Promise<DocumentRequest> {
+  return normDocRequest(await http(`/document-requests/${requestId}`));
+}
+
+// ── Organizations (advocate orgs) ─────────────────────────────────
+export async function listOrganizations(): Promise<unknown[]> {
+  return listFrom(await http("/organizations"), "organizations", "items", "data");
+}
+export async function createOrganization(input: Record<string, unknown>): Promise<unknown> {
+  return http("/organizations", { method: "POST", body: JSON.stringify(input) });
+}
+export async function listOrgMembers(orgId: string): Promise<unknown[]> {
+  return listFrom(await http(`/organizations/${orgId}/members`), "members", "items", "data");
+}
+export async function addOrgMember(orgId: string, input: Record<string, unknown>): Promise<unknown> {
+  return http(`/organizations/${orgId}/members`, { method: "POST", body: JSON.stringify(input) });
+}
+
+// ── Secure chat ───────────────────────────────────────────────────
+export type SecureMessage = {
+  id: string;
+  senderId: string;
+  filteredContent: string;
+  isBlocked: boolean;
+  blockReason?: string;
+  createdAt: string;
+};
+function normSecureMsg(v: unknown): SecureMessage {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    senderId: asStr(d.sender_id ?? d.senderId),
+    filteredContent: asStr(d.filtered_content ?? d.content),
+    isBlocked: Boolean(d.is_blocked),
+    blockReason: asStr(d.block_reason) || undefined,
+    createdAt: asStr(d.created_at ?? d.createdAt),
+  };
+}
+export async function listSecureChats(): Promise<unknown[]> {
+  return listFrom(await http("/secure-chats"), "rooms", "items", "data");
+}
+export async function createSecureChat(input: Record<string, unknown>): Promise<unknown> {
+  return http("/secure-chats", { method: "POST", body: JSON.stringify(input) });
+}
+export async function getSecureMessages(roomId: string): Promise<SecureMessage[]> {
+  return listFrom(await http(`/secure-chats/${roomId}/messages`), "messages", "items", "data").map(normSecureMsg);
+}
+export async function sendSecureMessage(roomId: string, content: string): Promise<SecureMessage> {
+  return normSecureMsg(
+    await http(`/secure-chats/${roomId}/messages`, { method: "POST", body: JSON.stringify({ content }) }),
+  );
+}
+
+// ── Approvals (four-eyes) ─────────────────────────────────────────
+export type Approval = {
+  id: string;
+  type: string;
+  status: string;
+  adminApproved: boolean;
+  managerApproved: boolean;
+  createdAt: string;
+};
+function normApproval(v: unknown): Approval {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    type: asStr(d.request_type ?? d.type ?? d.kind),
+    status: asStr(d.status),
+    adminApproved: !!(d.admin_approved_by_user_id ?? d.admin_approved),
+    managerApproved: !!(d.manager_approved_by_user_id ?? d.manager_approved),
+    createdAt: asStr(d.created_at ?? d.createdAt),
+  };
+}
+export async function listApprovals(): Promise<Approval[]> {
+  return listFrom(await http("/approvals"), "approvals", "items", "data").map(normApproval);
+}
+export async function createApproval(input: Record<string, unknown>): Promise<unknown> {
+  return http("/approvals", { method: "POST", body: JSON.stringify(input) });
+}
+export async function adminApprove(id: string): Promise<Approval> {
+  return normApproval(await http(`/approvals/${id}/admin-approve`, { method: "POST" }));
+}
+export async function managerApprove(id: string): Promise<Approval> {
+  return normApproval(await http(`/approvals/${id}/manager-approve`, { method: "POST" }));
+}
+
+// ── Leads ─────────────────────────────────────────────────────────
+export type Lead = {
+  id: string;
+  name: string;
+  phone: string;
+  source: string;
+  category: string;
+  region: string;
+  urgency: string;
+  note: string;
+  status: string;
+  score: number;
+  createdAt: string;
+};
+function normLead(v: unknown): Lead {
+  const d = asDict(v);
+  const det = asDict(d.details);
+  return {
+    id: asStr(d.id),
+    name: asStr(det.name ?? d.name),
+    phone: asStr(det.phone ?? d.phone),
+    source: asStr(d.source),
+    category: asStr(d.category),
+    region: asStr(d.region),
+    urgency: asStr(d.urgency),
+    note: asStr(det.note ?? det.message ?? d.note),
+    status: asStr(d.status),
+    score: asNum(d.score),
+    createdAt: asStr(d.created_at ?? d.createdAt),
+  };
+}
+// Contact info is carried in `details` (the schema has no top-level name/phone).
+export async function createLead(input: {
+  name: string;
+  phone: string;
+  note?: string;
+  category?: string;
+  region?: string;
+  urgency?: string;
+}): Promise<unknown> {
+  return http("/leads", {
+    method: "POST",
+    body: JSON.stringify({
+      source: "web",
+      category: input.category,
+      region: input.region,
+      urgency: input.urgency,
+      details: { name: input.name, phone: input.phone, note: input.note ?? "" },
+    }),
+  });
+}
+export async function listLeads(): Promise<Lead[]> {
+  return listFrom(await http("/admin/leads"), "leads", "items", "data").map(normLead);
+}
+
+// ── Seller verification / admin actions ───────────────────────────
+export async function requestVerification(input: Record<string, unknown> = {}): Promise<unknown> {
+  return http("/lawyers/me/verifications", { method: "POST", body: JSON.stringify(input) });
+}
+export async function adminVerifyLawyer(lawyerUserId: string): Promise<unknown> {
+  return http(`/admin/lawyers/${lawyerUserId}/verify`, { method: "POST" });
+}
+export async function adminMarkPaid(paymentId: string): Promise<unknown> {
+  return http(`/admin/payments/${paymentId}/mark-paid`, { method: "POST" });
 }
 
 // ── helpers ───────────────────────────────────────────────────────

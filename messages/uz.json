@@ -1461,7 +1461,8 @@
       "messagePlaceholder": "Masalangizni qisqacha yozing…",
       "submit": "Arizani yuborish",
       "success": "Rahmat! Kol-markaz tez orada siz bilan bog'lanadi.",
-      "required": "Iltimos, majburiy maydonlarni to'ldiring."
+      "required": "Iltimos, majburiy maydonlarni to'ldiring.",
+      "sending": "Yuborilmoqda…"
     },
     "officesTitle": "Ofislar",
     "offices": [
@@ -2316,7 +2317,9 @@
       "templates": "Namunalar",
       "roles": "Rollar va ruxsatlar",
       "notifications": "Bildirishnomalar",
-      "bootstrap": "Bootstrap"
+      "bootstrap": "Bootstrap",
+      "leads": "Lidlar",
+      "approvals": "Tasdiqlashlar"
     },
     "overview": {
       "kicker": "Admin konsoli",
@@ -2412,6 +2415,23 @@
       "submit": "Bootstrap",
       "done": "Superadmin berildi. Ruxsatlarni yangilash uchun qayta kiring.",
       "note": "Bu server kaliti bilan himoyalangan bir martalik sozlash amali."
+    },
+    "leads": {
+      "title": "Lidlar",
+      "lead": "Veb-shakllar, AI va reklamalardan kelgan lidlar.",
+      "empty": "Hozircha lid yo‘q",
+      "emptyText": "Yangi lidlar shu yerda ko‘rinadi."
+    },
+    "approvals": {
+      "title": "Tasdiqlashlar",
+      "lead": "Qaytarish va advokat almashtirish admin + menejer tasdig‘ini talab qiladi.",
+      "empty": "Tasdiqlash yo‘q",
+      "emptyText": "Kutilayotgan tasdiqlar shu yerda ko‘rinadi.",
+      "admin": "Admin",
+      "manager": "Menejer",
+      "adminApprove": "Admin tasdiqlashi",
+      "managerApprove": "Menejer tasdiqlashi",
+      "item": "Tasdiqlash"
     }
   }
 }

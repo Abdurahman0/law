@@ -13,7 +13,9 @@ import {
   IconStar,
   IconDocLines,
   IconShield,
+  IconShieldCheck,
   IconChat,
+  IconUsers,
   IconBolt,
   IconLogout,
   IconMenu,
@@ -27,6 +29,8 @@ const NAV: { href: string; key: string; Icon: SvgC }[] = [
   { href: "/admin/plans", key: "plans", Icon: IconStar },
   { href: "/admin/templates", key: "templates", Icon: IconDocLines },
   { href: "/admin/roles", key: "roles", Icon: IconShield },
+  { href: "/admin/leads", key: "leads", Icon: IconUsers },
+  { href: "/admin/approvals", key: "approvals", Icon: IconShieldCheck },
   { href: "/admin/notifications", key: "notifications", Icon: IconChat },
   { href: "/admin/bootstrap", key: "bootstrap", Icon: IconBolt },
 ];

@@ -1455,7 +1455,8 @@
       "messagePlaceholder": "Briefly describe your matter…",
       "submit": "Send the request",
       "success": "Thank you! The call center will contact you shortly.",
-      "required": "Please fill in the required fields."
+      "required": "Please fill in the required fields.",
+      "sending": "Sending…"
     },
     "officesTitle": "Offices",
     "offices": [
@@ -2310,7 +2311,9 @@
       "templates": "Templates",
       "roles": "Roles & access",
       "notifications": "Notifications",
-      "bootstrap": "Bootstrap"
+      "bootstrap": "Bootstrap",
+      "leads": "Leads",
+      "approvals": "Approvals"
     },
     "overview": {
       "kicker": "Admin console",
@@ -2406,6 +2409,23 @@
       "submit": "Bootstrap",
       "done": "Superadmin granted. Log out and back in to refresh access.",
       "note": "This is a one-time setup action protected by a server-side key."
+    },
+    "leads": {
+      "title": "Leads",
+      "lead": "Inbound leads from web forms, AI capture and ads.",
+      "empty": "No leads yet",
+      "emptyText": "New leads will appear here."
+    },
+    "approvals": {
+      "title": "Approvals",
+      "lead": "Refunds and lawyer replacements need admin + manager approval.",
+      "empty": "No approvals",
+      "emptyText": "Pending approvals will appear here.",
+      "admin": "Admin",
+      "manager": "Manager",
+      "adminApprove": "Admin approve",
+      "managerApprove": "Manager approve",
+      "item": "Approval"
     }
   }
 }

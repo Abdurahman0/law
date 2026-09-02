@@ -37,13 +37,13 @@ export type Session = {
 
 const KEY = "lexgo_session";
 
-// Our UI has client|lawyer|advocate; the backend has client|advokat. Lawyer and
-// advocate both register as advokat; we keep the finer role locally so the
-// portal matches the user's choice. A fresh advokat login lands in advocate.
+// Our UI has client|lawyer|advocate; the backend has client|yurist|advokat
+// (+ advokat_tashkiloti and internal staff roles). Map lawyer↔yurist,
+// advocate↔advokat (advokat_tashkiloti also lands in the advocate portal).
 const toBackendRole = (r: Role): BackendRole =>
-  r === "client" ? "client" : "advokat";
+  r === "client" ? "client" : r === "lawyer" ? "yurist" : "advokat";
 const fromBackendRole = (r: BackendRole): Role =>
-  r === "advokat" ? "advocate" : "client";
+  r === "yurist" ? "lawyer" : r === "advokat" || r === "advokat_tashkiloti" ? "advocate" : "client";
 
 type AuthCtx = {
   session: Session | null;
@@ -157,8 +157,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         });
         setToken(token);
         if (role !== "client") {
+          const sellerType = role === "lawyer" ? "yurist" : "advokat";
           try {
-            await upsertMyLawyer(draft.profile);
+            await upsertMyLawyer(draft.profile, sellerType);
             if (draft.profile.services.length) {
               await putMyServices(draft.profile.services);
             }

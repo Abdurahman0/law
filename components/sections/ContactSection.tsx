@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
+import { createLead } from "@/lib/services/backend";
 import { IconInfo, IconChat, IconClock } from "../icons";
 
 export default function ContactSection() {
@@ -9,7 +10,7 @@ export default function ContactSection() {
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [message, setMessage] = useState("");
-  const [state, setState] = useState<"idle" | "error" | "ok">("idle");
+  const [state, setState] = useState<"idle" | "error" | "ok" | "sending">("idle");
 
   const offices = t.raw("offices") as {
     city: string;
@@ -22,16 +23,27 @@ export default function ContactSection() {
     contact: string;
   }[];
 
-  function submit(e: FormEvent) {
+  async function submit(e: FormEvent) {
     e.preventDefault();
+    if (state === "sending") return;
     if (!name.trim() || !contact.trim()) {
       setState("error");
       return;
     }
-    setState("ok");
-    setName("");
-    setContact("");
-    setMessage("");
+    setState("sending");
+    try {
+      await createLead({
+        name: name.trim(),
+        phone: contact.trim(),
+        note: message.trim(),
+      });
+      setState("ok");
+      setName("");
+      setContact("");
+      setMessage("");
+    } catch {
+      setState("error");
+    }
   }
 
   return (
@@ -80,8 +92,8 @@ export default function ContactSection() {
             {state === "ok" ? (
               <div className="cform__ok">{t("form.success")}</div>
             ) : null}
-            <button className="btn btn--pri" type="submit">
-              {t("form.submit")}
+            <button className="btn btn--pri" type="submit" disabled={state === "sending"}>
+              {state === "sending" ? t("form.sending") : t("form.submit")}
             </button>
           </form>
 
