@@ -629,9 +629,13 @@ export async function updateDocumentAnswers(
 export async function payDocumentRequest(
   requestId: string,
   provider: "payme" | "click",
+  amount: number,
 ): Promise<DocumentRequest> {
   return normDocRequest(
-    await http(`/document-requests/${requestId}/payments`, { method: "POST", body: JSON.stringify({ provider }) }),
+    await http(`/document-requests/${requestId}/payments`, {
+      method: "POST",
+      body: JSON.stringify({ provider, amount }),
+    }),
   );
 }
 export async function getDocumentRequest(requestId: string): Promise<DocumentRequest> {

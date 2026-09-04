@@ -95,7 +95,7 @@ export default function DocumentFlow() {
     setBusy(true);
     setNote(null);
     try {
-      let r = await payDocumentRequest(req.id, "payme");
+      let r = await payDocumentRequest(req.id, "payme", req.price);
       if (r.status !== "file_ready") r = await getDocumentRequest(req.id);
       setReq(r);
       if (r.status === "file_ready") setStage("done");
