@@ -385,6 +385,12 @@ export const IconLanguage = (p: P) => (
   </svg>
 );
 
+export const IconFolder = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />
+  </svg>
+);
+
 export const IconBell = (p: P) => (
   <svg {...base} {...p}>
     <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" />

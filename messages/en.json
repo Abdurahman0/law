@@ -1686,7 +1686,8 @@
         "ai": "AI Assistant",
         "promotion": "Promotion",
         "subscription": "Subscription",
-        "notifications": "Notifications"
+        "notifications": "Notifications",
+        "workspace": "Workspace"
       },
       "client": {
         "dashboard": "Dashboard",
@@ -1711,7 +1712,8 @@
         "subscription": "Subscription",
         "messages": "Messages",
         "organization": "Organization",
-        "notifications": "Notifications"
+        "notifications": "Notifications",
+        "workspace": "Workspace"
       }
     },
     "lawyer": {
@@ -2117,6 +2119,40 @@
       "markAll": "Mark all read",
       "empty": "No notifications",
       "emptyText": "Updates about your cases and payments will appear here."
+    },
+    "caseManage": {
+      "title": "Manage case",
+      "status": "Status",
+      "stage": "Stage",
+      "stagePh": "e.g. Investigation",
+      "nextAction": "Next action",
+      "nextActionPh": "What happens next",
+      "save": "Save",
+      "saving": "Saving…",
+      "saved": "Case updated.",
+      "error": "Something went wrong."
+    },
+    "workspace": {
+      "title": "Workspace",
+      "lead": "Organize your case folders and files.",
+      "allFiles": "All files",
+      "addFile": "Add file",
+      "addFolder": "Add folder",
+      "folderPh": "New folder",
+      "fileName": "File name",
+      "fileNamePh": "contract.pdf",
+      "fileUrl": "File link",
+      "fileUrlPh": "https://…",
+      "folder": "Folder",
+      "noFolder": "No folder",
+      "save": "Save",
+      "saving": "Saving…",
+      "saved": "File saved.",
+      "error": "Something went wrong.",
+      "empty": "No files yet",
+      "emptyText": "Add a file or create a folder to get started.",
+      "remove": "Remove",
+      "open": "Open"
     }
   },
   "notFound": {
@@ -2511,7 +2547,11 @@
       "cases": "Cases",
       "roles": "Roles",
       "empty": "No dashboard data yet",
-      "emptyText": "Metrics and charts appear once there is activity."
+      "emptyText": "Metrics and charts appear once there is activity.",
+      "seed": "Seed demo data",
+      "seeding": "Seeding…",
+      "seedDone": "Seeded {templates} templates, {ads} ad products.",
+      "seedError": "Seed failed."
     },
     "form": {
       "title": "Title",
@@ -2660,7 +2700,12 @@
     "offline": "Reconnecting…",
     "errorLoad": "Could not load messages.",
     "today": "Today",
-    "yesterday": "Yesterday"
+    "yesterday": "Yesterday",
+    "audioCall": "Audio call",
+    "videoCall": "Video call",
+    "callActive": "Call in progress",
+    "callJoin": "Join",
+    "callEnd": "End"
   },
   "academy": {
     "kicker": "LexGo Academy",

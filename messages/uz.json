@@ -1692,7 +1692,8 @@
         "ai": "AI Yordamchi",
         "promotion": "Targ'ibot",
         "subscription": "Obuna",
-        "notifications": "Bildirishnomalar"
+        "notifications": "Bildirishnomalar",
+        "workspace": "Ish maydoni"
       },
       "client": {
         "dashboard": "Boshqaruv paneli",
@@ -1717,7 +1718,8 @@
         "subscription": "Obuna",
         "messages": "Xabarlar",
         "organization": "Tashkilot",
-        "notifications": "Bildirishnomalar"
+        "notifications": "Bildirishnomalar",
+        "workspace": "Ish maydoni"
       }
     },
     "lawyer": {
@@ -2123,6 +2125,40 @@
       "markAll": "Barchasini o‘qilgan",
       "empty": "Bildirishnomalar yo‘q",
       "emptyText": "Ishlaringiz va to‘lovlaringiz haqidagi yangiliklar shu yerda ko‘rinadi."
+    },
+    "caseManage": {
+      "title": "Ishni boshqarish",
+      "status": "Holat",
+      "stage": "Bosqich",
+      "stagePh": "masalan, Tergov",
+      "nextAction": "Keyingi qadam",
+      "nextActionPh": "Keyingi ish",
+      "save": "Saqlash",
+      "saving": "Saqlanmoqda…",
+      "saved": "Ish yangilandi.",
+      "error": "Xatolik yuz berdi."
+    },
+    "workspace": {
+      "title": "Ish maydoni",
+      "lead": "Ish papkalari va fayllarni tartibga soling.",
+      "allFiles": "Barcha fayllar",
+      "addFile": "Fayl qo‘shish",
+      "addFolder": "Papka",
+      "folderPh": "Yangi papka",
+      "fileName": "Fayl nomi",
+      "fileNamePh": "contract.pdf",
+      "fileUrl": "Fayl havolasi",
+      "fileUrlPh": "https://…",
+      "folder": "Papka",
+      "noFolder": "Papkasiz",
+      "save": "Saqlash",
+      "saving": "Saqlanmoqda…",
+      "saved": "Fayl saqlandi.",
+      "error": "Xatolik yuz berdi.",
+      "empty": "Hozircha fayllar yo‘q",
+      "emptyText": "Fayl qo‘shing yoki papka yarating.",
+      "remove": "O‘chirish",
+      "open": "Ochish"
     }
   },
   "notFound": {
@@ -2517,7 +2553,11 @@
       "cases": "Ishlar",
       "roles": "Rollar",
       "empty": "Hozircha panel ma‘lumoti yo‘q",
-      "emptyText": "Faollik paydo bo‘lgach ko‘rsatkichlar va grafiklar ko‘rinadi."
+      "emptyText": "Faollik paydo bo‘lgach ko‘rsatkichlar va grafiklar ko‘rinadi.",
+      "seed": "Demo ma'lumot",
+      "seeding": "Yuklanmoqda…",
+      "seedDone": "{templates} shablon, {ads} reklama qo‘shildi.",
+      "seedError": "Xatolik yuz berdi."
     },
     "form": {
       "title": "Nomi",
@@ -2666,7 +2706,12 @@
     "offline": "Qayta ulanmoqda…",
     "errorLoad": "Xabarlarni yuklab bo‘lmadi.",
     "today": "Bugun",
-    "yesterday": "Kecha"
+    "yesterday": "Kecha",
+    "audioCall": "Audio qo‘ng‘iroq",
+    "videoCall": "Video qo‘ng‘iroq",
+    "callActive": "Qo‘ng‘iroq davom etmoqda",
+    "callJoin": "Qo‘shilish",
+    "callEnd": "Tugatish"
   },
   "academy": {
     "kicker": "LexGo Akademiya",

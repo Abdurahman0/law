@@ -28,6 +28,7 @@ import {
   IconStar,
   IconBuilding,
   IconBell,
+  IconFolder,
 } from "../icons";
 
 type SvgC = ComponentType<{ className?: string }>;
@@ -40,6 +41,7 @@ const LAWYER_NAV: NavItem[] = [
   { href: "/portal/lawyer/calendar", key: "calendar", Icon: IconCalendar },
   { href: "/portal/lawyer/clients", key: "clients", Icon: IconUsers },
   { href: "/portal/lawyer/documents", key: "documents", Icon: IconDocLines },
+  { href: "/portal/lawyer/workspace", key: "workspace", Icon: IconFolder },
   { href: "/portal/lawyer/chat", key: "chat", Icon: IconChat },
   { href: "/portal/lawyer/notifications", key: "notifications", Icon: IconBell },
   { href: "/portal/lawyer/ai", key: "ai", Icon: IconSparkle },
@@ -54,6 +56,7 @@ const ADVOCATE_NAV: NavItem[] = [
   { href: "/portal/advocate/messages", key: "messages", Icon: IconChat },
   { href: "/portal/advocate/notifications", key: "notifications", Icon: IconBell },
   { href: "/portal/advocate/organization", key: "organization", Icon: IconBuilding },
+  { href: "/portal/advocate/workspace", key: "workspace", Icon: IconFolder },
   { href: "/portal/advocate/profile", key: "profile", Icon: IconUser },
   { href: "/portal/advocate/promotion", key: "promotion", Icon: IconBolt },
   { href: "/portal/advocate/subscription", key: "subscription", Icon: IconStar },

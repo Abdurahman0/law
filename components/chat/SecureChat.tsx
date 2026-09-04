@@ -9,7 +9,10 @@ import {
   getSecureMessages,
   sendSecureMessage,
   secureSocketUrl,
+  startCall,
+  endCall,
   type SecureMessage,
+  type CallSession,
 } from "@/lib/services/backend";
 import {
   IconSend,
@@ -20,6 +23,8 @@ import {
   IconCheckDouble,
   IconClock,
   IconUser,
+  IconPhone,
+  IconVideo,
 } from "../icons";
 
 type LocalMsg = SecureMessage & { pending?: boolean; failed?: boolean };
@@ -45,8 +50,34 @@ export default function SecureChat({ roomId }: { roomId: string }) {
   const [sending, setSending] = useState(false);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [conn, setConn] = useState<Conn>("connecting");
+  const [call, setCall] = useState<CallSession | null>(null);
+  const [callBusy, setCallBusy] = useState(false);
   const bodyRef = useRef<HTMLDivElement>(null);
   const seen = useRef<Set<string>>(new Set());
+
+  async function beginCall(kind: "audio" | "video") {
+    if (callBusy || call) return;
+    setCallBusy(true);
+    try {
+      const c = await startCall(roomId, kind, t(kind === "video" ? "videoCall" : "audioCall"));
+      setCall(c);
+      if (c.joinUrl) window.open(c.joinUrl, "_blank");
+    } catch {
+      /* ignore */
+    } finally {
+      setCallBusy(false);
+    }
+  }
+  async function finishCall() {
+    if (!call) return;
+    const id = call.id;
+    setCall(null);
+    try {
+      await endCall(id);
+    } catch {
+      /* ignore */
+    }
+  }
 
   function push(list: LocalMsg[]) {
     setMsgs((prev) => {
@@ -167,11 +198,51 @@ export default function SecureChat({ roomId }: { roomId: string }) {
             {connLabel}
           </span>
         </div>
+        <div className="schat__calls">
+          <button
+            className="schat__call"
+            type="button"
+            onClick={() => beginCall("audio")}
+            disabled={callBusy || !!call}
+            aria-label={t("audioCall")}
+          >
+            <IconPhone />
+          </button>
+          <button
+            className="schat__call schat__call--video"
+            type="button"
+            onClick={() => beginCall("video")}
+            disabled={callBusy || !!call}
+            aria-label={t("videoCall")}
+          >
+            <IconVideo />
+          </button>
+        </div>
         <span className="schat__lock" title={t("secured")}>
           <IconLock />
           {t("e2e")}
         </span>
       </div>
+
+      {call ? (
+        <div className="schat__callbar">
+          <span className="schat__callbar-l">
+            <i className="schat__callpulse" aria-hidden />
+            {call.callType === "video" ? <IconVideo /> : <IconPhone />}
+            {t("callActive")}
+          </span>
+          <div className="schat__callbar-a">
+            {call.joinUrl ? (
+              <a className="btn btn--line btn--sm" href={call.joinUrl} target="_blank" rel="noopener noreferrer">
+                {t("callJoin")}
+              </a>
+            ) : null}
+            <button className="btn btn--sm schat__endcall" type="button" onClick={finishCall}>
+              {t("callEnd")}
+            </button>
+          </div>
+        </div>
+      ) : null}
 
       <div className="schat__body" ref={bodyRef}>
         <div className="schat__sys">

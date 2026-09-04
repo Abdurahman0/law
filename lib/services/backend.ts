@@ -328,6 +328,11 @@ export type BackendCase = {
   status: string;
   nextAction: string;
   deadlineAt?: string;
+  title: string;
+  description: string;
+  clientUserId?: string;
+  lawyerUserId?: string;
+  orderId?: string;
 };
 
 function normCase(v: unknown): BackendCase {
@@ -340,6 +345,11 @@ function normCase(v: unknown): BackendCase {
     status: asStr(d.status),
     nextAction: asStr(d.next_action ?? d.nextAction),
     deadlineAt: asStr(d.deadline_at ?? d.deadlineAt) || undefined,
+    title: asStr(d.title ?? d.case_type),
+    description: asStr(d.description),
+    clientUserId: asStr(d.client_user_id) || undefined,
+    lawyerUserId: asStr(d.lawyer_user_id) || undefined,
+    orderId: asStr(d.order_id) || undefined,
   };
 }
 
@@ -1290,6 +1300,143 @@ export async function markAllNotificationsRead(): Promise<void> {
 export async function getUnreadCount(): Promise<number> {
   const d = asDict(await http("/notifications/unread-count"));
   return asNum(d.count);
+}
+
+// ── Cases: detail, update, status, seller's cases (CIMS) ──────────
+export async function getCase(caseId: string): Promise<BackendCase> {
+  return normCase(await http(`/cases/${caseId}`));
+}
+export type CaseUpdate = {
+  lawyer_user_id?: string;
+  case_type?: string;
+  stage?: string;
+  status?: string;
+  title?: string;
+  description?: string;
+  next_action?: string;
+  deadline_at?: string;
+};
+export async function updateCase(caseId: string, patch: CaseUpdate): Promise<BackendCase> {
+  return normCase(await http(`/cases/${caseId}`, { method: "PATCH", body: JSON.stringify(patch) }));
+}
+export async function setCaseStatus(caseId: string, status: string, nextAction?: string): Promise<BackendCase> {
+  const body: Record<string, unknown> = { status };
+  if (nextAction !== undefined) body.next_action = nextAction;
+  return normCase(await http(`/cases/${caseId}/status`, { method: "POST", body: JSON.stringify(body) }));
+}
+export async function getMyCases(): Promise<BackendCase[]> {
+  return listFrom(await http("/lawyers/me/cases"), "cases", "items", "data").map(normCase);
+}
+
+// ── Secure-chat call sessions (audio/video) ───────────────────────
+export type CallSession = {
+  id: string;
+  roomId: string;
+  callerUserId: string;
+  callType: string;
+  title: string;
+  status: string;
+  joinUrl: string;
+  startedAt: string;
+  endedAt?: string;
+};
+function normCall(v: unknown): CallSession {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    roomId: asStr(d.room_id),
+    callerUserId: asStr(d.caller_user_id),
+    callType: asStr(d.call_type),
+    title: asStr(d.title),
+    status: asStr(d.status),
+    joinUrl: asStr(d.join_url),
+    startedAt: asStr(d.started_at),
+    endedAt: asStr(d.ended_at) || undefined,
+  };
+}
+export async function startCall(roomId: string, callType: "audio" | "video", title: string): Promise<CallSession> {
+  return normCall(
+    await http(`/secure-chats/${roomId}/calls`, {
+      method: "POST",
+      body: JSON.stringify({ call_type: callType, title }),
+    }),
+  );
+}
+export async function listCalls(roomId: string): Promise<CallSession[]> {
+  return listFrom(await http(`/secure-chats/${roomId}/calls`), "calls", "items", "data").map(normCall);
+}
+export async function endCall(callId: string): Promise<CallSession> {
+  return normCall(await http(`/calls/${callId}`, { method: "PATCH", body: JSON.stringify({ status: "ended" }) }));
+}
+
+// ── Seller workspace (folders + file metadata) ────────────────────
+export type WorkspaceFolder = { id: string; name: string; parentId?: string; caseId?: string; status: string; createdAt: string };
+function normFolder(v: unknown): WorkspaceFolder {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    name: asStr(d.name),
+    parentId: asStr(d.parent_id) || undefined,
+    caseId: asStr(d.case_id) || undefined,
+    status: asStr(d.status),
+    createdAt: asStr(d.created_at),
+  };
+}
+export async function listFolders(): Promise<WorkspaceFolder[]> {
+  return listFrom(await http("/workspace/folders"), "folders", "items", "data").map(normFolder);
+}
+export async function createFolder(input: { name: string; parent_id?: string; case_id?: string }): Promise<WorkspaceFolder> {
+  return normFolder(await http("/workspace/folders", { method: "POST", body: JSON.stringify(input) }));
+}
+export async function deleteFolder(id: string): Promise<void> {
+  await http(`/workspace/folders/${id}`, { method: "DELETE" });
+}
+
+export type WorkspaceFile = {
+  id: string;
+  folderId?: string;
+  caseId?: string;
+  fileName: string;
+  fileUrl: string;
+  mimeType: string;
+  size: number;
+  createdAt: string;
+};
+function normFile(v: unknown): WorkspaceFile {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    folderId: asStr(d.folder_id) || undefined,
+    caseId: asStr(d.case_id) || undefined,
+    fileName: asStr(d.file_name),
+    fileUrl: asStr(d.file_url),
+    mimeType: asStr(d.mime_type),
+    size: asNum(d.size),
+    createdAt: asStr(d.created_at),
+  };
+}
+export async function listFiles(): Promise<WorkspaceFile[]> {
+  return listFrom(await http("/workspace/files"), "files", "items", "data").map(normFile);
+}
+export async function createFile(input: {
+  file_name: string;
+  file_url?: string;
+  folder_id?: string;
+  case_id?: string;
+  mime_type?: string;
+  size?: number;
+}): Promise<WorkspaceFile> {
+  return normFile(await http("/workspace/files", { method: "POST", body: JSON.stringify(input) }));
+}
+export async function deleteFile(id: string): Promise<void> {
+  await http(`/workspace/files/${id}`, { method: "DELETE" });
+}
+
+// ── Admin: seed demo data ─────────────────────────────────────────
+export type DemoSeedResult = { templates: number; adsProducts: number; message: string };
+export async function seedDemoData(): Promise<DemoSeedResult> {
+  const d = asDict(await http("/admin/demo-data/seed", { method: "POST" }));
+  return { templates: asNum(d.templates), adsProducts: asNum(d.ads_products), message: asStr(d.message) };
 }
 
 // ── helpers ───────────────────────────────────────────────────────
