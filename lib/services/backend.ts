@@ -2,7 +2,8 @@
 // Every function talks to the same-origin proxy with the bearer token attached.
 // UI callers wrap reads in `withFallback(...)` so the app keeps working on local
 // mock data until the backend is reachable.
-import { http, asDict, asStr, asNum, asArr, API_BASE, type Dict } from "@/lib/http";
+import { http, asDict, asStr, asNum, asArr, API_BASE, ApiError, absUrl, type Dict } from "@/lib/http";
+import { getToken } from "@/lib/client";
 import type { ProfessionalProfile } from "@/lib/types";
 
 // ── Auth ──────────────────────────────────────────────────────────
@@ -978,6 +979,317 @@ export async function getLawyerPrivateChat(lawyerUserId: string): Promise<Secure
   } catch {
     return null;
   }
+}
+
+// ── Order actions (accept / decline) ──────────────────────────────
+export async function acceptOrder(orderId: string): Promise<BackendOrder> {
+  return normOrder(await http(`/orders/${orderId}/accept`, { method: "POST" }));
+}
+export async function declineOrder(orderId: string): Promise<{ id: string; status: string }> {
+  const d = asDict(await http(`/orders/${orderId}/decline`, { method: "POST" }));
+  return { id: asStr(d.id), status: asStr(d.status) };
+}
+
+// ── Document template download (authed blob → browser save) ────────
+export async function downloadTemplateFile(templateId: string, filename: string): Promise<void> {
+  const token = getToken();
+  const res = await fetch(`${API_BASE}/document-templates/${templateId}/file`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
+  if (!res.ok) throw new ApiError(res.status);
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename || `template-${templateId}.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+// ── Seller stats & clients ────────────────────────────────────────
+export type SellerStats = { workload: Dict; finance: Dict; performance: Dict };
+export async function getLawyerStats(): Promise<SellerStats> {
+  const d = asDict(await http("/lawyers/me/stats"));
+  return { workload: asDict(d.workload), finance: asDict(d.finance), performance: asDict(d.performance) };
+}
+
+export type LawyerClient = {
+  id: string;
+  name: string;
+  phone: string;
+  casesCount: number;
+  hasConflict: boolean;
+  lastActiveAt?: string;
+};
+export async function getLawyerClients(): Promise<LawyerClient[]> {
+  return listFrom(await http("/lawyers/me/clients"), "items", "data").map((v) => {
+    const d = asDict(v);
+    return {
+      id: asStr(d.id),
+      name: asStr(d.name),
+      phone: asStr(d.phone),
+      casesCount: asNum(d.cases_count),
+      hasConflict: Boolean(d.has_conflict),
+      lastActiveAt: asStr(d.last_active_at) || undefined,
+    };
+  });
+}
+
+// ── Calendar events ───────────────────────────────────────────────
+export type CalendarEvent = {
+  id: string;
+  type: string;
+  title: string;
+  caseId?: string;
+  startsAt: string;
+  endsAt?: string;
+  location: string;
+  status: string;
+};
+function normEvent(v: unknown): CalendarEvent {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    type: asStr(d.type),
+    title: asStr(d.title),
+    caseId: asStr(d.case_id) || undefined,
+    startsAt: asStr(d.starts_at),
+    endsAt: asStr(d.ends_at) || undefined,
+    location: asStr(d.location),
+    status: asStr(d.status),
+  };
+}
+export async function listCalendarEvents(range?: { from?: string; to?: string }): Promise<CalendarEvent[]> {
+  const q = new URLSearchParams();
+  if (range?.from) q.set("from", range.from);
+  if (range?.to) q.set("to", range.to);
+  const qs = q.toString();
+  return listFrom(await http(`/calendar-events${qs ? `?${qs}` : ""}`), "items", "data").map(normEvent);
+}
+export type CalendarEventInput = {
+  type: string;
+  title: string;
+  case_id?: string;
+  starts_at: string;
+  ends_at?: string;
+  location?: string;
+};
+export async function createCalendarEvent(input: CalendarEventInput): Promise<CalendarEvent> {
+  return normEvent(await http("/calendar-events", { method: "POST", body: JSON.stringify(input) }));
+}
+export async function deleteCalendarEvent(id: string): Promise<void> {
+  await http(`/calendar-events/${id}`, { method: "DELETE" });
+}
+
+// ── Promotions ────────────────────────────────────────────────────
+export type PromotionStatus = { active: boolean; packageId?: string; daysLeft: number; endsAt?: string };
+export async function getPromotionStatus(): Promise<PromotionStatus> {
+  const d = asDict(await http("/promotions/me"));
+  return {
+    active: Boolean(d.active),
+    packageId: asStr(d.package_id) || undefined,
+    daysLeft: asNum(d.days_left),
+    endsAt: asStr(d.ends_at) || undefined,
+  };
+}
+export type PromotionAnalytics = {
+  impressions: number;
+  searchAppearances: number;
+  profileClicks: number;
+  contactRequests: number;
+  series: { date: string; impressions: number }[];
+};
+export async function getPromotionAnalytics(): Promise<PromotionAnalytics> {
+  const d = asDict(await http("/promotions/analytics"));
+  return {
+    impressions: asNum(d.impressions),
+    searchAppearances: asNum(d.search_appearances),
+    profileClicks: asNum(d.profile_clicks),
+    contactRequests: asNum(d.contact_requests),
+    series: asArr(d.series).map((x) => {
+      const s = asDict(x);
+      return { date: asStr(s.date), impressions: asNum(s.impressions) };
+    }),
+  };
+}
+export async function checkoutPromotion(packageId: string, days: number): Promise<PurchaseResult> {
+  return normPurchase(
+    await http("/promotions/checkout", {
+      method: "POST",
+      body: JSON.stringify({ package_id: packageId, days, provider: "demo_payme" }),
+    }),
+  );
+}
+
+// ── Gifts ─────────────────────────────────────────────────────────
+export type Gift = {
+  id: string;
+  direction: string;
+  recipientPhone: string;
+  planName: string;
+  termMonths: number;
+  status: string;
+  createdAt: string;
+};
+function normGift(v: unknown): Gift {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    direction: asStr(d.direction, "sent"),
+    recipientPhone: asStr(d.recipient_phone),
+    planName: asStr(d.plan_name),
+    termMonths: asNum(d.term_months),
+    status: asStr(d.status),
+    createdAt: asStr(d.created_at),
+  };
+}
+export async function listGifts(): Promise<Gift[]> {
+  return listFrom(await http("/gifts"), "items", "data").map(normGift);
+}
+export type GiftInput = { plan_id: string; recipient_phone: string; term_months?: number; message?: string };
+export async function createGift(input: GiftInput): Promise<PurchaseResult> {
+  return normPurchase(
+    await http("/gifts", {
+      method: "POST",
+      body: JSON.stringify({ provider: "demo_payme", term_months: 6, ...input }),
+    }),
+  );
+}
+
+// ── Client profile, payment methods, family ───────────────────────
+export type ClientProfile = {
+  name: string;
+  phone: string;
+  email: string;
+  avatarUrl: string;
+  subscription?: { planName: string; status: string; renewsAt?: string };
+};
+function normClientProfile(v: unknown): ClientProfile {
+  const d = asDict(v);
+  const sub = asDict(d.subscription);
+  const hasSub = Object.keys(sub).length > 0;
+  return {
+    name: asStr(d.name),
+    phone: asStr(d.phone),
+    email: asStr(d.email),
+    avatarUrl: asStr(d.avatar_url),
+    subscription: hasSub
+      ? { planName: asStr(sub.plan_name), status: asStr(sub.status), renewsAt: asStr(sub.renews_at) || undefined }
+      : undefined,
+  };
+}
+export async function getClientProfile(): Promise<ClientProfile> {
+  return normClientProfile(await http("/clients/me"));
+}
+export async function updateClientProfile(patch: {
+  name?: string;
+  email?: string;
+  avatar_url?: string;
+}): Promise<ClientProfile> {
+  return normClientProfile(await http("/clients/me", { method: "PUT", body: JSON.stringify(patch) }));
+}
+
+export type PaymentMethod = { id: string; brand: string; last4: string; expires: string; isDefault: boolean };
+function normMethod(v: unknown): PaymentMethod {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    brand: asStr(d.brand),
+    last4: asStr(d.last4),
+    expires: asStr(d.expires),
+    isDefault: Boolean(d.is_default),
+  };
+}
+export async function listPaymentMethods(): Promise<PaymentMethod[]> {
+  return listFrom(await http("/clients/me/payment-methods"), "items", "data").map(normMethod);
+}
+export async function addPaymentMethod(input: {
+  brand?: string;
+  last4: string;
+  expires?: string;
+  is_default?: boolean;
+}): Promise<PaymentMethod> {
+  return normMethod(await http("/clients/me/payment-methods", { method: "POST", body: JSON.stringify(input) }));
+}
+export async function deletePaymentMethod(id: string): Promise<void> {
+  await http(`/clients/me/payment-methods/${id}`, { method: "DELETE" });
+}
+
+export type FamilyMember = { id: string; name: string; phone: string; relation: string };
+function normFamily(v: unknown): FamilyMember {
+  const d = asDict(v);
+  return { id: asStr(d.id), name: asStr(d.name), phone: asStr(d.phone), relation: asStr(d.relation) };
+}
+export async function listFamilyMembers(): Promise<FamilyMember[]> {
+  return listFrom(await http("/clients/me/family-members"), "items", "data").map(normFamily);
+}
+export async function addFamilyMember(input: { name: string; phone: string; relation?: string }): Promise<FamilyMember> {
+  return normFamily(await http("/clients/me/family-members", { method: "POST", body: JSON.stringify(input) }));
+}
+export async function deleteFamilyMember(id: string): Promise<void> {
+  await http(`/clients/me/family-members/${id}`, { method: "DELETE" });
+}
+
+// ── Payments history ──────────────────────────────────────────────
+export type PaymentHistory = {
+  id: string;
+  amount: number;
+  currency: string;
+  status: string;
+  method: string;
+  kind: string;
+  description: string;
+  orderId?: string;
+  createdAt: string;
+  receiptUrl?: string;
+};
+export async function listPayments(): Promise<PaymentHistory[]> {
+  return listFrom(await http("/payments"), "items", "data").map((v) => {
+    const d = asDict(v);
+    return {
+      id: asStr(d.id),
+      amount: asNum(d.amount),
+      currency: asStr(d.currency, "UZS"),
+      status: asStr(d.status),
+      method: asStr(d.method),
+      kind: asStr(d.kind),
+      description: asStr(d.description),
+      orderId: asStr(d.order_id) || undefined,
+      createdAt: asStr(d.created_at),
+      receiptUrl: asStr(d.receipt_url) || undefined,
+    };
+  });
+}
+export function paymentReceiptUrl(paymentId: string): string {
+  return absUrl(`/payments/${paymentId}/receipt`);
+}
+
+// ── Notifications ─────────────────────────────────────────────────
+export type Notification = { id: string; title: string; body: string; kind: string; read: boolean; createdAt: string };
+export async function listNotifications(): Promise<Notification[]> {
+  return listFrom(await http("/notifications"), "items", "data").map((v) => {
+    const d = asDict(v);
+    return {
+      id: asStr(d.id),
+      title: asStr(d.title),
+      body: asStr(d.body),
+      kind: asStr(d.kind),
+      read: Boolean(d.read),
+      createdAt: asStr(d.created_at),
+    };
+  });
+}
+export async function markNotificationRead(id: string): Promise<void> {
+  await http(`/notifications/${id}/read`, { method: "POST" });
+}
+export async function markAllNotificationsRead(): Promise<void> {
+  await http("/notifications/read-all", { method: "POST" });
+}
+export async function getUnreadCount(): Promise<number> {
+  const d = asDict(await http("/notifications/unread-count"));
+  return asNum(d.count);
 }
 
 // ── helpers ───────────────────────────────────────────────────────

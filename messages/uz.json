@@ -1675,7 +1675,10 @@
       "roleAdvocate": "Advokat",
       "loadError": "Ma'lumot yuklanmadi",
       "loadErrorText": "Internet aloqasini tekshirib, qayta urinib ko'ring.",
-      "admin": "Admin"
+      "admin": "Admin",
+      "accepting": "Qabul qilinmoqda…",
+      "accepted": "Qabul qilindi",
+      "declined": "Rad etildi"
     },
     "sidebar": {
       "lawyer": {
@@ -1688,7 +1691,8 @@
         "chat": "Xavfsiz chat",
         "ai": "AI Yordamchi",
         "promotion": "Targ'ibot",
-        "subscription": "Obuna"
+        "subscription": "Obuna",
+        "notifications": "Bildirishnomalar"
       },
       "client": {
         "dashboard": "Boshqaruv paneli",
@@ -1701,7 +1705,8 @@
         "profile": "Profil",
         "services": "Xizmatlar",
         "documents": "Hujjatlar",
-        "messages": "Xabarlar"
+        "messages": "Xabarlar",
+        "notifications": "Bildirishnomalar"
       },
       "advocate": {
         "dashboard": "Boshqaruv paneli",
@@ -1711,7 +1716,8 @@
         "promotion": "Targ'ibot",
         "subscription": "Obuna",
         "messages": "Xabarlar",
-        "organization": "Tashkilot"
+        "organization": "Tashkilot",
+        "notifications": "Bildirishnomalar"
       }
     },
     "lawyer": {
@@ -1757,7 +1763,20 @@
         "meeting": "Uchrashuv",
         "deadline": "Muddat",
         "empty": "Hozircha tadbir yo'q",
-        "emptyText": "Sud majlislari, uchrashuvlar va muddatlar shu yerda ko'rinadi."
+        "emptyText": "Sud majlislari, uchrashuvlar va muddatlar shu yerda ko'rinadi.",
+        "add": "Voqea qo‘shish",
+        "addTitle": "Yangi voqea",
+        "save": "Saqlash",
+        "saving": "Saqlanmoqda…",
+        "created": "Voqea qo‘shildi.",
+        "error": "Xatolik yuz berdi.",
+        "remove": "O‘chirish",
+        "typeLabel": "Turi",
+        "titleLabel": "Nomi",
+        "titlePh": "Voqea nomi",
+        "dateLabel": "Sana va vaqt",
+        "locationLabel": "Manzil",
+        "locationPh": "Sud, ofis…"
       },
       "clients": {
         "title": "Mijozlar",
@@ -1867,7 +1886,8 @@
         "date": "Sana",
         "amount": "Summa",
         "empty": "Hozircha to'lov yo'q",
-        "emptyText": "To'lovlar va cheklar shu yerda ko'rinadi."
+        "emptyText": "To'lovlar va cheklar shu yerda ko'rinadi.",
+        "receipt": "Chek"
       },
       "gifts": {
         "title": "Sovg'alar",
@@ -1880,7 +1900,14 @@
         "activated": "Faollashtirilgan",
         "pending": "Kutilmoqda",
         "empty": "Hozircha sovg'a yo'q",
-        "emptyText": "Yuborgan yoki olgan sovg'a obunalaringiz shu yerda ko'rinadi."
+        "emptyText": "Yuborgan yoki olgan sovg'a obunalaringiz shu yerda ko'rinadi.",
+        "plan": "Tarif",
+        "message": "Xabar",
+        "messagePh": "Qabul qiluvchiga ixtiyoriy xabar",
+        "send": "Sovg‘a yuborish",
+        "sending": "Yuborilmoqda…",
+        "success": "Sovg‘a yuborildi.",
+        "error": "Maydonlarni tekshiring."
       },
       "profile": {
         "title": "Profil",
@@ -1895,7 +1922,28 @@
         "card": "Bank kartasi",
         "addFamily": "Oila a'zosini qo'shish",
         "noFamily": "Oila a'zolari qo'shilmagan",
-        "subActive": "Standard · faol"
+        "subActive": "Standard · faol",
+        "edit": "Tahrirlash",
+        "notSet": "Kiritilmagan",
+        "cards": "To‘lov usullari",
+        "addCard": "Karta qo‘shish",
+        "noCards": "Saqlangan kartalar yo‘q.",
+        "defaultCard": "Asosiy",
+        "editTitle": "Profilni tahrirlash",
+        "namePh": "Ismingiz",
+        "emailPh": "you@email.com",
+        "saved": "Saqlandi.",
+        "error": "Xatolik yuz berdi.",
+        "saving": "Saqlanmoqda…",
+        "save": "Saqlash",
+        "memberName": "F.I.Sh.",
+        "memberPhone": "Telefon",
+        "relation": "Aloqadorlik",
+        "relationPh": "Turmush o‘rtoq, farzand…",
+        "cardBrand": "Karta turi",
+        "cardLast4": "Oxirgi 4 raqam",
+        "cardExpires": "Amal muddati",
+        "remove": "O‘chirish"
       },
       "journey": {
         "title": "Sizning yuridik yo'lingiz",
@@ -2056,6 +2104,25 @@
       "addMember": "A'zo qo'shish",
       "noMembers": "Hozircha a'zo yo'q",
       "memberAdded": "A'zo qo'shildi."
+    },
+    "stats": {
+      "activeCases": "Faol ishlar",
+      "openOrders": "Ochiq so‘rovlar",
+      "unreadMessages": "O‘qilmagan xabarlar",
+      "deadlinesToday": "Bugungi muddatlar",
+      "earnings": "Bu oy",
+      "profileViews": "Profil ko‘rishlari",
+      "searchAppearances": "Qidiruvdagi ko‘rinishlar",
+      "profileClicks": "Profil bosishlari",
+      "contactRequests": "Aloqa so‘rovlari",
+      "rating": "Reyting",
+      "responseRate": "Javob darajasi"
+    },
+    "notifications": {
+      "title": "Bildirishnomalar",
+      "markAll": "Barchasini o‘qilgan",
+      "empty": "Bildirishnomalar yo‘q",
+      "emptyText": "Ishlaringiz va to‘lovlaringiz haqidagi yangiliklar shu yerda ko‘rinadi."
     }
   },
   "notFound": {

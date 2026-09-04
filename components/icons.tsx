@@ -385,6 +385,13 @@ export const IconLanguage = (p: P) => (
   </svg>
 );
 
+export const IconBell = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+    <path d="M13.7 21a2 2 0 01-3.4 0" />
+  </svg>
+);
+
 export const IconLock = (p: P) => (
   <svg {...base} {...p}>
     <rect x="4" y="11" width="16" height="10" rx="2.5" />

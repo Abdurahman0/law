@@ -1,0 +1,88 @@
+"use client";
+
+import type { ReactNode } from "react";
+import { useTranslations } from "next-intl";
+import { getLawyerStats, type SellerStats } from "@/lib/services/backend";
+import { useResourceOne } from "@/lib/useResource";
+import { Skeleton, EmptyState } from "./DataState";
+import {
+  IconBriefcase,
+  IconFileText,
+  IconChat,
+  IconClock,
+  IconCard,
+  IconEye,
+  IconSearch,
+  IconTarget,
+  IconStar,
+  IconTrendingUp,
+} from "@/components/icons";
+
+type Fmt = "int" | "som" | "rating" | "percent";
+type Metric = { key: string; from: "workload" | "finance" | "performance"; label: string; Icon: (p: { className?: string }) => ReactNode; fmt: Fmt };
+
+const num = (o: Record<string, unknown>, k: string): number => {
+  const x = o?.[k];
+  const n = typeof x === "number" ? x : parseFloat(String(x));
+  return Number.isFinite(n) ? n : 0;
+};
+const som = (n: number) => n.toLocaleString("ru-RU").replace(/,/g, " ");
+
+const WORKLOAD: Metric[] = [
+  { key: "active_cases", from: "workload", label: "activeCases", Icon: IconBriefcase, fmt: "int" },
+  { key: "open_orders", from: "workload", label: "openOrders", Icon: IconFileText, fmt: "int" },
+  { key: "unread_messages", from: "workload", label: "unreadMessages", Icon: IconChat, fmt: "int" },
+  { key: "deadlines_today", from: "workload", label: "deadlinesToday", Icon: IconClock, fmt: "int" },
+  { key: "earnings_month", from: "finance", label: "earnings", Icon: IconCard, fmt: "som" },
+];
+const PERFORMANCE: Metric[] = [
+  { key: "profile_views", from: "performance", label: "profileViews", Icon: IconEye, fmt: "int" },
+  { key: "search_appearances", from: "performance", label: "searchAppearances", Icon: IconSearch, fmt: "int" },
+  { key: "profile_clicks", from: "performance", label: "profileClicks", Icon: IconTarget, fmt: "int" },
+  { key: "contact_requests", from: "performance", label: "contactRequests", Icon: IconChat, fmt: "int" },
+  { key: "rating", from: "performance", label: "rating", Icon: IconStar, fmt: "rating" },
+  { key: "response_rate", from: "performance", label: "responseRate", Icon: IconTrendingUp, fmt: "percent" },
+];
+
+export default function StatGrid({
+  variant,
+  emptyTitle,
+  emptyText,
+}: {
+  variant: "workload" | "performance";
+  emptyTitle: string;
+  emptyText: string;
+}) {
+  const t = useTranslations("portal.stats");
+  const res = useResourceOne<SellerStats>(getLawyerStats, []);
+  const metrics = variant === "workload" ? WORKLOAD : PERFORMANCE;
+
+  if (res.status === "loading") return <Skeleton rows={2} />;
+  if (res.status === "error" || !res.data) {
+    return <EmptyState icon={<IconTrendingUp />} title={emptyTitle} text={emptyText} />;
+  }
+  const s = res.data;
+
+  function value(m: Metric): string {
+    const n = num(s[m.from], m.key);
+    if (m.fmt === "som") {
+      const cur = String((s.finance.currency as string) || "UZS");
+      return `${som(n)} ${cur}`;
+    }
+    if (m.fmt === "rating") return n ? n.toFixed(1) : "—";
+    if (m.fmt === "percent") return `${Math.round(n <= 1 ? n * 100 : n)}%`;
+    return String(n);
+  }
+
+  return (
+    <div className="amet">
+      {metrics.map((m) => (
+        <div className="amet__c" key={m.key}>
+          <span className="amet__i"><m.Icon /></span>
+          <b>{value(m)}</b>
+          <span className="amet__l">{t(m.label)}</span>
+        </div>
+      ))}
+    </div>
+  );
+}

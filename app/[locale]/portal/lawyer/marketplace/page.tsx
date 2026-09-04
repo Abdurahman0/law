@@ -4,11 +4,11 @@ import { useTranslations } from "next-intl";
 import { listOrders } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
+import OrderActions from "@/components/portal/OrderActions";
 import { IconBriefcase, IconMapPin, IconClock } from "@/components/icons";
 
 export default function LawyerMarketplace() {
   const t = useTranslations("portal.lawyer.marketplace");
-  const tc = useTranslations("portal.common");
   const res = useResource(listOrders, []);
 
   return (
@@ -34,10 +34,7 @@ export default function LawyerMarketplace() {
                 <IconMapPin />
                 {[o.region, o.budget].filter(Boolean).join(" · ")}
               </small>
-              <div className="pcase__act">
-                <button className="btn btn--pri btn--sm" type="button">{tc("accept")}</button>
-                <button className="btn btn--line btn--sm" type="button">{tc("decline")}</button>
-              </div>
+              <OrderActions orderId={o.id} />
             </div>
           ))}
         </div>

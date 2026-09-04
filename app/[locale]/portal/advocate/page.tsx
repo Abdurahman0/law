@@ -6,12 +6,12 @@ import { useAuth } from "@/lib/auth";
 import { listOrders } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
+import StatGrid from "@/components/portal/StatGrid";
 import {
   IconBolt,
   IconArrowRight,
   IconClock,
   IconMapPin,
-  IconTrendingUp,
   IconBriefcase,
 } from "@/components/icons";
 
@@ -48,7 +48,7 @@ export default function AdvocateDashboard() {
         <div className="ppanel__h">
           <b>{t("performance")}</b>
         </div>
-        <EmptyState icon={<IconTrendingUp />} title={t("performanceEmpty")} text={t("performanceEmptyText")} />
+        <StatGrid variant="performance" emptyTitle={t("performanceEmpty")} emptyText={t("performanceEmptyText")} />
       </div>
 
       <div className="pgrid2">

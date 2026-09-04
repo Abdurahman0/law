@@ -931,7 +931,8 @@ body:has(.plogin) .fab{display:none}
 .pcase__h{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .pcase__id{font-size:.74rem;font-weight:800;color:var(--b600);letter-spacing:.02em}
 .pcase p{margin:0;font-size:.9rem;color:var(--ink);line-height:1.5}
-.pcase small{font-size:.8rem;color:var(--gray2)}
+.pcase small{font-size:.8rem;color:var(--gray2);display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.pcase small svg{width:13px;height:13px;stroke:var(--gray2);flex:none}
 .pcase__act{display:flex;gap:8px;flex-wrap:wrap}
 
 /* generic list rows */
@@ -1769,3 +1770,47 @@ body:has(.schat) .fab{display:none}
 .pverify{display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--b50);border-radius:14px;padding:14px 16px;margin-top:14px;flex-wrap:wrap}
 .pverify b{display:block;font-size:.95rem}
 .pverify span{font-size:.82rem;color:var(--gray)}
+
+/* ── Endpoint wiring: order actions, clients, calendar, notifications ── */
+.pcase__done{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:700;padding:8px 14px;border-radius:var(--pill)}
+.pcase__done svg{width:15px;height:15px}
+.pcase__done--accept{color:var(--ok);background:#E1F6EE}
+.pcase__done--decline{color:var(--gray2);background:var(--b50)}
+.creq__badge--ok{color:var(--ok);background:#E1F6EE}
+.pclients{display:flex;flex-direction:column;gap:8px}
+.pclient{display:flex;align-items:center;gap:13px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--rl);background:#fff}
+.pclient__av{width:40px;height:40px;border-radius:50%;flex:none;background:var(--b100);color:var(--b600);display:grid;place-items:center;font-weight:800;font-size:.85rem}
+.pclient__m{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.pclient__m b{font-weight:700}
+.pclient__m span{font-size:.84rem;color:var(--gray)}
+.pclient__conflict{display:inline-flex;align-items:center;gap:5px;font-size:.76rem;font-style:normal;color:#C0392B;margin-top:3px}
+.pclient__conflict svg{width:13px;height:13px;stroke:#C0392B}
+.pclient__badge{font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:var(--pill);flex:none}
+.pclient__badge--warn{color:#C0392B;background:#FDECEC}
+.calist{display:flex;flex-direction:column;gap:8px}
+.calev{display:flex;align-items:center;gap:13px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--rl);background:#fff}
+.calev__type{font-size:.72rem;font-weight:700;padding:5px 11px;border-radius:var(--pill);flex:none;color:var(--b700);background:var(--b100)}
+.calev__type--hearing{color:#8A5A00;background:#FCEFD6}
+.calev__type--deadline{color:#C0392B;background:#FDECEC}
+.calev__type--meeting{color:var(--ok);background:#E1F6EE}
+.calev__m{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.calev__m b{font-weight:700}
+.calev__m span{font-size:.83rem;color:var(--gray);display:inline-flex;align-items:center;gap:5px;flex-wrap:wrap}
+.calev__m span svg{width:13px;height:13px;stroke:var(--gray2)}
+.calev__x{width:32px;height:32px;border-radius:9px;border:0;background:var(--b50);color:var(--gray2);cursor:pointer;display:grid;place-items:center;flex:none;transition:.15s}
+.calev__x:hover{background:#FDECEC;color:#C0392B}
+.calev__x svg{width:15px;height:15px}
+.ntlist{display:flex;flex-direction:column;gap:6px}
+.ntitem{display:flex;align-items:flex-start;gap:12px;padding:13px 14px;border:1px solid var(--line);border-radius:var(--rl);background:#fff;text-align:left;cursor:pointer;width:100%;transition:border-color .15s,background .15s}
+.ntitem:hover{border-color:var(--b300)}
+.ntitem--unread{background:var(--b50);border-color:var(--b200)}
+.ntitem__dot{width:9px;height:9px;border-radius:50%;background:transparent;margin-top:6px;flex:none}
+.ntitem--unread .ntitem__dot{background:var(--b600)}
+.ntitem__m{display:flex;flex-direction:column;gap:3px;min-width:0}
+.ntitem__m b{font-weight:700;font-size:.92rem}
+.ntitem__m span{font-size:.85rem;color:var(--gray);line-height:1.45}
+.ntitem__m em{font-style:normal;font-size:.74rem;color:var(--gray2)}
+.ptop__bell{position:relative;width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--gray);display:grid;place-items:center;cursor:pointer;transition:.15s;text-decoration:none}
+.ptop__bell:hover{border-color:var(--b300);color:var(--b600)}
+.ptop__bell svg{width:19px;height:19px}
+.ptop__badge{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#C0392B;color:#fff;font-size:.66rem;font-weight:800;display:grid;place-items:center;border:2px solid #fff}

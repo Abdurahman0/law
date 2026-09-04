@@ -6,6 +6,7 @@ import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { useAuth, hasAdminAccess, type Role } from "@/lib/auth";
 import { initials } from "@/lib/lawyers";
 import LanguageSwitcher from "../LanguageSwitcher";
+import NotificationBell from "./NotificationBell";
 import {
   IconLogo,
   IconGrid,
@@ -26,6 +27,7 @@ import {
   IconBolt,
   IconStar,
   IconBuilding,
+  IconBell,
 } from "../icons";
 
 type SvgC = ComponentType<{ className?: string }>;
@@ -39,6 +41,7 @@ const LAWYER_NAV: NavItem[] = [
   { href: "/portal/lawyer/clients", key: "clients", Icon: IconUsers },
   { href: "/portal/lawyer/documents", key: "documents", Icon: IconDocLines },
   { href: "/portal/lawyer/chat", key: "chat", Icon: IconChat },
+  { href: "/portal/lawyer/notifications", key: "notifications", Icon: IconBell },
   { href: "/portal/lawyer/ai", key: "ai", Icon: IconSparkle },
   { href: "/portal/lawyer/promotion", key: "promotion", Icon: IconBolt },
   { href: "/portal/lawyer/subscription", key: "subscription", Icon: IconStar },
@@ -49,6 +52,7 @@ const ADVOCATE_NAV: NavItem[] = [
   { href: "/portal/advocate/opportunities", key: "opportunities", Icon: IconBriefcase },
   { href: "/portal/advocate/cases", key: "cases", Icon: IconFileText },
   { href: "/portal/advocate/messages", key: "messages", Icon: IconChat },
+  { href: "/portal/advocate/notifications", key: "notifications", Icon: IconBell },
   { href: "/portal/advocate/organization", key: "organization", Icon: IconBuilding },
   { href: "/portal/advocate/profile", key: "profile", Icon: IconUser },
   { href: "/portal/advocate/promotion", key: "promotion", Icon: IconBolt },
@@ -61,6 +65,7 @@ const CLIENT_NAV: NavItem[] = [
   { href: "/portal/client/documents", key: "documents", Icon: IconDocLines },
   { href: "/portal/client/cases", key: "cases", Icon: IconFileText },
   { href: "/portal/client/messages", key: "messages", Icon: IconChat },
+  { href: "/portal/client/notifications", key: "notifications", Icon: IconBell },
   { href: "/portal/client/ai", key: "ai", Icon: IconSparkle },
   { href: "/portal/client/lawyers", key: "lawyers", Icon: IconUser },
   { href: "/portal/client/subscription", key: "subscription", Icon: IconShield },
@@ -159,6 +164,7 @@ export default function PortalShell({
           </button>
           <h1>{title}</h1>
           <div className="ptop__sp">
+            <NotificationBell role={role} />
             <LanguageSwitcher />
             <div className="ptop__user">
               <span className="ptop__av">{initials(session.name || "U")}</span>

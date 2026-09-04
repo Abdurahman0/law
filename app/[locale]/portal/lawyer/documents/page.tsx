@@ -1,10 +1,31 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { getDocumentTemplates } from "@/lib/services/backend";
+import { getDocumentTemplates, downloadTemplateFile } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
 import { IconFileText, IconDownload } from "@/components/icons";
+
+function DownloadBtn({ id, name }: { id: string; name: string }) {
+  const [busy, setBusy] = useState(false);
+  async function go() {
+    if (busy) return;
+    setBusy(true);
+    try {
+      await downloadTemplateFile(id, `${name || "template"}.pdf`);
+    } catch {
+      /* ignore */
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <button className="btn btn--line btn--sm" type="button" onClick={go} disabled={busy} aria-busy={busy}>
+      <IconDownload style={{ width: 15, height: 15 }} />
+    </button>
+  );
+}
 
 export default function LawyerDocuments() {
   const t = useTranslations("portal.lawyer.documents");
@@ -34,9 +55,7 @@ export default function LawyerDocuments() {
                 <span>{[d.category, d.language].filter(Boolean).join(" · ")}</span>
               </div>
               <div style={{ display: "flex", gap: 8, flex: "none" }}>
-                <button className="btn btn--line btn--sm" type="button">
-                  <IconDownload style={{ width: 15, height: 15 }} />
-                </button>
+                <DownloadBtn id={d.id} name={d.name} />
               </div>
             </div>
           ))}

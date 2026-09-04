@@ -1,59 +1,326 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/lib/auth";
+import {
+  getClientProfile,
+  updateClientProfile,
+  listFamilyMembers,
+  addFamilyMember,
+  deleteFamilyMember,
+  listPaymentMethods,
+  addPaymentMethod,
+  deletePaymentMethod,
+} from "@/lib/services/backend";
+import { useResource, useResourceOne } from "@/lib/useResource";
+import { Skeleton } from "@/components/portal/DataState";
+import { Notice } from "@/components/admin/AdminBits";
+import Modal from "@/components/admin/Modal";
+import Select from "@/components/Select";
+import { IconEdit, IconPlus, IconClose, IconCard } from "@/components/icons";
 
 export default function ClientProfile() {
   const t = useTranslations("portal.client.profile");
-  const { session } = useAuth();
+  const { session, update } = useAuth();
+  const [key, setKey] = useState(0);
+  const reload = () => setKey((k) => k + 1);
+  const prof = useResourceOne(getClientProfile, [key]);
+  const family = useResource(() => listFamilyMembers(), [key]);
+  const methods = useResource(() => listPaymentMethods(), [key]);
+
+  const [editOpen, setEditOpen] = useState(false);
+  const [famOpen, setFamOpen] = useState(false);
+  const [cardOpen, setCardOpen] = useState(false);
+
+  const p = prof.data;
+  const name = p?.name || session?.name || "—";
+  const phone = p?.phone || session?.phone || "—";
+  const email = p?.email || "";
 
   return (
     <>
       <div className="ppanel">
         <div className="ppanel__h">
           <b>{t("personal")}</b>
+          <button className="btn btn--soft btn--sm" type="button" onClick={() => setEditOpen(true)}>
+            <IconEdit />
+            {t("edit")}
+          </button>
         </div>
-        <div className="pkv">
-          <div className="pkv__i">
-            <label>{t("name")}</label>
-            <b>{session?.name ?? "—"}</b>
+        {prof.status === "loading" ? (
+          <Skeleton rows={2} />
+        ) : (
+          <div className="pkv">
+            <div className="pkv__i"><label>{t("name")}</label><b>{name}</b></div>
+            <div className="pkv__i"><label>{t("phone")}</label><b>{phone}</b></div>
+            <div className="pkv__i"><label>{t("email")}</label><b>{email || t("notSet")}</b></div>
+            <div className="pkv__i"><label>{t("card")}</label><b>{methods.data[0] ? `•••• ${methods.data[0].last4}` : t("notSet")}</b></div>
           </div>
-          <div className="pkv__i">
-            <label>{t("phone")}</label>
-            <b>{session?.phone || "—"}</b>
-          </div>
-          <div className="pkv__i">
-            <label>{t("email")}</label>
-            <b>—</b>
-          </div>
-          <div className="pkv__i">
-            <label>{t("card")}</label>
-            <b>—</b>
-          </div>
-        </div>
+        )}
       </div>
 
       <div className="pgrid2">
         <div className="ppanel">
           <div className="ppanel__h">
             <b>{t("family")}</b>
-            <button className="btn btn--soft btn--sm" type="button">
+            <button className="btn btn--soft btn--sm" type="button" onClick={() => setFamOpen(true)}>
+              <IconPlus />
               {t("addFamily")}
             </button>
           </div>
-          <p style={{ margin: 0, color: "var(--gray2)", fontSize: ".88rem" }}>
-            {t("noFamily")}
-          </p>
+          {family.status === "loading" ? (
+            <Skeleton rows={2} />
+          ) : !family.data.length ? (
+            <p style={{ margin: 0, color: "var(--gray2)", fontSize: ".88rem" }}>{t("noFamily")}</p>
+          ) : (
+            <div className="alist">
+              {family.data.map((m) => (
+                <div className="creq" key={m.id}>
+                  <span className="creq__st" />
+                  <div className="creq__m">
+                    <b>{m.name}</b>
+                    <span>{[m.phone, m.relation].filter(Boolean).join(" · ")}</span>
+                  </div>
+                  <button
+                    className="calev__x"
+                    type="button"
+                    aria-label={t("remove")}
+                    onClick={() => deleteFamilyMember(m.id).then(reload).catch(() => {})}
+                  >
+                    <IconClose />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+
         <div className="ppanel">
           <div className="ppanel__h">
-            <b>{t("subscription")}</b>
+            <b>{t("cards")}</b>
+            <button className="btn btn--soft btn--sm" type="button" onClick={() => setCardOpen(true)}>
+              <IconPlus />
+              {t("addCard")}
+            </button>
           </div>
-          <p style={{ margin: 0, color: "var(--gray)", fontSize: ".9rem" }}>
-            {t("subActive")}
-          </p>
+          {methods.status === "loading" ? (
+            <Skeleton rows={2} />
+          ) : !methods.data.length ? (
+            <p style={{ margin: 0, color: "var(--gray2)", fontSize: ".88rem" }}>{t("noCards")}</p>
+          ) : (
+            <div className="alist">
+              {methods.data.map((m) => (
+                <div className="creq" key={m.id}>
+                  <span className="creq__st" />
+                  <div className="creq__m">
+                    <b>{[m.brand || "card", `•••• ${m.last4}`].join(" · ")}</b>
+                    <span>{m.expires}{m.isDefault ? ` · ${t("defaultCard")}` : ""}</span>
+                  </div>
+                  <button
+                    className="calev__x"
+                    type="button"
+                    aria-label={t("remove")}
+                    onClick={() => deletePaymentMethod(m.id).then(reload).catch(() => {})}
+                  >
+                    <IconClose />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
+
+      <div className="ppanel">
+        <div className="ppanel__h">
+          <b>{t("subscription")}</b>
+        </div>
+        <p style={{ margin: 0, color: "var(--gray)", fontSize: ".9rem", display: "flex", alignItems: "center", gap: 8 }}>
+          <IconCard style={{ width: 16, height: 16 }} />
+          {p?.subscription
+            ? `${p.subscription.planName} · ${p.subscription.status}`
+            : t("subActive")}
+        </p>
+      </div>
+
+      <EditModal
+        open={editOpen}
+        onClose={() => setEditOpen(false)}
+        initial={{ name: p?.name || session?.name || "", email }}
+        onSaved={(np) => {
+          if (np.name && session) update({ name: np.name });
+          reload();
+        }}
+      />
+      <FamilyModal open={famOpen} onClose={() => setFamOpen(false)} onSaved={reload} />
+      <CardModal open={cardOpen} onClose={() => setCardOpen(false)} onSaved={reload} />
     </>
+  );
+}
+
+function EditModal({
+  open,
+  onClose,
+  initial,
+  onSaved,
+}: {
+  open: boolean;
+  onClose: () => void;
+  initial: { name: string; email: string };
+  onSaved: (p: { name: string; email: string }) => void;
+}) {
+  const t = useTranslations("portal.client.profile");
+  const [name, setName] = useState(initial.name);
+  const [email, setEmail] = useState(initial.email);
+  const [busy, setBusy] = useState(false);
+  const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    if (busy) return;
+    setBusy(true);
+    setNote(null);
+    try {
+      await updateClientProfile({ name: name.trim(), email: email.trim() });
+      setNote({ ok: true, msg: t("saved") });
+      onSaved({ name: name.trim(), email: email.trim() });
+      setTimeout(onClose, 800);
+    } catch {
+      setNote({ ok: false, msg: t("error") });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <Modal open={open} onClose={onClose} title={t("editTitle")}>
+      <form className="cform" style={{ maxWidth: "none" }} onSubmit={submit}>
+        <div>
+          <label>{t("name")}</label>
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("namePh")} />
+        </div>
+        <div>
+          <label>{t("email")}</label>
+          <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t("emailPh")} type="email" />
+        </div>
+        {note ? <Notice ok={note.ok} msg={note.msg} /> : null}
+        <button className="btn btn--pri btn--full" type="submit" disabled={busy}>
+          {busy ? t("saving") : t("save")}
+        </button>
+      </form>
+    </Modal>
+  );
+}
+
+function FamilyModal({ open, onClose, onSaved }: { open: boolean; onClose: () => void; onSaved: () => void }) {
+  const t = useTranslations("portal.client.profile");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [relation, setRelation] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    if (busy || !name.trim() || !phone.trim()) {
+      setNote({ ok: false, msg: t("error") });
+      return;
+    }
+    setBusy(true);
+    setNote(null);
+    try {
+      await addFamilyMember({ name: name.trim(), phone: phone.trim(), relation: relation.trim() || undefined });
+      setNote({ ok: true, msg: t("saved") });
+      setName("");
+      setPhone("");
+      setRelation("");
+      onSaved();
+      setTimeout(onClose, 800);
+    } catch {
+      setNote({ ok: false, msg: t("error") });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <Modal open={open} onClose={onClose} title={t("addFamily")}>
+      <form className="cform" style={{ maxWidth: "none" }} onSubmit={submit}>
+        <div>
+          <label>{t("memberName")}</label>
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("namePh")} />
+        </div>
+        <div>
+          <label>{t("memberPhone")}</label>
+          <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+998 __ ___ __ __" type="tel" />
+        </div>
+        <div>
+          <label>{t("relation")}</label>
+          <input value={relation} onChange={(e) => setRelation(e.target.value)} placeholder={t("relationPh")} />
+        </div>
+        {note ? <Notice ok={note.ok} msg={note.msg} /> : null}
+        <button className="btn btn--pri btn--full" type="submit" disabled={busy}>
+          {busy ? t("saving") : t("save")}
+        </button>
+      </form>
+    </Modal>
+  );
+}
+
+function CardModal({ open, onClose, onSaved }: { open: boolean; onClose: () => void; onSaved: () => void }) {
+  const t = useTranslations("portal.client.profile");
+  const [brand, setBrand] = useState("uzcard");
+  const [last4, setLast4] = useState("");
+  const [expires, setExpires] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
+
+  const brandOpts = ["uzcard", "humo", "visa", "mastercard"].map((v) => ({ value: v, label: v.toUpperCase() }));
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    const l4 = last4.replace(/\D/g, "").slice(-4);
+    if (busy || l4.length !== 4) {
+      setNote({ ok: false, msg: t("error") });
+      return;
+    }
+    setBusy(true);
+    setNote(null);
+    try {
+      await addPaymentMethod({ brand, last4: l4, expires: expires.trim() || undefined });
+      setNote({ ok: true, msg: t("saved") });
+      setLast4("");
+      setExpires("");
+      onSaved();
+      setTimeout(onClose, 800);
+    } catch {
+      setNote({ ok: false, msg: t("error") });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <Modal open={open} onClose={onClose} title={t("addCard")}>
+      <form className="cform" style={{ maxWidth: "none" }} onSubmit={submit}>
+        <div>
+          <label>{t("cardBrand")}</label>
+          <Select value={brand} onChange={setBrand} options={brandOpts} ariaLabel={t("cardBrand")} />
+        </div>
+        <div>
+          <label>{t("cardLast4")}</label>
+          <input value={last4} onChange={(e) => setLast4(e.target.value)} placeholder="1234" inputMode="numeric" maxLength={4} />
+        </div>
+        <div>
+          <label>{t("cardExpires")}</label>
+          <input value={expires} onChange={(e) => setExpires(e.target.value)} placeholder="MM/YY" maxLength={5} />
+        </div>
+        {note ? <Notice ok={note.ok} msg={note.msg} /> : null}
+        <button className="btn btn--pri btn--full" type="submit" disabled={busy}>
+          {busy ? t("saving") : t("save")}
+        </button>
+      </form>
+    </Modal>
   );
 }

@@ -5,7 +5,9 @@ import { Link } from "@/i18n/navigation";
 import { listOrders } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
-import { IconTrendingUp, IconBriefcase, IconClock, IconMapPin } from "@/components/icons";
+import StatGrid from "@/components/portal/StatGrid";
+import OrderActions from "@/components/portal/OrderActions";
+import { IconBriefcase, IconClock, IconMapPin } from "@/components/icons";
 
 export default function LawyerDashboard() {
   const t = useTranslations("portal.lawyer.dashboard");
@@ -18,7 +20,7 @@ export default function LawyerDashboard() {
         <div className="ppanel__h">
           <b>{t("today")}</b>
         </div>
-        <EmptyState icon={<IconTrendingUp />} title={t("kpisEmpty")} text={t("kpisEmptyText")} />
+        <StatGrid variant="workload" emptyTitle={t("kpisEmpty")} emptyText={t("kpisEmptyText")} />
       </div>
 
       <div className="ppanel">
@@ -52,10 +54,7 @@ export default function LawyerDashboard() {
                     </>
                   ) : null}
                 </small>
-                <div className="pcase__act">
-                  <button className="btn btn--pri btn--sm" type="button">{tc("accept")}</button>
-                  <button className="btn btn--line btn--sm" type="button">{tc("decline")}</button>
-                </div>
+                <OrderActions orderId={o.id} />
               </div>
             ))}
           </div>

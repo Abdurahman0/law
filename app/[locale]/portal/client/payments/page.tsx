@@ -1,15 +1,13 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { listOrders } from "@/lib/services/backend";
+import { listPayments } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
-import { IconCard } from "@/components/icons";
+import { IconCard, IconDownload } from "@/components/icons";
 
-const som = (v: string) => {
-  const n = parseInt(v, 10);
-  return Number.isFinite(n) && n > 0 ? n.toLocaleString("ru-RU").replace(/,/g, " ") : v || "—";
-};
+const som = (n: number, cur: string) =>
+  n ? `${n.toLocaleString("ru-RU").replace(/,/g, " ")} ${cur}` : "—";
 const fmtDate = (s: string) => {
   if (!s) return "—";
   const d = new Date(s);
@@ -18,7 +16,7 @@ const fmtDate = (s: string) => {
 
 export default function ClientPayments() {
   const t = useTranslations("portal.client.payments");
-  const res = useResource(listOrders, []);
+  const res = useResource(listPayments, []);
 
   return (
     <div className="ppanel">
@@ -40,15 +38,26 @@ export default function ClientPayments() {
               <span>{t("amount")}</span>
               <span>{t("id")}</span>
             </div>
-            {res.data.map((o) => (
-              <div className="ptable__row" key={o.id}>
+            {res.data.map((p) => (
+              <div className="ptable__row" key={p.id}>
                 <span data-l={t("what")}>
-                  <b>{o.title || o.serviceName || "—"}</b>
+                  <b>{p.description || p.kind || "—"}</b>
                 </span>
-                <span data-l={t("date")}>{fmtDate(o.createdAt)}</span>
-                <span data-l={t("amount")}>{som(o.budget)}</span>
-                <span data-l={t("id")}>
-                  <span className="creq__badge">{o.paymentStatus || o.status || "—"}</span>
+                <span data-l={t("date")}>{fmtDate(p.createdAt)}</span>
+                <span data-l={t("amount")}>{som(p.amount, p.currency)}</span>
+                <span data-l={t("id")} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span className={`creq__badge${p.status === "paid" ? " creq__badge--ok" : ""}`}>{p.status || "—"}</span>
+                  {p.receiptUrl ? (
+                    <a
+                      className="btn btn--line btn--sm"
+                      href={p.receiptUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={t("receipt")}
+                    >
+                      <IconDownload style={{ width: 14, height: 14 }} />
+                    </a>
+                  ) : null}
                 </span>
               </div>
             ))}

@@ -1669,7 +1669,10 @@
       "roleAdvocate": "Advocate",
       "loadError": "Couldn't load data",
       "loadErrorText": "Please check your connection and try again.",
-      "admin": "Admin"
+      "admin": "Admin",
+      "accepting": "Accepting…",
+      "accepted": "Accepted",
+      "declined": "Declined"
     },
     "sidebar": {
       "lawyer": {
@@ -1682,7 +1685,8 @@
         "chat": "Secure Chat",
         "ai": "AI Assistant",
         "promotion": "Promotion",
-        "subscription": "Subscription"
+        "subscription": "Subscription",
+        "notifications": "Notifications"
       },
       "client": {
         "dashboard": "Dashboard",
@@ -1695,7 +1699,8 @@
         "profile": "Profile",
         "services": "Services",
         "documents": "Documents",
-        "messages": "Messages"
+        "messages": "Messages",
+        "notifications": "Notifications"
       },
       "advocate": {
         "dashboard": "Dashboard",
@@ -1705,7 +1710,8 @@
         "promotion": "Promotion",
         "subscription": "Subscription",
         "messages": "Messages",
-        "organization": "Organization"
+        "organization": "Organization",
+        "notifications": "Notifications"
       }
     },
     "lawyer": {
@@ -1751,7 +1757,20 @@
         "meeting": "Meeting",
         "deadline": "Deadline",
         "empty": "No events yet",
-        "emptyText": "Hearings, meetings and deadlines will appear here."
+        "emptyText": "Hearings, meetings and deadlines will appear here.",
+        "add": "Add event",
+        "addTitle": "New event",
+        "save": "Save",
+        "saving": "Saving…",
+        "created": "Event added.",
+        "error": "Something went wrong.",
+        "remove": "Remove",
+        "typeLabel": "Type",
+        "titleLabel": "Title",
+        "titlePh": "Event title",
+        "dateLabel": "Date & time",
+        "locationLabel": "Location",
+        "locationPh": "Court, office…"
       },
       "clients": {
         "title": "Clients",
@@ -1861,7 +1880,8 @@
         "date": "Date",
         "amount": "Amount",
         "empty": "No payments yet",
-        "emptyText": "Your payments and receipts will appear here."
+        "emptyText": "Your payments and receipts will appear here.",
+        "receipt": "Receipt"
       },
       "gifts": {
         "title": "Gifts",
@@ -1874,7 +1894,14 @@
         "activated": "Activated",
         "pending": "Pending",
         "empty": "No gifts yet",
-        "emptyText": "Gift subscriptions you send or receive will appear here."
+        "emptyText": "Gift subscriptions you send or receive will appear here.",
+        "plan": "Plan",
+        "message": "Message",
+        "messagePh": "Optional note to the recipient",
+        "send": "Send gift",
+        "sending": "Sending…",
+        "success": "Gift sent.",
+        "error": "Please check the fields."
       },
       "profile": {
         "title": "Profile",
@@ -1889,7 +1916,28 @@
         "card": "Bank card",
         "addFamily": "Add family member",
         "noFamily": "No family members added",
-        "subActive": "Standard · active"
+        "subActive": "Standard · active",
+        "edit": "Edit",
+        "notSet": "Not set",
+        "cards": "Payment methods",
+        "addCard": "Add card",
+        "noCards": "No saved cards yet.",
+        "defaultCard": "Default",
+        "editTitle": "Edit profile",
+        "namePh": "Your name",
+        "emailPh": "you@email.com",
+        "saved": "Saved.",
+        "error": "Something went wrong.",
+        "saving": "Saving…",
+        "save": "Save",
+        "memberName": "Full name",
+        "memberPhone": "Phone",
+        "relation": "Relation",
+        "relationPh": "Spouse, child…",
+        "cardBrand": "Card type",
+        "cardLast4": "Last 4 digits",
+        "cardExpires": "Expiry",
+        "remove": "Remove"
       },
       "journey": {
         "title": "Your legal journey",
@@ -2050,6 +2098,25 @@
       "addMember": "Add member",
       "noMembers": "No members yet",
       "memberAdded": "Member added."
+    },
+    "stats": {
+      "activeCases": "Active cases",
+      "openOrders": "Open requests",
+      "unreadMessages": "Unread messages",
+      "deadlinesToday": "Deadlines today",
+      "earnings": "This month",
+      "profileViews": "Profile views",
+      "searchAppearances": "Search appearances",
+      "profileClicks": "Profile clicks",
+      "contactRequests": "Contact requests",
+      "rating": "Rating",
+      "responseRate": "Response rate"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "markAll": "Mark all read",
+      "empty": "No notifications",
+      "emptyText": "Updates about your cases and payments will appear here."
     }
   },
   "notFound": {
