@@ -70,6 +70,7 @@ export default function LawyersSection({
     try {
       const r = await demoPrivateChat({ lawyer_user_id: l.userId });
       if (r.chatRoomId) router.push(`/portal/chat/${r.chatRoomId}`);
+      else if (r.paymentUrl) window.open(r.paymentUrl, "_blank");
     } catch {
       /* ignore */
     } finally {

@@ -49,23 +49,8 @@ function normAuth(v: unknown): AuthResult {
   };
 }
 
-export async function apiRegister(input: {
-  role: BackendRole;
-  name: string;
-  phone: string;
-  password: string;
-}): Promise<AuthResult> {
-  const data = await http("/auth/register", {
-    method: "POST",
-    body: JSON.stringify(input),
-  });
-  const res = normAuth(data);
-  // Some backends return only a success flag on register — log in for a token.
-  if (!res.token) return apiLogin(input.phone, input.password);
-  return res;
-}
-
-// Two-step OTP registration (LEXGO_FRONTEND_UPDATE.md).
+// Two-step OTP registration. /auth/register now behaves like /auth/register/start
+// (returns a verification + demo_otp); we use the explicit /start endpoint.
 export type RegisterStartResult = {
   verificationId: string;
   phone: string;
@@ -419,6 +404,7 @@ export async function createCase(input: Record<string, unknown>): Promise<unknow
 export type PurchaseResult = {
   paymentId: string;
   paymentStatus: string;
+  paymentUrl?: string;
   orderId?: string;
   chatRoomId?: string;
   subscriptionId?: string;
@@ -426,11 +412,13 @@ export type PurchaseResult = {
 function normPurchase(v: unknown): PurchaseResult {
   const d = asDict(v);
   const payment = asDict(d.payment);
-  const room = asDict(d.chat_room);
+  // Backend returns both `chat_room` and `room` for compatibility.
+  const room = asDict(d.chat_room ?? d.room);
   const order = asDict(d.order);
   return {
     paymentId: asStr(payment.id),
     paymentStatus: asStr(payment.status),
+    paymentUrl: asStr(payment.payment_url) || undefined,
     orderId: asStr(order.id) || undefined,
     chatRoomId: asStr(room.id) || undefined,
     subscriptionId: asStr(d.subscription_id) || undefined,
@@ -461,7 +449,14 @@ export async function demoPrivateChat(input: {
   return normPurchase(
     await http("/payments/demo-private-chat", {
       method: "POST",
-      body: JSON.stringify({ amount: 0, provider: "demo_payme", title: "Private chat", ...input }),
+      body: JSON.stringify({
+        amount: 10000,
+        provider: "demo_payme",
+        title: "Private chat",
+        // send both keys — backend accepts either
+        seller_user_id: input.lawyer_user_id,
+        ...input,
+      }),
     }),
   );
 }

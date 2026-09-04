@@ -67,6 +67,7 @@ export default function ClientServices() {
       setBuying(false);
       setOrder(null);
       if (r.chatRoomId) router.push(`/portal/chat/${r.chatRoomId}`);
+      else if (r.paymentUrl) window.open(r.paymentUrl, "_blank");
       else router.push("/portal/client/cases");
     } catch {
       setBuying(false);

@@ -22,7 +22,8 @@ export default function PlansPanel() {
     setBusy(plan.id);
     setDone(null);
     try {
-      await demoPlanPurchase(plan.id);
+      const r = await demoPlanPurchase(plan.id);
+      if (r.paymentUrl) window.open(r.paymentUrl, "_blank");
       setDone(plan.name);
     } catch {
       /* ignore */
