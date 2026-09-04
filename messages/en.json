@@ -1691,7 +1691,8 @@
         "subscription": "Subscription",
         "gifts": "Gifts",
         "ai": "LexGo.AI",
-        "profile": "Profile"
+        "profile": "Profile",
+        "services": "Services"
       },
       "advocate": {
         "dashboard": "Dashboard",
@@ -1896,6 +1897,25 @@
         "track": "Track my request",
         "askAi": "Ask LexGo AI",
         "upload": "Upload a document"
+      },
+      "services": {
+        "title": "Order a service",
+        "lead": "Browse the LexGo catalog, pick a specialist and start.",
+        "search": "Search services",
+        "all": "All",
+        "empty": "No services found",
+        "emptyText": "Try another category or search.",
+        "som": "so'm",
+        "byRequest": "By request",
+        "orderTitle": "Order service",
+        "price": "Price",
+        "seller": "Specialist",
+        "selectSeller": "Select a specialist",
+        "noSellers": "No specialists available for this service yet.",
+        "buy": "Buy & start",
+        "buying": "Processing…",
+        "orderError": "Purchase failed. Try again.",
+        "orderNote": "A private, protected chat with your specialist opens after purchase."
       }
     },
     "advocate": {

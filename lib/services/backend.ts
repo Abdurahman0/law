@@ -152,10 +152,12 @@ function normLawyer(v: unknown): BackendLawyer {
 export async function listLawyers(filters?: {
   region?: string;
   specialization?: string;
+  service_id?: string;
 }): Promise<BackendLawyer[]> {
   const qs = new URLSearchParams();
   if (filters?.region) qs.set("region", filters.region);
   if (filters?.specialization) qs.set("specialization", filters.specialization);
+  if (filters?.service_id) qs.set("service_id", filters.service_id);
   const q = qs.toString();
   const data = await http(`/lawyers${q ? `?${q}` : ""}`);
   return listFrom(data, "lawyers", "items", "data").map(normLawyer);

@@ -1681,3 +1681,7 @@ body:has(.schat) .fab{display:none}
 .dbar{flex:1;min-width:16px;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
 .dbar__fill{width:100%;max-width:26px;background:var(--grad);border-radius:6px 6px 0 0;min-height:4px}
 .dbar__lbl{font-size:.62rem;color:var(--gray2);white-space:nowrap}
+
+.oprice{display:flex;justify-content:space-between;align-items:center;background:var(--b50);border-radius:14px;padding:14px 16px}
+.oprice b{font-family:var(--fd);font-size:1.2rem;color:var(--b600)}
+.oprice span{color:var(--gray);font-size:.88rem}

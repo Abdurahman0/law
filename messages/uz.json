@@ -1697,7 +1697,8 @@
         "subscription": "Obuna",
         "gifts": "Sovg'alar",
         "ai": "LexGo.AI",
-        "profile": "Profil"
+        "profile": "Profil",
+        "services": "Xizmatlar"
       },
       "advocate": {
         "dashboard": "Boshqaruv paneli",
@@ -1902,6 +1903,25 @@
         "track": "So'rovni kuzatish",
         "askAi": "LexGo AI'dan so'rash",
         "upload": "Hujjat yuklash"
+      },
+      "services": {
+        "title": "Xizmat buyurtma qilish",
+        "lead": "LexGo katalogini ko'ring, mutaxassis tanlang va boshlang.",
+        "search": "Xizmatlarni qidirish",
+        "all": "Barchasi",
+        "empty": "Xizmat topilmadi",
+        "emptyText": "Boshqa kategoriya yoki qidiruvni sinang.",
+        "som": "so'm",
+        "byRequest": "So'rov bo'yicha",
+        "orderTitle": "Xizmat buyurtmasi",
+        "price": "Narx",
+        "seller": "Mutaxassis",
+        "selectSeller": "Mutaxassisni tanlang",
+        "noSellers": "Bu xizmat uchun hozircha mutaxassis yo'q.",
+        "buy": "Sotib olish va boshlash",
+        "buying": "Amalga oshirilmoqda…",
+        "orderError": "Xarid amalga oshmadi. Qayta urining.",
+        "orderNote": "Xariddan so'ng mutaxassis bilan maxfiy, himoyalangan chat ochiladi."
       }
     },
     "advocate": {

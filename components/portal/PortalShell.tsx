@@ -54,6 +54,7 @@ const ADVOCATE_NAV: NavItem[] = [
 
 const CLIENT_NAV: NavItem[] = [
   { href: "/portal/client", key: "dashboard", Icon: IconGrid },
+  { href: "/portal/client/services", key: "services", Icon: IconBriefcase },
   { href: "/portal/client/cases", key: "cases", Icon: IconFileText },
   { href: "/portal/client/ai", key: "ai", Icon: IconSparkle },
   { href: "/portal/client/lawyers", key: "lawyers", Icon: IconUser },
