@@ -14,7 +14,6 @@ export default function LoginForm() {
   const { login } = useAuth();
   const router = useRouter();
   const [role, setRole] = useState<Role>("client");
-  const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState<string | null>(null);
@@ -33,7 +32,7 @@ export default function LoginForm() {
     try {
       const s = await login(p, password, {
         role,
-        name: name.trim() || t(`role${cap(role)}`),
+        name: t(`role${cap(role)}`),
       });
       router.replace(`/portal/${s.role}`);
     } catch {
@@ -62,28 +61,15 @@ export default function LoginForm() {
             <button
               key={r}
               type="button"
-              className={`prole${role === r ? " on" : ""}`}
+              className={`prole prole--slim${role === r ? " on" : ""}`}
               onClick={() => setRole(r)}
             >
               <b>{t(`role${cap(r)}`)}</b>
-              <span>{t(`role${cap(r)}Hint`)}</span>
             </button>
           ))}
         </div>
 
         <div className="cform" style={{ maxWidth: "none" }}>
-          <div>
-            <label htmlFor="l-name">
-              {t("name")} <span className="rf__opt">{t("nameOptional")}</span>
-            </label>
-            <input
-              id="l-name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder={t("namePh")}
-              autoComplete="name"
-            />
-          </div>
           <div>
             <label htmlFor="l-phone">{t("phone")}</label>
             <input
