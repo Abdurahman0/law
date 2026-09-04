@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { sendCode } from "@/lib/services/sms";
-import { IconPhone, IconSend } from "../icons";
+import { IconPhone, IconArrowRight } from "../icons";
 
 export default function PhoneStep({
   phone,
@@ -16,21 +15,15 @@ export default function PhoneStep({
   onSent: () => void;
 }) {
   const t = useTranslations("register.phone");
-  const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
-  async function submit() {
-    if (busy) return;
-    setErr(null);
-    setBusy(true);
-    const res = await sendCode(phone);
-    if (res.ok) {
-      setBusy(false);
-      onSent();
-    } else {
-      setBusy(false);
+  function submit() {
+    if (phone.replace(/\D/g, "").length < 9) {
       setErr(t("invalid"));
+      return;
     }
+    setErr(null);
+    onSent();
   }
 
   return (
@@ -58,23 +51,9 @@ export default function PhoneStep({
           />
         </div>
         {err ? <p className="rf__err">{err}</p> : null}
-        <button
-          className="btn btn--grad btn--full btn--lg"
-          type="button"
-          onClick={submit}
-          disabled={busy}
-        >
-          {busy ? (
-            <>
-              <span className="spin" />
-              {t("sending")}
-            </>
-          ) : (
-            <>
-              <IconSend />
-              {t("send")}
-            </>
-          )}
+        <button className="btn btn--grad btn--full btn--lg" type="button" onClick={submit}>
+          {t("continue")}
+          <IconArrowRight />
         </button>
       </div>
 

@@ -1,4 +1,5 @@
 export type Lawyer = {
+  userId?: string; // backend user id (for purchase/chat), when from the API
   name: string;
   regionKey: string; // key into enums.regions
   areaKey: string; // key into enums.areas

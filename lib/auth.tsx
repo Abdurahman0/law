@@ -14,8 +14,9 @@ import type { PlanTier, ProfessionalProfile, RegistrationDraft } from "./types";
 import { scoreCompleteness, registerAccount } from "./services/registration";
 import {
   apiLogin,
-  apiRegister,
   apiMe,
+  registerStart,
+  registerVerify,
   upsertMyLawyer,
   putMyServices,
   type BackendRole,
@@ -53,7 +54,12 @@ type AuthCtx = {
     password: string,
     fallback?: { role: Role; name: string },
   ) => Promise<Session>;
-  register: (draft: RegistrationDraft, password: string) => Promise<Session>;
+  startRegistration: (draft: RegistrationDraft) => Promise<{ verificationId: string; demoOtp: string }>;
+  register: (
+    draft: RegistrationDraft,
+    verificationId: string,
+    code: string,
+  ) => Promise<Session>;
   update: (patch: Partial<Session>) => void;
   logout: () => void;
 };
@@ -144,59 +150,64 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [persist],
   );
 
+  // Step 1: request an OTP (backend returns demo_otp until SMS is live).
+  const startRegistration = useCallback(async (draft: RegistrationDraft) => {
+    const role = (draft.accountType ?? "client") as Role;
+    try {
+      const r = await registerStart({
+        role: toBackendRole(role),
+        name: draft.profile.name,
+        phone: draft.phone,
+        password: draft.password,
+      });
+      return { verificationId: r.verificationId, demoOtp: r.demoOtp };
+    } catch (e) {
+      if (e instanceof ApiError && !isOffline(e)) throw e;
+      // Backend unreachable → offline demo OTP.
+      return { verificationId: "", demoOtp: "123456" };
+    }
+  }, []);
+
+  // Step 2: verify the OTP, create the session, then upsert the seller profile.
   const register = useCallback(
-    async (draft: RegistrationDraft, password: string) => {
+    async (draft: RegistrationDraft, verificationId: string, code: string) => {
       const role = (draft.accountType ?? "client") as Role;
       const completeness = scoreCompleteness(role, draft.profile);
-      try {
-        const { token, user } = await apiRegister({
-          role: toBackendRole(role),
-          name: draft.profile.name,
-          phone: draft.phone,
-          password,
-        });
-        setToken(token);
-        if (role !== "client") {
-          const sellerType = role === "lawyer" ? "yurist" : "advokat";
-          try {
-            await upsertMyLawyer(draft.profile, sellerType);
-            if (draft.profile.services.length) {
-              await putMyServices(draft.profile.services);
-            }
-          } catch {
-            /* profile upsert is best-effort */
-          }
-        }
-        const s: Session = {
-          role,
-          name: user.name || draft.profile.name,
-          phone: user.phone || draft.phone,
-          id: user.id,
-          plan: "free",
-          completeness,
-          profile: draft.profile,
-          token,
-          roles: user.roles,
-          permissions: user.permissions,
-        };
+      const finish = (s: Session) => {
         persist(s);
         return s;
-      } catch (e) {
-        if (e instanceof ApiError && !isOffline(e)) throw e;
-        // Backend unreachable → local demo account.
+      };
+      // Offline path (no verification id).
+      if (!verificationId) {
         const acc = await registerAccount(draft);
-        const s: Session = {
-          role,
-          name: acc.name,
-          phone: acc.phone,
-          id: acc.id,
-          plan: "free",
-          completeness,
-          profile: draft.profile,
-        };
-        persist(s);
-        return s;
+        return finish({
+          role, name: acc.name, phone: acc.phone, id: acc.id,
+          plan: "free", completeness, profile: draft.profile,
+        });
       }
+      const { token, user } = await registerVerify(verificationId, code);
+      setToken(token);
+      if (role !== "client") {
+        const sellerType = role === "lawyer" ? "yurist" : "advokat";
+        try {
+          await upsertMyLawyer(draft.profile, sellerType);
+          if (draft.profile.services.length) await putMyServices(draft.profile.services);
+        } catch {
+          /* profile upsert is best-effort */
+        }
+      }
+      return finish({
+        role,
+        name: user.name || draft.profile.name,
+        phone: user.phone || draft.phone,
+        id: user.id,
+        plan: "free",
+        completeness,
+        profile: draft.profile,
+        token,
+        roles: user.roles,
+        permissions: user.permissions,
+      });
     },
     [persist],
   );
@@ -213,7 +224,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => persist(null), [persist]);
 
   return (
-    <Ctx.Provider value={{ session, ready, login, register, update, logout }}>
+    <Ctx.Provider value={{ session, ready, login, startRegistration, register, update, logout }}>
       {children}
     </Ctx.Provider>
   );

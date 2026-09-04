@@ -2,7 +2,7 @@
 // Every function talks to the same-origin proxy with the bearer token attached.
 // UI callers wrap reads in `withFallback(...)` so the app keeps working on local
 // mock data until the backend is reachable.
-import { http, asDict, asStr, asNum, asArr, type Dict } from "@/lib/http";
+import { http, asDict, asStr, asNum, asArr, API_BASE, type Dict } from "@/lib/http";
 import type { ProfessionalProfile } from "@/lib/types";
 
 // ── Auth ──────────────────────────────────────────────────────────
@@ -63,6 +63,38 @@ export async function apiRegister(input: {
   // Some backends return only a success flag on register — log in for a token.
   if (!res.token) return apiLogin(input.phone, input.password);
   return res;
+}
+
+// Two-step OTP registration (LEXGO_FRONTEND_UPDATE.md).
+export type RegisterStartResult = {
+  verificationId: string;
+  phone: string;
+  demoOtp: string;
+  expiresAt: string;
+  message: string;
+};
+export async function registerStart(input: {
+  role: BackendRole;
+  name: string;
+  phone: string;
+  password: string;
+}): Promise<RegisterStartResult> {
+  const d = asDict(await http("/auth/register/start", { method: "POST", body: JSON.stringify(input) }));
+  return {
+    verificationId: asStr(d.verification_id),
+    phone: asStr(d.phone),
+    demoOtp: asStr(d.demo_otp),
+    expiresAt: asStr(d.expires_at),
+    message: asStr(d.message),
+  };
+}
+export async function registerVerify(verificationId: string, code: string): Promise<AuthResult> {
+  return normAuth(
+    await http("/auth/register/verify", {
+      method: "POST",
+      body: JSON.stringify({ verification_id: verificationId, code }),
+    }),
+  );
 }
 
 export async function apiLogin(phone: string, password: string): Promise<AuthResult> {
@@ -381,6 +413,71 @@ export async function createCase(input: Record<string, unknown>): Promise<unknow
   return http("/cases", { method: "POST", body: JSON.stringify(input) });
 }
 
+// ── Demo purchase flows (LEXGO_FRONTEND_UPDATE.md) ────────────────
+export type PurchaseResult = {
+  paymentId: string;
+  paymentStatus: string;
+  orderId?: string;
+  chatRoomId?: string;
+  subscriptionId?: string;
+};
+function normPurchase(v: unknown): PurchaseResult {
+  const d = asDict(v);
+  const payment = asDict(d.payment);
+  const room = asDict(d.chat_room);
+  const order = asDict(d.order);
+  return {
+    paymentId: asStr(payment.id),
+    paymentStatus: asStr(payment.status),
+    orderId: asStr(order.id) || undefined,
+    chatRoomId: asStr(room.id) || undefined,
+    subscriptionId: asStr(d.subscription_id) || undefined,
+  };
+}
+export async function demoPurchase(input: {
+  service_id: string;
+  lawyer_user_id: string;
+  package_id?: string;
+  provider?: string;
+  details?: Record<string, unknown>;
+}): Promise<PurchaseResult> {
+  return normPurchase(
+    await http("/orders/demo-purchase", { method: "POST", body: JSON.stringify({ provider: "demo_payme", ...input }) }),
+  );
+}
+export async function demoPayOrder(orderId: string, provider = "demo_payme"): Promise<PurchaseResult> {
+  return normPurchase(
+    await http(`/orders/${orderId}/demo-pay?provider=${encodeURIComponent(provider)}`, { method: "POST" }),
+  );
+}
+export async function demoPrivateChat(input: {
+  lawyer_user_id: string;
+  amount?: number;
+  provider?: string;
+  title?: string;
+}): Promise<PurchaseResult> {
+  return normPurchase(
+    await http("/payments/demo-private-chat", {
+      method: "POST",
+      body: JSON.stringify({ amount: 0, provider: "demo_payme", title: "Private chat", ...input }),
+    }),
+  );
+}
+export async function demoPlanPurchase(
+  planId: string,
+  input: { provider?: string; billing_period?: string; family_members?: unknown[] } = {},
+): Promise<PurchaseResult> {
+  return normPurchase(
+    await http(`/subscription-plans/${planId}/demo-purchase`, {
+      method: "POST",
+      body: JSON.stringify({ plan_id: planId, provider: "demo_payme", billing_period: "monthly", family_members: [], ...input }),
+    }),
+  );
+}
+export async function demoConfirmPayment(paymentId: string): Promise<PurchaseResult> {
+  return normPurchase(await http(`/payments/${paymentId}/demo-confirm`, { method: "POST" }));
+}
+
 // ── Payments ──────────────────────────────────────────────────────
 export type PaymentProvider = "payme" | "click" | "rahmat";
 export async function createPayment(input: {
@@ -536,7 +633,7 @@ function normSecureMsg(v: unknown): SecureMessage {
   const d = asDict(v);
   return {
     id: asStr(d.id),
-    senderId: asStr(d.sender_id ?? d.senderId),
+    senderId: asStr(d.sender_user_id ?? d.sender_id ?? d.senderId),
     filteredContent: asStr(d.filtered_content ?? d.content),
     isBlocked: Boolean(d.is_blocked),
     blockReason: asStr(d.block_reason) || undefined,
@@ -554,8 +651,16 @@ export async function getSecureMessages(roomId: string): Promise<SecureMessage[]
 }
 export async function sendSecureMessage(roomId: string, content: string): Promise<SecureMessage> {
   return normSecureMsg(
-    await http(`/secure-chats/${roomId}/messages`, { method: "POST", body: JSON.stringify({ content }) }),
+    await http(`/secure-chats/${roomId}/messages`, {
+      method: "POST",
+      body: JSON.stringify({ message_type: "text", content }),
+    }),
   );
+}
+export function secureSocketUrl(roomId: string, token?: string | null): string {
+  const base = API_BASE.replace(/^http/i, "ws");
+  const q = token ? `?token=${encodeURIComponent(token)}` : "";
+  return `${base}/ws/secure-chats/${roomId}${q}`;
 }
 
 // ── Approvals (four-eyes) ─────────────────────────────────────────
@@ -644,6 +749,71 @@ export async function createLead(input: {
 }
 export async function listLeads(): Promise<Lead[]> {
   return listFrom(await http("/admin/leads"), "leads", "items", "data").map(normLead);
+}
+// Admin manual lead management.
+export async function adminCreateLead(input: {
+  name?: string;
+  phone?: string;
+  note?: string;
+  source?: string;
+  category?: string;
+  region?: string;
+  urgency?: string;
+}): Promise<Lead> {
+  return normLead(
+    await http("/admin/leads", {
+      method: "POST",
+      body: JSON.stringify({
+        source: input.source || "manual",
+        category: input.category || "",
+        region: input.region || "",
+        urgency: input.urgency || "",
+        details: { name: input.name || "", phone: input.phone || "", note: input.note || "" },
+      }),
+    }),
+  );
+}
+export async function adminUpdateLead(leadId: string, patch: Record<string, unknown>): Promise<Lead> {
+  return normLead(await http(`/admin/leads/${leadId}`, { method: "PATCH", body: JSON.stringify(patch) }));
+}
+export async function adminDeleteLead(leadId: string): Promise<void> {
+  await http(`/admin/leads/${leadId}`, { method: "DELETE" });
+}
+
+// ── Admin dashboard ───────────────────────────────────────────────
+export type DashboardStat = { label: string; value: number };
+export type DashboardChart = { key: string; points: { label: string; value: number }[] };
+export type AdminDashboard = {
+  totals: DashboardStat[];
+  charts: DashboardChart[];
+};
+function toStats(obj: unknown): DashboardStat[] {
+  const d = asDict(obj);
+  return Object.entries(d)
+    .filter(([, v]) => typeof v === "number" || typeof v === "string")
+    .map(([label, v]) => ({ label, value: asNum(v) }));
+}
+export async function getAdminDashboard(): Promise<AdminDashboard> {
+  const d = asDict(await http("/admin/dashboard"));
+  const totals = [
+    ...toStats(d.totals),
+    ...toStats(d.payments),
+    ...toStats(d.orders),
+    ...toStats(d.leads),
+    ...toStats(d.sellers),
+  ];
+  const chartsObj = asDict(d.charts);
+  const charts: DashboardChart[] = Object.entries(chartsObj).map(([key, val]) => {
+    const arr = asArr(val).map((p) => {
+      const x = asDict(p);
+      return {
+        label: asStr(x.label ?? x.date ?? x.day ?? x.name ?? x.key),
+        value: asNum(x.value ?? x.count ?? x.total ?? x.amount),
+      };
+    });
+    return { key, points: arr };
+  });
+  return { totals, charts };
 }
 
 // ── Seller verification / admin actions ───────────────────────────

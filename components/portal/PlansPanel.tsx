@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { getSubscriptionPlans, type BackendPlan } from "@/lib/services/backend";
-import { checkout } from "@/lib/services/billing";
+import { getSubscriptionPlans, demoPlanPurchase, type BackendPlan } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "./DataState";
 import { IconCheck, IconCard } from "@/components/icons";
@@ -22,9 +21,14 @@ export default function PlansPanel() {
     if (busy) return;
     setBusy(plan.id);
     setDone(null);
-    const r = await checkout(plan.price);
-    setBusy(null);
-    if (r.ok) setDone(plan.name);
+    try {
+      await demoPlanPurchase(plan.id);
+      setDone(plan.name);
+    } catch {
+      /* ignore */
+    } finally {
+      setBusy(null);
+    }
   }
 
   return (

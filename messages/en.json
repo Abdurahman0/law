@@ -646,7 +646,8 @@
       "reviews": "{count} reviews · {years} yrs experience",
       "priceNote": "from · package",
       "super": "Super lawyer",
-      "choose": "Choose"
+      "choose": "Choose",
+      "opening": "Opening…"
     },
     "empty": "There are no lawyers in this area yet. Leave a request — we will find a suitable lawyer for you.",
     "priceInfo": "The price is formed by open criteria: region (higher in big cities), experience (3–5 yrs +10%, 6–10 yrs +15%, 10+ yrs +20%), rating and super-lawyer status (regional TOP-3 — up to 30%, 10+ yrs in a narrow area — up to 20%). If the price is higher, the reason is shown in the order window.",
@@ -2018,7 +2019,7 @@
     "optional": "optional",
     "phone": {
       "title": "Enter your phone number",
-      "subtitle": "We'll send a verification code by SMS.",
+      "subtitle": "We'll verify your phone with a one-time code at the end.",
       "label": "Phone number",
       "placeholder": "+998 __ ___ __ __",
       "invalid": "Enter a valid phone number.",
@@ -2026,7 +2027,8 @@
       "sending": "Sending code…",
       "terms": "By continuing you agree to LexGo's Terms and Privacy Policy.",
       "haveAccount": "Already have an account?",
-      "login": "Log in"
+      "login": "Log in",
+      "continue": "Continue"
     },
     "otp": {
       "title": "Enter the verification code",
@@ -2194,6 +2196,18 @@
     },
     "done": {
       "creating": "Creating your account…"
+    },
+    "verify": {
+      "title": "Verify your phone",
+      "subtitle": "Enter the 6-digit code sent to {phone}",
+      "demoHint": "Demo code: {code}",
+      "verifying": "Verifying…",
+      "submit": "Verify & finish",
+      "change": "Back",
+      "incorrect": "Incorrect code. Please try again.",
+      "startError": "Couldn't start registration. Try again.",
+      "sending": "Sending code…",
+      "getCode": "Get code"
     }
   },
   "plans": {
@@ -2326,7 +2340,9 @@
       "lawyers": "Lawyers",
       "orders": "Orders",
       "cases": "Cases",
-      "roles": "Roles"
+      "roles": "Roles",
+      "empty": "No dashboard data yet",
+      "emptyText": "Metrics and charts appear once there is activity."
     },
     "form": {
       "title": "Title",
@@ -2414,7 +2430,20 @@
       "title": "Leads",
       "lead": "Inbound leads from web forms, AI capture and ads.",
       "empty": "No leads yet",
-      "emptyText": "New leads will appear here."
+      "emptyText": "New leads will appear here.",
+      "create": "Add lead",
+      "name": "Name",
+      "phone": "Phone",
+      "note": "Note",
+      "region": "Region",
+      "delete": "Delete",
+      "statusLabel": "Status",
+      "status": {
+        "new": "New",
+        "in_progress": "In progress",
+        "converted": "Converted",
+        "rejected": "Rejected"
+      }
     },
     "approvals": {
       "title": "Approvals",
@@ -2427,5 +2456,18 @@
       "managerApprove": "Manager approve",
       "item": "Approval"
     }
+  },
+  "secureChat": {
+    "title": "Private chat",
+    "secured": "Secured by LexGo",
+    "close": "Close",
+    "loading": "Loading…",
+    "empty": "This is the start of your private, protected conversation.",
+    "placeholder": "Write a message…",
+    "send": "Send",
+    "safetyNote": "Sharing phone numbers, Telegram or external links is blocked. Keep everything on LexGo.",
+    "blocked": "This message was blocked.",
+    "loginRequired": "Log in to open this private chat.",
+    "login": "Log in"
   }
 }

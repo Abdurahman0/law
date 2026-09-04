@@ -1641,3 +1641,43 @@ body:has(.auth) .fab{display:none}
 .amodal__x svg{width:16px;height:16px}
 .amodal__b{padding:22px}
 @keyframes pop{from{transform:translateY(12px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+
+
+/* ═══════════════ SECURE CHAT ═══════════════ */
+body:has(.schat){overflow:hidden;padding-bottom:0}
+body:has(.schat) .bar,
+body:has(.schat) .ftr,
+body:has(.schat) .tabbar,
+body:has(.schat) .fab{display:none}
+.schat{height:100dvh;display:flex;flex-direction:column;background:var(--b50)}
+.schat--gate{align-items:center;justify-content:center;gap:16px;text-align:center}
+.schat__head{display:flex;align-items:center;gap:12px;padding:14px 18px;background:#fff;border-bottom:1px solid var(--line)}
+.schat__x{width:34px;height:34px;border-radius:10px;border:0;background:var(--b50);color:var(--gray);cursor:pointer;display:grid;place-items:center}
+.schat__x svg{width:16px;height:16px}
+.schat__i{width:38px;height:38px;border-radius:11px;background:var(--grad);color:#fff;display:grid;place-items:center}
+.schat__i svg{width:20px;height:20px;stroke:#fff}
+.schat__t b{display:block;font-weight:700}
+.schat__t span{font-size:.78rem;color:var(--ok)}
+.schat__body{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:10px;max-width:820px;width:100%;margin:0 auto}
+.schat__hint{color:var(--gray2);text-align:center;margin:auto}
+.schat__empty{margin:auto;text-align:center;color:var(--gray2);display:flex;flex-direction:column;align-items:center;gap:10px}
+.schat__empty svg{width:40px;height:40px;stroke:var(--b300)}
+.sbub{max-width:76%;display:flex;flex-direction:column;gap:4px}
+.sbub--me{align-self:flex-end;align-items:flex-end}
+.sbub--them{align-self:flex-start}
+.sbub__c{padding:11px 15px;border-radius:16px;font-size:.94rem;line-height:1.5;background:#fff;border:1px solid var(--line)}
+.sbub--me .sbub__c{background:var(--grad);color:#fff;border:0}
+.sbub__blocked{display:flex;align-items:center;gap:6px;font-size:.76rem;color:#C0392B;background:#FDECEC;padding:5px 10px;border-radius:10px}
+.sbub__blocked svg{width:14px;height:14px;stroke:#C0392B}
+.schat__note{text-align:center;font-size:.76rem;color:var(--gray2);padding:6px 16px}
+.schat__bar{display:flex;gap:10px;padding:14px 18px;background:#fff;border-top:1px solid var(--line);max-width:820px;width:100%;margin:0 auto}
+.schat__bar input{flex:1;border:0;background:var(--b50);border-radius:var(--pill);padding:13px 18px;outline:none;color:var(--ink)}
+.schat__bar button{width:46px;height:46px;border-radius:50%;border:0;background:var(--grad);color:#fff;cursor:pointer;display:grid;place-items:center;flex:none}
+.schat__bar button:disabled{opacity:.5}
+.schat__bar button svg{width:19px;height:19px;stroke:#fff}
+
+/* admin dashboard mini bar chart */
+.dchart{display:flex;align-items:flex-end;gap:6px;height:150px;padding-top:8px;overflow-x:auto}
+.dbar{flex:1;min-width:16px;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.dbar__fill{width:100%;max-width:26px;background:var(--grad);border-radius:6px 6px 0 0;min-height:4px}
+.dbar__lbl{font-size:.62rem;color:var(--gray2);white-space:nowrap}

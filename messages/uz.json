@@ -652,7 +652,8 @@
       "reviews": "{count} ta baho · {years} yil tajriba",
       "priceNote": "so'mdan · paket",
       "super": "Super advokat",
-      "choose": "Tanlash"
+      "choose": "Tanlash",
+      "opening": "Ochilmoqda…"
     },
     "empty": "Bu yo'nalishda hozircha advokat yo'q. Arizangizni qoldiring — mos advokatni biz topamiz.",
     "priceInfo": "Narx ochiq mezonlar bo'yicha shakllanadi: hudud (yirik shaharlarda qimmatroq), staj (3–5 yil +10%, 6–10 yil +15%, 10+ yil +20%), reyting va super advokat maqomi (viloyat TOP-3 — 30% gacha, tor yo'nalishda 10+ yil tajriba — 20% gacha). Narx oshgan bo'lsa, sababi buyurtma oynasida yozib ko'rsatiladi.",
@@ -2024,7 +2025,7 @@
     "optional": "ixtiyoriy",
     "phone": {
       "title": "Telefon raqamingizni kiriting",
-      "subtitle": "Tasdiqlash kodini SMS orqali yuboramiz.",
+      "subtitle": "Yakunida telefoningizni bir martalik kod bilan tasdiqlaymiz.",
       "label": "Telefon raqami",
       "placeholder": "+998 __ ___ __ __",
       "invalid": "To'g'ri telefon raqamini kiriting.",
@@ -2032,7 +2033,8 @@
       "sending": "Kod yuborilmoqda…",
       "terms": "Davom etish orqali LexGo shartlari va Maxfiylik siyosatiga rozilik bildirasiz.",
       "haveAccount": "Hisobingiz bormi?",
-      "login": "Kirish"
+      "login": "Kirish",
+      "continue": "Davom etish"
     },
     "otp": {
       "title": "Tasdiqlash kodini kiriting",
@@ -2200,6 +2202,18 @@
     },
     "done": {
       "creating": "Hisobingiz yaratilmoqda…"
+    },
+    "verify": {
+      "title": "Telefonni tasdiqlang",
+      "subtitle": "{phone} raqamiga yuborilgan 6 xonali kodni kiriting",
+      "demoHint": "Demo kod: {code}",
+      "verifying": "Tekshirilmoqda…",
+      "submit": "Tasdiqlash va yakunlash",
+      "change": "Orqaga",
+      "incorrect": "Kod noto‘g‘ri. Qayta urinib ko‘ring.",
+      "startError": "Ro‘yxatdan o‘tishni boshlab bo‘lmadi. Qayta urining.",
+      "sending": "Kod yuborilmoqda…",
+      "getCode": "Kod olish"
     }
   },
   "plans": {
@@ -2332,7 +2346,9 @@
       "lawyers": "Yuristlar",
       "orders": "Buyurtmalar",
       "cases": "Ishlar",
-      "roles": "Rollar"
+      "roles": "Rollar",
+      "empty": "Hozircha panel ma‘lumoti yo‘q",
+      "emptyText": "Faollik paydo bo‘lgach ko‘rsatkichlar va grafiklar ko‘rinadi."
     },
     "form": {
       "title": "Nomi",
@@ -2420,7 +2436,20 @@
       "title": "Lidlar",
       "lead": "Veb-shakllar, AI va reklamalardan kelgan lidlar.",
       "empty": "Hozircha lid yo‘q",
-      "emptyText": "Yangi lidlar shu yerda ko‘rinadi."
+      "emptyText": "Yangi lidlar shu yerda ko‘rinadi.",
+      "create": "Lid qo‘shish",
+      "name": "Ism",
+      "phone": "Telefon",
+      "note": "Izoh",
+      "region": "Viloyat",
+      "delete": "O‘chirish",
+      "statusLabel": "Holat",
+      "status": {
+        "new": "Yangi",
+        "in_progress": "Jarayonda",
+        "converted": "Konvertatsiya",
+        "rejected": "Rad etilgan"
+      }
     },
     "approvals": {
       "title": "Tasdiqlashlar",
@@ -2433,5 +2462,18 @@
       "managerApprove": "Menejer tasdiqlashi",
       "item": "Tasdiqlash"
     }
+  },
+  "secureChat": {
+    "title": "Maxfiy chat",
+    "secured": "LexGo himoyasida",
+    "close": "Yopish",
+    "loading": "Yuklanmoqda…",
+    "empty": "Bu maxfiy va himoyalangan suhbatingiz boshlanishi.",
+    "placeholder": "Xabar yozing…",
+    "send": "Yuborish",
+    "safetyNote": "Telefon raqam, Telegram yoki tashqi havolalar bloklanadi. Hammasini LexGo ichida saqlang.",
+    "blocked": "Bu xabar bloklandi.",
+    "loginRequired": "Bu maxfiy chatni ochish uchun tizimga kiring.",
+    "login": "Kirish"
   }
 }

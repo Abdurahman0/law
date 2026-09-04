@@ -15,7 +15,6 @@ import { LANGUAGE_KEYS, AREA_KEYS, REGION_KEYS } from "@/lib/mock/catalog";
 import Select, { type Option } from "@/components/Select";
 import { IconLogo, IconChevronLeft, IconArrowRight, IconCheck } from "../icons";
 import PhoneStep from "./PhoneStep";
-import OtpStep from "./OtpStep";
 import AccountTypeCards from "./AccountTypeCards";
 import ChipMulti from "./ChipMulti";
 import PhotoUpload from "./PhotoUpload";
@@ -45,18 +44,26 @@ export default function RegisterFlow() {
   const te = useTranslations("enums");
   const tl = useTranslations("register.languages");
   const router = useRouter();
-  const { register } = useAuth();
+  const { startRegistration, register } = useAuth();
 
   const [draft, setDraft] = useState<RegistrationDraft>(emptyDraft());
   const [idx, setIdx] = useState(0);
   const [creating, setCreating] = useState(false);
 
+  // OTP verification state
+  const [verificationId, setVerificationId] = useState("");
+  const [demoOtp, setDemoOtp] = useState("");
+  const [code, setCode] = useState("");
+  const [starting, setStarting] = useState(false);
+  const [verifying, setVerifying] = useState(false);
+  const [verifyErr, setVerifyErr] = useState<string | null>(null);
+
   const steps = useMemo(
-    () => ["phone", "otp", "type", ...(draft.accountType ? STEPS_BY_TYPE[draft.accountType] : [])],
+    () => ["phone", "type", ...(draft.accountType ? [...STEPS_BY_TYPE[draft.accountType], "verify"] : [])],
     [draft.accountType],
   );
   const step = steps[idx];
-  const total = draft.accountType ? steps.length : steps.length + 2; // hint more to come
+  const total = draft.accountType ? steps.length : steps.length + 3; // hint more to come
 
   const p = draft.profile;
   function setProfile(patch: Partial<ProfessionalProfile>) {
@@ -92,17 +99,44 @@ export default function RegisterFlow() {
         stats: type === "advocate" ? ZERO_STATS : d.profile.stats,
       },
     }));
-    setIdx(3);
+    setIdx(2);
   }
 
-  async function submit() {
-    if (!draft.accountType) return;
+  // Last profile step → request the OTP, then advance to the verify step.
+  async function startReg() {
+    if (!draft.accountType || starting) return;
+    setStarting(true);
+    setVerifyErr(null);
+    try {
+      const { verificationId: vid, demoOtp: otp } = await startRegistration(draft);
+      setVerificationId(vid);
+      setDemoOtp(otp);
+      setCode(otp || "");
+      setStarting(false);
+      next();
+    } catch {
+      setStarting(false);
+      setVerifyErr(t("verify.startError"));
+    }
+  }
+
+  // Verify step → confirm the code, create the session, go to the portal.
+  async function doVerify() {
+    if (verifying) return;
+    if (code.trim().length < 4) {
+      setVerifyErr(t("verify.incorrect"));
+      return;
+    }
+    setVerifying(true);
+    setVerifyErr(null);
     setCreating(true);
     try {
-      const s = await register(draft, draft.password);
+      const s = await register(draft, verificationId, code.trim());
       router.replace(`/portal/${s.role}`);
     } catch {
+      setVerifying(false);
       setCreating(false);
+      setVerifyErr(t("verify.incorrect"));
     }
   }
 
@@ -133,8 +167,9 @@ export default function RegisterFlow() {
     }
   }
 
-  const isLast = idx === steps.length - 1 && !!draft.accountType;
-  const showFooter = !["phone", "otp", "type"].includes(step);
+  // The last profile step is right before "verify".
+  const lastProfileStep = !!draft.accountType && idx === steps.length - 2;
+  const showFooter = !["phone", "type", "verify"].includes(step);
 
   // Advocate mini-stepper index
   const advPos = ADV_STEPS.indexOf(step);
@@ -181,15 +216,46 @@ export default function RegisterFlow() {
             />
           ) : null}
 
-          {step === "otp" ? (
-            <OtpStep
-              phone={draft.phone}
-              onVerified={() => {
-                setDraft((d) => ({ ...d, phoneVerified: true }));
-                next();
-              }}
-              onBack={back}
-            />
+          {step === "verify" ? (
+            <div className="rf__step">
+              <span className="rf__ico rf__ico--brand">
+                <span className="rf__otpnum">6</span>
+              </span>
+              <h1 className="rf__title">{t("verify.title")}</h1>
+              <p className="rf__sub">{t("verify.subtitle", { phone: draft.phone })}</p>
+              <div className="otp">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <input
+                    key={i}
+                    className="otp__box"
+                    inputMode="numeric"
+                    maxLength={i === 0 ? 6 : 1}
+                    value={code[i] ?? ""}
+                    onChange={(e) => {
+                      const v = e.target.value.replace(/\D/g, "");
+                      if (i === 0 && v.length > 1) {
+                        setCode(v.slice(0, 6));
+                        return;
+                      }
+                      const arr = code.padEnd(6, " ").split("");
+                      arr[i] = v.slice(-1) || " ";
+                      setCode(arr.join("").replace(/\s/g, ""));
+                    }}
+                    aria-label={`digit ${i + 1}`}
+                  />
+                ))}
+              </div>
+              {verifyErr ? <p className="rf__otpmsg rf__otpmsg--err">{verifyErr}</p> : null}
+              {demoOtp ? <p className="rf__demo">{t("verify.demoHint", { code: demoOtp })}</p> : null}
+              <button className="btn btn--grad btn--full btn--lg" type="button" onClick={doVerify} disabled={verifying} style={{ marginTop: 18 }}>
+                {verifying ? t("verify.verifying") : t("verify.submit")}
+                {verifying ? null : <IconCheck />}
+              </button>
+              <button type="button" className="rf__link rf__link--muted" onClick={back} style={{ marginTop: 14 }}>
+                <IconChevronLeft />
+                {t("verify.change")}
+              </button>
+            </div>
           ) : null}
 
           {step === "type" ? (
@@ -378,10 +444,10 @@ export default function RegisterFlow() {
               <IconChevronLeft />
               {t("back")}
             </button>
-            {isLast ? (
-              <button type="button" className="btn btn--grad btn--lg" onClick={submit} disabled={!canContinue()}>
-                {draft.accountType === "advocate" ? t("advocate.review.submit") : t("finish")}
-                <IconCheck />
+            {lastProfileStep ? (
+              <button type="button" className="btn btn--grad btn--lg" onClick={startReg} disabled={!canContinue() || starting}>
+                {starting ? t("verify.sending") : t("verify.getCode")}
+                {starting ? null : <IconArrowRight />}
               </button>
             ) : (
               <button type="button" className="btn btn--grad btn--lg" onClick={next} disabled={!canContinue()}>

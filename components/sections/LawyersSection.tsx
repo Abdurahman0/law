@@ -8,8 +8,10 @@ import {
   REGION_KEYS,
   type Lawyer,
 } from "@/lib/lawyers";
-import { listLawyers, type BackendLawyer } from "@/lib/services/backend";
+import { listLawyers, demoPrivateChat, type BackendLawyer } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
+import { useAuth } from "@/lib/auth";
+import { useRouter } from "@/i18n/navigation";
 import { Skeleton, EmptyState } from "../portal/DataState";
 import Select, { type Option } from "../Select";
 import { IconChevronLeft, IconChevronRight, IconInfo } from "../icons";
@@ -21,6 +23,7 @@ const priceNum = (p: string) => Number(p.replace(/\s/g, "")) || 0;
 function toLawyer(b: BackendLawyer): Lawyer {
   const r = b.region.toLowerCase();
   return {
+    userId: b.userId,
     name: b.name || "—",
     regionKey: REGION_KEYS.find((k) => r.includes(k)) || "tashkent",
     areaKey: AREA_KEYS.find((a) => b.specializations.includes(a)) || b.specializations[0] || "civil",
@@ -52,6 +55,27 @@ export default function LawyersSection({
   const [sort, setSort] = useState("rating");
   const res = useResource<BackendLawyer>(() => listLawyers(), []);
   const source = useMemo(() => res.data.map(toLawyer), [res.data]);
+  const { session } = useAuth();
+  const router = useRouter();
+  const [chatBusy, setChatBusy] = useState<string | null>(null);
+
+  // "Choose" → start a paid private chat with this seller (demo purchase).
+  async function choose(l: Lawyer) {
+    if (!session) {
+      router.push("/login");
+      return;
+    }
+    if (!l.userId || chatBusy) return;
+    setChatBusy(l.userId);
+    try {
+      const r = await demoPrivateChat({ lawyer_user_id: l.userId });
+      if (r.chatRoomId) router.push(`/portal/chat/${r.chatRoomId}`);
+    } catch {
+      /* ignore */
+    } finally {
+      setChatBusy(null);
+    }
+  }
   const scroller = useRef<HTMLDivElement>(null);
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
@@ -148,8 +172,13 @@ export default function LawyersSection({
               <b>{l.price}</b>
               <span>{t("card.priceNote")}</span>
             </div>
-            <button className="btn btn--pri btn--sm" type="button">
-              {t("card.choose")}
+            <button
+              className="btn btn--pri btn--sm"
+              type="button"
+              onClick={() => choose(l)}
+              disabled={chatBusy === l.userId}
+            >
+              {chatBusy === l.userId ? t("card.opening") : t("card.choose")}
             </button>
           </div>
         </div>
