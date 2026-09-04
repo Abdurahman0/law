@@ -919,8 +919,15 @@ export async function getAdminDashboard(): Promise<AdminDashboard> {
 }
 
 // ── Seller verification / admin actions ───────────────────────────
-export async function requestVerification(input: Record<string, unknown> = {}): Promise<unknown> {
-  return http("/lawyers/me/verifications", { method: "POST", body: JSON.stringify(input) });
+export async function requestVerification(
+  input: Record<string, unknown> = {},
+): Promise<unknown> {
+  // check_type is required by the backend (SellerVerificationCreate); default to
+  // a manual review request when the caller doesn't specify one.
+  return http("/lawyers/me/verifications", {
+    method: "POST",
+    body: JSON.stringify({ check_type: "manual", ...input }),
+  });
 }
 export async function adminVerifyLawyer(lawyerUserId: string): Promise<unknown> {
   return http(`/admin/lawyers/${lawyerUserId}/verify`, { method: "POST" });
