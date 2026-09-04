@@ -116,7 +116,8 @@
       "civil": "Fuqarolik ishlari",
       "economic": "Iqtisodiy nizolar",
       "findLawyer": "Advokat qidirish",
-      "courses": "Kurslar"
+      "courses": "Kurslar",
+      "legalAid": "Yuridik yordam"
     },
     "rights": "© 2026 LexGo.uz — barcha huquqlar himoyalangan",
     "terms": "Foydalanish shartlari",
@@ -1848,7 +1849,14 @@
         "requestSending": "Yuborilmoqda…",
         "requestSent": "So'rov ko'rib chiqishga yuborildi.",
         "requestError": "Yuborib bo'lmadi. Qayta urining.",
-        "requestNote": "Faqat admin va menejer tasdig'idan so'ng qabul qilinadi."
+        "requestNote": "Faqat admin va menejer tasdig'idan so'ng qabul qilinadi.",
+        "docsCta": "Hujjatlar",
+        "docsTitle": "Ish hujjatlari",
+        "docsEmpty": "Hujjatlar yo‘q",
+        "docsEmptyText": "Bu ish uchun birinchi hujjatni qo‘shing.",
+        "docsAdd": "Hujjat qo‘shish",
+        "docsAddPh": "Hujjat nomi",
+        "docsAdded": "Hujjat qo‘shildi."
       },
       "payments": {
         "title": "To'lovlar",
@@ -2018,7 +2026,10 @@
         "verifyCta": "Tasdiqlash so'rash",
         "verifySending": "Yuborilmoqda…",
         "verifyRequested": "Tasdiqlash so'raldi. Profilingizni ko'rib chiqamiz.",
-        "verifyError": "So'rovni yuborib bo'lmadi. Qayta urining."
+        "verifyError": "So'rovni yuborib bo'lmadi. Qayta urining.",
+        "servicesTitle": "Mening xizmatlarim",
+        "servicesEmpty": "Hozircha xizmatlar yo‘q",
+        "servicesEmptyText": "Xizmatlarni ro‘yxatdan o‘tishda yoki profil sozlamalarida qo‘shing."
       }
     },
     "org": {
@@ -2423,7 +2434,8 @@
       "notifications": "Bildirishnomalar",
       "bootstrap": "Bootstrap",
       "leads": "Lidlar",
-      "approvals": "Tasdiqlashlar"
+      "approvals": "Tasdiqlashlar",
+      "ads": "Reklama"
     },
     "overview": {
       "kicker": "Admin konsoli",
@@ -2551,6 +2563,13 @@
       "adminApprove": "Admin tasdiqlashi",
       "managerApprove": "Menejer tasdiqlashi",
       "item": "Tasdiqlash"
+    },
+    "ads": {
+      "title": "Reklama va promo",
+      "lead": "Reklama e’lonlari va promo mahsulotlar.",
+      "empty": "Hozircha reklama yo‘q",
+      "emptyText": "Birinchi reklama mahsulotini yarating.",
+      "create": "Yangi reklama"
     }
   },
   "secureChat": {
@@ -2572,5 +2591,39 @@
       "emptyText": "Xizmat buyurtma qilib yoki mutaxassis tanlab boshlang.",
       "room": "Chat"
     }
+  },
+  "academy": {
+    "kicker": "LexGo Akademiya",
+    "title": "Yuridik kurslar va trening",
+    "lead": "Amaliyotchi yuristlardan amaliy kurslar — yuridik ko‘nikmalaringizni oshiring.",
+    "empty": "Hozircha kurslar yo‘q",
+    "emptyText": "Yangi kurslar tez orada qo‘shiladi.",
+    "course": "Kurs",
+    "som": "so‘m",
+    "free": "Bepul"
+  },
+  "b2b": {
+    "kicker": "Biznes uchun",
+    "title": "B2B yuridik mahsulotlar",
+    "lead": "Kompaniyalar uchun obunalar, autsorsing va yuridik paketlar.",
+    "empty": "Hozircha mahsulotlar yo‘q",
+    "emptyText": "B2B takliflar tez orada qo‘shiladi.",
+    "product": "Mahsulot",
+    "som": "so‘m",
+    "byRequest": "So‘rov bo‘yicha"
+  },
+  "legalAid": {
+    "kicker": "Yuridik yordam",
+    "title": "Bepul yuridik yordam so‘rovi",
+    "lead": "Vaziyatingizni yozing — sizga yordam beradigan yurist bilan bog‘laymiz.",
+    "name": "F.I.Sh.",
+    "namePh": "Ismingiz",
+    "phone": "Telefon",
+    "details": "Vaziyatingiz",
+    "detailsPh": "Muammoingizni qisqacha yozing",
+    "required": "Iltimos, barcha maydonlarni to‘ldiring.",
+    "success": "So‘rov yuborildi. Tez orada bog‘lanamiz.",
+    "sending": "Yuborilmoqda…",
+    "submit": "So‘rov yuborish"
   }
 }

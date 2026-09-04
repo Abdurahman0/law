@@ -8,7 +8,7 @@ import {
   REGION_KEYS,
   type Lawyer,
 } from "@/lib/lawyers";
-import { listLawyers, demoPrivateChat, type BackendLawyer } from "@/lib/services/backend";
+import { listLawyers, demoPrivateChat, getLawyerPrivateChat, type BackendLawyer } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
 import { useAuth } from "@/lib/auth";
 import { useRouter } from "@/i18n/navigation";
@@ -68,6 +68,12 @@ export default function LawyersSection({
     if (!l.userId || chatBusy) return;
     setChatBusy(l.userId);
     try {
+      // Reuse an existing private-chat room if one already exists; else pay for one.
+      const existing = await getLawyerPrivateChat(l.userId);
+      if (existing) {
+        router.push(`/portal/chat/${existing.id}`);
+        return;
+      }
       const r = await demoPrivateChat({ lawyer_user_id: l.userId });
       if (r.chatRoomId) router.push(`/portal/chat/${r.chatRoomId}`);
       else if (r.paymentUrl) window.open(r.paymentUrl, "_blank");

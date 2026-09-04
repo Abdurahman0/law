@@ -1,0 +1,80 @@
+"use client";
+
+import { useState } from "react";
+import { useTranslations } from "next-intl";
+import { listAds, createAd } from "@/lib/services/backend";
+import { useResource } from "@/lib/useResource";
+import { Skeleton, EmptyState } from "@/components/portal/DataState";
+import { AdminForm, AdminItem, useReload } from "@/components/admin/AdminBits";
+import Modal from "@/components/admin/Modal";
+import { IconRocket, IconPlus } from "@/components/icons";
+
+const som = (n?: number) => (n ? n.toLocaleString("ru-RU").replace(/,/g, " ") : "—");
+const num = (v: string | boolean) => parseInt(String(v || "0"), 10) || 0;
+
+export default function AdminAds() {
+  const t = useTranslations("admin");
+  const [key, reload] = useReload();
+  const ads = useResource(listAds, [key]);
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="ppanel">
+      <div className="ppanel__h">
+        <b>{t("ads.title")}</b>
+        <span className="ahdr">
+          <span className="advmuted">{ads.data.length}</span>
+          <button className="btn btn--pri btn--sm" type="button" onClick={() => setOpen(true)}>
+            <IconPlus />
+            {t("form.add")}
+          </button>
+        </span>
+      </div>
+      <p className="advmuted" style={{ marginBottom: 16 }}>{t("ads.lead")}</p>
+
+      {ads.status === "loading" ? (
+        <Skeleton rows={3} />
+      ) : !ads.data.length ? (
+        <EmptyState icon={<IconRocket />} title={t("ads.empty")} text={t("ads.emptyText")} />
+      ) : (
+        <div className="alist">
+          {ads.data.map((a, i) => (
+            <AdminItem
+              key={a.id}
+              index={i + 1}
+              title={a.title}
+              meta={a.recordType}
+              right={som(a.price)}
+              tags={a.status ? [{ label: a.status }] : undefined}
+            />
+          ))}
+        </div>
+      )}
+
+      <Modal open={open} onClose={() => setOpen(false)} title={t("ads.create")}>
+        <AdminForm
+          fields={[
+            { name: "title", label: t("form.title"), required: true },
+            { name: "description", label: t("form.description"), type: "textarea" },
+            { name: "price", label: t("form.price"), type: "number", placeholder: "0" },
+          ]}
+          onSubmit={async (v) =>
+            void (await createAd({
+              title: String(v.title),
+              price: num(v.price),
+              payload: { description: String(v.description) },
+            }))
+          }
+          submitLabel={t("form.save")}
+          busyLabel={t("form.saving")}
+          okMsg={t("form.created")}
+          errMsg={t("form.error")}
+          onDone={() => {
+            reload();
+            setOpen(false);
+          }}
+        />
+      </Modal>
+    </div>
+  );
+}

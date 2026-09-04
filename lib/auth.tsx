@@ -19,6 +19,7 @@ import {
   registerVerify,
   upsertMyLawyer,
   putMyServices,
+  createSellerOnboarding,
   type BackendRole,
 } from "./services/backend";
 
@@ -192,8 +193,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         try {
           await upsertMyLawyer(draft.profile, sellerType);
           if (draft.profile.services.length) await putMyServices(draft.profile.services);
+          await createSellerOnboarding({
+            title: draft.profile.name || draft.phone,
+            status: "pending",
+            payload: { seller_type: sellerType, phone: draft.phone },
+          });
         } catch {
-          /* profile upsert is best-effort */
+          /* profile upsert + onboarding are best-effort */
         }
       }
       return finish({

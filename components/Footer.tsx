@@ -76,7 +76,10 @@ export default function Footer() {
                 <Link href="/for-lawyers">{tn("forLawyers")}</Link>
               </li>
               <li>
-                <Link href="/app">{t("links.courses")}</Link>
+                <Link href="/academy">{t("links.courses")}</Link>
+              </li>
+              <li>
+                <Link href="/legal-aid">{t("links.legalAid")}</Link>
               </li>
               <li>
                 <Link href="/warranty">{tn("warranty")}</Link>

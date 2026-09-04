@@ -899,6 +899,87 @@ export async function adminMarkPaid(paymentId: string): Promise<unknown> {
   return http(`/admin/payments/${paymentId}/mark-paid`, { method: "POST" });
 }
 
+// ── Generic module records (academy, b2b, ads, case-documents, legal-aid,
+//    seller-onboarding, refund/replacement) — all share one shape ──────
+export type ModuleRecord = {
+  id: string;
+  module: string;
+  recordType: string;
+  title: string;
+  status: string;
+  price: number;
+  currency: string;
+  payload: Record<string, unknown>;
+  createdAt: string;
+};
+function normModule(v: unknown): ModuleRecord {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    module: asStr(d.module),
+    recordType: asStr(d.record_type),
+    title: asStr(d.title),
+    status: asStr(d.status),
+    price: asNum(d.price),
+    currency: asStr(d.currency, "UZS"),
+    payload: (d.payload as Record<string, unknown>) ?? {},
+    createdAt: asStr(d.created_at ?? d.createdAt),
+  };
+}
+export type ModuleInput = {
+  title: string;
+  record_type?: string;
+  status?: string;
+  price?: number;
+  currency?: string;
+  payload?: Record<string, unknown>;
+};
+function listModule(path: string): Promise<ModuleRecord[]> {
+  return http(path).then((d) => listFrom(d, "items", "data").map(normModule));
+}
+function createModule(path: string, input: ModuleInput): Promise<ModuleRecord> {
+  return http(path, {
+    method: "POST",
+    body: JSON.stringify({
+      record_type: input.record_type ?? "",
+      title: input.title,
+      status: input.status ?? "active",
+      price: input.price ?? 0,
+      currency: input.currency ?? "UZS",
+      payload: input.payload ?? {},
+    }),
+  }).then(normModule);
+}
+
+export const listCourses = () => listModule("/academy/courses");
+export const listB2bProducts = () => listModule("/b2b/products");
+export const listAds = () => listModule("/ads/products");
+export const createAd = (i: ModuleInput) => createModule("/ads/products", i);
+export const listCaseDocuments = () => listModule("/case-documents");
+export const createCaseDocument = (i: ModuleInput) => createModule("/case-documents", i);
+export const listLegalAid = () => listModule("/legal-aid/requests");
+export const createLegalAidRequest = (i: ModuleInput) => createModule("/legal-aid/requests", i);
+export const createSellerOnboarding = (i: ModuleInput) => createModule("/seller-onboarding", i);
+export const createRefundRequest = (i: ModuleInput) => createModule("/refund-requests", i);
+export const createReplacementRequest = (i: ModuleInput) => createModule("/replacement-requests", i);
+
+// A seller's public service offering + an existing private-chat room, if any.
+export async function getLawyerServices(lawyerUserId: string): Promise<{ id: string; name: string }[]> {
+  const d = asDict(await http(`/lawyers/${lawyerUserId}/services`));
+  return asArr(d.services).map((x) => {
+    const s = asDict(x);
+    return { id: asStr(s.id ?? s.service_id ?? x), name: asStr(s.title ?? s.name) };
+  });
+}
+export async function getLawyerPrivateChat(lawyerUserId: string): Promise<SecureRoom | null> {
+  try {
+    const r = normRoom(await http(`/lawyers/${lawyerUserId}/private-chat`));
+    return r.id ? r : null;
+  } catch {
+    return null;
+  }
+}
+
 // ── helpers ───────────────────────────────────────────────────────
 function listFrom(data: unknown, ...keys: string[]): unknown[] {
   if (Array.isArray(data)) return data;

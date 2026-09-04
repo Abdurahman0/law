@@ -116,7 +116,8 @@
       "civil": "Civil cases",
       "economic": "Economic disputes",
       "findLawyer": "Find a lawyer",
-      "courses": "Courses"
+      "courses": "Courses",
+      "legalAid": "Legal aid"
     },
     "rights": "© 2026 LexGo.uz — all rights reserved",
     "terms": "Terms of use",
@@ -1842,7 +1843,14 @@
         "requestSending": "Sending…",
         "requestSent": "Request submitted for review.",
         "requestError": "Couldn't submit. Try again.",
-        "requestNote": "Approved only after admin and manager sign-off."
+        "requestNote": "Approved only after admin and manager sign-off.",
+        "docsCta": "Documents",
+        "docsTitle": "Case documents",
+        "docsEmpty": "No documents",
+        "docsEmptyText": "Add the first document for this case.",
+        "docsAdd": "Add document",
+        "docsAddPh": "Document title",
+        "docsAdded": "Document added."
       },
       "payments": {
         "title": "Payments",
@@ -2012,7 +2020,10 @@
         "verifyCta": "Request verification",
         "verifySending": "Sending…",
         "verifyRequested": "Verification requested. We'll review your profile.",
-        "verifyError": "Couldn't send the request. Try again."
+        "verifyError": "Couldn't send the request. Try again.",
+        "servicesTitle": "My services",
+        "servicesEmpty": "No services yet",
+        "servicesEmptyText": "Add services from registration or profile setup."
       }
     },
     "org": {
@@ -2417,7 +2428,8 @@
       "notifications": "Notifications",
       "bootstrap": "Bootstrap",
       "leads": "Leads",
-      "approvals": "Approvals"
+      "approvals": "Approvals",
+      "ads": "Ads"
     },
     "overview": {
       "kicker": "Admin console",
@@ -2545,6 +2557,13 @@
       "adminApprove": "Admin approve",
       "managerApprove": "Manager approve",
       "item": "Approval"
+    },
+    "ads": {
+      "title": "Ads & promotions",
+      "lead": "Promoted listings and ad products.",
+      "empty": "No ads yet",
+      "emptyText": "Create the first ad product.",
+      "create": "New ad"
     }
   },
   "secureChat": {
@@ -2566,5 +2585,39 @@
       "emptyText": "Start one by ordering a service or choosing a specialist.",
       "room": "Chat"
     }
+  },
+  "academy": {
+    "kicker": "LexGo Academy",
+    "title": "Legal courses & training",
+    "lead": "Practical courses from practicing lawyers — grow your legal skills.",
+    "empty": "No courses yet",
+    "emptyText": "New courses are coming soon.",
+    "course": "Course",
+    "som": "UZS",
+    "free": "Free"
+  },
+  "b2b": {
+    "kicker": "For business",
+    "title": "B2B legal products",
+    "lead": "Subscriptions, outsourcing and legal packages for companies.",
+    "empty": "No products yet",
+    "emptyText": "B2B offers are coming soon.",
+    "product": "Product",
+    "som": "UZS",
+    "byRequest": "On request"
+  },
+  "legalAid": {
+    "kicker": "Legal aid",
+    "title": "Free legal aid request",
+    "lead": "Describe your situation — we will connect you with a lawyer who can help.",
+    "name": "Full name",
+    "namePh": "Your name",
+    "phone": "Phone",
+    "details": "Your situation",
+    "detailsPh": "Briefly describe your legal issue",
+    "required": "Please fill in all fields.",
+    "success": "Request sent. We will contact you soon.",
+    "sending": "Sending…",
+    "submit": "Send request"
   }
 }

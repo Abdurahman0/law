@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/lib/auth";
-import { requestVerification } from "@/lib/services/backend";
+import { requestVerification, getLawyerServices } from "@/lib/services/backend";
+import { useResource } from "@/lib/useResource";
 import ProfilePreview from "@/components/register/ProfilePreview";
-import { EmptyState } from "@/components/portal/DataState";
+import { EmptyState, Skeleton } from "@/components/portal/DataState";
 import { Notice } from "@/components/admin/AdminBits";
-import { IconInfo, IconUser, IconShieldCheck } from "@/components/icons";
+import { IconInfo, IconUser, IconShieldCheck, IconBriefcase } from "@/components/icons";
 
 export default function AdvocateProfile() {
   const t = useTranslations("portal.advocate.profile");
@@ -61,7 +62,33 @@ export default function AdvocateProfile() {
         </div>
         {note ? <Notice ok={note.ok} msg={note.msg} /> : null}
       </div>
+      <MyServices userId={session?.id ?? ""} />
       <ProfilePreview p={profile} />
+    </div>
+  );
+}
+
+function MyServices({ userId }: { userId: string }) {
+  const t = useTranslations("portal.advocate.profile");
+  const load = useCallback(() => (userId ? getLawyerServices(userId) : Promise.resolve([])), [userId]);
+  const svc = useResource(load, [userId]);
+  return (
+    <div className="ppanel">
+      <div className="ppanel__h">
+        <b>{t("servicesTitle")}</b>
+        <span className="advmuted">{svc.data.length}</span>
+      </div>
+      {svc.status === "loading" ? (
+        <Skeleton rows={2} />
+      ) : !svc.data.length ? (
+        <EmptyState icon={<IconBriefcase />} title={t("servicesEmpty")} text={t("servicesEmptyText")} />
+      ) : (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          {svc.data.map((s) => (
+            <span className="chip" key={s.id}>{s.name}</span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

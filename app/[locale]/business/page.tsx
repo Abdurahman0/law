@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import BusinessSection from "@/components/sections/BusinessSection";
+import B2bSection from "@/components/sections/B2bSection";
 import DirectionsSection from "@/components/sections/DirectionsSection";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -17,6 +18,7 @@ export default async function Page({ params }: Props) {
   return (
     <>
       <BusinessSection />
+      <B2bSection />
       <DirectionsSection />
     </>
   );

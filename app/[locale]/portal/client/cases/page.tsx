@@ -1,23 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useTranslations } from "next-intl";
-import { listCases, createApproval, type BackendCase } from "@/lib/services/backend";
+import {
+  listCases,
+  createRefundRequest,
+  createReplacementRequest,
+  listCaseDocuments,
+  createCaseDocument,
+  type BackendCase,
+  type ModuleRecord,
+} from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
 import { Notice } from "@/components/admin/AdminBits";
 import Modal from "@/components/admin/Modal";
 import Select from "@/components/Select";
-import { IconFileText, IconArrowRight } from "@/components/icons";
+import { IconFileText, IconArrowRight, IconDocLines } from "@/components/icons";
 
 export default function ClientCases() {
   const t = useTranslations("portal.client.cases");
   const res = useResource(listCases, []);
+
+  // Refund / replacement request modal
   const [target, setTarget] = useState<BackendCase | null>(null);
   const [kind, setKind] = useState("refund");
   const [reason, setReason] = useState("");
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
+
+  // Case-documents modal
+  const [docCase, setDocCase] = useState<BackendCase | null>(null);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -25,12 +38,10 @@ export default function ClientCases() {
     setBusy(true);
     setNote(null);
     try {
-      await createApproval({
-        request_type: kind,
-        target_type: "case",
-        target_id: target.id,
-        reason: reason.trim(),
-      });
+      const payload = { case_id: target.id, reason: reason.trim() };
+      const title = `${target.caseType || target.caseNumber} — ${kind}`;
+      if (kind === "refund") await createRefundRequest({ title, payload });
+      else await createReplacementRequest({ title, payload });
       setNote({ ok: true, msg: t("requestSent") });
       setReason("");
       setTimeout(() => setTarget(null), 1200);
@@ -44,7 +55,7 @@ export default function ClientCases() {
 
   const kindOpts = [
     { value: "refund", label: t("refund") },
-    { value: "lawyer_replacement", label: t("replacement") },
+    { value: "replacement", label: t("replacement") },
   ];
 
   return (
@@ -73,6 +84,9 @@ export default function ClientCases() {
             </div>
             <div className="creq__side">
               <span className="creq__badge">{c.status}</span>
+              <button className="btn btn--line btn--sm" type="button" onClick={() => setDocCase(c)}>
+                {t("docsCta")}
+              </button>
               <button
                 className="btn btn--line btn--sm"
                 type="button"
@@ -108,6 +122,73 @@ export default function ClientCases() {
           <p className="rf__hint">{t("requestNote")}</p>
         </form>
       </Modal>
+
+      <CaseDocsModal target={docCase} onClose={() => setDocCase(null)} />
     </div>
+  );
+}
+
+function CaseDocsModal({ target, onClose }: { target: BackendCase | null; onClose: () => void }) {
+  const t = useTranslations("portal.client.cases");
+  const [reloadKey, setReloadKey] = useState(0);
+  const caseId = target?.id ?? "";
+  const load = useCallback(async () => {
+    if (!caseId) return [] as ModuleRecord[];
+    const all = await listCaseDocuments();
+    return all.filter((d) => String(d.payload.case_id ?? "") === caseId);
+  }, [caseId]);
+  const docs = useResource(load, [caseId, reloadKey]);
+
+  const [title, setTitle] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
+
+  async function add(e: React.FormEvent) {
+    e.preventDefault();
+    if (!title.trim() || busy || !caseId) return;
+    setBusy(true);
+    setNote(null);
+    try {
+      await createCaseDocument({ title: title.trim(), payload: { case_id: caseId } });
+      setTitle("");
+      setNote({ ok: true, msg: t("docsAdded") });
+      setReloadKey((k) => k + 1);
+    } catch {
+      setNote({ ok: false, msg: t("requestError") });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <Modal open={!!target} onClose={onClose} title={t("docsTitle")}>
+      <div className="cform" style={{ maxWidth: "none" }}>
+        {docs.status === "loading" ? (
+          <Skeleton rows={2} />
+        ) : !docs.data.length ? (
+          <EmptyState icon={<IconDocLines />} title={t("docsEmpty")} text={t("docsEmptyText")} />
+        ) : (
+          <div className="alist">
+            {docs.data.map((d) => (
+              <div className="creq" key={d.id}>
+                <span className="creq__st" />
+                <div className="creq__m">
+                  <b>{d.title}</b>
+                  {d.status ? <span>{d.status}</span> : null}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        <form onSubmit={add} style={{ display: "grid", gap: 8, marginTop: 4 }}>
+          <label>{t("docsAdd")}</label>
+          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t("docsAddPh")} />
+          {note ? <Notice ok={note.ok} msg={note.msg} /> : null}
+          <button className="btn btn--pri btn--full" type="submit" disabled={busy}>
+            {busy ? t("requestSending") : t("docsAdd")}
+          </button>
+        </form>
+      </div>
+    </Modal>
   );
 }
