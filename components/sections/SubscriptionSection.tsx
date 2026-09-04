@@ -5,71 +5,68 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { fmtNumber } from "@/lib/lexai";
 import { useAuth } from "@/lib/auth";
+import { getSubscriptionPlans, type BackendPlan } from "@/lib/services/backend";
+import { useResource } from "@/lib/useResource";
 import { IconInfo } from "../icons";
 
-// Illustrative marketing pricing + discount calculator. The real, backend-driven
-// plans and purchase flow live in the portal PlansPanel (/portal/{role}/subscription);
-// the CTAs here funnel logged-in users straight into it and guests into register.
-const BASE = { standard: 249000, premium: 549000 };
+// Personal-lawyer subscription tariffs (TZ: "Шахсий адвокат ёллаш обуна модули").
+// Prices come from the backend (admin-managed, TZ-aligned); these are only the
+// offline fallback so the marketing page still renders without the API.
+const FALLBACK: Record<"standard" | "premium", number> = { standard: 149000, premium: 349000 };
+const SLUG: Record<"standard" | "premium", string> = {
+  standard: "shaxsiy-advokat-standard",
+  premium: "shaxsiy-advokat-premium",
+};
 
-function calc(base: number, term: number, upfront: boolean) {
-  let m = base;
-  if (term === 12) m *= 0.9;
-  if (upfront) m *= 0.9;
-  m = Math.round(m / 1000) * 1000;
-  return m;
+type Term = 1 | 6 | 12;
+
+// Build a TZ pricing table from a plan (or a synthesised fallback).
+function pricing(plan: BackendPlan | undefined, fallbackMonthly: number, term: Term, upfront: boolean) {
+  const monthly = plan?.monthlyPrice || fallbackMonthly;
+  const six = plan?.sixMonthPrice || Math.round((monthly * 6 * 0.95) / 1000) * 1000;
+  const year = plan?.yearlyPrice || Math.round((monthly * 12 * 0.9) / 1000) * 1000;
+  const prepaid = plan?.prepaidYearlyPrice || Math.round((year * 0.9) / 1000) * 1000;
+  const total = term === 1 ? monthly : term === 6 ? six : upfront ? prepaid : year;
+  const perMonth = Math.round(total / term);
+  const baseline = monthly * term;
+  const save = Math.max(0, baseline - total);
+  return { monthly, total, perMonth, save, savePct: baseline ? Math.round((save / baseline) * 100) : 0 };
 }
 
 export default function SubscriptionSection() {
   const t = useTranslations("subscription");
   const { session } = useAuth();
-  const [term, setTerm] = useState(6);
+  const plansRes = useResource<BackendPlan>(getSubscriptionPlans, []);
+  const [term, setTerm] = useState<Term>(6);
   const [upfront, setUpfront] = useState(false);
 
-  // Where "choose plan" sends the user: the real connected subscription panel.
+  const bySlug = new Map(plansRes.data.map((p) => [p.slug, p]));
   const buyHref = session ? `/portal/${session.role}/subscription` : "/register";
 
-  function Plan({
-    id,
-    hot,
-  }: {
-    id: "standard" | "premium";
-    hot?: boolean;
-  }) {
-    const base = BASE[id];
-    const m = calc(base, term, upfront);
-    const diff = base - m;
+  function Plan({ id, hot }: { id: "standard" | "premium"; hot?: boolean }) {
+    const plan = bySlug.get(SLUG[id]);
+    const pr = pricing(plan, FALLBACK[id], term, upfront);
     const features = t.raw(`plans.${id}.features`) as string[];
     return (
-      <article
-        className={`plan${hot ? " plan--hot" : ""}`}
-        data-badge={hot ? t("mostChosen") : undefined}
-      >
+      <article className={`plan${hot ? " plan--hot" : ""}`} data-badge={hot ? t("mostChosen") : undefined}>
         <h3 className="plan__h">{t(`plans.${id}.name`)}</h3>
         <p className="plan__for">{t(`plans.${id}.for`)}</p>
         <div className="plan__p">
-          <b>{fmtNumber(m)}</b>
+          <b>{fmtNumber(pr.perMonth)}</b>
           <em>{t("perMonth")}</em>
-          {diff > 0 ? <span className="old">{fmtNumber(base)}</span> : null}
-          {diff > 0 ? (
-            <span className="save">−{Math.round((diff / base) * 100)}%</span>
-          ) : null}
+          {pr.save > 0 ? <span className="old">{fmtNumber(pr.monthly)}</span> : null}
+          {pr.savePct > 0 ? <span className="save">−{pr.savePct}%</span> : null}
         </div>
         <p className="plan__t">
-          {t("totalFor", { term, total: fmtNumber(m * term) })}
-          {diff > 0
-            ? t("youSave", { amount: fmtNumber(diff * term) })
-            : ""}
+          {t("totalFor", { term, total: fmtNumber(pr.total) })}
+          {pr.save > 0 ? t("youSave", { amount: fmtNumber(pr.save) }) : ""}
         </p>
         <ul>
           {features.map((f, i) => (
             <li key={i}>{f}</li>
           ))}
         </ul>
-        <Link
-          href={buyHref}
-          className={`btn ${id === "premium" ? "btn--grad" : "btn--line"} btn--full`}
-        >
+        <Link href={buyHref} className={`btn ${id === "premium" ? "btn--grad" : "btn--line"} btn--full`}>
           {t(`plans.${id}.cta`)}
         </Link>
       </article>
@@ -88,29 +85,16 @@ export default function SubscriptionSection() {
         </div>
 
         <div className="switch" role="group">
-          <button
-            type="button"
-            aria-pressed={term === 6}
-            onClick={() => setTerm(6)}
-          >
-            {t("term6")}
-          </button>
-          <button
-            type="button"
-            aria-pressed={term === 12}
-            onClick={() => setTerm(12)}
-          >
-            {t("term12")}
-          </button>
+          <button type="button" aria-pressed={term === 1} onClick={() => setTerm(1)}>{t("term1")}</button>
+          <button type="button" aria-pressed={term === 6} onClick={() => setTerm(6)}>{t("term6")}</button>
+          <button type="button" aria-pressed={term === 12} onClick={() => setTerm(12)}>{t("term12")}</button>
         </div>
-        <label className="chkline">
-          <input
-            type="checkbox"
-            checked={upfront}
-            onChange={(e) => setUpfront(e.target.checked)}
-          />
-          {t("upfront")}
-        </label>
+        {term === 12 ? (
+          <label className="chkline">
+            <input type="checkbox" checked={upfront} onChange={(e) => setUpfront(e.target.checked)} />
+            {t("upfront")}
+          </label>
+        ) : null}
 
         <div className="plans">
           <Plan id="standard" />
@@ -124,9 +108,7 @@ export default function SubscriptionSection() {
                 <span>{t("plans.gift.badgeSub")}</span>
               </span>
             </div>
-            <h3 className="plan__h" style={{ color: "#fff" }}>
-              {t("plans.gift.name")}
-            </h3>
+            <h3 className="plan__h" style={{ color: "#fff" }}>{t("plans.gift.name")}</h3>
             <p className="plan__for">{t("plans.gift.for")}</p>
             <div className="plan__p">
               <b style={{ color: "#fff" }}>{t("plans.gift.price")}</b>

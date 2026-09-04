@@ -1067,7 +1067,8 @@
         "name": "Jasur K.",
         "role": "Gift subscriber"
       }
-    ]
+    ],
+    "term1": "1 month"
   },
   "business": {
     "metaTitle": "For business",
@@ -2474,7 +2475,12 @@
     "freeLabel": "Free",
     "choose": "Choose plan",
     "empty": "No plans available",
-    "emptyText": "Subscription plans will load from the backend."
+    "emptyText": "Subscription plans will load from the backend.",
+    "term1": "1 mo",
+    "term6": "6 mo",
+    "term12": "1 yr",
+    "upfront": "Pay the year in full — extra −10%",
+    "totalNote": "{term} mo — {total} UZS total"
   },
   "promotion": {
     "kicker": "Visibility tool",

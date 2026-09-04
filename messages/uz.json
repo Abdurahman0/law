@@ -1073,7 +1073,8 @@
         "name": "Jasur K.",
         "role": "Sovg'a obunachisi"
       }
-    ]
+    ],
+    "term1": "1 oylik"
   },
   "business": {
     "metaTitle": "Biznes uchun",
@@ -2480,7 +2481,12 @@
     "freeLabel": "Bepul",
     "choose": "Rejani tanlash",
     "empty": "Rejalar mavjud emas",
-    "emptyText": "Obuna rejalari backenddan yuklanadi."
+    "emptyText": "Obuna rejalari backenddan yuklanadi.",
+    "term1": "1 oy",
+    "term6": "6 oy",
+    "term12": "1 yil",
+    "upfront": "Yillikni to‘liq to‘lang — yana −10%",
+    "totalNote": "{term} oy — jami {total} so‘m"
   },
   "promotion": {
     "kicker": "Ko'rinuvchanlik vositasi",

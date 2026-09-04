@@ -293,11 +293,19 @@ export async function getServicePackages(params?: { package_code?: string; tarif
 }
 
 // ── Subscription plans ────────────────────────────────────────────
+// Prices follow the TZ model: monthly base, 6-month, yearly (−10%/mo) and
+// prepaid-yearly (a further −10%). All amounts are admin-managed on the backend.
 export type BackendPlan = {
   id: string;
   name: string;
   slug: string;
-  price: number;
+  price: number; // monthly (back-compat alias)
+  monthlyPrice: number;
+  sixMonthPrice: number;
+  yearlyPrice: number;
+  prepaidYearlyPrice: number;
+  audience: string;
+  description: string;
   features: string[];
   isGiftable: boolean;
   isActive: boolean;
@@ -307,11 +315,18 @@ export async function getSubscriptionPlans(): Promise<BackendPlan[]> {
   const data = await http("/subscription-plans");
   return listFrom(data, "plans", "items", "data").map((v) => {
     const d = asDict(v);
+    const monthly = asNum(d.monthly_price ?? d.price);
     return {
       id: asStr(d.id),
       name: asStr(d.title ?? d.name),
       slug: asStr(d.slug),
-      price: asNum(d.monthly_price ?? d.price),
+      price: monthly,
+      monthlyPrice: monthly,
+      sixMonthPrice: asNum(d.six_month_price),
+      yearlyPrice: asNum(d.yearly_price),
+      prepaidYearlyPrice: asNum(d.prepaid_yearly_price),
+      audience: asStr(d.audience),
+      description: asStr(d.description),
       features: asArr(d.benefits ?? d.features).map((f) => asStr(f)),
       isGiftable: Boolean(d.is_giftable),
       isActive: d.is_active !== false,

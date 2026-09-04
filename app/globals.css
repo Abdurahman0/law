@@ -1846,3 +1846,10 @@ body:has(.schat) .fab{display:none}
 .wsp__newfolder input{border:1.5px solid var(--line);background:var(--b50);border-radius:var(--pill);padding:8px 14px;outline:none;font-size:.85rem;width:150px}
 .wsp__newfolder input:focus{border-color:var(--b300);background:#fff}
 .wsp__files{display:flex;flex-direction:column;gap:8px}
+
+/* ── Plans: TZ term pricing ── */
+.switch--sm{padding:3px;margin-bottom:0}
+.switch--sm button{padding:8px 15px;font-size:.82rem}
+.splan__h{display:flex;align-items:center;gap:8px}
+.splan__save{font-size:.72rem;font-weight:800;color:var(--ok);background:#E1F6EE;padding:3px 9px;border-radius:var(--pill);margin-left:auto}
+.splan__total{margin:-8px 0 6px;font-size:.8rem;color:var(--gray2)}
