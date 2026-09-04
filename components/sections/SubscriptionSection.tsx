@@ -4,8 +4,12 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { fmtNumber } from "@/lib/lexai";
+import { useAuth } from "@/lib/auth";
 import { IconInfo } from "../icons";
 
+// Illustrative marketing pricing + discount calculator. The real, backend-driven
+// plans and purchase flow live in the portal PlansPanel (/portal/{role}/subscription);
+// the CTAs here funnel logged-in users straight into it and guests into register.
 const BASE = { standard: 249000, premium: 549000 };
 
 function calc(base: number, term: number, upfront: boolean) {
@@ -18,9 +22,12 @@ function calc(base: number, term: number, upfront: boolean) {
 
 export default function SubscriptionSection() {
   const t = useTranslations("subscription");
-  const cur = useTranslations("enums")("currency");
+  const { session } = useAuth();
   const [term, setTerm] = useState(6);
   const [upfront, setUpfront] = useState(false);
+
+  // Where "choose plan" sends the user: the real connected subscription panel.
+  const buyHref = session ? `/portal/${session.role}/subscription` : "/register";
 
   function Plan({
     id,
@@ -60,7 +67,7 @@ export default function SubscriptionSection() {
           ))}
         </ul>
         <Link
-          href="/contact"
+          href={buyHref}
           className={`btn ${id === "premium" ? "btn--grad" : "btn--line"} btn--full`}
         >
           {t(`plans.${id}.cta`)}
@@ -131,7 +138,7 @@ export default function SubscriptionSection() {
                 <li key={i}>{f}</li>
               ))}
             </ul>
-            <Link href="/contact" className="btn btn--grad btn--full">
+            <Link href={buyHref} className="btn btn--grad btn--full">
               {t("plans.gift.cta")}
             </Link>
             <p className="quote">{t("plans.gift.quote")}</p>
