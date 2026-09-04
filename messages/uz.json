@@ -2589,8 +2589,17 @@
       "lead": "Mutaxassislar bilan himoyalangan suhbatlaringiz.",
       "empty": "Hozircha suhbat yo'q",
       "emptyText": "Xizmat buyurtma qilib yoki mutaxassis tanlab boshlang.",
-      "room": "Chat"
-    }
+      "room": "Chat",
+      "secured": "Himoyalangan suhbat"
+    },
+    "e2e": "Shifrlangan",
+    "encrypted": "Xabarlar filtrlanadi va uchdan-uchgacha himoyalangan.",
+    "online": "Onlayn",
+    "connecting": "Ulanmoqda…",
+    "offline": "Qayta ulanmoqda…",
+    "errorLoad": "Xabarlarni yuklab bo‘lmadi.",
+    "today": "Bugun",
+    "yesterday": "Kecha"
   },
   "academy": {
     "kicker": "LexGo Akademiya",

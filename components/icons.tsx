@@ -385,6 +385,21 @@ export const IconLanguage = (p: P) => (
   </svg>
 );
 
+export const IconLock = (p: P) => (
+  <svg {...base} {...p}>
+    <rect x="4" y="11" width="16" height="10" rx="2.5" />
+    <path d="M8 11V8a4 4 0 018 0v3" />
+    <circle cx="12" cy="16" r="1.3" fill="currentColor" stroke="none" />
+  </svg>
+);
+
+export const IconCheckDouble = (p: P) => (
+  <svg {...base} strokeWidth={2.4} {...p}>
+    <path d="M2 13l4 4 8-9" />
+    <path d="M12 15.5l1.5 1.5 8-9" />
+  </svg>
+);
+
 // Name → component registry so data files can reference icons by string.
 const ICON_MAP: Record<string, ComponentType<P>> = {
   IconChatDots,

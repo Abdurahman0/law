@@ -5,7 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { listSecureChats } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
-import { IconShieldCheck, IconArrowRight } from "@/components/icons";
+import { IconShieldCheck, IconArrowRight, IconLock } from "@/components/icons";
 
 export default function SecureInbox() {
   const t = useTranslations("secureChat.inbox");
@@ -17,22 +17,32 @@ export default function SecureInbox() {
         <b>{t("title")}</b>
         <span className="advmuted">{res.data.length}</span>
       </div>
-      <p className="advmuted" style={{ marginBottom: 16 }}>{t("lead")}</p>
+
+      <div className="sinbox__banner">
+        <span className="sinbox__banner-i"><IconLock /></span>
+        <span>{t("lead")}</span>
+      </div>
 
       {res.status === "loading" ? (
         <Skeleton rows={3} />
       ) : !res.data.length ? (
         <EmptyState icon={<IconShieldCheck />} title={t("empty")} text={t("emptyText")} />
       ) : (
-        <div className="alist">
+        <div className="sinbox">
           {res.data.map((r) => (
-            <Link key={r.id} href={`/portal/chat/${r.id}`} className="aitem aitem--link">
-              <span className="aitem__n"><IconShieldCheck /></span>
-              <div className="aitem__m">
+            <Link key={r.id} href={`/portal/chat/${r.id}`} className="sinbox__item">
+              <span className="sinbox__av">
+                <IconShieldCheck />
+              </span>
+              <div className="sinbox__m">
                 <b>{t("room")} · {r.id.slice(0, 8)}</b>
-                {r.status ? <span className="aitem__meta">{r.status}</span> : null}
+                <span className="sinbox__sub">
+                  <IconLock />
+                  {t("secured")}
+                </span>
               </div>
-              <span className="aitem__r"><IconArrowRight /></span>
+              {r.status ? <span className={`sinbox__st sinbox__st--${r.status.toLowerCase()}`}>{r.status}</span> : null}
+              <span className="sinbox__go"><IconArrowRight /></span>
             </Link>
           ))}
         </div>

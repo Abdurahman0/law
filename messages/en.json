@@ -2583,8 +2583,17 @@
       "lead": "Your protected conversations with specialists.",
       "empty": "No conversations yet",
       "emptyText": "Start one by ordering a service or choosing a specialist.",
-      "room": "Chat"
-    }
+      "room": "Chat",
+      "secured": "Protected conversation"
+    },
+    "e2e": "Encrypted",
+    "encrypted": "Messages are filtered and protected end-to-end.",
+    "online": "Online",
+    "connecting": "Connecting…",
+    "offline": "Reconnecting…",
+    "errorLoad": "Could not load messages.",
+    "today": "Today",
+    "yesterday": "Yesterday"
   },
   "academy": {
     "kicker": "LexGo Academy",
