@@ -1685,3 +1685,16 @@ body:has(.schat) .fab{display:none}
 .oprice{display:flex;justify-content:space-between;align-items:center;background:var(--b50);border-radius:14px;padding:14px 16px}
 .oprice b{font-family:var(--fd);font-size:1.2rem;color:var(--b600)}
 .oprice span{color:var(--gray);font-size:.88rem}
+
+/* secure inbox link rows + doc-done + verify */
+.aitem--link{cursor:pointer;text-decoration:none}
+.aitem--link:hover{border-color:var(--b300)}
+.docdone{text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;padding:10px 0}
+.docdone__i{width:52px;height:52px;border-radius:16px;background:rgba(0,168,112,.14);display:grid;place-items:center}
+.docdone__i svg{width:26px;height:26px;stroke:var(--ok);stroke-width:3}
+.docdone b{font-family:var(--fd);font-size:1.1rem}
+.docdone__f{font-size:.85rem;color:var(--gray)}
+.docdone__act{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap;justify-content:center}
+.pverify{display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--b50);border-radius:14px;padding:14px 16px;margin-top:14px;flex-wrap:wrap}
+.pverify b{display:block;font-size:.95rem}
+.pverify span{font-size:.82rem;color:var(--gray)}

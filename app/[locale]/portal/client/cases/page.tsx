@@ -1,14 +1,51 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { listCases } from "@/lib/services/backend";
+import { listCases, createApproval, type BackendCase } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
+import { Notice } from "@/components/admin/AdminBits";
+import Modal from "@/components/admin/Modal";
+import Select from "@/components/Select";
 import { IconFileText, IconArrowRight } from "@/components/icons";
 
 export default function ClientCases() {
   const t = useTranslations("portal.client.cases");
   const res = useResource(listCases, []);
+  const [target, setTarget] = useState<BackendCase | null>(null);
+  const [kind, setKind] = useState("refund");
+  const [reason, setReason] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!target || busy) return;
+    setBusy(true);
+    setNote(null);
+    try {
+      await createApproval({
+        request_type: kind,
+        target_type: "case",
+        target_id: target.id,
+        reason: reason.trim(),
+      });
+      setNote({ ok: true, msg: t("requestSent") });
+      setReason("");
+      setTimeout(() => setTarget(null), 1200);
+    } catch (err) {
+      const d = err && typeof err === "object" && "detail" in err ? String((err as { detail?: string }).detail) : "";
+      setNote({ ok: false, msg: d || t("requestError") });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const kindOpts = [
+    { value: "refund", label: t("refund") },
+    { value: "lawyer_replacement", label: t("replacement") },
+  ];
 
   return (
     <div className="ppanel">
@@ -36,10 +73,41 @@ export default function ClientCases() {
             </div>
             <div className="creq__side">
               <span className="creq__badge">{c.status}</span>
+              <button
+                className="btn btn--line btn--sm"
+                type="button"
+                onClick={() => {
+                  setTarget(c);
+                  setKind("refund");
+                  setReason("");
+                  setNote(null);
+                }}
+              >
+                {t("requestCta")}
+              </button>
             </div>
           </div>
         ))
       )}
+
+      <Modal open={!!target} onClose={() => setTarget(null)} title={t("requestTitle")}>
+        <form className="cform" style={{ maxWidth: "none" }} onSubmit={submit}>
+          <p className="advmuted">{t("requestLead")}</p>
+          <div>
+            <label>{t("requestKind")}</label>
+            <Select value={kind} onChange={setKind} options={kindOpts} ariaLabel={t("requestKind")} />
+          </div>
+          <div>
+            <label>{t("requestReason")}</label>
+            <textarea rows={3} value={reason} onChange={(e) => setReason(e.target.value)} placeholder={t("requestReasonPh")} />
+          </div>
+          {note ? <Notice ok={note.ok} msg={note.msg} /> : null}
+          <button className="btn btn--pri btn--full" type="submit" disabled={busy}>
+            {busy ? t("requestSending") : t("requestSubmit")}
+          </button>
+          <p className="rf__hint">{t("requestNote")}</p>
+        </form>
+      </Modal>
     </div>
   );
 }

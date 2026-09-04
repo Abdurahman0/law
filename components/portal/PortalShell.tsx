@@ -25,6 +25,7 @@ import {
   IconClose,
   IconBolt,
   IconStar,
+  IconBuilding,
 } from "../icons";
 
 type SvgC = ComponentType<{ className?: string }>;
@@ -47,6 +48,8 @@ const ADVOCATE_NAV: NavItem[] = [
   { href: "/portal/advocate", key: "dashboard", Icon: IconGrid },
   { href: "/portal/advocate/opportunities", key: "opportunities", Icon: IconBriefcase },
   { href: "/portal/advocate/cases", key: "cases", Icon: IconFileText },
+  { href: "/portal/advocate/messages", key: "messages", Icon: IconChat },
+  { href: "/portal/advocate/organization", key: "organization", Icon: IconBuilding },
   { href: "/portal/advocate/profile", key: "profile", Icon: IconUser },
   { href: "/portal/advocate/promotion", key: "promotion", Icon: IconBolt },
   { href: "/portal/advocate/subscription", key: "subscription", Icon: IconStar },
@@ -55,7 +58,9 @@ const ADVOCATE_NAV: NavItem[] = [
 const CLIENT_NAV: NavItem[] = [
   { href: "/portal/client", key: "dashboard", Icon: IconGrid },
   { href: "/portal/client/services", key: "services", Icon: IconBriefcase },
+  { href: "/portal/client/documents", key: "documents", Icon: IconDocLines },
   { href: "/portal/client/cases", key: "cases", Icon: IconFileText },
+  { href: "/portal/client/messages", key: "messages", Icon: IconChat },
   { href: "/portal/client/ai", key: "ai", Icon: IconSparkle },
   { href: "/portal/client/lawyers", key: "lawyers", Icon: IconUser },
   { href: "/portal/client/subscription", key: "subscription", Icon: IconShield },

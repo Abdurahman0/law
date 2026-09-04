@@ -1,5 +1,7 @@
-import SubscriptionSection from "@/components/sections/SubscriptionSection";
+"use client";
+
+import PlansPanel from "@/components/portal/PlansPanel";
 
 export default function ClientSubscription() {
-  return <SubscriptionSection />;
+  return <PlansPanel />;
 }

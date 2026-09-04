@@ -1698,7 +1698,9 @@
         "gifts": "Sovg'alar",
         "ai": "LexGo.AI",
         "profile": "Profil",
-        "services": "Xizmatlar"
+        "services": "Xizmatlar",
+        "documents": "Hujjatlar",
+        "messages": "Xabarlar"
       },
       "advocate": {
         "dashboard": "Boshqaruv paneli",
@@ -1706,7 +1708,9 @@
         "cases": "Mening ishlarim",
         "profile": "Profil",
         "promotion": "Targ'ibot",
-        "subscription": "Obuna"
+        "subscription": "Obuna",
+        "messages": "Xabarlar",
+        "organization": "Tashkilot"
       }
     },
     "lawyer": {
@@ -1831,7 +1835,20 @@
         "title": "So'rovlarim",
         "empty": "Hozircha so'rov yo'q",
         "count": "Jami {n}",
-        "emptyText": "Birinchi so'rovni yaratish uchun muammoni yozing."
+        "emptyText": "Birinchi so'rovni yaratish uchun muammoni yozing.",
+        "requestCta": "So'rov",
+        "requestTitle": "Qaytarish yoki almashtirish so'rovi",
+        "requestLead": "Qaytarish va advokat almashtirish admin + menejer tomonidan ko'rib chiqiladi.",
+        "requestKind": "So'rov turi",
+        "refund": "Qaytarish",
+        "replacement": "Advokatni almashtirish",
+        "requestReason": "Sabab",
+        "requestReasonPh": "So'rovingizni qisqacha yozing",
+        "requestSubmit": "So'rov yuborish",
+        "requestSending": "Yuborilmoqda…",
+        "requestSent": "So'rov ko'rib chiqishga yuborildi.",
+        "requestError": "Yuborib bo'lmadi. Qayta urining.",
+        "requestNote": "Faqat admin va menejer tasdig'idan so'ng qabul qilinadi."
       },
       "payments": {
         "title": "To'lovlar",
@@ -1922,6 +1939,28 @@
         "buying": "Amalga oshirilmoqda…",
         "orderError": "Xarid amalga oshmadi. Qayta urining.",
         "orderNote": "Xariddan so'ng mutaxassis bilan maxfiy, himoyalangan chat ochiladi."
+      },
+      "documents": {
+        "title": "Hujjat tayyorlash",
+        "lead": "Namuna tanlang, bir nechta savolga javob bering va to'lab PDF oling.",
+        "empty": "Namunalar yo'q",
+        "emptyText": "Mijoz hujjat namunalari shu yerda ko'rinadi.",
+        "som": "so'm",
+        "free": "Bepul",
+        "answersLead": "Hujjatingiz uchun ma'lumotlarni to'ldiring.",
+        "noFields": "Qo'shimcha ma'lumot shart emas.",
+        "saving": "Saqlanmoqda…",
+        "continue": "Davom etish",
+        "price": "Narx",
+        "payLead": "PDF yaratish va ochish uchun to'lang.",
+        "pay": "To'lash va yaratish",
+        "processingShort": "Amalga oshirilmoqda…",
+        "checkStatus": "Holatni tekshirish",
+        "ready": "Hujjatingiz tayyor",
+        "open": "Ochish",
+        "download": "Yuklab olish",
+        "error": "Xatolik yuz berdi. Qayta urining.",
+        "processing": "To'lov amalga oshirilmoqda — birozdan so'ng holatni tekshiring."
       }
     },
     "advocate": {
@@ -1973,8 +2012,39 @@
         "visibility": "{pct}% to'ldirilgan",
         "previewNote": "Mijozlar profilingizni shunday ko'radi.",
         "emptyTitle": "Profil to'ldirilmagan",
-        "emptyText": "Professional profilingizni yaratish uchun ro'yxatdan o'tishni yakunlang."
+        "emptyText": "Professional profilingizni yaratish uchun ro'yxatdan o'tishni yakunlang.",
+        "verifyTitle": "Tasdiqlash",
+        "verifyLead": "Profilingiz uchun tasdiqlangan belgi so'rang.",
+        "verifyCta": "Tasdiqlash so'rash",
+        "verifySending": "Yuborilmoqda…",
+        "verifyRequested": "Tasdiqlash so'raldi. Profilingizni ko'rib chiqamiz.",
+        "verifyError": "So'rovni yuborib bo'lmadi. Qayta urining."
       }
+    },
+    "org": {
+      "title": "Mening tashkilotim",
+      "lead": "Advokatlar tashkilotingiz va a'zolarini boshqaring.",
+      "create": "Yangi tashkilot",
+      "empty": "Hozircha tashkilot yo'q",
+      "emptyText": "A'zo va xodim qo'shish uchun tashkilot yarating.",
+      "pending": "Kutilmoqda",
+      "members": "A'zolar",
+      "name": "Nomi",
+      "phone": "Telefon",
+      "inn": "STIR",
+      "region": "Viloyat",
+      "address": "Manzil",
+      "save": "Saqlash",
+      "saving": "Saqlanmoqda…",
+      "created": "Yaratildi.",
+      "error": "Xatolik yuz berdi.",
+      "member": "Foydalanuvchi",
+      "selectMember": "Foydalanuvchini tanlang",
+      "memberTitle": "Lavozim",
+      "memberTitlePh": "masalan, Katta yurist",
+      "addMember": "A'zo qo'shish",
+      "noMembers": "Hozircha a'zo yo'q",
+      "memberAdded": "A'zo qo'shildi."
     }
   },
   "notFound": {
@@ -2494,6 +2564,13 @@
     "safetyNote": "Telefon raqam, Telegram yoki tashqi havolalar bloklanadi. Hammasini LexGo ichida saqlang.",
     "blocked": "Bu xabar bloklandi.",
     "loginRequired": "Bu maxfiy chatni ochish uchun tizimga kiring.",
-    "login": "Kirish"
+    "login": "Kirish",
+    "inbox": {
+      "title": "Maxfiy chatlar",
+      "lead": "Mutaxassislar bilan himoyalangan suhbatlaringiz.",
+      "empty": "Hozircha suhbat yo'q",
+      "emptyText": "Xizmat buyurtma qilib yoki mutaxassis tanlab boshlang.",
+      "room": "Chat"
+    }
   }
 }

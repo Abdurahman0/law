@@ -2,6 +2,6 @@
 
 import SecureInbox from "@/components/chat/SecureInbox";
 
-export default function LawyerChat() {
+export default function ClientMessages() {
   return <SecureInbox />;
 }

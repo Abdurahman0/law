@@ -504,25 +504,34 @@ export type BackendTemplate = {
   slug: string;
   category: string;
   language: string;
+  description: string;
   price: number;
+  visibility: string;
   isActive: boolean;
+  questionnaire: { name: string; label: string; required?: boolean }[];
 };
 
+function normTemplate(v: unknown): BackendTemplate {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    name: asStr(d.title ?? d.name),
+    slug: asStr(d.slug),
+    category: asStr(d.category),
+    language: asStr(d.language),
+    description: asStr(d.description),
+    price: asNum(d.price),
+    visibility: asStr(d.visibility, "client"),
+    isActive: d.is_active !== false,
+    questionnaire: asArr(d.fields ?? d.questionnaire).map((q) => {
+      const x = asDict(q);
+      return { name: asStr(x.name), label: asStr(x.label ?? x.name), required: Boolean(x.required) };
+    }),
+  };
+}
+
 export async function getDocumentTemplates(): Promise<BackendTemplate[]> {
-  return listFrom(await http("/document-templates"), "templates", "items", "data").map(
-    (v) => {
-      const d = asDict(v);
-      return {
-        id: asStr(d.id),
-        name: asStr(d.title ?? d.name),
-        slug: asStr(d.slug),
-        category: asStr(d.category),
-        language: asStr(d.language),
-        price: asNum(d.price),
-        isActive: d.is_active !== false,
-      };
-    },
-  );
+  return listFrom(await http("/document-templates"), "templates", "items", "data").map(normTemplate);
 }
 
 // ── Document requests (contract/application flow) ─────────────────
@@ -609,17 +618,62 @@ export async function getDocumentRequest(requestId: string): Promise<DocumentReq
 }
 
 // ── Organizations (advocate orgs) ─────────────────────────────────
-export async function listOrganizations(): Promise<unknown[]> {
-  return listFrom(await http("/organizations"), "organizations", "items", "data");
+export type Organization = {
+  id: string;
+  name: string;
+  organizationType: string;
+  phone: string;
+  inn: string;
+  region: string;
+  address: string;
+  verificationStatus: string;
+  ownerUserId: string;
+};
+function normOrg(v: unknown): Organization {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    name: asStr(d.name),
+    organizationType: asStr(d.organization_type),
+    phone: asStr(d.phone),
+    inn: asStr(d.inn),
+    region: asStr(d.region),
+    address: asStr(d.address),
+    verificationStatus: asStr(d.verification_status),
+    ownerUserId: asStr(d.owner_user_id),
+  };
 }
-export async function createOrganization(input: Record<string, unknown>): Promise<unknown> {
-  return http("/organizations", { method: "POST", body: JSON.stringify(input) });
+export type OrgMember = { id: string; userId: string; title: string; status: string };
+function normMember(v: unknown): OrgMember {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    userId: asStr(d.user_id),
+    title: asStr(d.title),
+    status: asStr(d.status),
+  };
 }
-export async function listOrgMembers(orgId: string): Promise<unknown[]> {
-  return listFrom(await http(`/organizations/${orgId}/members`), "members", "items", "data");
+export async function listOrganizations(): Promise<Organization[]> {
+  return listFrom(await http("/organizations"), "organizations", "items", "data").map(normOrg);
 }
-export async function addOrgMember(orgId: string, input: Record<string, unknown>): Promise<unknown> {
-  return http(`/organizations/${orgId}/members`, { method: "POST", body: JSON.stringify(input) });
+export async function createOrganization(input: {
+  name: string;
+  organization_type?: string;
+  phone?: string;
+  inn?: string;
+  region?: string;
+  address?: string;
+}): Promise<Organization> {
+  return normOrg(await http("/organizations", { method: "POST", body: JSON.stringify(input) }));
+}
+export async function listOrgMembers(orgId: string): Promise<OrgMember[]> {
+  return listFrom(await http(`/organizations/${orgId}/members`), "members", "items", "data").map(normMember);
+}
+export async function addOrgMember(
+  orgId: string,
+  input: { user_id: string; title?: string; role_id?: string },
+): Promise<OrgMember> {
+  return normMember(await http(`/organizations/${orgId}/members`, { method: "POST", body: JSON.stringify(input) }));
 }
 
 // ── Secure chat ───────────────────────────────────────────────────
@@ -642,11 +696,32 @@ function normSecureMsg(v: unknown): SecureMessage {
     createdAt: asStr(d.created_at ?? d.createdAt),
   };
 }
-export async function listSecureChats(): Promise<unknown[]> {
-  return listFrom(await http("/secure-chats"), "rooms", "items", "data");
+export type SecureRoom = {
+  id: string;
+  status: string;
+  orderId?: string;
+  caseId?: string;
+  clientUserId?: string;
+  sellerUserId?: string;
+  createdAt: string;
+};
+function normRoom(v: unknown): SecureRoom {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    status: asStr(d.status),
+    orderId: asStr(d.order_id) || undefined,
+    caseId: asStr(d.case_id) || undefined,
+    clientUserId: asStr(d.client_user_id) || undefined,
+    sellerUserId: asStr(d.seller_user_id) || undefined,
+    createdAt: asStr(d.created_at ?? d.createdAt),
+  };
 }
-export async function createSecureChat(input: Record<string, unknown>): Promise<unknown> {
-  return http("/secure-chats", { method: "POST", body: JSON.stringify(input) });
+export async function listSecureChats(): Promise<SecureRoom[]> {
+  return listFrom(await http("/secure-chats"), "rooms", "items", "data").map(normRoom);
+}
+export async function createSecureChat(input: Record<string, unknown>): Promise<SecureRoom> {
+  return normRoom(await http("/secure-chats", { method: "POST", body: JSON.stringify(input) }));
 }
 export async function getSecureMessages(roomId: string): Promise<SecureMessage[]> {
   return listFrom(await http(`/secure-chats/${roomId}/messages`), "messages", "items", "data").map(normSecureMsg);

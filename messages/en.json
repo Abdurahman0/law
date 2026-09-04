@@ -1692,7 +1692,9 @@
         "gifts": "Gifts",
         "ai": "LexGo.AI",
         "profile": "Profile",
-        "services": "Services"
+        "services": "Services",
+        "documents": "Documents",
+        "messages": "Messages"
       },
       "advocate": {
         "dashboard": "Dashboard",
@@ -1700,7 +1702,9 @@
         "cases": "My Cases",
         "profile": "Profile",
         "promotion": "Promotion",
-        "subscription": "Subscription"
+        "subscription": "Subscription",
+        "messages": "Messages",
+        "organization": "Organization"
       }
     },
     "lawyer": {
@@ -1825,7 +1829,20 @@
         "title": "My requests",
         "empty": "No requests yet",
         "count": "{n} total",
-        "emptyText": "Describe a legal problem to create your first request."
+        "emptyText": "Describe a legal problem to create your first request.",
+        "requestCta": "Request",
+        "requestTitle": "Request refund or replacement",
+        "requestLead": "Refunds and lawyer replacements are reviewed by admin + manager.",
+        "requestKind": "Request type",
+        "refund": "Refund",
+        "replacement": "Lawyer replacement",
+        "requestReason": "Reason",
+        "requestReasonPh": "Briefly explain your request",
+        "requestSubmit": "Submit request",
+        "requestSending": "Sending…",
+        "requestSent": "Request submitted for review.",
+        "requestError": "Couldn't submit. Try again.",
+        "requestNote": "Approved only after admin and manager sign-off."
       },
       "payments": {
         "title": "Payments",
@@ -1916,6 +1933,28 @@
         "buying": "Processing…",
         "orderError": "Purchase failed. Try again.",
         "orderNote": "A private, protected chat with your specialist opens after purchase."
+      },
+      "documents": {
+        "title": "Prepare a document",
+        "lead": "Pick a template, answer a few questions and pay to get your PDF.",
+        "empty": "No templates yet",
+        "emptyText": "Client document templates will appear here.",
+        "som": "so'm",
+        "free": "Free",
+        "answersLead": "Fill in the details for your document.",
+        "noFields": "No extra details needed.",
+        "saving": "Saving…",
+        "continue": "Continue",
+        "price": "Price",
+        "payLead": "Pay to generate and unlock your PDF.",
+        "pay": "Pay & generate",
+        "processingShort": "Processing…",
+        "checkStatus": "Check status",
+        "ready": "Your document is ready",
+        "open": "Open",
+        "download": "Download",
+        "error": "Something went wrong. Try again.",
+        "processing": "Payment is processing — check status in a moment."
       }
     },
     "advocate": {
@@ -1967,8 +2006,39 @@
         "visibility": "{pct}% complete",
         "previewNote": "This is how clients see your profile.",
         "emptyTitle": "Profile not set up",
-        "emptyText": "Complete your registration to build your professional profile."
+        "emptyText": "Complete your registration to build your professional profile.",
+        "verifyTitle": "Verification",
+        "verifyLead": "Request a verified badge for your profile.",
+        "verifyCta": "Request verification",
+        "verifySending": "Sending…",
+        "verifyRequested": "Verification requested. We'll review your profile.",
+        "verifyError": "Couldn't send the request. Try again."
       }
+    },
+    "org": {
+      "title": "My organization",
+      "lead": "Manage your advocate organization and its members.",
+      "create": "New organization",
+      "empty": "No organization yet",
+      "emptyText": "Create one to add members and staff.",
+      "pending": "Pending",
+      "members": "Members",
+      "name": "Name",
+      "phone": "Phone",
+      "inn": "INN",
+      "region": "Region",
+      "address": "Address",
+      "save": "Save",
+      "saving": "Saving…",
+      "created": "Created.",
+      "error": "Something went wrong.",
+      "member": "User",
+      "selectMember": "Select a user",
+      "memberTitle": "Title",
+      "memberTitlePh": "e.g. Senior lawyer",
+      "addMember": "Add member",
+      "noMembers": "No members yet",
+      "memberAdded": "Member added."
     }
   },
   "notFound": {
@@ -2488,6 +2558,13 @@
     "safetyNote": "Sharing phone numbers, Telegram or external links is blocked. Keep everything on LexGo.",
     "blocked": "This message was blocked.",
     "loginRequired": "Log in to open this private chat.",
-    "login": "Log in"
+    "login": "Log in",
+    "inbox": {
+      "title": "Private chats",
+      "lead": "Your protected conversations with specialists.",
+      "empty": "No conversations yet",
+      "emptyText": "Start one by ordering a service or choosing a specialist.",
+      "room": "Chat"
+    }
   }
 }
