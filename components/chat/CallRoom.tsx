@@ -84,11 +84,11 @@ export default function CallRoom({ roomId, callId, callType, isCaller, myUserId,
       if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ event, payload }));
     };
 
-    async function makeOffer() {
+    async function makeOffer(iceRestart = false) {
       const pc = pcRef.current;
       if (!pc) return;
       try {
-        const offer = await pc.createOffer();
+        const offer = await pc.createOffer(iceRestart ? { iceRestart: true } : undefined);
         await pc.setLocalDescription(offer);
         send("webrtc.offer", { sdp: pc.localDescription });
       } catch {
@@ -97,12 +97,15 @@ export default function CallRoom({ roomId, callId, callType, isCaller, myUserId,
     }
 
     (async () => {
-      // 1) local media
+      // 1) local media (relaxed constraints for iOS/Safari compatibility)
       let stream: MediaStream;
       try {
         stream = await navigator.mediaDevices.getUserMedia({
           audio: true,
-          video: callType === "video" ? { width: 1280, height: 720 } : false,
+          video:
+            callType === "video"
+              ? { facingMode: "user", width: { ideal: 1280 }, height: { ideal: 720 } }
+              : false,
         });
       } catch {
         if (alive) setStatus("error");
@@ -113,7 +116,10 @@ export default function CallRoom({ roomId, callId, callType, isCaller, myUserId,
         return;
       }
       streamRef.current = stream;
-      if (localRef.current) localRef.current.srcObject = stream;
+      if (localRef.current) {
+        localRef.current.srcObject = stream;
+        localRef.current.play().catch(() => {});
+      }
 
       // 2) peer connection
       const pc = new RTCPeerConnection(ICE);
@@ -123,13 +129,22 @@ export default function CallRoom({ roomId, callId, callType, isCaller, myUserId,
         if (e.candidate) send("webrtc.ice_candidate", { candidate: e.candidate.toJSON() });
       };
       pc.ontrack = (e) => {
-        if (remoteRef.current && e.streams[0]) remoteRef.current.srcObject = e.streams[0];
+        const el = remoteRef.current;
+        if (el && e.streams[0]) {
+          el.srcObject = e.streams[0];
+          // iOS/Safari won't autoplay; the call was opened by a tap, so play() is allowed.
+          el.play().catch(() => {});
+        }
         setRemoteOn(true);
         setStatus("live");
       };
       pc.onconnectionstatechange = () => {
         if (pc.connectionState === "connected") setStatus("live");
-        if (pc.connectionState === "failed" || pc.connectionState === "disconnected") setStatus("error");
+        // On failure, the caller retries ICE before giving up (helps flaky NAT/TURN).
+        if (pc.connectionState === "failed") {
+          if (isCaller) makeOffer(true);
+          else setStatus("error");
+        }
       };
 
       // 3) signaling socket
