@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/lib/auth";
 import { Link, useRouter } from "@/i18n/navigation";
@@ -8,8 +8,13 @@ import { IconLogo } from "../icons";
 
 export default function LoginForm() {
   const t = useTranslations("portal.login");
-  const { login } = useAuth();
+  const { login, session, ready } = useAuth();
   const router = useRouter();
+
+  // Already signed in → the login page is off-limits until logout.
+  useEffect(() => {
+    if (ready && session) router.replace(`/portal/${session.role}`);
+  }, [ready, session, router]);
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState<string | null>(null);

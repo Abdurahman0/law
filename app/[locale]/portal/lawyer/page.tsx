@@ -37,10 +37,10 @@ export default function LawyerDashboard() {
           <EmptyState icon={<IconBriefcase />} title={t("newCasesEmpty")} text={t("newCasesEmptyText")} />
         ) : (
           <div className="pcards">
-            {res.data.map((o) => (
+            {res.data.map((o, i) => (
               <div className="pcase" key={o.id}>
                 <div className="pcase__h">
-                  <span className="pcase__id">#{o.id}</span>
+                  <span className="pcase__id">{o.serviceName || `#${i + 1}`}</span>
                   <span className="advmuted">{o.status}</span>
                 </div>
                 <p>{o.title}</p>

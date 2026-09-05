@@ -137,7 +137,7 @@ export default function OrganizationsPanel() {
             {members.length ? (
               <div className="alist" style={{ marginBottom: 14 }}>
                 {members.map((m, i) => (
-                  <AdminItem key={m.id} index={i + 1} title={m.title || m.userId.slice(0, 8)} meta={m.status} />
+                  <AdminItem key={m.id} index={i + 1} title={m.title || t("member")} meta={m.status} />
                 ))}
               </div>
             ) : (

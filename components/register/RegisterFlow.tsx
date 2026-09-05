@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { useAuth } from "@/lib/auth";
@@ -44,7 +44,12 @@ export default function RegisterFlow() {
   const te = useTranslations("enums");
   const tl = useTranslations("register.languages");
   const router = useRouter();
-  const { startRegistration, register } = useAuth();
+  const { startRegistration, register, session, ready } = useAuth();
+
+  // Already signed in → registration is off-limits until logout.
+  useEffect(() => {
+    if (ready && session) router.replace(`/portal/${session.role}`);
+  }, [ready, session, router]);
 
   const [draft, setDraft] = useState<RegistrationDraft>(emptyDraft());
   const [idx, setIdx] = useState(0);

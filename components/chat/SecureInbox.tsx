@@ -29,13 +29,13 @@ export default function SecureInbox() {
         <EmptyState icon={<IconShieldCheck />} title={t("empty")} text={t("emptyText")} />
       ) : (
         <div className="sinbox">
-          {res.data.map((r) => (
+          {res.data.map((r, i) => (
             <Link key={r.id} href={`/portal/chat/${r.id}`} className="sinbox__item">
               <span className="sinbox__av">
                 <IconShieldCheck />
               </span>
               <div className="sinbox__m">
-                <b>{t("room")} · {r.id.slice(0, 8)}</b>
+                <b>{t("room")} #{i + 1}</b>
                 <span className="sinbox__sub">
                   <IconLock />
                   {t("secured")}

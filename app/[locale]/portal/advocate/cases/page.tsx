@@ -29,7 +29,7 @@ export default function AdvocateCases() {
           {res.data.map((c) => (
             <button className="pcase pcase--btn" key={c.id} type="button" onClick={() => setTarget(c)}>
               <div className="pcase__h">
-                <span className="pcase__id">#{c.caseNumber || c.id}</span>
+                <span className="pcase__id">{c.caseNumber ? `#${c.caseNumber}` : c.caseType || t("title")}</span>
                 <span className="advmuted">{c.status}</span>
               </div>
               <p>{c.caseType}</p>

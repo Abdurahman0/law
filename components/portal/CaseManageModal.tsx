@@ -63,7 +63,7 @@ export default function CaseManageModal({
       {target ? (
         <form className="cform" style={{ maxWidth: "none" }} onSubmit={submit}>
           <div className="cmcase__head">
-            <span className="pcase__id">#{target.caseNumber || target.id.slice(0, 8)}</span>
+            <span className="pcase__id">{target.caseNumber ? `#${target.caseNumber}` : target.caseType || target.title}</span>
             <b>{target.title || target.caseType}</b>
             {target.description ? <p className="advmuted">{target.description}</p> : null}
           </div>
