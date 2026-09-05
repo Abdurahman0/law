@@ -2,18 +2,14 @@
 
 import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
-import { useAuth, type Role } from "@/lib/auth";
+import { useAuth } from "@/lib/auth";
 import { Link, useRouter } from "@/i18n/navigation";
 import { IconLogo } from "../icons";
-
-const ROLES: Role[] = ["client", "lawyer", "advocate"];
-const cap = (r: Role) => (r === "advocate" ? "Advocate" : r === "lawyer" ? "Lawyer" : "Client");
 
 export default function LoginForm() {
   const t = useTranslations("portal.login");
   const { login } = useAuth();
   const router = useRouter();
-  const [role, setRole] = useState<Role>("client");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState<string | null>(null);
@@ -30,10 +26,9 @@ export default function LoginForm() {
     setErr(null);
     setBusy(true);
     try {
-      const s = await login(p, password, {
-        role,
-        name: t(`role${cap(role)}`),
-      });
+      // Real login resolves the role from the backend; the fallback role only
+      // applies when the API is unreachable (offline demo).
+      const s = await login(p, password, { role: "client", name: t("roleClient") });
       router.replace(`/portal/${s.role}`);
     } catch {
       setErr(t("failed"));
@@ -56,20 +51,7 @@ export default function LoginForm() {
         <h1 style={{ marginTop: 18 }}>{t("title")}</h1>
         <p className="sub">{t("subtitle")}</p>
 
-        <div className="plogin__roles plogin__roles--3">
-          {ROLES.map((r) => (
-            <button
-              key={r}
-              type="button"
-              className={`prole prole--slim${role === r ? " on" : ""}`}
-              onClick={() => setRole(r)}
-            >
-              <b>{t(`role${cap(r)}`)}</b>
-            </button>
-          ))}
-        </div>
-
-        <div className="cform" style={{ maxWidth: "none" }}>
+        <div className="cform" style={{ maxWidth: "none", marginTop: 20 }}>
           <div>
             <label htmlFor="l-phone">{t("phone")}</label>
             <input

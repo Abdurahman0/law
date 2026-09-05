@@ -1607,7 +1607,7 @@
     "metaTitle": "Portal",
     "login": {
       "title": "Log in to LexGo",
-      "subtitle": "Choose your role and continue",
+      "subtitle": "Sign in with your phone number",
       "roleClient": "Client",
       "roleLawyer": "Lawyer",
       "roleClientHint": "Find lawyers, order services, track your cases",
