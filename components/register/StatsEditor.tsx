@@ -2,18 +2,23 @@
 
 import { useTranslations } from "next-intl";
 import type { AdvocateStats } from "@/lib/types";
-import { IconFileText, IconAward, IconTarget, IconClock, IconUsers } from "../icons";
+import { IconFileText, IconAward, IconTarget, IconShieldCheck } from "../icons";
 
-const FIELDS: { key: keyof AdvocateStats; icon: typeof IconFileText; editable: boolean }[] = [
+const FIELDS: {
+  key: keyof AdvocateStats;
+  icon: typeof IconFileText;
+  editable: boolean;
+  noteKey?: string;
+}[] = [
   { key: "totalCases", icon: IconFileText, editable: true },
-  { key: "casesWon", icon: IconAward, editable: true },
+  { key: "fullyWonCases", icon: IconAward, editable: true, noteKey: "fullyWonNote" },
+  { key: "partiallyWonCases", icon: IconShieldCheck, editable: true, noteKey: "partiallyWonNote" },
   { key: "successRate", icon: IconTarget, editable: false },
-  { key: "yearsPractice", icon: IconClock, editable: true },
-  { key: "clientsRepresented", icon: IconUsers, editable: true },
 ];
 
 export function computeStats(s: AdvocateStats): AdvocateStats {
-  const successRate = s.totalCases > 0 ? Math.round((s.casesWon / s.totalCases) * 100) : 0;
+  const won = (s.fullyWonCases || 0) + (s.partiallyWonCases || 0);
+  const successRate = s.totalCases > 0 ? Math.round((won / s.totalCases) * 100) : 0;
   return { ...s, successRate: Math.min(successRate, 100) };
 }
 
@@ -33,7 +38,7 @@ export default function StatsEditor({
 
   return (
     <div className="stged">
-      {FIELDS.map(({ key, icon: I, editable }) => (
+      {FIELDS.map(({ key, icon: I, editable, noteKey }) => (
         <div className={`stged__c${editable ? "" : " stged__c--calc"}`} key={key}>
           <span className="stged__i">
             <I />
@@ -53,6 +58,7 @@ export default function StatsEditor({
             </b>
           )}
           <span className="stged__l">{t(key)}</span>
+          {noteKey ? <small className="stged__note">{t(noteKey)}</small> : null}
         </div>
       ))}
     </div>

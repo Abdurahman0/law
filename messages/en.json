@@ -2382,15 +2382,16 @@
         "clear": "Clear"
       },
       "expertiseTitle": "Professional expertise",
-      "expertiseSubtitle": "Select the legal areas you practice in.",
+      "expertiseSubtitle": "Pick the areas you practise in — this step is optional.",
       "stats": {
         "title": "Case statistics",
         "subtitle": "Show clients your track record. Success rate is calculated automatically.",
         "totalCases": "Total cases",
-        "casesWon": "Cases won",
-        "successRate": "Success rate",
-        "yearsPractice": "Years of practice",
-        "clientsRepresented": "Clients represented"
+        "fullyWonCases": "Fully won cases",
+        "fullyWonNote": "Cases where the court ruled fully in your favor",
+        "partiallyWonCases": "Partially won cases",
+        "partiallyWonNote": "Cases with a reduced charge or partially granted claim",
+        "successRate": "Success rate"
       },
       "review": {
         "title": "Review your profile",

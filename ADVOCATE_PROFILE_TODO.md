@@ -1,44 +1,42 @@
 # Advocate profile — TODO (moved out of registration)
 
-Three steps were **removed from advocate registration** to keep sign-up short.
-They must be re-added later inside the **advocate profile editor**, not the
-registration wizard.
+Advocate registration flow is now:
+`personal → professional → expertise → stats → review`
+(`STEPS_BY_TYPE.advocate` in `components/register/RegisterFlow.tsx`).
 
-- Registration flow: `components/register/RegisterFlow.tsx`
-  (`STEPS_BY_TYPE.advocate` is now `["personal", "professional", "review"]`).
-- Target for re-adding: `app/[locale]/portal/advocate/profile/page.tsx`.
+## Still pending: move into the profile editor
 
-## Steps to move into the profile
+Only **one** step is deferred to the advocate profile editor
+(`app/[locale]/portal/advocate/profile/page.tsx`):
 
 1. **Tajriba / Work history** (`experience` step)
    - Component: `components/register/WorkHistoryEditor.tsx`
    - Data: `ProfessionalProfile.workHistory: WorkEntry[]`
    - i18n: `register.advocate.work.*`
+   - The JSX lived in `RegisterFlow.tsx` — recover from git history.
 
-2. **Yo'nalishlar / Practice areas** (`expertise` step)
-   - Component: `components/register/ChipMulti.tsx` fed by `AREA_KEYS`
-   - Data: `ProfessionalProfile.practiceAreas: string[]` (enum `enums.areas`)
-   - i18n: `register.advocate.expertiseTitle`, `expertiseSubtitle`
+When the profile editor collects work history, add it back to the advocate
+completeness checks in `lib/services/registration.ts` (`scoreCompleteness`).
 
-3. **Statistika / Stats** (`stats` step)
-   - Component: `components/register/StatsEditor.tsx`
-   - Data: `ProfessionalProfile.stats: AdvocateStats`
-   - i18n: `register.advocate.stats.*`
+## Restored / current behaviour (for reference)
 
-The old JSX for all three lived in `RegisterFlow.tsx` (git history: the commit
-that trimmed the advocate steps) — copy from there when wiring the profile
-editor.
+- **Yo'nalishlar / Practice areas** (`expertise` step) — restored, **optional**
+  (no `canContinue` gate). Now uses the categorized catalog
+  `lib/legalServices.ts` via `components/register/LegalServicePicker.tsx`
+  (accordion: category → sub-services). Selected sub-service keys are stored in
+  `ProfessionalProfile.practiceAreas: string[]`.
+- **Statistika / Stats** (`stats` step) — restored, reworked:
+  - removed *years of practice* and *clients represented*;
+  - *cases won* split into two inputs: `fullyWonCases` (fully won) and
+    `partiallyWonCases` (charge mitigated / partly granted), each with a short
+    note (`register.advocate.stats.fullyWonNote` / `partiallyWonNote`);
+  - `successRate` is computed from (fully + partially) / total.
+  - Backend `PUT /lawyers/me` maps these to `wins_count` / `partial_wins_count`
+    (see `upsertMyLawyer` in `lib/services/backend.ts`).
 
-## Also changed in the professional step
+## Professional step (unchanged from previous change)
 
-- **Specialization** is now a dropdown (`register.advocate.specOptions`:
-  `criminalAdmin`, `economicCivil`, `both`) instead of a free-text input.
-- **Bar association** (`register.advocate.bar`) field was removed from
-  registration.
-- Single "experience (years)" replaced by **two** inputs:
-  `ProfessionalProfile.advocateYears` and `ProfessionalProfile.lawyerYears`
-  (i18n `register.advocate.advExp` / `lawExp`).
-
-When the profile editor collects work history / practice areas / stats again,
-update the advocate completeness checks in
-`lib/services/registration.ts` (`scoreCompleteness`) to include them.
+- **Specialization** is a dropdown (`register.advocate.specOptions`).
+- **Bar association** field removed.
+- Two experience inputs: `advocateYears` / `lawyerYears`
+  (`register.advocate.advExp` / `lawExp`).

@@ -2388,15 +2388,16 @@
         "clear": "Tozalash"
       },
       "expertiseTitle": "Kasbiy yo'nalishlar",
-      "expertiseSubtitle": "Amaliyot olib boradigan yuridik sohalarni tanlang.",
+      "expertiseSubtitle": "Amaliyot olib boradigan yo'nalishlarni tanlang — bu qadam ixtiyoriy.",
       "stats": {
         "title": "Ishlar statistikasi",
         "subtitle": "Mijozlarga natijalaringizni ko'rsating. Muvaffaqiyat darajasi avtomatik hisoblanadi.",
         "totalCases": "Jami ishlar",
-        "casesWon": "Yutilgan ishlar",
-        "successRate": "Muvaffaqiyat darajasi",
-        "yearsPractice": "Amaliyot yillari",
-        "clientsRepresented": "Vakillik qilingan mijozlar"
+        "fullyWonCases": "To'liq yutilgan ishlar",
+        "fullyWonNote": "Sud qarori to'liq foydangizga chiqqan ishlar",
+        "partiallyWonCases": "Qisman yutilgan ishlar",
+        "partiallyWonNote": "Ayb yengillashtirilgan yoki talab qisman qanoatlantirilgan ishlar",
+        "successRate": "Muvaffaqiyat darajasi"
       },
       "review": {
         "title": "Profilingizni ko'rib chiqing",

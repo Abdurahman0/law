@@ -38,10 +38,9 @@ export type WorkEntry = {
 
 export type AdvocateStats = {
   totalCases: number;
-  casesWon: number;
-  successRate: number; // 0..100
-  yearsPractice: number;
-  clientsRepresented: number;
+  fullyWonCases: number; // sud qarori to'liq foydaga chiqqan
+  partiallyWonCases: number; // ayb yengillashtirilgan / qisman qanoatlantirilgan
+  successRate: number; // 0..100, computed
 };
 
 export type ProfessionalProfile = {

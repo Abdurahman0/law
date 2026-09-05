@@ -18,23 +18,23 @@ import PhoneStep from "./PhoneStep";
 import AccountTypeCards from "./AccountTypeCards";
 import PhotoUpload from "./PhotoUpload";
 import ServiceSelector from "./ServiceSelector";
+import LegalServicePicker from "./LegalServicePicker";
+import StatsEditor from "./StatsEditor";
 import ProfilePreview from "./ProfilePreview";
 
 const ZERO_STATS: AdvocateStats = {
   totalCases: 0,
-  casesWon: 0,
+  fullyWonCases: 0,
+  partiallyWonCases: 0,
   successRate: 0,
-  yearsPractice: 0,
-  clientsRepresented: 0,
 };
 
 const STEPS_BY_TYPE: Record<AccountType, string[]> = {
   client: ["clientInfo"],
   lawyer: ["lawyerBasic", "lawyerServices"],
-  // NOTE: "experience", "expertise" and "stats" steps were pulled out of
-  // registration — they belong in the advocate profile editor. See
-  // ADVOCATE_PROFILE_TODO.md before re-adding them anywhere.
-  advocate: ["personal", "professional", "review"],
+  // NOTE: the "experience" (work history) step is intentionally NOT here — it
+  // belongs in the advocate profile editor. See ADVOCATE_PROFILE_TODO.md.
+  advocate: ["personal", "professional", "expertise", "stats", "review"],
 };
 
 const ADV_STEPS = STEPS_BY_TYPE.advocate;
@@ -466,6 +466,22 @@ export default function RegisterFlow() {
                   </div>
                 </div>
               </div>
+            </div>
+          ) : null}
+
+          {step === "expertise" ? (
+            <div className="rf__step rf__step--wide">
+              <h1 className="rf__title">{t("advocate.expertiseTitle")}</h1>
+              <p className="rf__sub">{t("advocate.expertiseSubtitle")}</p>
+              <LegalServicePicker value={p.practiceAreas} onChange={(v) => setProfile({ practiceAreas: v })} />
+            </div>
+          ) : null}
+
+          {step === "stats" ? (
+            <div className="rf__step rf__step--wide">
+              <h1 className="rf__title">{t("advocate.stats.title")}</h1>
+              <p className="rf__sub">{t("advocate.stats.subtitle")}</p>
+              <StatsEditor value={p.stats ?? ZERO_STATS} onChange={(v) => setProfile({ stats: v })} />
             </div>
           ) : null}
 

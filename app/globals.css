@@ -1915,3 +1915,29 @@ body:has(.schat) .fab{display:none}
 .rf__back{display:inline-flex;align-items:center;gap:5px;align-self:flex-start;border:0;background:transparent;color:var(--gray);font:inherit;font-size:.86rem;font-weight:600;cursor:pointer;padding:4px 0;margin-bottom:6px;transition:color .15s}
 .rf__back:hover{color:var(--b600)}
 .rf__back svg{width:16px;height:16px}
+
+/* Advocate stats note + legal-service picker (practice areas) */
+.stged__note{font-size:.72rem;color:var(--gray);line-height:1.35;margin-top:-2px}
+.lsp{margin-top:8px;display:flex;flex-direction:column;gap:12px}
+.lsp__search{display:flex;align-items:center;gap:9px;border:1.5px solid var(--line);border-radius:12px;padding:0 13px;background:#fff}
+.lsp__search svg{width:17px;height:17px;color:var(--gray);flex:none}
+.lsp__search input{flex:1;border:0;outline:none;background:none;padding:12px 0;font-size:.95rem;font-family:inherit}
+.lsp__count{margin:0;font-size:.8rem;font-weight:700;color:var(--b600)}
+.lsp__cats{display:flex;flex-direction:column;gap:8px}
+.lsp__cat{border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+.lsp__cat.on{border-color:#bcd4ff}
+.lsp__head{width:100%;display:flex;align-items:center;gap:10px;padding:13px 15px;background:none;border:0;cursor:pointer;text-align:left;font-family:inherit}
+.lsp__head:hover{background:var(--b50)}
+.lsp__hlabel{flex:1;font-weight:700;font-size:.95rem;color:var(--ink)}
+.lsp__badge{min-width:22px;height:22px;padding:0 7px;border-radius:11px;background:var(--b600);color:#fff;font-size:.75rem;font-weight:800;display:grid;place-items:center}
+.lsp__cv{color:var(--gray);display:grid;place-items:center;transition:transform .18s}
+.lsp__cv svg{width:17px;height:17px}
+.lsp__cat.on .lsp__cv{transform:rotate(90deg)}
+.lsp__opts{display:flex;flex-wrap:wrap;gap:8px;padding:4px 15px 15px}
+.lsp__opt{display:inline-flex;align-items:center;gap:8px;padding:8px 13px 8px 9px;border:1.5px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;font-family:inherit;font-size:.88rem;color:var(--ink);transition:all .14s}
+.lsp__opt:hover{border-color:#bcd4ff;background:var(--b50)}
+.lsp__opt.on{border-color:var(--b600);background:var(--b50);color:var(--b600);font-weight:600}
+.lsp__box{width:18px;height:18px;border-radius:6px;border:1.5px solid var(--line);display:grid;place-items:center;flex:none;background:#fff}
+.lsp__opt.on .lsp__box{background:var(--b600);border-color:var(--b600);color:#fff}
+.lsp__box svg{width:12px;height:12px}
+.lsp__empty{padding:24px;text-align:center;color:var(--gray);font-size:.9rem}

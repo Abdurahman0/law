@@ -1,7 +1,8 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { initials } from "@/lib/lawyers";
+import { legalServiceLabel, type CatalogLocale } from "@/lib/legalServices";
 import type { ProfessionalProfile } from "@/lib/types";
 import {
   IconMapPin,
@@ -16,6 +17,7 @@ export default function ProfilePreview({ p }: { p: ProfessionalProfile }) {
   const te = useTranslations("enums");
   const tl = useTranslations("register.languages");
   const ts = useTranslations("register.advocate.stats");
+  const locale = useLocale() as CatalogLocale;
 
   const stats = p.stats;
 
@@ -51,11 +53,13 @@ export default function ProfilePreview({ p }: { p: ProfessionalProfile }) {
             ) : null}
             <span>
               <IconStar />
-              {stats ? (stats.casesWon / Math.max(stats.totalCases, 1) * 5).toFixed(1) : "5.0"}
+              {stats
+                ? (((stats.fullyWonCases + stats.partiallyWonCases) / Math.max(stats.totalCases, 1)) * 5).toFixed(1)
+                : "5.0"}
             </span>
             <span>
               <IconClock />
-              {p.experienceYears ?? stats?.yearsPractice ?? 0} {t("yrs")}
+              {p.advocateYears ?? p.experienceYears ?? 0} {t("yrs")}
             </span>
           </div>
         </div>
@@ -63,7 +67,7 @@ export default function ProfilePreview({ p }: { p: ProfessionalProfile }) {
 
       {stats ? (
         <div className="ppv__stats">
-          {(["totalCases", "casesWon", "successRate", "clientsRepresented"] as const).map((k) => (
+          {(["totalCases", "fullyWonCases", "partiallyWonCases", "successRate"] as const).map((k) => (
             <div key={k}>
               <b>
                 {stats[k]}
@@ -81,7 +85,7 @@ export default function ProfilePreview({ p }: { p: ProfessionalProfile }) {
           <div className="ppv__chips">
             {p.practiceAreas.map((a) => (
               <span className="pill pill--glass" key={a}>
-                {te(`areas.${a}`)}
+                {legalServiceLabel(a, locale)}
               </span>
             ))}
           </div>
