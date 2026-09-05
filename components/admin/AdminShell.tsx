@@ -87,7 +87,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
           })}
         </nav>
         <div className="psb__foot">
-          <Link href="/portal/client" className="psb__link">
+          <Link href={session ? `/portal/${session.role}` : "/portal/client"} className="psb__link">
             <IconGrid />
             {t("backToPortal")}
           </Link>
