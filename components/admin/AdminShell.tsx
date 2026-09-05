@@ -24,16 +24,18 @@ import {
 } from "../icons";
 
 type SvgC = ComponentType<{ className?: string }>;
-const NAV: { href: string; key: string; Icon: SvgC }[] = [
+// `perm` = the backend permission a page needs. Items without a perm (overview,
+// bootstrap) are full-admin only. Superadmin/admin see everything.
+const NAV: { href: string; key: string; Icon: SvgC; perm?: string }[] = [
   { href: "/admin", key: "overview", Icon: IconGrid },
-  { href: "/admin/services", key: "services", Icon: IconBriefcase },
-  { href: "/admin/plans", key: "plans", Icon: IconStar },
-  { href: "/admin/templates", key: "templates", Icon: IconDocLines },
-  { href: "/admin/ads", key: "ads", Icon: IconRocket },
-  { href: "/admin/roles", key: "roles", Icon: IconShield },
-  { href: "/admin/leads", key: "leads", Icon: IconUsers },
-  { href: "/admin/approvals", key: "approvals", Icon: IconShieldCheck },
-  { href: "/admin/notifications", key: "notifications", Icon: IconChat },
+  { href: "/admin/services", key: "services", Icon: IconBriefcase, perm: "services.manage" },
+  { href: "/admin/plans", key: "plans", Icon: IconStar, perm: "subscriptions.manage" },
+  { href: "/admin/templates", key: "templates", Icon: IconDocLines, perm: "templates.manage" },
+  { href: "/admin/ads", key: "ads", Icon: IconRocket, perm: "ads.manage" },
+  { href: "/admin/roles", key: "roles", Icon: IconShield, perm: "roles.manage" },
+  { href: "/admin/leads", key: "leads", Icon: IconUsers, perm: "leads.manage" },
+  { href: "/admin/approvals", key: "approvals", Icon: IconShieldCheck, perm: "approvals.manage" },
+  { href: "/admin/notifications", key: "notifications", Icon: IconChat, perm: "notifications.manage" },
   { href: "/admin/bootstrap", key: "bootstrap", Icon: IconBolt },
 ];
 
@@ -47,12 +49,33 @@ export default function AdminShell({ children }: { children: ReactNode }) {
   const isBootstrap = pathname === "/admin/bootstrap";
   const allowed = hasAdminAccess(session) || isBootstrap;
 
+  // Superadmin/admin see every page; other staff only pages their permissions
+  // grant. This drives both the sidebar and the per-page access guard.
+  const roles = (session?.roles ?? []).map((r) => r.toLowerCase());
+  const isFullAdmin = roles.includes("admin") || roles.includes("superadmin");
+  const perms = session?.permissions ?? [];
+  const visibleNav = NAV.filter((n) => isFullAdmin || (n.perm && perms.includes(n.perm)));
+
   useEffect(() => {
     if (!ready) return;
-    if (!session && !isBootstrap) router.replace("/login");
-    else if (session && !hasAdminAccess(session) && !isBootstrap)
+    if (!session && !isBootstrap) {
+      router.replace("/login");
+      return;
+    }
+    if (!session) return;
+    if (!hasAdminAccess(session) && !isBootstrap) {
       router.replace(`/portal/${session.role}`);
-  }, [ready, session, router, isBootstrap]);
+      return;
+    }
+    // Staff on a page their permissions don't cover → send to their first page.
+    if (!isFullAdmin && !isBootstrap) {
+      const onAllowed = visibleNav.some(
+        (n) => pathname === n.href || pathname.startsWith(n.href + "/"),
+      );
+      if (!onAllowed) router.replace(visibleNav[0]?.href ?? `/portal/${session.role}`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, session, router, isBootstrap, pathname]);
 
   useEffect(() => setOpen(false), [pathname]);
 
@@ -76,7 +99,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
           <span className="psb__role">{t("badge")}</span>
         </div>
         <nav className="psb__nav">
-          {NAV.map(({ href, key, Icon }) => {
+          {visibleNav.map(({ href, key, Icon }) => {
             const on = active?.href === href;
             return (
               <Link key={href} href={href} className={`psb__link${on ? " on" : ""}`}>
