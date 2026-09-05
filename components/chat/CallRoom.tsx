@@ -7,12 +7,37 @@ import { callSocketUrl, endCall } from "@/lib/services/backend";
 import { playRingback, playEndTone } from "@/lib/callSounds";
 import { IconClose, IconMic, IconMicOff, IconVideo, IconUser } from "../icons";
 
-const ICE: RTCConfiguration = {
-  iceServers: [
-    { urls: "stun:stun.l.google.com:19302" },
+// STUN alone only works when peers can reach each other directly (same LAN,
+// cone NAT). Computer↔phone and mobile-carrier (symmetric) NATs need a TURN
+// relay, or the media never connects. Configure a real TURN via env for
+// production; fall back to a free public relay so cross-network calls still
+// work out of the box.
+function buildIce(): RTCConfiguration {
+  const servers: RTCIceServer[] = [
+    { urls: process.env.NEXT_PUBLIC_STUN_URL || "stun:stun.l.google.com:19302" },
     { urls: "stun:stun1.l.google.com:19302" },
-  ],
-};
+  ];
+  const turnUrl = process.env.NEXT_PUBLIC_TURN_URL;
+  if (turnUrl) {
+    servers.push({
+      urls: turnUrl.split(",").map((s) => s.trim()),
+      username: process.env.NEXT_PUBLIC_TURN_USERNAME || "",
+      credential: process.env.NEXT_PUBLIC_TURN_CREDENTIAL || "",
+    });
+  } else {
+    servers.push({
+      urls: [
+        "turn:openrelay.metered.ca:80",
+        "turn:openrelay.metered.ca:443",
+        "turn:openrelay.metered.ca:443?transport=tcp",
+      ],
+      username: "openrelayproject",
+      credential: "openrelayproject",
+    });
+  }
+  return { iceServers: servers, iceCandidatePoolSize: 4 };
+}
+const ICE: RTCConfiguration = buildIce();
 
 type Props = {
   roomId: string;
@@ -40,6 +65,20 @@ export default function CallRoom({ roomId, callId, callType, isCaller, myUserId,
 
   useEffect(() => {
     let alive = true;
+    // ICE candidates that arrive before the remote description is set must be
+    // buffered, or addIceCandidate throws and the connection can never form.
+    const pending: RTCIceCandidateInit[] = [];
+    const flushCandidates = async () => {
+      const pc = pcRef.current;
+      if (!pc) return;
+      while (pending.length) {
+        try {
+          await pc.addIceCandidate(pending.shift() as RTCIceCandidateInit);
+        } catch {
+          /* ignore */
+        }
+      }
+    };
     const send = (event: string, payload: Record<string, unknown> = {}) => {
       const ws = wsRef.current;
       if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ event, payload }));
@@ -119,6 +158,7 @@ export default function CallRoom({ roomId, callId, callType, isCaller, myUserId,
           case "webrtc.offer":
             try {
               await pc2.setRemoteDescription(new RTCSessionDescription(payload.sdp as RTCSessionDescriptionInit));
+              await flushCandidates();
               const answer = await pc2.createAnswer();
               await pc2.setLocalDescription(answer);
               send("webrtc.answer", { sdp: pc2.localDescription });
@@ -129,15 +169,22 @@ export default function CallRoom({ roomId, callId, callType, isCaller, myUserId,
           case "webrtc.answer":
             try {
               await pc2.setRemoteDescription(new RTCSessionDescription(payload.sdp as RTCSessionDescriptionInit));
+              await flushCandidates();
             } catch {
               /* ignore */
             }
             break;
           case "webrtc.ice_candidate":
-            try {
-              if (payload.candidate) await pc2.addIceCandidate(payload.candidate as RTCIceCandidateInit);
-            } catch {
-              /* ignore */
+            if (payload.candidate) {
+              if (pc2.remoteDescription && pc2.remoteDescription.type) {
+                try {
+                  await pc2.addIceCandidate(payload.candidate as RTCIceCandidateInit);
+                } catch {
+                  /* ignore */
+                }
+              } else {
+                pending.push(payload.candidate as RTCIceCandidateInit);
+              }
             }
             break;
           case "call.end":
