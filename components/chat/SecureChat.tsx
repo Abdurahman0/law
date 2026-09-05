@@ -58,6 +58,7 @@ export default function SecureChat({ roomId }: { roomId: string }) {
   const [callBusy, setCallBusy] = useState(false);
   const bodyRef = useRef<HTMLDivElement>(null);
   const seen = useRef<Set<string>>(new Set());
+  const wsRef = useRef<WebSocket | null>(null);
 
   // Start a call, or join the one already active in this room.
   async function beginCall(kind: "audio" | "video") {
@@ -147,21 +148,48 @@ export default function SecureChat({ roomId }: { roomId: string }) {
 
   useEffect(() => {
     let alive = true;
-    getSecureMessages(roomId)
-      .then((m) => {
-        if (!alive) return;
-        m.forEach((x) => x.id && seen.current.add(x.id));
-        setMsgs(m);
-        setStatus("ready");
-      })
-      .catch(() => alive && setStatus("error"));
-
     let ws: WebSocket | null = null;
-    try {
-      ws = new WebSocket(secureSocketUrl(roomId, getToken()));
-      ws.onopen = () => alive && setConn("online");
-      ws.onclose = () => alive && setConn("offline");
-      ws.onerror = () => alive && setConn("offline");
+    let retry = 0;
+    let reconnectTimer: ReturnType<typeof setTimeout> | undefined;
+    let firstOpen = true;
+
+    // Fetch history — also on every reconnect, to catch messages that arrived
+    // while the socket was down.
+    async function loadHistory() {
+      try {
+        const m = await getSecureMessages(roomId);
+        if (!alive) return;
+        push(m); // dedupes via the `seen` set
+        setStatus("ready");
+      } catch {
+        if (alive) setStatus((s) => (s === "ready" ? s : "error"));
+      }
+    }
+
+    function scheduleReconnect() {
+      if (!alive) return;
+      retry = Math.min(retry + 1, 6);
+      clearTimeout(reconnectTimer);
+      reconnectTimer = setTimeout(connect, Math.min(1000 * 2 ** retry, 15000));
+    }
+
+    function connect() {
+      if (!alive) return;
+      setConn("connecting");
+      try {
+        ws = new WebSocket(secureSocketUrl(roomId, getToken()));
+        wsRef.current = ws;
+      } catch {
+        scheduleReconnect();
+        return;
+      }
+      ws.onopen = () => {
+        if (!alive) return;
+        retry = 0;
+        setConn("online");
+        if (!firstOpen) loadHistory(); // re-sync after a drop
+        firstOpen = false;
+      };
       ws.onmessage = (e) => {
         try {
           const o = JSON.parse(e.data);
@@ -174,17 +202,56 @@ export default function SecureChat({ roomId }: { roomId: string }) {
             blockReason: raw.block_reason ? String(raw.block_reason) : undefined,
             createdAt: String(raw.created_at ?? ""),
           };
-          if (m.id) push([m]);
+          if (!m.id) return;
+          // My own message echoed back → replace the optimistic bubble.
+          if (session && m.senderId === session.id) {
+            setSending(false);
+            setMsgs((prev) => {
+              if (seen.current.has(m.id)) return prev;
+              const idx = prev.findIndex((x) => x.pending);
+              seen.current.add(m.id);
+              if (idx >= 0) {
+                const next = [...prev];
+                next[idx] = m;
+                return next;
+              }
+              return [...prev, m];
+            });
+          } else {
+            push([m]);
+          }
         } catch {
           /* ignore non-JSON frames */
         }
       };
-    } catch {
-      setConn("offline");
+      ws.onclose = () => {
+        if (!alive) return;
+        setConn("offline");
+        scheduleReconnect();
+      };
+      ws.onerror = () => {
+        try {
+          ws?.close();
+        } catch {
+          /* onclose handles reconnect */
+        }
+      };
     }
+
+    loadHistory();
+    connect();
+
     return () => {
       alive = false;
-      ws?.close();
+      clearTimeout(reconnectTimer);
+      if (ws) {
+        ws.onclose = null;
+        try {
+          ws.close();
+        } catch {
+          /* ignore */
+        }
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomId]);
@@ -196,10 +263,9 @@ export default function SecureChat({ roomId }: { roomId: string }) {
 
   async function send() {
     const content = text.trim();
-    if (!content || sending) return;
+    if (!content) return;
     setText("");
-    setSending(true);
-    // Optimistic bubble so the message shows instantly with a "sending" state.
+    // Optimistic bubble; reconciled when the server echoes it back.
     const tempId = `tmp-${Date.now()}`;
     const optimistic: LocalMsg = {
       id: tempId,
@@ -210,6 +276,20 @@ export default function SecureChat({ roomId }: { roomId: string }) {
       pending: true,
     };
     setMsgs((prev) => [...prev, optimistic]);
+    setSending(true);
+
+    // Send over the WebSocket so the backend broadcasts it live to the other
+    // participant (an HTTP POST is NOT broadcast). Fall back to HTTP if the
+    // socket is down — that message is at least stored.
+    const ws = wsRef.current;
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      try {
+        ws.send(JSON.stringify({ content, message_type: "text", meta: {} }));
+        return; // echo reconciles the optimistic bubble and clears "sending"
+      } catch {
+        /* fall through to HTTP */
+      }
+    }
     try {
       const m = await sendSecureMessage(roomId, content);
       if (m.id) seen.current.add(m.id);
