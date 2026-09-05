@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { listOrders } from "@/lib/services/backend";
+import { listOpenOrders } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
 import OrderActions from "@/components/portal/OrderActions";
@@ -9,7 +9,7 @@ import { IconClock, IconMapPin, IconBriefcase } from "@/components/icons";
 
 export default function AdvocateOpportunities() {
   const t = useTranslations("portal.advocate.opportunities");
-  const res = useResource(listOrders, []);
+  const res = useResource(listOpenOrders, []);
 
   return (
     <div className="ppanel">

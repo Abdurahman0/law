@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { listOrders } from "@/lib/services/backend";
+import { listOpenOrders } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
 import StatGrid from "@/components/portal/StatGrid";
@@ -12,7 +12,7 @@ import { IconBriefcase, IconClock, IconMapPin } from "@/components/icons";
 export default function LawyerDashboard() {
   const t = useTranslations("portal.lawyer.dashboard");
   const tc = useTranslations("portal.common");
-  const res = useResource(listOrders, []);
+  const res = useResource(listOpenOrders, []);
 
   return (
     <>

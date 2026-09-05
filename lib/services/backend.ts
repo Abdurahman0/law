@@ -405,6 +405,23 @@ export async function listOrders(): Promise<BackendOrder[]> {
   return listFrom(await http("/orders"), "orders", "items", "data").map(normOrder);
 }
 
+// Orders still open for a seller to take — the marketplace/opportunities feeds.
+// Already accepted/declined/closed orders belong in "my cases", not here.
+const TAKEN_ORDER_STATUSES = new Set([
+  "accepted",
+  "declined",
+  "rejected",
+  "in_progress",
+  "completed",
+  "cancelled",
+  "canceled",
+  "closed",
+  "done",
+]);
+export async function listOpenOrders(): Promise<BackendOrder[]> {
+  return (await listOrders()).filter((o) => !TAKEN_ORDER_STATUSES.has((o.status || "").toLowerCase()));
+}
+
 export async function createOrder(input: {
   service_id: string;
   package_id?: string;

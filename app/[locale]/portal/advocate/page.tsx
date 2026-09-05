@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useAuth } from "@/lib/auth";
-import { listOrders } from "@/lib/services/backend";
+import { listOpenOrders } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
 import StatGrid from "@/components/portal/StatGrid";
@@ -19,7 +19,7 @@ export default function AdvocateDashboard() {
   const t = useTranslations("portal.advocate.dashboard");
   const tc = useTranslations("portal.common");
   const { session } = useAuth();
-  const res = useResource(listOrders, []);
+  const res = useResource(listOpenOrders, []);
   const completeness = session?.completeness ?? 0;
 
   return (
