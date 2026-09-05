@@ -2,7 +2,7 @@
 // Every function talks to the same-origin proxy with the bearer token attached.
 // UI callers wrap reads in `withFallback(...)` so the app keeps working on local
 // mock data until the backend is reachable.
-import { http, asDict, asStr, asNum, asArr, API_BASE, ApiError, absUrl, type Dict } from "@/lib/http";
+import { http, asDict, asStr, asNum, asArr, API_BASE, ApiError, absUrl, backendOrigin, backendUrl, type Dict } from "@/lib/http";
 import { getToken } from "@/lib/client";
 import type { ProfessionalProfile } from "@/lib/types";
 
@@ -781,9 +781,8 @@ export async function sendSecureMessage(roomId: string, content: string): Promis
   );
 }
 export function secureSocketUrl(roomId: string, token?: string | null): string {
-  const base = API_BASE.replace(/^http/i, "ws");
   const q = token ? `?token=${encodeURIComponent(token)}` : "";
-  return `${base}/ws/secure-chats/${roomId}${q}`;
+  return `${backendOrigin("ws")}/ws/secure-chats/${roomId}${q}`;
 }
 
 // ── Approvals (four-eyes) ─────────────────────────────────────────
@@ -1396,7 +1395,7 @@ function normCall(v: unknown): CallSession {
     callType: asStr(d.call_type),
     title: asStr(d.title),
     status: asStr(d.status),
-    joinUrl: asStr(d.join_url),
+    joinUrl: backendUrl(asStr(d.join_url)),
     startedAt: asStr(d.started_at),
     endedAt: asStr(d.ended_at) || undefined,
   };

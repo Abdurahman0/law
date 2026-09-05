@@ -73,6 +73,29 @@ export function absUrl(path: string): string {
   return `${API_BASE}${path.startsWith("/") ? "" : "/"}${path}`;
 }
 
+// The same-origin proxy (/api/backend) can't upgrade WebSockets, so real-time
+// features (secure-chat WS, call join links) must hit the backend directly.
+// Resolve the backend origin: an explicit NEXT_PUBLIC_WS_ORIGIN, else an
+// absolute API base, else the deployed backend.
+export function backendOrigin(scheme: "http" | "ws"): string {
+  const explicit = process.env.NEXT_PUBLIC_WS_ORIGIN;
+  let origin = explicit
+    ? explicit
+    : /^https?:\/\//i.test(API_BASE)
+      ? API_BASE
+      : "https://lexgo.api.cognilabs.org";
+  origin = origin.replace(/\/+$/, "");
+  return scheme === "ws" ? origin.replace(/^http/i, "ws") : origin.replace(/^ws/i, "http");
+}
+
+// Turn a possibly-relative backend URL (e.g. a call join_url) into an absolute
+// one pointing at the backend origin.
+export function backendUrl(path: string): string {
+  if (!path) return "";
+  if (/^https?:\/\//i.test(path)) return path;
+  return `${backendOrigin("http")}${path.startsWith("/") ? "" : "/"}${path}`;
+}
+
 // Small dict helpers shared by normalizers.
 export type Dict = Record<string, unknown>;
 export const asDict = (v: unknown): Dict =>

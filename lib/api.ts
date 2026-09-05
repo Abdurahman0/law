@@ -5,6 +5,7 @@ import {
   asDict,
   asStr,
   http,
+  backendOrigin,
   type Dict,
 } from "./http";
 
@@ -175,7 +176,6 @@ export function chatSocketUrl(
   chatId: string,
   token?: string | null,
 ): string {
-  const base = API_BASE.replace(/^http/i, "ws");
   const q = token ? `?token=${encodeURIComponent(token)}` : "";
-  return `${base}/ws/clients/${clientId}/chats/${chatId}${q}`;
+  return `${backendOrigin("ws")}/ws/clients/${clientId}/chats/${chatId}${q}`;
 }
