@@ -7,6 +7,7 @@ import { useAuth, hasAdminAccess, type Role } from "@/lib/auth";
 import { initials } from "@/lib/lawyers";
 import LanguageSwitcher from "../LanguageSwitcher";
 import NotificationBell from "./NotificationBell";
+import IncomingCallWatcher from "./IncomingCallWatcher";
 import {
   IconLogo,
   IconGrid,
@@ -114,6 +115,7 @@ export default function PortalShell({
 
   return (
     <div className="portal">
+      <IncomingCallWatcher />
       <div
         className={`psb__scrim${open ? " on" : ""}`}
         onClick={() => setOpen(false)}

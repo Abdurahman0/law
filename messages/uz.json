@@ -2802,6 +2802,11 @@
     "error": "Ulanish muammosi",
     "mic": "Mikrofon",
     "cam": "Kamera",
-    "end": "Tugatish"
+    "end": "Tugatish",
+    "someone": "Kimdir",
+    "incomingVideo": "Kiruvchi video qo‘ng‘iroq",
+    "incomingAudio": "Kiruvchi qo‘ng‘iroq",
+    "accept": "Qabul qilish",
+    "decline": "Rad etish"
   }
 }

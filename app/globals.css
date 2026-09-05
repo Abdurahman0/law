@@ -1888,3 +1888,21 @@ body:has(.schat) .fab{display:none}
 .callroom__btn--end{background:#E5484D;width:64px;height:64px}
 .callroom__btn--end:hover{background:#c53a3f}
 .callroom__btn--end svg{width:28px;height:28px}
+
+/* ── Incoming call ringing card ── */
+.incall{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:90;width:min(420px,92vw);animation:incallIn .3s cubic-bezier(.2,.7,.3,1)}
+.incall__card{display:flex;align-items:center;gap:14px;background:#0B1B3A;color:#fff;border-radius:18px;padding:14px 16px;box-shadow:0 16px 40px rgba(0,0,0,.35)}
+.incall__av{width:48px;height:48px;border-radius:50%;flex:none;background:var(--grad);display:grid;place-items:center;animation:incallPulse 1.4s infinite}
+.incall__av svg{width:24px;height:24px;stroke:#fff}
+.incall__m{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.incall__m b{font-weight:700}
+.incall__m span{font-size:.82rem;color:#B7CDEC}
+.incall__act{display:flex;gap:10px;flex:none}
+.incall__btn{width:46px;height:46px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center}
+.incall__btn svg{width:22px;height:22px;stroke:#fff}
+.incall__btn--accept{background:#37D39B}
+.incall__btn--accept:hover{background:#2bbe88}
+.incall__btn--decline{background:#E5484D}
+.incall__btn--decline:hover{background:#c53a3f}
+@keyframes incallIn{from{opacity:0;transform:translate(-50%,-16px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes incallPulse{0%{box-shadow:0 0 0 0 rgba(55,211,155,.5)}70%{box-shadow:0 0 0 12px rgba(55,211,155,0)}100%{box-shadow:0 0 0 0 rgba(55,211,155,0)}}

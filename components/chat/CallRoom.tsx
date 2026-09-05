@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { getToken } from "@/lib/client";
 import { callSocketUrl, endCall } from "@/lib/services/backend";
+import { playRingback, playEndTone } from "@/lib/callSounds";
 import { IconClose, IconMic, IconMicOff, IconVideo, IconUser } from "../icons";
 
 const ICE: RTCConfiguration = {
@@ -28,7 +29,7 @@ type Props = {
 export default function CallRoom({ roomId, callId, callType, isCaller, myUserId, onEnd }: Props) {
   const t = useTranslations("call");
   const localRef = useRef<HTMLVideoElement>(null);
-  const remoteRef = useRef<HTMLVideoElement>(null);
+  const remoteRef = useRef<HTMLMediaElement | null>(null);
   const pcRef = useRef<RTCPeerConnection | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -140,6 +141,7 @@ export default function CallRoom({ roomId, callId, callType, isCaller, myUserId,
             }
             break;
           case "call.end":
+            playEndTone();
             cleanup();
             setStatus("ended");
             onEnd();
@@ -165,6 +167,13 @@ export default function CallRoom({ roomId, callId, callType, isCaller, myUserId,
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomId, callId, callType, isCaller, myUserId]);
 
+  // Caller hears a ringback tone until the other side connects.
+  useEffect(() => {
+    if (!isCaller || status === "live" || remoteOn) return;
+    const stop = playRingback();
+    return stop;
+  }, [isCaller, status, remoteOn]);
+
   function toggleMic() {
     const s = streamRef.current;
     if (!s) return;
@@ -184,6 +193,7 @@ export default function CallRoom({ roomId, callId, callType, isCaller, myUserId,
   async function hangUp() {
     const ws = wsRef.current;
     if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ event: "call.end", payload: {} }));
+    playEndTone();
     try {
       await endCall(callId);
     } catch {
@@ -199,10 +209,23 @@ export default function CallRoom({ roomId, callId, callType, isCaller, myUserId,
     <div className="callroom">
       <div className="callroom__stage">
         {callType === "video" ? (
-          <video ref={remoteRef} className="callroom__remote" autoPlay playsInline />
+          <video
+            ref={(el) => {
+              remoteRef.current = el;
+            }}
+            className="callroom__remote"
+            autoPlay
+            playsInline
+          />
         ) : (
           <div className="callroom__audio">
             <span className="callroom__avatar"><IconUser /></span>
+            <audio
+              ref={(el) => {
+                remoteRef.current = el;
+              }}
+              autoPlay
+            />
           </div>
         )}
         {!remoteOn ? (

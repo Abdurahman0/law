@@ -2796,6 +2796,11 @@
     "error": "Connection problem",
     "mic": "Microphone",
     "cam": "Camera",
-    "end": "End call"
+    "end": "End call",
+    "someone": "Someone",
+    "incomingVideo": "Incoming video call",
+    "incomingAudio": "Incoming call",
+    "accept": "Accept",
+    "decline": "Decline"
   }
 }

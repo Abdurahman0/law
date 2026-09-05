@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { useAuth } from "@/lib/auth";
 import { getToken } from "@/lib/client";
+import { playRingtone } from "@/lib/callSounds";
 import {
   getSecureMessages,
   sendSecureMessage,
@@ -45,6 +47,7 @@ export default function SecureChat({ roomId }: { roomId: string }) {
   const t = useTranslations("secureChat");
   const { session, ready } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [msgs, setMsgs] = useState<LocalMsg[]>([]);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
@@ -105,6 +108,30 @@ export default function SecureChat({ roomId }: { roomId: string }) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomId, session, activeCall]);
+
+  // Auto-join a call when arriving from an incoming-call notification (?join=id).
+  useEffect(() => {
+    const joinId = searchParams.get("join");
+    if (!joinId || activeCall) return;
+    let alive = true;
+    listCalls(roomId)
+      .then((calls) => {
+        const c = calls.find((x) => x.id === joinId);
+        if (alive && c) setActiveCall({ callId: c.id, callType: c.callType === "video" ? "video" : "audio", isCaller: false });
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, roomId]);
+
+  // Ring while an in-room incoming call is pending.
+  useEffect(() => {
+    if (!incoming || activeCall) return;
+    const stop = playRingtone();
+    return stop;
+  }, [incoming, activeCall]);
 
   function push(list: LocalMsg[]) {
     setMsgs((prev) => {
