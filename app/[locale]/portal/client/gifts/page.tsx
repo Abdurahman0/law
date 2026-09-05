@@ -6,7 +6,9 @@ import {
   listGifts,
   createGift,
   getSubscriptionPlans,
+  getServices,
   type BackendPlan,
+  type BackendService,
 } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
@@ -26,10 +28,13 @@ export default function ClientGifts() {
   const [reloadKey, setReloadKey] = useState(0);
   const gifts = useResource(() => listGifts(), [reloadKey]);
   const plans = useResource<BackendPlan>(getSubscriptionPlans, []);
+  const services = useResource<BackendService>(() => getServices(), []);
   const giftable = plans.data.filter((p) => p.isGiftable);
 
   const [open, setOpen] = useState(false);
+  const [kind, setKind] = useState<"plan" | "service">("plan");
   const [planId, setPlanId] = useState("");
+  const [serviceId, setServiceId] = useState("");
   const [phone, setPhone] = useState("");
   const [term, setTerm] = useState("6");
   const [message, setMessage] = useState("");
@@ -37,12 +42,14 @@ export default function ClientGifts() {
   const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
 
   const planOpts = (giftable.length ? giftable : plans.data).map((p) => ({ value: p.id, label: p.name }));
+  const serviceOpts = services.data.filter((s) => s.isActive).map((s) => ({ value: s.id, label: s.name }));
   const termOpts = ["3", "6", "12"].map((n) => ({ value: n, label: `${n} ${t("months")}` }));
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    const pid = planId || planOpts[0]?.value;
-    if (busy || !pid || !phone.trim()) {
+    const isService = kind === "service";
+    const chosen = isService ? serviceId || serviceOpts[0]?.value : planId || planOpts[0]?.value;
+    if (busy || !chosen || !phone.trim()) {
       setNote({ ok: false, msg: t("error") });
       return;
     }
@@ -50,9 +57,8 @@ export default function ClientGifts() {
     setNote(null);
     try {
       const r = await createGift({
-        plan_id: pid,
+        ...(isService ? { service_id: chosen } : { plan_id: chosen, term_months: parseInt(term, 10) }),
         recipient_phone: phone.trim(),
-        term_months: parseInt(term, 10),
         message: message.trim() || undefined,
       });
       if (r.paymentUrl) window.open(r.paymentUrl, "_blank");
@@ -103,23 +109,45 @@ export default function ClientGifts() {
 
       <Modal open={open} onClose={() => setOpen(false)} title={t("give")}>
         <form className="cform" style={{ maxWidth: "none" }} onSubmit={submit}>
-          <div>
-            <label>{t("plan")}</label>
-            <Select
-              value={planId || planOpts[0]?.value || ""}
-              onChange={setPlanId}
-              options={planOpts.length ? planOpts : [{ value: "", label: "—" }]}
-              ariaLabel={t("plan")}
-            />
+          <div className="rolerow" style={{ display: "flex" }}>
+            <button type="button" className="roletab" aria-pressed={kind === "plan"} onClick={() => setKind("plan")}>
+              {t("kindPlan")}
+            </button>
+            <button type="button" className="roletab" aria-pressed={kind === "service"} onClick={() => setKind("service")}>
+              {t("kindService")}
+            </button>
           </div>
+          {kind === "plan" ? (
+            <div>
+              <label>{t("plan")}</label>
+              <Select
+                value={planId || planOpts[0]?.value || ""}
+                onChange={setPlanId}
+                options={planOpts.length ? planOpts : [{ value: "", label: "—" }]}
+                ariaLabel={t("plan")}
+              />
+            </div>
+          ) : (
+            <div>
+              <label>{t("service")}</label>
+              <Select
+                value={serviceId || serviceOpts[0]?.value || ""}
+                onChange={setServiceId}
+                options={serviceOpts.length ? serviceOpts : [{ value: "", label: "—" }]}
+                ariaLabel={t("service")}
+              />
+            </div>
+          )}
           <div>
             <label>{t("recipient")}</label>
             <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+998 __ ___ __ __" type="tel" />
           </div>
-          <div>
-            <label>{t("term")}</label>
-            <Select value={term} onChange={setTerm} options={termOpts} ariaLabel={t("term")} />
-          </div>
+          {kind === "plan" ? (
+            <div>
+              <label>{t("term")}</label>
+              <Select value={term} onChange={setTerm} options={termOpts} ariaLabel={t("term")} />
+            </div>
+          ) : null}
           <div>
             <label>{t("message")}</label>
             <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t("messagePh")} rows={2} />

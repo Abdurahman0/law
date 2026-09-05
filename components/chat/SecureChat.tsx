@@ -14,6 +14,8 @@ import {
   secureSocketUrl,
   startCall,
   listCalls,
+  setChatAutoDelete,
+  deleteSecureChat,
   type SecureMessage,
 } from "@/lib/services/backend";
 import CallRoom from "./CallRoom";
@@ -23,6 +25,7 @@ import {
   IconClose,
   IconAlert,
   IconLock,
+  IconCheck,
   IconCheckDouble,
   IconClock,
   IconUser,
@@ -57,6 +60,8 @@ export default function SecureChat({ roomId }: { roomId: string }) {
   const [activeCall, setActiveCall] = useState<{ callId: string; callType: "audio" | "video"; isCaller: boolean } | null>(null);
   const [incoming, setIncoming] = useState<{ callId: string; callType: "audio" | "video" } | null>(null);
   const [callBusy, setCallBusy] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [ttl, setTtl] = useState(0); // auto-delete window in hours (0 = off)
   const bodyRef = useRef<HTMLDivElement>(null);
   const seen = useRef<Set<string>>(new Set());
   const wsRef = useRef<WebSocket | null>(null);
@@ -86,6 +91,32 @@ export default function SecureChat({ roomId }: { roomId: string }) {
     setActiveCall({ callId: incoming.callId, callType: incoming.callType, isCaller: false });
     setIncoming(null);
   }
+
+  // Chat retention controls. The backend keeps a ~1-month archive after delete.
+  async function applyTtl(hours: number) {
+    setTtl(hours);
+    setMenuOpen(false);
+    try {
+      await setChatAutoDelete(roomId, hours);
+    } catch {
+      /* backend may not support this yet */
+    }
+  }
+  async function removeChat() {
+    setMenuOpen(false);
+    try {
+      await deleteSecureChat(roomId);
+    } catch {
+      /* ignore */
+    }
+    router.back();
+  }
+  const TTL_OPTS: { h: number; key: string }[] = [
+    { h: 0, key: "ttlOff" },
+    { h: 24, key: "ttl24h" },
+    { h: 168, key: "ttl7d" },
+    { h: 720, key: "ttl30d" },
+  ];
 
   // Poll for a call another participant started, so we can offer to join.
   useEffect(() => {
@@ -359,6 +390,39 @@ export default function SecureChat({ roomId }: { roomId: string }) {
           <IconLock />
           {t("e2e")}
         </span>
+        <div className="schat__menu">
+          <button
+            className="schat__call"
+            type="button"
+            aria-label={t("chatSettings")}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            <IconClock />
+          </button>
+          {menuOpen ? (
+            <div className="schat__drop" role="menu">
+              <p className="schat__droplabel">{t("ttlTitle")}</p>
+              {TTL_OPTS.map((o) => (
+                <button
+                  key={o.key}
+                  type="button"
+                  className={`schat__dropi${ttl === o.h ? " on" : ""}`}
+                  onClick={() => applyTtl(o.h)}
+                >
+                  {ttl === o.h ? <IconCheck /> : <span className="schat__dropdot" />}
+                  {t(o.key)}
+                </button>
+              ))}
+              <div className="schat__dropsep" />
+              <button type="button" className="schat__dropi schat__dropi--danger" onClick={removeChat}>
+                <IconClose />
+                {t("deleteChat")}
+              </button>
+              <p className="schat__dropnote">{t("archiveNote")}</p>
+            </div>
+          ) : null}
+        </div>
       </div>
 
       {incoming && !activeCall ? (

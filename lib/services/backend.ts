@@ -797,6 +797,18 @@ export async function listSecureChats(): Promise<SecureRoom[]> {
 export async function createSecureChat(input: Record<string, unknown>): Promise<SecureRoom> {
   return normRoom(await http("/secure-chats", { method: "POST", body: JSON.stringify(input) }));
 }
+// Set how long messages live before auto-deletion. 0 = never (off).
+// The backend keeps a 30-day archive after deletion.
+export async function setChatAutoDelete(roomId: string, autoDeleteHours: number): Promise<void> {
+  await http(`/secure-chats/${roomId}/settings`, {
+    method: "PATCH",
+    body: JSON.stringify({ auto_delete_hours: autoDeleteHours }),
+  });
+}
+// Delete (archive) a chat. Backend keeps it recoverable for ~1 month.
+export async function deleteSecureChat(roomId: string): Promise<void> {
+  await http(`/secure-chats/${roomId}`, { method: "DELETE" });
+}
 export async function getSecureMessages(roomId: string): Promise<SecureMessage[]> {
   return listFrom(await http(`/secure-chats/${roomId}/messages`), "messages", "items", "data").map(normSecureMsg);
 }
@@ -1228,7 +1240,7 @@ function normGift(v: unknown): Gift {
     id: asStr(d.id),
     direction: asStr(d.direction, "sent"),
     recipientPhone: asStr(d.recipient_phone),
-    planName: asStr(d.plan_name),
+    planName: asStr(d.plan_name ?? d.service_name),
     termMonths: asNum(d.term_months),
     status: asStr(d.status),
     createdAt: asStr(d.created_at),
@@ -1237,7 +1249,14 @@ function normGift(v: unknown): Gift {
 export async function listGifts(): Promise<Gift[]> {
   return listFrom(await http("/gifts"), "items", "data").map(normGift);
 }
-export type GiftInput = { plan_id: string; recipient_phone: string; term_months?: number; message?: string };
+// A gift is either a subscription plan or a single service.
+export type GiftInput = {
+  plan_id?: string;
+  service_id?: string;
+  recipient_phone: string;
+  term_months?: number;
+  message?: string;
+};
 export async function createGift(input: GiftInput): Promise<PurchaseResult> {
   return normPurchase(
     await http("/gifts", {
@@ -1306,10 +1325,23 @@ export async function deletePaymentMethod(id: string): Promise<void> {
   await http(`/clients/me/payment-methods/${id}`, { method: "DELETE" });
 }
 
-export type FamilyMember = { id: string; name: string; phone: string; relation: string };
+export type FamilyMember = {
+  id: string;
+  name: string;
+  phone: string;
+  relation: string;
+  // When true, this member may use the account owner's active plan benefits.
+  sharedAccess: boolean;
+};
 function normFamily(v: unknown): FamilyMember {
   const d = asDict(v);
-  return { id: asStr(d.id), name: asStr(d.name), phone: asStr(d.phone), relation: asStr(d.relation) };
+  return {
+    id: asStr(d.id),
+    name: asStr(d.name),
+    phone: asStr(d.phone),
+    relation: asStr(d.relation),
+    sharedAccess: Boolean(d.shared_access ?? d.can_use_plan),
+  };
 }
 export async function listFamilyMembers(): Promise<FamilyMember[]> {
   return listFrom(await http("/clients/me/family-members"), "items", "data").map(normFamily);
@@ -1319,6 +1351,35 @@ export async function addFamilyMember(input: { name: string; phone: string; rela
 }
 export async function deleteFamilyMember(id: string): Promise<void> {
   await http(`/clients/me/family-members/${id}`, { method: "DELETE" });
+}
+// Toggle whether a family member can use the owner's active plan.
+export async function setFamilyMemberAccess(id: string, sharedAccess: boolean): Promise<void> {
+  await http(`/clients/me/family-members/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify({ shared_access: sharedAccess }),
+  });
+}
+
+// ── User activity log ─────────────────────────────────────────────
+export type ActivityEntry = {
+  id: string;
+  action: string;
+  detail: string;
+  ip?: string;
+  createdAt: string;
+};
+function normActivity(v: unknown): ActivityEntry {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    action: asStr(d.action ?? d.type ?? d.event),
+    detail: asStr(d.detail ?? d.description ?? d.message),
+    ip: asStr(d.ip ?? d.ip_address) || undefined,
+    createdAt: asStr(d.created_at ?? d.createdAt ?? d.timestamp),
+  };
+}
+export async function listMyActivity(): Promise<ActivityEntry[]> {
+  return listFrom(await http("/users/me/activity"), "items", "data", "logs").map(normActivity);
 }
 
 // ── Payments history ──────────────────────────────────────────────

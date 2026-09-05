@@ -9,16 +9,24 @@ import {
   listFamilyMembers,
   addFamilyMember,
   deleteFamilyMember,
+  setFamilyMemberAccess,
+  listMyActivity,
   listPaymentMethods,
   addPaymentMethod,
   deletePaymentMethod,
 } from "@/lib/services/backend";
 import { useResource, useResourceOne } from "@/lib/useResource";
-import { Skeleton } from "@/components/portal/DataState";
+import { Skeleton, EmptyState } from "@/components/portal/DataState";
 import { Notice } from "@/components/admin/AdminBits";
 import Modal from "@/components/admin/Modal";
 import Select from "@/components/Select";
-import { IconEdit, IconPlus, IconClose, IconCard } from "@/components/icons";
+import { IconEdit, IconPlus, IconClose, IconCard, IconCheck, IconClock } from "@/components/icons";
+
+function fmtDateTime(s: string) {
+  if (!s) return "";
+  const d = new Date(s);
+  return Number.isNaN(d.getTime()) ? s : d.toLocaleString("ru-RU");
+}
 
 export default function ClientProfile() {
   const t = useTranslations("portal.client.profile");
@@ -28,6 +36,7 @@ export default function ClientProfile() {
   const prof = useResourceOne(getClientProfile, [key]);
   const family = useResource(() => listFamilyMembers(), [key]);
   const methods = useResource(() => listPaymentMethods(), [key]);
+  const activity = useResource(() => listMyActivity(), [key]);
 
   const [editOpen, setEditOpen] = useState(false);
   const [famOpen, setFamOpen] = useState(false);
@@ -69,6 +78,7 @@ export default function ClientProfile() {
               {t("addFamily")}
             </button>
           </div>
+          <p className="ppanel__note">{t("familyShareNote")}</p>
           {family.status === "loading" ? (
             <Skeleton rows={2} />
           ) : !family.data.length ? (
@@ -82,6 +92,15 @@ export default function ClientProfile() {
                     <b>{m.name}</b>
                     <span>{[m.phone, m.relation].filter(Boolean).join(" · ")}</span>
                   </div>
+                  <button
+                    type="button"
+                    className={`famshare${m.sharedAccess ? " on" : ""}`}
+                    aria-pressed={m.sharedAccess}
+                    onClick={() => setFamilyMemberAccess(m.id, !m.sharedAccess).then(reload).catch(() => {})}
+                  >
+                    {m.sharedAccess ? <IconCheck /> : null}
+                    {m.sharedAccess ? t("shared") : t("share")}
+                  </button>
                   <button
                     className="calev__x"
                     type="button"
@@ -142,6 +161,29 @@ export default function ClientProfile() {
             ? `${p.subscription.planName} · ${p.subscription.status}`
             : t("subActive")}
         </p>
+      </div>
+
+      <div className="ppanel">
+        <div className="ppanel__h">
+          <b>{t("activity")}</b>
+        </div>
+        {activity.status === "loading" ? (
+          <Skeleton rows={3} />
+        ) : !activity.data.length ? (
+          <EmptyState icon={<IconClock />} title={t("noActivity")} text={t("noActivityText")} />
+        ) : (
+          <div className="alist">
+            {activity.data.map((a) => (
+              <div className="creq" key={a.id}>
+                <span className="creq__st" />
+                <div className="creq__m">
+                  <b>{t.has(`log.${a.action}`) ? t(`log.${a.action}`) : a.action || "—"}</b>
+                  <span>{[a.detail, a.ip, fmtDateTime(a.createdAt)].filter(Boolean).join(" · ")}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <EditModal

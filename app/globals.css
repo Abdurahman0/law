@@ -1951,3 +1951,25 @@ body:has(.schat) .fab{display:none}
 .advcard__kind{display:inline-flex;align-items:center;padding:2px 9px;border-radius:999px;font-size:.72rem;font-weight:700;line-height:1.6}
 .advcard__kind--advocate{background:#eef2ff;color:#4f46e5}
 .advcard__kind--lawyer{background:#ecfdf5;color:#059669}
+
+/* Family shared-access toggle + panel note + registration work-history block */
+.ppanel__note{margin:0 0 12px;font-size:.82rem;color:var(--gray);line-height:1.4}
+.famshare{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border:1.5px solid var(--line);border-radius:9px;background:#fff;font-family:inherit;font-size:.76rem;font-weight:600;color:var(--gray);cursor:pointer;white-space:nowrap;transition:all .14s}
+.famshare:hover{border-color:#bcd4ff;color:var(--ink)}
+.famshare.on{background:#ecfdf5;border-color:#a7f3d0;color:#059669}
+.famshare svg{width:13px;height:13px}
+.rf__wh{margin-top:6px}
+.rf__wh>label{display:block;font-weight:700;font-size:.92rem;color:var(--ink)}
+/* Secure chat retention/delete menu */
+.schat__menu{position:relative}
+.schat__drop{position:absolute;right:0;top:calc(100% + 8px);z-index:30;min-width:230px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 34px rgba(0,0,0,.16);padding:8px}
+.schat__droplabel{margin:6px 8px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--gray)}
+.schat__dropi{width:100%;display:flex;align-items:center;gap:9px;padding:9px 10px;border:0;background:none;border-radius:9px;font-family:inherit;font-size:.9rem;color:var(--ink);cursor:pointer;text-align:left}
+.schat__dropi:hover{background:var(--b50)}
+.schat__dropi.on{color:var(--b600);font-weight:600}
+.schat__dropi svg{width:15px;height:15px}
+.schat__dropdot{width:15px;height:15px;flex:none}
+.schat__dropi--danger{color:#dc2626}
+.schat__dropi--danger:hover{background:#fef2f2}
+.schat__dropsep{height:1px;background:var(--line);margin:6px 4px}
+.schat__dropnote{margin:4px 8px 6px;font-size:.72rem;color:var(--gray);line-height:1.35}

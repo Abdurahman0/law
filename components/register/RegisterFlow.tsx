@@ -20,6 +20,7 @@ import PhotoUpload from "./PhotoUpload";
 import ServiceSelector from "./ServiceSelector";
 import LegalServicePicker from "./LegalServicePicker";
 import StatsEditor from "./StatsEditor";
+import WorkHistoryEditor from "./WorkHistoryEditor";
 import ProfilePreview from "./ProfilePreview";
 
 const ZERO_STATS: AdvocateStats = {
@@ -463,6 +464,11 @@ export default function RegisterFlow() {
                     <label>{t("advocate.lawExp")}</label>
                     <input type="number" min={0} value={p.lawyerYears ?? ""} onChange={(e) => setProfile({ lawyerYears: parseInt(e.target.value || "0", 10) || 0 })} placeholder={t("fields.experiencePh")} />
                   </div>
+                </div>
+                <div className="rf__wh">
+                  <label>{t("advocate.work.title")}</label>
+                  <p className="rf__hint">{t("advocate.work.subtitle")}</p>
+                  <WorkHistoryEditor value={p.workHistory} onChange={(v) => setProfile({ workHistory: v })} />
                 </div>
               </div>
             </div>
