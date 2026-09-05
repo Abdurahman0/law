@@ -57,6 +57,8 @@ export type ProfessionalProfile = {
   services: string[]; // lawyer service offering (backend service ids)
   // advocate-only
   email?: string;
+  advocateYears?: number; // years practised as an advocate
+  lawyerYears?: number; // years practised as a lawyer (yurist)
   licenseNumber?: string;
   licenseDoc?: string; // file name
   barAssociation?: string;

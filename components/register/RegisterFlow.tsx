@@ -11,16 +11,13 @@ import {
   type ProfessionalProfile,
   type RegistrationDraft,
 } from "@/lib/types";
-import { AREA_KEYS, REGION_KEYS } from "@/lib/mock/catalog";
+import { REGION_KEYS } from "@/lib/mock/catalog";
 import Select, { type Option } from "@/components/Select";
 import { IconLogo, IconChevronLeft, IconArrowRight, IconCheck } from "../icons";
 import PhoneStep from "./PhoneStep";
 import AccountTypeCards from "./AccountTypeCards";
-import ChipMulti from "./ChipMulti";
 import PhotoUpload from "./PhotoUpload";
 import ServiceSelector from "./ServiceSelector";
-import WorkHistoryEditor from "./WorkHistoryEditor";
-import StatsEditor from "./StatsEditor";
 import ProfilePreview from "./ProfilePreview";
 
 const ZERO_STATS: AdvocateStats = {
@@ -34,7 +31,10 @@ const ZERO_STATS: AdvocateStats = {
 const STEPS_BY_TYPE: Record<AccountType, string[]> = {
   client: ["clientInfo"],
   lawyer: ["lawyerBasic", "lawyerServices"],
-  advocate: ["personal", "professional", "experience", "expertise", "stats", "review"],
+  // NOTE: "experience", "expertise" and "stats" steps were pulled out of
+  // registration — they belong in the advocate profile editor. See
+  // ADVOCATE_PROFILE_TODO.md before re-adding them anywhere.
+  advocate: ["personal", "professional", "review"],
 };
 
 const ADV_STEPS = STEPS_BY_TYPE.advocate;
@@ -166,7 +166,10 @@ export default function RegisterFlow() {
     value: r,
     label: te(`regions.${r}`),
   }));
-  const areaOpts = AREA_KEYS.map((a) => ({ value: a, label: te(`areas.${a}`) }));
+  const specOpts: Option[] = (["criminalAdmin", "economicCivil", "both"] as const).map((k) => ({
+    value: k,
+    label: t(`advocate.specOptions.${k}`),
+  }));
 
   const pwOk = draft.password.length >= 8;
   const nameOk = !!p.firstName?.trim() && !!p.lastName?.trim();
@@ -182,8 +185,6 @@ export default function RegisterFlow() {
         return nameOk && !!p.region && pwOk;
       case "professional":
         return !!p.licenseNumber?.trim() && !!p.specialization?.trim();
-      case "expertise":
-        return p.practiceAreas.length > 0;
       default:
         return true;
     }
@@ -446,8 +447,8 @@ export default function RegisterFlow() {
                     <input value={p.licenseNumber ?? ""} onChange={(e) => setProfile({ licenseNumber: e.target.value })} placeholder={t("advocate.licensePh")} />
                   </div>
                   <div>
-                    <label>{t("advocate.experience")}</label>
-                    <input type="number" min={0} value={p.experienceYears ?? ""} onChange={(e) => setProfile({ experienceYears: parseInt(e.target.value || "0", 10) || 0 })} placeholder={t("fields.experiencePh")} />
+                    <label>{t("advocate.specialization")}</label>
+                    <Select value={p.specialization ?? ""} onChange={(v) => setProfile({ specialization: v })} options={specOpts} ariaLabel={t("advocate.specialization")} placeholder={t("advocate.specPlaceholder")} />
                   </div>
                 </div>
                 <div>
@@ -456,39 +457,15 @@ export default function RegisterFlow() {
                 </div>
                 <div className="cform__row2">
                   <div>
-                    <label>{t("advocate.bar")}</label>
-                    <input value={p.barAssociation ?? ""} onChange={(e) => setProfile({ barAssociation: e.target.value })} placeholder={t("advocate.barPh")} />
+                    <label>{t("advocate.advExp")}</label>
+                    <input type="number" min={0} value={p.advocateYears ?? ""} onChange={(e) => setProfile({ advocateYears: parseInt(e.target.value || "0", 10) || 0 })} placeholder={t("fields.experiencePh")} />
                   </div>
                   <div>
-                    <label>{t("advocate.specialization")}</label>
-                    <input value={p.specialization ?? ""} onChange={(e) => setProfile({ specialization: e.target.value })} placeholder={t("advocate.specializationPh")} />
+                    <label>{t("advocate.lawExp")}</label>
+                    <input type="number" min={0} value={p.lawyerYears ?? ""} onChange={(e) => setProfile({ lawyerYears: parseInt(e.target.value || "0", 10) || 0 })} placeholder={t("fields.experiencePh")} />
                   </div>
                 </div>
               </div>
-            </div>
-          ) : null}
-
-          {step === "experience" ? (
-            <div className="rf__step rf__step--wide">
-              <h1 className="rf__title">{t("advocate.work.title")}</h1>
-              <p className="rf__sub">{t("advocate.work.subtitle")}</p>
-              <WorkHistoryEditor value={p.workHistory} onChange={(v) => setProfile({ workHistory: v })} />
-            </div>
-          ) : null}
-
-          {step === "expertise" ? (
-            <div className="rf__step rf__step--wide">
-              <h1 className="rf__title">{t("advocate.expertiseTitle")}</h1>
-              <p className="rf__sub">{t("advocate.expertiseSubtitle")}</p>
-              <ChipMulti options={areaOpts} value={p.practiceAreas} onChange={(v) => setProfile({ practiceAreas: v })} />
-            </div>
-          ) : null}
-
-          {step === "stats" ? (
-            <div className="rf__step rf__step--wide">
-              <h1 className="rf__title">{t("advocate.stats.title")}</h1>
-              <p className="rf__sub">{t("advocate.stats.subtitle")}</p>
-              <StatsEditor value={p.stats ?? ZERO_STATS} onChange={(v) => setProfile({ stats: v })} />
             </div>
           ) : null}
 

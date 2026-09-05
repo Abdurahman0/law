@@ -2353,6 +2353,14 @@
       "barPh": "e.g. Chamber of Advocates of Uzbekistan",
       "specialization": "Specialization",
       "specializationPh": "e.g. Criminal law",
+      "specPlaceholder": "Select an area",
+      "specOptions": {
+        "criminalAdmin": "Criminal-administrative",
+        "economicCivil": "Economic-civil",
+        "both": "Criminal-administrative and economic-civil"
+      },
+      "advExp": "Experience as advocate (years)",
+      "lawExp": "Experience as lawyer (years)",
       "experience": "Years of experience",
       "work": {
         "title": "Work experience",
