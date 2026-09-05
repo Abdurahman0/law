@@ -157,6 +157,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const r = await registerStart({
         role: toBackendRole(role),
         name: draft.profile.name,
+        firstName: draft.profile.firstName,
+        lastName: draft.profile.lastName,
         phone: normUzPhone(draft.phone),
         password: draft.password,
       });

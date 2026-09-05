@@ -11,7 +11,7 @@ import {
   type ProfessionalProfile,
   type RegistrationDraft,
 } from "@/lib/types";
-import { LANGUAGE_KEYS, AREA_KEYS, REGION_KEYS } from "@/lib/mock/catalog";
+import { AREA_KEYS, REGION_KEYS } from "@/lib/mock/catalog";
 import Select, { type Option } from "@/components/Select";
 import { IconLogo, IconChevronLeft, IconArrowRight, IconCheck } from "../icons";
 import PhoneStep from "./PhoneStep";
@@ -42,7 +42,6 @@ const ADV_STEPS = STEPS_BY_TYPE.advocate;
 export default function RegisterFlow() {
   const t = useTranslations("register");
   const te = useTranslations("enums");
-  const tl = useTranslations("register.languages");
   const router = useRouter();
   const { startRegistration, register, session, ready } = useAuth();
 
@@ -74,6 +73,17 @@ export default function RegisterFlow() {
   const p = draft.profile;
   function setProfile(patch: Partial<ProfessionalProfile>) {
     setDraft((d) => ({ ...d, profile: { ...d.profile, ...patch } }));
+  }
+  // First/last name are two inputs; keep `name` in sync for backend + display.
+  function setName(patch: { firstName?: string; lastName?: string }) {
+    setDraft((d) => {
+      const firstName = (patch.firstName ?? d.profile.firstName ?? "").trimStart();
+      const lastName = (patch.lastName ?? d.profile.lastName ?? "").trimStart();
+      return {
+        ...d,
+        profile: { ...d.profile, firstName, lastName, name: `${firstName} ${lastName}`.trim() },
+      };
+    });
   }
 
   const pwField = (
@@ -156,20 +166,20 @@ export default function RegisterFlow() {
     value: r,
     label: te(`regions.${r}`),
   }));
-  const langOpts = LANGUAGE_KEYS.map((l) => ({ value: l, label: tl(l) }));
   const areaOpts = AREA_KEYS.map((a) => ({ value: a, label: te(`areas.${a}`) }));
 
   const pwOk = draft.password.length >= 8;
+  const nameOk = !!p.firstName?.trim() && !!p.lastName?.trim();
   function canContinue(): boolean {
     switch (step) {
       case "clientInfo":
-        return p.name.trim().length > 1 && pwOk;
+        return nameOk && pwOk;
       case "lawyerBasic":
-        return p.name.trim().length > 1 && !!p.region && p.languages.length > 0 && pwOk;
+        return nameOk && !!p.region && pwOk;
       case "lawyerServices":
         return p.services.length > 0;
       case "personal":
-        return p.name.trim().length > 1 && !!p.region && p.languages.length > 0 && pwOk;
+        return nameOk && !!p.region && pwOk;
       case "professional":
         return !!p.licenseNumber?.trim() && !!p.specialization?.trim();
       case "expertise":
@@ -314,9 +324,15 @@ export default function RegisterFlow() {
               <h1 className="rf__title">{t("client.title")}</h1>
               <p className="rf__sub">{t("client.subtitle")}</p>
               <div className="cform" style={{ maxWidth: "none", marginTop: 20 }}>
-                <div>
-                  <label>{t("fields.name")}</label>
-                  <input value={p.name} onChange={(e) => setProfile({ name: e.target.value })} placeholder={t("fields.namePh")} autoFocus />
+                <div className="cform__row2">
+                  <div>
+                    <label>{t("fields.firstName")}</label>
+                    <input value={p.firstName ?? ""} onChange={(e) => setName({ firstName: e.target.value })} placeholder={t("fields.firstNamePh")} autoFocus />
+                  </div>
+                  <div>
+                    <label>{t("fields.lastName")}</label>
+                    <input value={p.lastName ?? ""} onChange={(e) => setName({ lastName: e.target.value })} placeholder={t("fields.lastNamePh")} />
+                  </div>
                 </div>
                 <div>
                   <label>
@@ -336,9 +352,15 @@ export default function RegisterFlow() {
               <p className="rf__sub">{t("lawyer.basicSubtitle")}</p>
               <PhotoUpload value={p.photo} name={p.name} onChange={(u) => setProfile({ photo: u })} label={t("fields.photo")} hint={t("fields.photoHint")} />
               <div className="cform" style={{ maxWidth: "none" }}>
-                <div>
-                  <label>{t("fields.name")}</label>
-                  <input value={p.name} onChange={(e) => setProfile({ name: e.target.value })} placeholder={t("fields.namePh")} />
+                <div className="cform__row2">
+                  <div>
+                    <label>{t("fields.firstName")}</label>
+                    <input value={p.firstName ?? ""} onChange={(e) => setName({ firstName: e.target.value })} placeholder={t("fields.firstNamePh")} />
+                  </div>
+                  <div>
+                    <label>{t("fields.lastName")}</label>
+                    <input value={p.lastName ?? ""} onChange={(e) => setName({ lastName: e.target.value })} placeholder={t("fields.lastNamePh")} />
+                  </div>
                 </div>
                 <div className="cform__row2">
                   <div>
@@ -349,10 +371,6 @@ export default function RegisterFlow() {
                     <label>{t("fields.experience")}</label>
                     <input type="number" min={0} value={p.experienceYears ?? ""} onChange={(e) => setProfile({ experienceYears: parseInt(e.target.value || "0", 10) || 0 })} placeholder={t("fields.experiencePh")} />
                   </div>
-                </div>
-                <div>
-                  <label>{t("fields.languages")}</label>
-                  <ChipMulti options={langOpts} value={p.languages} onChange={(v) => setProfile({ languages: v })} />
                 </div>
                 <div>
                   <label>{t("fields.education")}</label>
@@ -387,27 +405,30 @@ export default function RegisterFlow() {
               <div className="cform" style={{ maxWidth: "none" }}>
                 <div className="cform__row2">
                   <div>
-                    <label>{t("fields.name")}</label>
-                    <input value={p.name} onChange={(e) => setProfile({ name: e.target.value })} placeholder={t("fields.namePh")} />
+                    <label>{t("fields.firstName")}</label>
+                    <input value={p.firstName ?? ""} onChange={(e) => setName({ firstName: e.target.value })} placeholder={t("fields.firstNamePh")} />
                   </div>
                   <div>
-                    <label>{t("fields.email")}</label>
-                    <input type="email" value={p.email ?? ""} onChange={(e) => setProfile({ email: e.target.value })} placeholder={t("fields.emailPh")} />
+                    <label>{t("fields.lastName")}</label>
+                    <input value={p.lastName ?? ""} onChange={(e) => setName({ lastName: e.target.value })} placeholder={t("fields.lastNamePh")} />
                   </div>
                 </div>
                 <div className="cform__row2">
                   <div>
+                    <label>{t("fields.email")}</label>
+                    <input type="email" value={p.email ?? ""} onChange={(e) => setProfile({ email: e.target.value })} placeholder={t("fields.emailPh")} />
+                  </div>
+                  <div>
                     <label>{t("fields.phone")}</label>
                     <input value={draft.phone} readOnly className="rf__ro" />
                   </div>
+                </div>
+                <div className="cform__row2">
                   <div>
                     <label>{t("fields.region")}</label>
                     <Select value={p.region ?? ""} onChange={(v) => setProfile({ region: v })} options={regionOpts} ariaLabel={t("fields.region")} placeholder={t("fields.regionPh")} />
                   </div>
-                </div>
-                <div>
-                  <label>{t("fields.languages")}</label>
-                  <ChipMulti options={langOpts} value={p.languages} onChange={(v) => setProfile({ languages: v })} />
+                  <div />
                 </div>
                 {pwField}
               </div>

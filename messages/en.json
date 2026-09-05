@@ -2018,7 +2018,7 @@
     },
     "advocate": {
       "dashboard": {
-        "kicker": "Business dashboard",
+        "kicker": "Project dashboard",
         "hi": "Welcome, {name}",
         "sub": "Your professional platform — track performance, win clients, grow your practice.",
         "completeness": "Profile completeness",
@@ -2256,10 +2256,10 @@
       "client": {
         "name": "Client",
         "tagline": "I need legal help",
-        "desc": "Describe your problem and let LexGo guide you to the right specialist and service.",
+        "desc": "Describe your problem and let LexGo guide you to the right lawyer or advocate and service.",
         "benefits": [
           "AI legal guidance",
-          "Smart specialist matching",
+          "Lawyers and advocates held to quality standards",
           "Track every request"
         ],
         "cta": "Continue as client"
@@ -2281,7 +2281,7 @@
         "desc": "A verified professional profile with credentials, statistics and priority visibility.",
         "benefits": [
           "Verified advocate badge",
-          "Business dashboard",
+          "Project dashboard",
           "Priority in search"
         ],
         "cta": "Continue as advocate"
@@ -2295,6 +2295,10 @@
     "fields": {
       "name": "Full name",
       "namePh": "Your name",
+      "firstName": "First name",
+      "firstNamePh": "Your first name",
+      "lastName": "Last name",
+      "lastNamePh": "Your last name",
       "email": "Email",
       "emailPh": "you@email.com",
       "photo": "Upload photo",

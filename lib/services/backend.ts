@@ -62,10 +62,18 @@ export type RegisterStartResult = {
 export async function registerStart(input: {
   role: BackendRole;
   name: string;
+  firstName?: string;
+  lastName?: string;
   phone: string;
   password: string;
 }): Promise<RegisterStartResult> {
-  const d = asDict(await http("/auth/register/start", { method: "POST", body: JSON.stringify(input) }));
+  const { firstName, lastName, ...rest } = input;
+  const body = {
+    ...rest,
+    ...(firstName ? { first_name: firstName } : {}),
+    ...(lastName ? { last_name: lastName } : {}),
+  };
+  const d = asDict(await http("/auth/register/start", { method: "POST", body: JSON.stringify(body) }));
   return {
     verificationId: asStr(d.verification_id),
     phone: asStr(d.phone),

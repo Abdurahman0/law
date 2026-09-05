@@ -45,7 +45,9 @@ export type AdvocateStats = {
 };
 
 export type ProfessionalProfile = {
-  name: string;
+  name: string; // kept in sync = `${firstName} ${lastName}` for backend + display
+  firstName?: string;
+  lastName?: string;
   photo?: string; // data URL (mock upload)
   region?: string; // enums.regions
   languages: string[]; // language keys
@@ -76,6 +78,8 @@ export type RegistrationDraft = {
 export function emptyProfile(): ProfessionalProfile {
   return {
     name: "",
+    firstName: "",
+    lastName: "",
     languages: [],
     services: [],
     practiceAreas: [],

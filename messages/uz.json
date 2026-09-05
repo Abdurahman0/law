@@ -2024,7 +2024,7 @@
     },
     "advocate": {
       "dashboard": {
-        "kicker": "Biznes paneli",
+        "kicker": "Loyiha boshqaruv paneli",
         "hi": "Xush kelibsiz, {name}",
         "sub": "Professional platformangiz — natijalarni kuzating, mijoz yutib oling, amaliyotni o'stiring.",
         "completeness": "Profil to'liqligi",
@@ -2262,10 +2262,10 @@
       "client": {
         "name": "Mijoz",
         "tagline": "Menga yuridik yordam kerak",
-        "desc": "Muammoyingizni yozing — LexGo sizni to'g'ri mutaxassis va xizmatga yo'naltiradi.",
+        "desc": "Muammoyingizni yozing — LexGo sizni to'g'ri yurist yoki advokat va xizmatga yo'naltiradi.",
         "benefits": [
           "Sun'iy intellekt yuridik yo'l-yo'riq",
-          "Aqlli mutaxassis tanlovi",
+          "Sifat standartlari asosida xizmat ko'rsatuvchi yurist va advokatlar",
           "Har bir so'rovni kuzatish"
         ],
         "cta": "Mijoz sifatida davom etish"
@@ -2287,7 +2287,7 @@
         "desc": "Litsenziya, statistika va ustuvor ko'rinuvchanlikka ega tasdiqlangan profil.",
         "benefits": [
           "Tasdiqlangan advokat belgisi",
-          "Biznes boshqaruv paneli",
+          "Loyiha boshqaruv paneli",
           "Qidiruvda ustuvorlik"
         ],
         "cta": "Advokat sifatida davom etish"
@@ -2301,6 +2301,10 @@
     "fields": {
       "name": "To'liq ism",
       "namePh": "Ismingiz",
+      "firstName": "Ism",
+      "firstNamePh": "Ismingiz",
+      "lastName": "Familiya",
+      "lastNamePh": "Familiyangiz",
       "email": "Email",
       "emailPh": "siz@email.com",
       "photo": "Rasm yuklash",
