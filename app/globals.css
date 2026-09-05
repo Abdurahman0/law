@@ -1853,3 +1853,16 @@ body:has(.schat) .fab{display:none}
 .splan__h{display:flex;align-items:center;gap:8px}
 .splan__save{font-size:.72rem;font-weight:800;color:var(--ok);background:#E1F6EE;padding:3px 9px;border-radius:var(--pill);margin-left:auto}
 .splan__total{margin:-8px 0 6px;font-size:.8rem;color:var(--gray2)}
+
+/* ── Admin: legal-aid requests ── */
+.laist{display:flex;flex-direction:column;gap:10px}
+.laitem{border:1px solid var(--line);border-radius:var(--rl);background:#fff;padding:16px}
+.laitem__h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.laitem__h b{font-weight:700}
+.aitem__st{font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:var(--pill);color:var(--b700);background:var(--b100);text-transform:capitalize;white-space:nowrap;flex:none}
+.aitem__st--active{color:var(--ok);background:#E1F6EE}
+.aitem__st--resolved{color:var(--ok);background:#E1F6EE}
+.laitem__phone{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;color:var(--b600);text-decoration:none;font-weight:600}
+.laitem__phone svg{width:14px;height:14px;stroke:var(--b600)}
+.laitem__details{margin:8px 0 6px;font-size:.9rem;color:var(--ink);line-height:1.5}
+.laitem__date{font-size:.75rem;color:var(--gray2)}

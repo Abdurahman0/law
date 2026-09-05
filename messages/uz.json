@@ -2544,7 +2544,9 @@
       "bootstrap": "Bootstrap",
       "leads": "Lidlar",
       "approvals": "Tasdiqlashlar",
-      "ads": "Reklama"
+      "ads": "Reklama",
+      "verifications": "Advokatlarni tasdiqlash",
+      "legalAid": "Yuridik yordam"
     },
     "overview": {
       "kicker": "Admin konsoli",
@@ -2683,6 +2685,26 @@
       "empty": "Hozircha reklama yo‘q",
       "emptyText": "Birinchi reklama mahsulotini yarating.",
       "create": "Yangi reklama"
+    },
+    "verifications": {
+      "title": "Yurist va advokatlarni tasdiqlash",
+      "lead": "Sotuvchi profillarini ko‘rib chiqing va tasdiqlang.",
+      "pendingCount": "{n} kutilmoqda",
+      "verify": "Tasdiqlash",
+      "verifying": "Tasdiqlanmoqda…",
+      "verified": "Tasdiqlangan",
+      "pending": "Kutilmoqda",
+      "unverified": "Tasdiqlanmagan",
+      "empty": "Hozircha advokatlar yo‘q",
+      "emptyText": "Ro‘yxatdan o‘tgan advokatlar shu yerda ko‘rinadi."
+    },
+    "legalAid": {
+      "title": "Yuridik yordam so‘rovlari",
+      "lead": "Fuqarolardan bepul yuridik yordam so‘rovlari.",
+      "empty": "Hozircha so‘rovlar yo‘q",
+      "emptyText": "Yangi so‘rovlar shu yerda ko‘rinadi.",
+      "anon": "Anonim",
+      "new": "Yangi"
     }
   },
   "secureChat": {

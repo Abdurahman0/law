@@ -112,6 +112,8 @@ export type BackendLawyer = {
   basePrice: number;
   bio?: string;
   verified: boolean;
+  verificationStatus: string;
+  sellerType: string;
 };
 
 function normLawyer(v: unknown): BackendLawyer {
@@ -132,6 +134,8 @@ function normLawyer(v: unknown): BackendLawyer {
     basePrice: asNum(d.base_hourly_price),
     bio: asStr(d.bio) || undefined,
     verified: Boolean(d.verified ?? d.is_verified),
+    verificationStatus: asStr(d.verification_status),
+    sellerType: asStr(d.seller_type),
   };
 }
 

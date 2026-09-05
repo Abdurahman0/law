@@ -2538,7 +2538,9 @@
       "bootstrap": "Bootstrap",
       "leads": "Leads",
       "approvals": "Approvals",
-      "ads": "Ads"
+      "ads": "Ads",
+      "verifications": "Verify lawyers",
+      "legalAid": "Legal aid"
     },
     "overview": {
       "kicker": "Admin console",
@@ -2677,6 +2679,26 @@
       "empty": "No ads yet",
       "emptyText": "Create the first ad product.",
       "create": "New ad"
+    },
+    "verifications": {
+      "title": "Verify lawyers & advocates",
+      "lead": "Review and verify seller profiles.",
+      "pendingCount": "{n} pending",
+      "verify": "Verify",
+      "verifying": "Verifying…",
+      "verified": "Verified",
+      "pending": "Pending",
+      "unverified": "Not verified",
+      "empty": "No lawyers yet",
+      "emptyText": "Registered lawyers will appear here for review."
+    },
+    "legalAid": {
+      "title": "Legal aid requests",
+      "lead": "Free legal aid requests from citizens.",
+      "empty": "No requests yet",
+      "emptyText": "New legal aid requests will appear here.",
+      "anon": "Anonymous",
+      "new": "New"
     }
   },
   "secureChat": {
