@@ -56,6 +56,8 @@ export type ProfessionalProfile = {
   services: string[]; // lawyer service offering (backend service ids)
   // advocate-only
   email?: string;
+  advocateStructure?: string; // byuro | firma | hayat
+  orgName?: string; // structure / firm name (or address)
   advocateYears?: number; // years practised as an advocate
   lawyerYears?: number; // years practised as a lawyer (yurist)
   licenseNumber?: string;

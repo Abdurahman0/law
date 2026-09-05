@@ -644,7 +644,12 @@
       }
     ],
     "filterAll": "Hammasi",
+    "roleAll": "Hammasi",
+    "roleAdvocates": "Advokatlar",
+    "roleLawyers": "Yuristlar",
     "card": {
+      "kindAdvocate": "Advokat",
+      "kindLawyer": "Yurist",
       "fullWin": "To'liq g'alaba",
       "partialWin": "Qisman",
       "responseValue": "30",
@@ -1700,13 +1705,13 @@
         "dashboard": "Boshqaruv paneli",
         "cases": "Mening ishlarim",
         "payments": "To'lovlar",
-        "lawyers": "Advokatlar",
+        "lawyers": "Advokat va yuristlar",
         "subscription": "Obuna",
         "gifts": "Sovg'alar",
         "ai": "LexGo.AI",
         "profile": "Profil",
         "services": "Xizmatlar",
-        "documents": "Hujjatlar",
+        "documents": "Hujjat namunalari",
         "messages": "Xabarlar",
         "notifications": "Bildirishnomalar"
       },
@@ -2000,8 +2005,8 @@
         "orderNote": "Xariddan so'ng mutaxassis bilan maxfiy, himoyalangan chat ochiladi."
       },
       "documents": {
-        "title": "Hujjat tayyorlash",
-        "lead": "Namuna tanlang, bir nechta savolga javob bering va to'lab PDF oling.",
+        "title": "Hujjat namunalari",
+        "lead": "Bizning professional advokatlar tomonidan tayyorlangan hujjat namunalaridan bemalol foydalanishingiz mumkin.",
         "empty": "Namunalar yo'q",
         "emptyText": "Mijoz hujjat namunalari shu yerda ko'rinadi.",
         "som": "so'm",
@@ -2325,7 +2330,7 @@
     },
     "lawyer": {
       "basicTitle": "Professional profilingiz",
-      "basicSubtitle": "Mijozlarga o'zingiz haqingizda ayting. To'liq profil ko'proq ishonch qozonadi.",
+      "basicSubtitle": "Bir necha asosiy ma'lumot yetarli — qolganini keyin profilingizda to'ldirasiz.",
       "servicesTitle": "Qaysi xizmatlarni ko'rsatasiz?",
       "servicesSubtitle": "Moslarining barchasini tanlang. Keyinchalik o'zgartirishingiz mumkin.",
       "matchNote": "Ko'rsatadigan xizmatlaringizni tanlang. Kelajakda LexGo tanlangan xizmatlaringiz asosida mos mijoz so'rovlarini sizga yo'naltiradi."
@@ -2367,6 +2372,15 @@
       },
       "advExp": "Advokat sifatida tajriba (yil)",
       "lawExp": "Yurist sifatida tajriba (yil)",
+      "structure": "Advokatlik tuzilmasi",
+      "structurePlaceholder": "Tuzilmani tanlang",
+      "structureOptions": {
+        "byuro": "Advokatlik byurosi",
+        "firma": "Advokatlik firmasi",
+        "hayat": "Advokatlar hay'ati"
+      },
+      "orgName": "Tuzilma nomi",
+      "orgNamePh": "Byuro / firma nomi yoki manzil",
       "experience": "Tajriba (yil)",
       "work": {
         "title": "Ish tajribasi",

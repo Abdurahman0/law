@@ -238,6 +238,13 @@ export function useAuth(): AuthCtx {
   return c;
 }
 
+// Only advocates working in the call center may INITIATE audio/video calls.
+// Everyone else (clients, regular lawyers/advocates) can still receive/join.
+export function canMakeCalls(s: Session | null): boolean {
+  if (!s) return false;
+  return (s.roles ?? []).some((r) => r.toLowerCase().includes("call_center"));
+}
+
 // Admin access = an admin/superadmin role or any granted permission.
 export function hasAdminAccess(s: Session | null): boolean {
   if (!s) return false;

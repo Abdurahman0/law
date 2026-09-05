@@ -210,6 +210,8 @@ export async function upsertMyLawyer(
       district: "",
       license_number: p.licenseNumber ?? "",
       bar_association: p.barAssociation ?? "",
+      advocate_structure: p.advocateStructure ?? "",
+      organization_name: p.orgName ?? "",
       experience_years: p.advocateYears ?? p.experienceYears ?? 0,
       lawyer_experience_years: p.lawyerYears ?? 0,
       specializations: p.practiceAreas,

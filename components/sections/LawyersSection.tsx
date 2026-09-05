@@ -22,6 +22,7 @@ const priceNum = (p: string) => Number(p.replace(/\s/g, "")) || 0;
 // missing fields default sanely). Only runs when the backend returns data.
 function toLawyer(b: BackendLawyer): Lawyer {
   const r = b.region.toLowerCase();
+  const st = b.sellerType.toLowerCase();
   return {
     userId: b.userId,
     name: b.name || "—",
@@ -34,6 +35,7 @@ function toLawyer(b: BackendLawyer): Lawyer {
     part: 0,
     price: b.basePrice ? b.basePrice.toLocaleString("ru-RU").replace(/,/g, " ") : "—",
     super: b.verified,
+    kind: st.includes("advokat") ? "advocate" : "lawyer",
   };
 }
 
@@ -53,6 +55,7 @@ export default function LawyersSection({
   const [area, setArea] = useState(initialArea);
   const [region, setRegion] = useState("");
   const [sort, setSort] = useState("rating");
+  const [kind, setKind] = useState<"" | "advocate" | "lawyer">("");
   const res = useResource<BackendLawyer>(() => listLawyers(), []);
   const source = useMemo(() => res.data.map(toLawyer), [res.data]);
   const { session } = useAuth();
@@ -89,7 +92,10 @@ export default function LawyersSection({
 
   const list = useMemo(() => {
     const filtered = source.filter(
-      (l) => (!area || l.areaKey === area) && (!region || l.regionKey === region),
+      (l) =>
+        (!area || l.areaKey === area) &&
+        (!region || l.regionKey === region) &&
+        (!kind || l.kind === kind),
     );
     const sorted = [...filtered];
     sorted.sort((a, b) => {
@@ -99,7 +105,7 @@ export default function LawyersSection({
       return b.rate - a.rate;
     });
     return sorted;
-  }, [area, region, sort, source]);
+  }, [area, region, sort, kind, source]);
 
   const syncNav = useCallback(() => {
     const el = scroller.current;
@@ -146,9 +152,12 @@ export default function LawyersSection({
               <div className="advcard__sp">
                 {te(`areas.${l.areaKey}`)} · {te(`regions.${l.regionKey}`)}
               </div>
-              {l.super ? (
-                <span className="advcard__badge">{t("card.super")}</span>
-              ) : null}
+              <div className="advcard__tags">
+                <span className={`advcard__kind advcard__kind--${l.kind ?? "lawyer"}`}>
+                  {t(l.kind === "advocate" ? "card.kindAdvocate" : "card.kindLawyer")}
+                </span>
+                {l.super ? <span className="advcard__badge">{t("card.super")}</span> : null}
+              </div>
             </div>
           </div>
         </div>
@@ -234,6 +243,24 @@ export default function LawyersSection({
             ))}
           </div>
         ) : null}
+
+        <div className="rolerow">
+          {([
+            ["", "roleAll"],
+            ["advocate", "roleAdvocates"],
+            ["lawyer", "roleLawyers"],
+          ] as const).map(([v, k]) => (
+            <button
+              key={k}
+              type="button"
+              className="roletab"
+              aria-pressed={kind === v}
+              onClick={() => setKind(v)}
+            >
+              {t(k)}
+            </button>
+          ))}
+        </div>
 
         <div className="chiprow">
           <button

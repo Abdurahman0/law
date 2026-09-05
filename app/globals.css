@@ -1941,3 +1941,13 @@ body:has(.schat) .fab{display:none}
 .lsp__opt.on .lsp__box{background:var(--b600);border-color:var(--b600);color:#fff}
 .lsp__box svg{width:12px;height:12px}
 .lsp__empty{padding:24px;text-align:center;color:var(--gray);font-size:.9rem}
+
+/* Client lawyers directory: role segmented control + kind badges */
+.rolerow{display:inline-flex;gap:4px;padding:4px;background:var(--b50);border:1px solid var(--line);border-radius:12px;margin-bottom:14px}
+.roletab{border:0;background:none;padding:8px 16px;border-radius:9px;font-family:inherit;font-size:.88rem;font-weight:600;color:var(--gray);cursor:pointer;transition:all .14s}
+.roletab:hover{color:var(--ink)}
+.roletab[aria-pressed="true"]{background:#fff;color:var(--b600);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.advcard__tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.advcard__kind{display:inline-flex;align-items:center;padding:2px 9px;border-radius:999px;font-size:.72rem;font-weight:700;line-height:1.6}
+.advcard__kind--advocate{background:#eef2ff;color:#4f46e5}
+.advcard__kind--lawyer{background:#ecfdf5;color:#059669}

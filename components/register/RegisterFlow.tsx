@@ -170,6 +170,10 @@ export default function RegisterFlow() {
     value: k,
     label: t(`advocate.specOptions.${k}`),
   }));
+  const structureOpts: Option[] = (["byuro", "firma", "hayat"] as const).map((k) => ({
+    value: k,
+    label: t(`advocate.structureOptions.${k}`),
+  }));
 
   const pwOk = draft.password.length >= 8;
   const nameOk = !!p.firstName?.trim() && !!p.lastName?.trim();
@@ -351,35 +355,20 @@ export default function RegisterFlow() {
             <div className="rf__step rf__step--wide">
               <h1 className="rf__title">{t("lawyer.basicTitle")}</h1>
               <p className="rf__sub">{t("lawyer.basicSubtitle")}</p>
-              <PhotoUpload value={p.photo} name={p.name} onChange={(u) => setProfile({ photo: u })} label={t("fields.photo")} hint={t("fields.photoHint")} />
-              <div className="cform" style={{ maxWidth: "none" }}>
+              <div className="cform" style={{ maxWidth: "none", marginTop: 8 }}>
                 <div className="cform__row2">
                   <div>
                     <label>{t("fields.firstName")}</label>
-                    <input value={p.firstName ?? ""} onChange={(e) => setName({ firstName: e.target.value })} placeholder={t("fields.firstNamePh")} />
+                    <input value={p.firstName ?? ""} onChange={(e) => setName({ firstName: e.target.value })} placeholder={t("fields.firstNamePh")} autoFocus />
                   </div>
                   <div>
                     <label>{t("fields.lastName")}</label>
                     <input value={p.lastName ?? ""} onChange={(e) => setName({ lastName: e.target.value })} placeholder={t("fields.lastNamePh")} />
                   </div>
                 </div>
-                <div className="cform__row2">
-                  <div>
-                    <label>{t("fields.region")}</label>
-                    <Select value={p.region ?? ""} onChange={(v) => setProfile({ region: v })} options={regionOpts} ariaLabel={t("fields.region")} placeholder={t("fields.regionPh")} />
-                  </div>
-                  <div>
-                    <label>{t("fields.experience")}</label>
-                    <input type="number" min={0} value={p.experienceYears ?? ""} onChange={(e) => setProfile({ experienceYears: parseInt(e.target.value || "0", 10) || 0 })} placeholder={t("fields.experiencePh")} />
-                  </div>
-                </div>
                 <div>
-                  <label>{t("fields.education")}</label>
-                  <input value={p.education ?? ""} onChange={(e) => setProfile({ education: e.target.value })} placeholder={t("fields.educationPh")} />
-                </div>
-                <div>
-                  <label>{t("fields.bio")}</label>
-                  <textarea rows={3} value={p.bio ?? ""} onChange={(e) => setProfile({ bio: e.target.value })} placeholder={t("fields.bioPh")} />
+                  <label>{t("fields.region")}</label>
+                  <Select value={p.region ?? ""} onChange={(v) => setProfile({ region: v })} options={regionOpts} ariaLabel={t("fields.region")} placeholder={t("fields.regionPh")} />
                 </div>
                 {pwField}
               </div>
@@ -449,6 +438,16 @@ export default function RegisterFlow() {
                   <div>
                     <label>{t("advocate.specialization")}</label>
                     <Select value={p.specialization ?? ""} onChange={(v) => setProfile({ specialization: v })} options={specOpts} ariaLabel={t("advocate.specialization")} placeholder={t("advocate.specPlaceholder")} />
+                  </div>
+                </div>
+                <div className="cform__row2">
+                  <div>
+                    <label>{t("advocate.structure")}</label>
+                    <Select value={p.advocateStructure ?? ""} onChange={(v) => setProfile({ advocateStructure: v })} options={structureOpts} ariaLabel={t("advocate.structure")} placeholder={t("advocate.structurePlaceholder")} />
+                  </div>
+                  <div>
+                    <label>{t("advocate.orgName")}</label>
+                    <input value={p.orgName ?? ""} onChange={(e) => setProfile({ orgName: e.target.value })} placeholder={t("advocate.orgNamePh")} />
                   </div>
                 </div>
                 <div>

@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
-import { useAuth } from "@/lib/auth";
+import { useAuth, canMakeCalls } from "@/lib/auth";
+import { maskContacts } from "@/lib/chatFilter";
 import { getToken } from "@/lib/client";
 import { playRingtone } from "@/lib/callSounds";
 import {
@@ -332,26 +333,28 @@ export default function SecureChat({ roomId }: { roomId: string }) {
             {connLabel}
           </span>
         </div>
-        <div className="schat__calls">
-          <button
-            className="schat__call"
-            type="button"
-            onClick={() => beginCall("audio")}
-            disabled={callBusy || !!activeCall}
-            aria-label={t("audioCall")}
-          >
-            <IconPhone />
-          </button>
-          <button
-            className="schat__call schat__call--video"
-            type="button"
-            onClick={() => beginCall("video")}
-            disabled={callBusy || !!activeCall}
-            aria-label={t("videoCall")}
-          >
-            <IconVideo />
-          </button>
-        </div>
+        {canMakeCalls(session) ? (
+          <div className="schat__calls">
+            <button
+              className="schat__call"
+              type="button"
+              onClick={() => beginCall("audio")}
+              disabled={callBusy || !!activeCall}
+              aria-label={t("audioCall")}
+            >
+              <IconPhone />
+            </button>
+            <button
+              className="schat__call schat__call--video"
+              type="button"
+              onClick={() => beginCall("video")}
+              disabled={callBusy || !!activeCall}
+              aria-label={t("videoCall")}
+            >
+              <IconVideo />
+            </button>
+          </div>
+        ) : null}
         <span className="schat__lock" title={t("secured")}>
           <IconLock />
           {t("e2e")}
@@ -427,7 +430,7 @@ export default function SecureChat({ roomId }: { roomId: string }) {
                 <div className={`sbub sbub--${mine ? "me" : "them"}`}>
                   {!mine ? <span className="sbub__av"><IconUser /></span> : null}
                   <div className="sbub__wrap">
-                    <div className={`sbub__c${m.failed ? " sbub__c--failed" : ""}`}>{m.filteredContent}</div>
+                    <div className={`sbub__c${m.failed ? " sbub__c--failed" : ""}`}>{maskContacts(m.filteredContent)}</div>
                     {m.isBlocked ? (
                       <div className="sbub__blocked">
                         <IconAlert />

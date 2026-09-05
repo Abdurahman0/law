@@ -638,7 +638,12 @@
       }
     ],
     "filterAll": "All",
+    "roleAll": "All",
+    "roleAdvocates": "Advocates",
+    "roleLawyers": "Lawyers",
     "card": {
+      "kindAdvocate": "Advocate",
+      "kindLawyer": "Lawyer",
       "fullWin": "Full win",
       "partialWin": "Partial",
       "responseValue": "30",
@@ -1694,13 +1699,13 @@
         "dashboard": "Dashboard",
         "cases": "My Cases",
         "payments": "Payments",
-        "lawyers": "Lawyers",
+        "lawyers": "Advocates & lawyers",
         "subscription": "Subscription",
         "gifts": "Gifts",
         "ai": "LexGo.AI",
         "profile": "Profile",
         "services": "Services",
-        "documents": "Documents",
+        "documents": "Document templates",
         "messages": "Messages",
         "notifications": "Notifications"
       },
@@ -1994,8 +1999,8 @@
         "orderNote": "A private, protected chat with your specialist opens after purchase."
       },
       "documents": {
-        "title": "Prepare a document",
-        "lead": "Pick a template, answer a few questions and pay to get your PDF.",
+        "title": "Document templates",
+        "lead": "Feel free to use the document templates prepared by our professional advocates.",
         "empty": "No templates yet",
         "emptyText": "Client document templates will appear here.",
         "som": "so'm",
@@ -2319,7 +2324,7 @@
     },
     "lawyer": {
       "basicTitle": "Your professional profile",
-      "basicSubtitle": "Tell clients who you are. A complete profile earns more trust.",
+      "basicSubtitle": "Just a few basics — you can fill in the rest later in your profile.",
       "servicesTitle": "Which services do you provide?",
       "servicesSubtitle": "Select all that apply. You can change these later.",
       "matchNote": "Select the services you provide. In the future, LexGo will match and send relevant client requests to you based on your selected services."
@@ -2361,6 +2366,15 @@
       },
       "advExp": "Experience as advocate (years)",
       "lawExp": "Experience as lawyer (years)",
+      "structure": "Advocate structure",
+      "structurePlaceholder": "Select a structure",
+      "structureOptions": {
+        "byuro": "Advocate bureau",
+        "firma": "Advocate firm",
+        "hayat": "Bar collegium"
+      },
+      "orgName": "Structure name",
+      "orgNamePh": "Bureau / firm name or address",
       "experience": "Years of experience",
       "work": {
         "title": "Work experience",

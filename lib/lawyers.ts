@@ -10,6 +10,7 @@ export type Lawyer = {
   part: number;
   price: string; // formatted number, currency word comes from translations
   super: boolean;
+  kind?: "advocate" | "lawyer"; // advokat vs yurist, for client-facing labels
 };
 
 // Practice areas and regions used across the site (keys resolved via messages).
