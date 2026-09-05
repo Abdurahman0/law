@@ -10,10 +10,10 @@ import {
   sendSecureMessage,
   secureSocketUrl,
   startCall,
-  endCall,
+  listCalls,
   type SecureMessage,
-  type CallSession,
 } from "@/lib/services/backend";
+import CallRoom from "./CallRoom";
 import {
   IconSend,
   IconShieldCheck,
@@ -50,34 +50,61 @@ export default function SecureChat({ roomId }: { roomId: string }) {
   const [sending, setSending] = useState(false);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [conn, setConn] = useState<Conn>("connecting");
-  const [call, setCall] = useState<CallSession | null>(null);
+  const [activeCall, setActiveCall] = useState<{ callId: string; callType: "audio" | "video"; isCaller: boolean } | null>(null);
+  const [incoming, setIncoming] = useState<{ callId: string; callType: "audio" | "video" } | null>(null);
   const [callBusy, setCallBusy] = useState(false);
   const bodyRef = useRef<HTMLDivElement>(null);
   const seen = useRef<Set<string>>(new Set());
 
+  // Start a call, or join the one already active in this room.
   async function beginCall(kind: "audio" | "video") {
-    if (callBusy || call) return;
+    if (callBusy || activeCall) return;
     setCallBusy(true);
     try {
-      const c = await startCall(roomId, kind, t(kind === "video" ? "videoCall" : "audioCall"));
-      setCall(c);
-      if (c.joinUrl) window.open(c.joinUrl, "_blank");
+      const calls = await listCalls(roomId);
+      const live = calls.find((c) => c.status === "active" || c.status === "ringing");
+      if (live) {
+        setActiveCall({ callId: live.id, callType: live.callType === "video" ? "video" : "audio", isCaller: false });
+      } else {
+        const c = await startCall(roomId, kind, t(kind === "video" ? "videoCall" : "audioCall"));
+        setActiveCall({ callId: c.id, callType: kind, isCaller: true });
+      }
+      setIncoming(null);
     } catch {
       /* ignore */
     } finally {
       setCallBusy(false);
     }
   }
-  async function finishCall() {
-    if (!call) return;
-    const id = call.id;
-    setCall(null);
-    try {
-      await endCall(id);
-    } catch {
-      /* ignore */
-    }
+  function joinIncoming() {
+    if (!incoming) return;
+    setActiveCall({ callId: incoming.callId, callType: incoming.callType, isCaller: false });
+    setIncoming(null);
   }
+
+  // Poll for a call another participant started, so we can offer to join.
+  useEffect(() => {
+    if (!session) return;
+    let alive = true;
+    const poll = async () => {
+      try {
+        const calls = await listCalls(roomId);
+        const live = calls.find(
+          (c) => (c.status === "active" || c.status === "ringing") && c.callerUserId !== session.id,
+        );
+        if (alive) setIncoming(live && !activeCall ? { callId: live.id, callType: live.callType === "video" ? "video" : "audio" } : null);
+      } catch {
+        /* ignore */
+      }
+    };
+    poll();
+    const iv = setInterval(poll, 5000);
+    return () => {
+      alive = false;
+      clearInterval(iv);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomId, session, activeCall]);
 
   function push(list: LocalMsg[]) {
     setMsgs((prev) => {
@@ -203,7 +230,7 @@ export default function SecureChat({ roomId }: { roomId: string }) {
             className="schat__call"
             type="button"
             onClick={() => beginCall("audio")}
-            disabled={callBusy || !!call}
+            disabled={callBusy || !!activeCall}
             aria-label={t("audioCall")}
           >
             <IconPhone />
@@ -212,7 +239,7 @@ export default function SecureChat({ roomId }: { roomId: string }) {
             className="schat__call schat__call--video"
             type="button"
             onClick={() => beginCall("video")}
-            disabled={callBusy || !!call}
+            disabled={callBusy || !!activeCall}
             aria-label={t("videoCall")}
           >
             <IconVideo />
@@ -224,24 +251,33 @@ export default function SecureChat({ roomId }: { roomId: string }) {
         </span>
       </div>
 
-      {call ? (
+      {incoming && !activeCall ? (
         <div className="schat__callbar">
           <span className="schat__callbar-l">
             <i className="schat__callpulse" aria-hidden />
-            {call.callType === "video" ? <IconVideo /> : <IconPhone />}
-            {t("callActive")}
+            {incoming.callType === "video" ? <IconVideo /> : <IconPhone />}
+            {t("incomingCall")}
           </span>
           <div className="schat__callbar-a">
-            {call.joinUrl ? (
-              <a className="btn btn--line btn--sm" href={call.joinUrl} target="_blank" rel="noopener noreferrer">
-                {t("callJoin")}
-              </a>
-            ) : null}
-            <button className="btn btn--sm schat__endcall" type="button" onClick={finishCall}>
-              {t("callEnd")}
+            <button className="btn btn--line btn--sm" type="button" onClick={() => setIncoming(null)}>
+              {t("callDismiss")}
+            </button>
+            <button className="btn btn--sm schat__joincall" type="button" onClick={joinIncoming}>
+              {t("callJoin")}
             </button>
           </div>
         </div>
+      ) : null}
+
+      {activeCall && session ? (
+        <CallRoom
+          roomId={roomId}
+          callId={activeCall.callId}
+          callType={activeCall.callType}
+          isCaller={activeCall.isCaller}
+          myUserId={session.id}
+          onEnd={() => setActiveCall(null)}
+        />
       ) : null}
 
       <div className="schat__body" ref={bodyRef}>

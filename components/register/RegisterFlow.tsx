@@ -57,6 +57,7 @@ export default function RegisterFlow() {
   const [starting, setStarting] = useState(false);
   const [verifying, setVerifying] = useState(false);
   const [verifyErr, setVerifyErr] = useState<string | null>(null);
+  const [pendingMsg, setPendingMsg] = useState<string | null>(null);
 
   const steps = useMemo(
     () => ["phone", "type", ...(draft.accountType ? [...STEPS_BY_TYPE[draft.accountType], "verify"] : [])],
@@ -132,6 +133,12 @@ export default function RegisterFlow() {
     setCreating(true);
     try {
       const s = await register(draft, verificationId, code.trim());
+      // Seller roles come back pending admin approval — show a review screen
+      // instead of entering a portal (no account exists yet).
+      if ("pending" in s) {
+        setPendingMsg(s.message);
+        return;
+      }
       router.replace(`/portal/${s.role}`);
     } catch {
       setVerifying(false);
@@ -173,6 +180,33 @@ export default function RegisterFlow() {
 
   // Advocate mini-stepper index
   const advPos = ADV_STEPS.indexOf(step);
+
+  // Seller registration submitted → awaiting admin approval.
+  if (pendingMsg) {
+    return (
+      <div className="rf">
+        <div className="rf__bg" />
+        <div className="rf__card">
+          <div className="rf__step" style={{ textAlign: "center", alignItems: "center" }}>
+            <span className="rf__ico rf__ico--brand">
+              <IconCheck />
+            </span>
+            <h1 className="rf__title">{t("pending.title")}</h1>
+            <p className="rf__sub">{pendingMsg}</p>
+            <p className="rf__sub">{t("pending.hint")}</p>
+            <button
+              className="btn btn--grad btn--full btn--lg"
+              type="button"
+              onClick={() => router.replace("/login")}
+              style={{ marginTop: 18 }}
+            >
+              {t("pending.toLogin")}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="rf">

@@ -2413,6 +2413,11 @@
       "startError": "Couldn't start registration. Try again.",
       "sending": "Sending code…",
       "getCode": "Get code"
+    },
+    "pending": {
+      "title": "Request submitted",
+      "hint": "You can sign in once an administrator approves your registration.",
+      "toLogin": "Go to sign in"
     }
   },
   "plans": {
@@ -2540,7 +2545,8 @@
       "approvals": "Approvals",
       "ads": "Ads",
       "verifications": "Verify lawyers",
-      "legalAid": "Legal aid"
+      "legalAid": "Legal aid",
+      "registerRequests": "Register requests"
     },
     "overview": {
       "kicker": "Admin console",
@@ -2699,6 +2705,18 @@
       "emptyText": "New legal aid requests will appear here.",
       "anon": "Anonymous",
       "new": "New"
+    },
+    "registerRequests": {
+      "title": "Seller registration requests",
+      "lead": "Review and approve yurist / advokat registrations.",
+      "empty": "No pending requests",
+      "emptyText": "New seller registrations will appear here.",
+      "accept": "Accept",
+      "accepting": "Accepting…",
+      "reject": "Reject",
+      "rejecting": "Rejecting…",
+      "accepted": "Accepted",
+      "rejected": "Rejected"
     }
   },
   "secureChat": {
@@ -2733,7 +2751,9 @@
     "videoCall": "Video call",
     "callActive": "Call in progress",
     "callJoin": "Join",
-    "callEnd": "End"
+    "callEnd": "End",
+    "incomingCall": "Incoming call",
+    "callDismiss": "Dismiss"
   },
   "academy": {
     "kicker": "LexGo Academy",
@@ -2768,5 +2788,14 @@
     "success": "Request sent. We will contact you soon.",
     "sending": "Sending…",
     "submit": "Send request"
+  },
+  "call": {
+    "connecting": "Connecting…",
+    "ringing": "Ringing…",
+    "live": "Connected",
+    "error": "Connection problem",
+    "mic": "Microphone",
+    "cam": "Camera",
+    "end": "End call"
   }
 }

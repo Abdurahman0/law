@@ -385,6 +385,28 @@ export const IconLanguage = (p: P) => (
   </svg>
 );
 
+export const IconMic = (p: P) => (
+  <svg {...base} {...p}>
+    <rect x="9" y="3" width="6" height="11" rx="3" />
+    <path d="M5 11a7 7 0 0014 0M12 18v3" />
+  </svg>
+);
+
+export const IconMicOff = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M9 9v2a3 3 0 004.5 2.6M15 11V6a3 3 0 00-5.9-.7" />
+    <path d="M5 11a7 7 0 0011 5.3M12 18v3M3 3l18 18" />
+  </svg>
+);
+
+export const IconUserPlus = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M16 21a6 6 0 00-12 0" />
+    <circle cx="10" cy="8" r="4" />
+    <path d="M19 8v6M22 11h-6" />
+  </svg>
+);
+
 export const IconFolder = (p: P) => (
   <svg {...base} {...p}>
     <path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />

@@ -1866,3 +1866,25 @@ body:has(.schat) .fab{display:none}
 .laitem__phone svg{width:14px;height:14px;stroke:var(--b600)}
 .laitem__details{margin:8px 0 6px;font-size:.9rem;color:var(--ink);line-height:1.5}
 .laitem__date{font-size:.75rem;color:var(--gray2)}
+
+/* ── WebRTC call room ── */
+.schat__joincall{background:#37D39B;color:#06231a;border:0;font-weight:700}
+.callroom{position:fixed;inset:0;z-index:80;background:#0B1B3A;display:flex;flex-direction:column}
+.callroom__stage{position:relative;flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.callroom__remote{width:100%;height:100%;object-fit:cover;background:#0B1B3A}
+.callroom__audio{display:flex;align-items:center;justify-content:center;width:100%;height:100%}
+.callroom__avatar{width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.08);display:grid;place-items:center}
+.callroom__avatar svg{width:64px;height:64px;stroke:#fff}
+.callroom__local{position:absolute;right:18px;bottom:18px;width:200px;max-width:34vw;aspect-ratio:9/16;object-fit:cover;border-radius:16px;border:2px solid rgba(255,255,255,.35);background:#12224a;box-shadow:0 10px 30px rgba(0,0,0,.4);transform:scaleX(-1)}
+.callroom__local.off{opacity:.25}
+.callroom__waiting{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#fff}
+.callroom__waiting p{font-size:1rem;color:#B7CDEC}
+.callroom__pulse{width:16px;height:16px;border-radius:50%;background:#37D39B;animation:schatPulse 1.6s infinite}
+.callroom__bar{display:flex;align-items:center;justify-content:center;gap:16px;padding:22px;background:rgba(11,27,58,.9)}
+.callroom__btn{width:56px;height:56px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;cursor:pointer;display:grid;place-items:center;transition:.15s}
+.callroom__btn:hover{background:rgba(255,255,255,.24)}
+.callroom__btn.off{background:#fff;color:#0B1B3A}
+.callroom__btn svg{width:24px;height:24px}
+.callroom__btn--end{background:#E5484D;width:64px;height:64px}
+.callroom__btn--end:hover{background:#c53a3f}
+.callroom__btn--end svg{width:28px;height:28px}

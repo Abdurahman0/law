@@ -17,9 +17,6 @@ import {
   apiMe,
   registerStart,
   registerVerify,
-  upsertMyLawyer,
-  putMyServices,
-  createSellerOnboarding,
   type BackendRole,
 } from "./services/backend";
 
@@ -60,7 +57,7 @@ type AuthCtx = {
     draft: RegistrationDraft,
     verificationId: string,
     code: string,
-  ) => Promise<Session>;
+  ) => Promise<Session | { pending: true; message: string }>;
   update: (patch: Partial<Session>) => void;
   logout: () => void;
 };
@@ -186,22 +183,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           plan: "free", completeness, profile: draft.profile,
         });
       }
-      const { token, user } = await registerVerify(verificationId, code);
-      setToken(token);
-      if (role !== "client") {
-        const sellerType = role === "lawyer" ? "yurist" : "advokat";
-        try {
-          await upsertMyLawyer(draft.profile, sellerType);
-          if (draft.profile.services.length) await putMyServices(draft.profile.services);
-          await createSellerOnboarding({
-            title: draft.profile.name || draft.phone,
-            status: "pending",
-            payload: { seller_type: sellerType, phone: draft.phone },
-          });
-        } catch {
-          /* profile upsert + onboarding are best-effort */
-        }
+      const res = await registerVerify(verificationId, code);
+      // Seller roles are approval-based: no account/token yet — an admin must
+      // accept the request. Surface a pending state instead of a session.
+      if (res.pending) {
+        return {
+          pending: true as const,
+          message: res.message || "Ro'yxatdan o'tish so'rovi adminga yuborildi",
+        };
       }
+      const { token, user } = res;
+      setToken(token);
       return finish({
         role,
         name: user.name || draft.profile.name,

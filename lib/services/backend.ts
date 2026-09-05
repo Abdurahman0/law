@@ -74,13 +74,30 @@ export async function registerStart(input: {
     message: asStr(d.message),
   };
 }
-export async function registerVerify(verificationId: string, code: string): Promise<AuthResult> {
-  return normAuth(
+// Seller registration is approval-based: verify does NOT return a token for
+// seller roles — it queues a request for admin review.
+export type RegisterVerifyResult =
+  | { pending: false; token: string; user: AuthUser }
+  | { pending: true; requestId: string; status: string; role: string; message: string };
+
+export async function registerVerify(verificationId: string, code: string): Promise<RegisterVerifyResult> {
+  const d = asDict(
     await http("/auth/register/verify", {
       method: "POST",
       body: JSON.stringify({ verification_id: verificationId, code }),
     }),
   );
+  const token = asStr(d.access_token ?? d.token);
+  if (!token || asStr(d.status) === "pending" || d.request_id) {
+    return {
+      pending: true,
+      requestId: asStr(d.request_id),
+      status: asStr(d.status, "pending"),
+      role: asStr(d.role),
+      message: asStr(d.message),
+    };
+  }
+  return { pending: false, token, user: normUser(d.user ?? d) };
 }
 
 export async function apiLogin(phone: string, password: string): Promise<AuthResult> {
@@ -776,13 +793,18 @@ export async function sendSecureMessage(roomId: string, content: string): Promis
   return normSecureMsg(
     await http(`/secure-chats/${roomId}/messages`, {
       method: "POST",
-      body: JSON.stringify({ message_type: "text", content }),
+      body: JSON.stringify({ message_type: "text", content, meta: {} }),
     }),
   );
 }
 export function secureSocketUrl(roomId: string, token?: string | null): string {
   const q = token ? `?token=${encodeURIComponent(token)}` : "";
   return `${backendOrigin("ws")}/ws/secure-chats/${roomId}${q}`;
+}
+// WebRTC signaling socket for a specific call session.
+export function callSocketUrl(roomId: string, callId: string, token?: string | null): string {
+  const q = token ? `?token=${encodeURIComponent(token)}` : "";
+  return `${backendOrigin("ws")}/ws/secure-chats/${roomId}/calls/${callId}${q}`;
 }
 
 // ── Approvals (four-eyes) ─────────────────────────────────────────
@@ -1483,6 +1505,39 @@ export type DemoSeedResult = { templates: number; adsProducts: number; message: 
 export async function seedDemoData(): Promise<DemoSeedResult> {
   const d = asDict(await http("/admin/demo-data/seed", { method: "POST" }));
   return { templates: asNum(d.templates), adsProducts: asNum(d.ads_products), message: asStr(d.message) };
+}
+
+// ── Admin: seller registration requests (approval flow) ──────────
+export type RegisterRequest = {
+  id: string;
+  verificationId: string;
+  status: string;
+  role: string;
+  name: string;
+  phone: string;
+  createdAt: string;
+};
+function normRegReq(v: unknown): RegisterRequest {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    verificationId: asStr(d.verification_id),
+    status: asStr(d.status),
+    role: asStr(d.role),
+    name: asStr(d.name),
+    phone: asStr(d.phone),
+    createdAt: asStr(d.created_at),
+  };
+}
+export async function listRegisterRequests(status = "pending"): Promise<RegisterRequest[]> {
+  const q = status ? `?status=${encodeURIComponent(status)}` : "";
+  return listFrom(await http(`/admin/register-requests${q}`), "requests", "items", "data").map(normRegReq);
+}
+export async function acceptRegisterRequest(id: string): Promise<unknown> {
+  return http(`/admin/register-requests/${id}/accept`, { method: "POST" });
+}
+export async function rejectRegisterRequest(id: string): Promise<unknown> {
+  return http(`/admin/register-requests/${id}/reject`, { method: "POST" });
 }
 
 // ── helpers ───────────────────────────────────────────────────────

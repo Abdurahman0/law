@@ -2419,6 +2419,11 @@
       "startError": "Ro‘yxatdan o‘tishni boshlab bo‘lmadi. Qayta urining.",
       "sending": "Kod yuborilmoqda…",
       "getCode": "Kod olish"
+    },
+    "pending": {
+      "title": "So‘rovingiz yuborildi",
+      "hint": "Admin tasdiqlagach tizimga kira olasiz.",
+      "toLogin": "Kirishga o‘tish"
     }
   },
   "plans": {
@@ -2546,7 +2551,8 @@
       "approvals": "Tasdiqlashlar",
       "ads": "Reklama",
       "verifications": "Advokatlarni tasdiqlash",
-      "legalAid": "Yuridik yordam"
+      "legalAid": "Yuridik yordam",
+      "registerRequests": "Ro‘yxatdan o‘tish so‘rovlari"
     },
     "overview": {
       "kicker": "Admin konsoli",
@@ -2705,6 +2711,18 @@
       "emptyText": "Yangi so‘rovlar shu yerda ko‘rinadi.",
       "anon": "Anonim",
       "new": "Yangi"
+    },
+    "registerRequests": {
+      "title": "Sotuvchi ro‘yxatdan o‘tish so‘rovlari",
+      "lead": "Yurist / advokat ro‘yxatlarini ko‘rib chiqing va tasdiqlang.",
+      "empty": "Kutilayotgan so‘rov yo‘q",
+      "emptyText": "Yangi so‘rovlar shu yerda ko‘rinadi.",
+      "accept": "Qabul qilish",
+      "accepting": "Qabul qilinmoqda…",
+      "reject": "Rad etish",
+      "rejecting": "Rad etilmoqda…",
+      "accepted": "Qabul qilindi",
+      "rejected": "Rad etildi"
     }
   },
   "secureChat": {
@@ -2739,7 +2757,9 @@
     "videoCall": "Video qo‘ng‘iroq",
     "callActive": "Qo‘ng‘iroq davom etmoqda",
     "callJoin": "Qo‘shilish",
-    "callEnd": "Tugatish"
+    "callEnd": "Tugatish",
+    "incomingCall": "Kiruvchi qo‘ng‘iroq",
+    "callDismiss": "Rad etish"
   },
   "academy": {
     "kicker": "LexGo Akademiya",
@@ -2774,5 +2794,14 @@
     "success": "So‘rov yuborildi. Tez orada bog‘lanamiz.",
     "sending": "Yuborilmoqda…",
     "submit": "So‘rov yuborish"
+  },
+  "call": {
+    "connecting": "Ulanmoqda…",
+    "ringing": "Chaqirilmoqda…",
+    "live": "Ulandi",
+    "error": "Ulanish muammosi",
+    "mic": "Mikrofon",
+    "cam": "Kamera",
+    "end": "Tugatish"
   }
 }
