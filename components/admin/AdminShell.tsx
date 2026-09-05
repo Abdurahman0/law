@@ -53,12 +53,14 @@ export default function AdminShell({ children }: { children: ReactNode }) {
   const isBootstrap = pathname === "/admin/bootstrap";
   const allowed = hasAdminAccess(session) || isBootstrap;
 
-  // Superadmin/admin see every page; other staff only pages their permissions
-  // grant. This drives both the sidebar and the per-page access guard.
+  // Superadmin sees everything. Admin sees the overview/bootstrap plus every
+  // page it actually has the permission for (e.g. it lacks roles.manage, so no
+  // Roles page). Other staff see only pages their permissions grant.
   const roles = (session?.roles ?? []).map((r) => r.toLowerCase());
-  const isFullAdmin = roles.includes("admin") || roles.includes("superadmin");
+  const isSuper = roles.includes("superadmin");
+  const isFullAdmin = isSuper || roles.includes("admin");
   const perms = session?.permissions ?? [];
-  const visibleNav = NAV.filter((n) => isFullAdmin || (n.perm && perms.includes(n.perm)));
+  const visibleNav = NAV.filter((n) => (n.perm ? isSuper || perms.includes(n.perm) : isFullAdmin));
 
   useEffect(() => {
     if (!ready) return;
@@ -71,8 +73,9 @@ export default function AdminShell({ children }: { children: ReactNode }) {
       router.replace(`/portal/${session.role}`);
       return;
     }
-    // Staff on a page their permissions don't cover → send to their first page.
-    if (!isFullAdmin && !isBootstrap) {
+    // Anyone but superadmin on a page their permissions don't cover → send to
+    // their first allowed page.
+    if (!isSuper && !isBootstrap) {
       const onAllowed = visibleNav.some(
         (n) => pathname === n.href || pathname.startsWith(n.href + "/"),
       );
