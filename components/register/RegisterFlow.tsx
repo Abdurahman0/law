@@ -299,6 +299,10 @@ export default function RegisterFlow() {
 
           {step === "type" ? (
             <div className="rf__step rf__step--wide">
+              <button type="button" className="rf__back" onClick={back}>
+                <IconChevronLeft />
+                {t("back")}
+              </button>
               <h1 className="rf__title">{t("type.title")}</h1>
               <p className="rf__sub">{t("type.subtitle")}</p>
               <AccountTypeCards onChoose={chooseType} />

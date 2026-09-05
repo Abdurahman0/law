@@ -5,20 +5,20 @@ import type { AccountType } from "@/lib/types";
 import {
   Icon,
   IconUser,
+  IconBriefcase,
   IconScale,
-  IconAward,
   IconCheck,
   IconArrowRight,
 } from "../icons";
 
 const TYPES: { type: AccountType; icon: string; accent: string }[] = [
   { type: "client", icon: "IconUser", accent: "client" },
-  { type: "lawyer", icon: "IconScale", accent: "lawyer" },
-  { type: "advocate", icon: "IconAward", accent: "advocate" },
+  { type: "lawyer", icon: "IconBriefcase", accent: "lawyer" },
+  { type: "advocate", icon: "IconScale", accent: "advocate" },
 ];
 
 // Keep icons referenced so tree-shaking doesn't drop them via the registry.
-void [IconUser, IconScale, IconAward];
+void [IconUser, IconBriefcase, IconScale];
 
 export default function AccountTypeCards({
   onChoose,

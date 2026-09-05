@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { formatUzPhone, isValidUzPhone } from "@/lib/phone";
 import { IconPhone, IconArrowRight } from "../icons";
 
 export default function PhoneStep({
@@ -18,7 +19,7 @@ export default function PhoneStep({
   const [err, setErr] = useState<string | null>(null);
 
   function submit() {
-    if (phone.replace(/\D/g, "").length < 9) {
+    if (!isValidUzPhone(phone)) {
       setErr(t("invalid"));
       return;
     }
@@ -41,12 +42,16 @@ export default function PhoneStep({
             id="rf-phone"
             type="tel"
             inputMode="tel"
-            value={phone}
-            onChange={(e) => onChange(e.target.value)}
+            value={formatUzPhone(phone)}
+            onChange={(e) => onChange(formatUzPhone(e.target.value))}
+            onFocus={(e) => {
+              if (!phone) onChange("+998");
+              requestAnimationFrame(() => e.target.setSelectionRange(e.target.value.length, e.target.value.length));
+            }}
             onKeyDown={(e) => {
               if (e.key === "Enter") submit();
             }}
-            placeholder={t("placeholder")}
+            placeholder="+998 90 123 45 67"
             autoComplete="tel"
           />
         </div>

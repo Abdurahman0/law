@@ -80,7 +80,7 @@
     "register": "Ro'yxatdan o'tish",
     "menu": "Menyu",
     "language": "Til",
-    "chat": "AI chat"
+    "chat": "Sun'iy intellekt chat"
   },
   "cta": {
     "viewPackages": "Paketlarni ko'rish",
@@ -96,12 +96,12 @@
   "tabbar": {
     "home": "Bosh",
     "services": "Xizmatlar",
-    "ai": "AI",
+    "ai": "Sun'iy intellekt",
     "lawyers": "Advokat",
     "subscription": "Obuna"
   },
   "footer": {
-    "about": "O'zbekistonning yuridik xizmatlar ekotizimi: AI, onlayn xizmatlar, advokatlar marketplace va shaxsiy advokat obunasi.",
+    "about": "O'zbekistonning yuridik xizmatlar ekotizimi: Sun'iy intellekt, onlayn xizmatlar, advokatlar marketplace va shaxsiy advokat obunasi.",
     "phoneNote": "Kol-markaz · qo'ng'iroq bepul",
     "servicesTitle": "Xizmatlar",
     "directionsTitle": "Yo'nalishlar",
@@ -177,7 +177,7 @@
       "responseSuffix": " daq"
     },
     "teaser": {
-      "aiTitle": "O'zbekiston qonunchiligiga o'qitilgan huquqiy AI",
+      "aiTitle": "O'zbekiston qonunchiligiga o'qitilgan huquqiy Sun'iy intellekt",
       "aiText": "Aniq moddaga havola bilan savol-javob, hujjat tayyorlash va hujjat tahlili — amaldagi qonunga tayanadi.",
       "lawyersTitle": "Tajribasi va g'alabalari ochiq advokatlar",
       "lawyersText": "Har bir advokat tergov va sud bosqichlarida nechta to'liq va qisman g'alaba qozonganini ko'rsatadi.",
@@ -292,7 +292,7 @@
     "tabs": {
       "lawyer": "Advokat topish",
       "doc": "Hujjat tayyorlash",
-      "ai": "AI ga savol"
+      "ai": "Sun'iy intellektga savol"
     },
     "labels": {
       "area": "Yo'nalish",
@@ -412,7 +412,7 @@
       "kvDirection": "Yo'nalish",
       "kvStage": "Ish bosqichi",
       "kvEstPrice": "Taxminiy narx",
-      "aiDisc": "Bu — dastlabki tahlil. AI advokat o'rnini bosmaydi: yakuniy huquqiy qaror advokatda qoladi.",
+      "aiDisc": "Bu — dastlabki tahlil. Sun'iy intellekt advokat o'rnini bosmaydi: yakuniy huquqiy qaror advokatda qoladi.",
       "perTemplate": "namuna",
       "fromSom": "so'mdan",
       "somPackage": "so'mdan · paket",
@@ -680,7 +680,7 @@
   "aiPage": {
     "metaTitle": "LexGo.AI",
     "kicker": "LexGo.AI",
-    "title": "O'zbekiston qonunchiligiga o'qitilgan huquqiy AI",
+    "title": "O'zbekiston qonunchiligiga o'qitilgan huquqiy Sun'iy intellekt",
     "lead": "Tizimga milliy qonunchilik, tergov va sud amaliyoti natijalari hamda professional yuristlar tayyorlagan hujjat namunalari yuklangan. Javob mavhum emas — amaldagi normaga tayanadi.",
     "features": [
       "Savol-javob: aniq modda va normaga havola bilan",
@@ -755,8 +755,8 @@
   "servicesPage": {
     "metaTitle": "Onlayn xizmatlar",
     "kicker": "Onlayn xizmatlar",
-    "title": "AI orqali ham, tirik advokat orqali ham",
-    "lead": "Har bir xizmatda tanlov sizda: tezroq va arzonroq AI varianti yoki tajribali advokat varianti. Narx farqi to'lov oynasida ochiq ko'rinadi.",
+    "title": "Sun'iy intellekt orqali ham, tirik advokat orqali ham",
+    "lead": "Har bir xizmatda tanlov sizda: tezroq va arzonroq Sun'iy intellekt varianti yoki tajribali advokat varianti. Narx farqi to'lov oynasida ochiq ko'rinadi.",
     "tabs": {
       "consultation": "Konsultatsiya",
       "docPrep": "Hujjat tayyorlash",
@@ -878,7 +878,7 @@
         },
         {
           "title": "Tekshiruvchini tanlang",
-          "text": "AI — tez va arzon. Advokat — chuqurroq."
+          "text": "Sun'iy intellekt — tez va arzon. Advokat — chuqurroq."
         },
         {
           "title": "Xulosani oling",
@@ -1186,7 +1186,7 @@
     "features": [
       "Case Marketplace — sizga mos yangi ishlar oqimi",
       "Case Command Center — bosqich, deadline, keyingi harakat, to'lov",
-      "AI Legal Assistant — ishni qisqartirish, xronologiya, yetishmayotgan hujjatlar",
+      "Sun'iy intellekt Legal Assistant — ishni qisqartirish, xronologiya, yetishmayotgan hujjatlar",
       "Kalendar: sud majlisi, tergov harakati, apellyatsiya muddati",
       "Conflict Check — manfaatlar to'qnashuvi ogohlantirishi",
       "Secure Chat — matn, ovoz, hujjat, video qo'ng'iroq"
@@ -1226,7 +1226,7 @@
         "text": "Har bir ish uchun bosqich, deadline, keyingi harakat va to'lov."
       },
       {
-        "title": "AI Legal Assistant",
+        "title": "Sun'iy intellekt Legal Assistant",
         "text": "Qisqacha mazmun, xronologiya va yetishmayotgan hujjatlar ro'yxati."
       },
       {
@@ -1307,7 +1307,7 @@
     "rules": [
       "Barcha to'lovlar faqat platforma orqali. Tashqaridan to'lov qilinsa, LexGo kafolat majburiyatini o'z zimmasiga olmaydi.",
       "To'lov bo'lgunga qadar advokat va mijozning kontakt ma'lumotlari bir-biriga ko'rinmaydi.",
-      "Platforma chatlarida tashqi kontaktlarni ulashish AI orqali aniqlanadi va bloklanadi.",
+      "Platforma chatlarida tashqi kontaktlarni ulashish Sun'iy intellekt orqali aniqlanadi va bloklanadi.",
       "Har 5 kunda mijozga nima qilingani va keyingi qadamlar yozma xabar qilinadi.",
       "Har bir advokat va mijozga ro'yxatdan o'tgach shaxsiy ID raqam beriladi.",
       "Ish bo'yicha 1 tadan 5 tagacha mustaqil advokat ishtirokida 30 daqiqalik onlayn muhokama."
@@ -1354,7 +1354,7 @@
     "featuresTitle": "Hammasi cho'ntagingizda",
     "features": [
       {
-        "title": "Bir zumda AI javoblari",
+        "title": "Bir zumda Sun'iy intellekt javoblari",
         "text": "LexGo.AI ga istalgan vaqtda savol bering va soniyalarda asosli javob oling."
       },
       {
@@ -1395,7 +1395,7 @@
     "items": [
       {
         "q": "LexGo.AI advokat o'rnini bosadimi?",
-        "a": "Yo'q. AI ishni qisqartirib beradi, xronologiya tuzadi, hujjatlarni taqqoslaydi va xavflarni ko'rsatadi. Yakuniy huquqiy qaror har doim advokatda qoladi — shuning uchun har bir AI xizmatining yonida advokat varianti ham turadi."
+        "a": "Yo'q. Sun'iy intellekt ishni qisqartirib beradi, xronologiya tuzadi, hujjatlarni taqqoslaydi va xavflarni ko'rsatadi. Yakuniy huquqiy qaror har doim advokatda qoladi — shuning uchun har bir Sun'iy intellekt xizmatining yonida advokat varianti ham turadi."
       },
       {
         "q": "Nima uchun to'lovni faqat platforma orqali qilish kerak?",
@@ -1690,7 +1690,7 @@
         "clients": "Mijozlar",
         "documents": "Hujjatlar",
         "chat": "Xavfsiz chat",
-        "ai": "AI Yordamchi",
+        "ai": "Sun'iy intellekt Yordamchi",
         "promotion": "Targ'ibot",
         "subscription": "Obuna",
         "notifications": "Bildirishnomalar",
@@ -1793,9 +1793,9 @@
         "title": "Hujjatlar",
         "lead": "Ish hujjatlarini yuklang, ko'rib chiqing, versiyalang va xavfsiz ulashing.",
         "upload": "Hujjat yuklash",
-        "aiAnalyze": "AI tahlili",
+        "aiAnalyze": "Sun'iy intellekt tahlili",
         "empty": "Hozircha hujjat yo'q",
-        "aiNote": "AI ushbu hujjatda ko'rib chiqish uchun 7 ta nuqta topdi.",
+        "aiNote": "Sun'iy intellekt ushbu hujjatda ko'rib chiqish uchun 7 ta nuqta topdi.",
         "emptyText": "Mavjud hujjat namunalari shu yerda ko'rinadi."
       },
       "chat": {
@@ -1803,7 +1803,7 @@
         "lead": "Mijozingiz bilan shifrlangan chat — matn, ovoz, hujjatlar, video."
       },
       "ai": {
-        "title": "AI Huquqiy Yordamchi",
+        "title": "Sun'iy intellekt Huquqiy Yordamchi",
         "lead": "Ishni umumlashtiring, xronologiya tuzing, yetishmayotgan hujjatlar va muddatlarni toping.",
         "actions": [
           "Ishni qisqacha bayon qilish",
@@ -1977,7 +1977,7 @@
         "findSpecialist": "Mutaxassis topish",
         "consultation": "Konsultatsiya olish",
         "track": "So'rovni kuzatish",
-        "askAi": "LexGo AI'dan so'rash",
+        "askAi": "LexGo Sun'iy intellekt'dan so'rash",
         "upload": "Hujjat yuklash"
       },
       "services": {
@@ -2264,7 +2264,7 @@
         "tagline": "Menga yuridik yordam kerak",
         "desc": "Muammoyingizni yozing — LexGo sizni to'g'ri mutaxassis va xizmatga yo'naltiradi.",
         "benefits": [
-          "AI yuridik yo'l-yo'riq",
+          "Sun'iy intellekt yuridik yo'l-yo'riq",
           "Aqlli mutaxassis tanlovi",
           "Har bir so'rovni kuzatish"
         ],
@@ -2520,9 +2520,9 @@
   },
   "auth": {
     "headline": "Yuridik yordam — yangicha.",
-    "sub": "LexGo bilan yuridik masalalarni tezroq hal qilayotgan minglab foydalanuvchilarga qo‘shiling — AI yo‘l-yo‘riq, tasdiqlangan mutaxassislar va haqiqiy natijalar.",
+    "sub": "LexGo bilan yuridik masalalarni tezroq hal qilayotgan minglab foydalanuvchilarga qo‘shiling — Sun'iy intellekt yo‘l-yo‘riq, tasdiqlangan mutaxassislar va haqiqiy natijalar.",
     "features": [
-      "AI asosidagi yuridik yo‘l-yo‘riq",
+      "Sun'iy intellekt asosidagi yuridik yo‘l-yo‘riq",
       "Tasdiqlangan yurist va advokatlar",
       "Har bir so‘rovni boshdan-oxir kuzatish",
       "O‘zbekiston bo‘ylab mijozlar ishonchi"
@@ -2657,7 +2657,7 @@
     },
     "leads": {
       "title": "Lidlar",
-      "lead": "Veb-shakllar, AI va reklamalardan kelgan lidlar.",
+      "lead": "Veb-shakllar, Sun'iy intellekt va reklamalardan kelgan lidlar.",
       "empty": "Hozircha lid yo‘q",
       "emptyText": "Yangi lidlar shu yerda ko‘rinadi.",
       "create": "Lid qo‘shish",

@@ -10,6 +10,7 @@ import {
 } from "react";
 import { getClientId, setToken } from "./client";
 import { ApiError, isOffline } from "./http";
+import { normUzPhone } from "./phone";
 import type { PlanTier, ProfessionalProfile, RegistrationDraft } from "./types";
 import { scoreCompleteness, registerAccount } from "./services/registration";
 import {
@@ -111,7 +112,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [persist]);
 
   const login = useCallback(
-    async (phone: string, password: string, fallback?: { role: Role; name: string }) => {
+    async (rawPhone: string, password: string, fallback?: { role: Role; name: string }) => {
+      const phone = normUzPhone(rawPhone);
       try {
         const { token, user } = await apiLogin(phone, password);
         setToken(token);
@@ -155,7 +157,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const r = await registerStart({
         role: toBackendRole(role),
         name: draft.profile.name,
-        phone: draft.phone,
+        phone: normUzPhone(draft.phone),
         password: draft.password,
       });
       return { verificationId: r.verificationId, demoOtp: r.demoOtp };
@@ -197,7 +199,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return finish({
         role,
         name: user.name || draft.profile.name,
-        phone: user.phone || draft.phone,
+        phone: user.phone || normUzPhone(draft.phone),
         id: user.id,
         plan: "free",
         completeness,

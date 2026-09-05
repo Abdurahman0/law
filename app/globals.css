@@ -1910,3 +1910,8 @@ body:has(.schat) .fab{display:none}
 /* ── Seller case card: client name ── */
 .pcase__client{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:.95rem;color:var(--ink);min-width:0}
 .pcase__client svg{width:15px;height:15px;stroke:var(--b600);flex:none}
+
+/* ── Register: step back button ── */
+.rf__back{display:inline-flex;align-items:center;gap:5px;align-self:flex-start;border:0;background:transparent;color:var(--gray);font:inherit;font-size:.86rem;font-weight:600;cursor:pointer;padding:4px 0;margin-bottom:6px;transition:color .15s}
+.rf__back:hover{color:var(--b600)}
+.rf__back svg{width:16px;height:16px}

@@ -4,6 +4,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/lib/auth";
 import { Link, useRouter } from "@/i18n/navigation";
+import { formatUzPhone } from "@/lib/phone";
 import { IconLogo } from "../icons";
 
 export default function LoginForm() {
@@ -62,9 +63,14 @@ export default function LoginForm() {
             <input
               id="l-phone"
               type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder={t("phonePh")}
+              inputMode="tel"
+              value={formatUzPhone(phone)}
+              onChange={(e) => setPhone(formatUzPhone(e.target.value))}
+              onFocus={(e) => {
+                if (!phone) setPhone("+998");
+                requestAnimationFrame(() => e.target.setSelectionRange(e.target.value.length, e.target.value.length));
+              }}
+              placeholder="+998 90 123 45 67"
               autoComplete="tel"
             />
           </div>
