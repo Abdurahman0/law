@@ -12,6 +12,7 @@ export type LegalSubservice = {
 export type LegalCategory = {
   key: string; // unique kebab-case category slug
   label: Record<CatalogLocale, string>;
+  advocateOnly?: boolean; // only advocates may offer these; lawyers cannot
   services: LegalSubservice[];
 };
 
@@ -312,6 +313,7 @@ export const LEGAL_SERVICES: LegalCategory[] = [
   },
   {
     key: "court",
+    advocateOnly: true,
     label: {
       uz: "Sud va nizolar",
       ru: "Суд и споры",
@@ -394,6 +396,7 @@ export const LEGAL_SERVICES: LegalCategory[] = [
   },
   {
     key: "criminal",
+    advocateOnly: true,
     label: {
       uz: "Jinoyat ishlari",
       ru: "Уголовные дела",
@@ -484,6 +487,7 @@ export const LEGAL_SERVICES: LegalCategory[] = [
   },
   {
     key: "administrative",
+    advocateOnly: true,
     label: {
       uz: "Ma'muriy ishlar",
       ru: "Административные дела",

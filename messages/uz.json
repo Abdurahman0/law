@@ -2357,7 +2357,8 @@
       "search": "Xizmatlarni qidirish",
       "selected": "{n} ta tanlandi",
       "empty": "Xizmatlar mavjud emas",
-      "emptyText": "Xizmatlar katalogi backenddan yuklanadi."
+      "emptyText": "Xizmatlar katalogi backenddan yuklanadi.",
+      "advocateOnly": "Faqat advokatlar"
     },
     "advocate": {
       "steps": {
@@ -2593,6 +2594,7 @@
       "notifications": "Bildirishnomalar",
       "bootstrap": "Bootstrap",
       "leads": "Lidlar",
+      "pipeline": "Sotuv voronkasi",
       "approvals": "Tasdiqlashlar",
       "ads": "Reklama",
       "verifications": "Advokatlarni tasdiqlash",
@@ -2719,6 +2721,23 @@
         "rejected": "Rad etilgan"
       }
     },
+    "pipeline": {
+      "title": "Sotuv voronkasi",
+      "lead": "Lidlarni bosqichma-bosqich yuriting: yangi → aloqa → malakali → yutildi/yo‘qotildi.",
+      "empty": "Lidlar yo‘q",
+      "emptyText": "Yangi lidlar bu yerda paydo bo‘ladi.",
+      "noneHere": "Bo‘sh",
+      "noInfo": "Ma'lumot yo‘q",
+      "moveBack": "Orqaga",
+      "moveFwd": "Oldinga",
+      "stages": {
+        "new": "Yangi",
+        "contacted": "Aloqa qilingan",
+        "qualified": "Malakali",
+        "won": "Yutildi",
+        "lost": "Yo‘qotildi"
+      }
+    },
     "approvals": {
       "title": "Tasdiqlashlar",
       "lead": "Qaytarish va advokat almashtirish admin + menejer tasdig‘ini talab qiladi.",
@@ -2801,6 +2820,7 @@
     "audioCall": "Audio qo‘ng‘iroq",
     "videoCall": "Video qo‘ng‘iroq",
     "chatSettings": "Chat sozlamalari",
+    "zoomCall": "Zoom qo'ng'iroq",
     "ttlTitle": "Xabarlar avtomatik o‘chishi",
     "ttlOff": "O‘chirilmasin",
     "ttl24h": "24 soatdan so‘ng",

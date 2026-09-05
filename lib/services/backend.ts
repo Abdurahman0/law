@@ -809,6 +809,17 @@ export async function setChatAutoDelete(roomId: string, autoDeleteHours: number)
 export async function deleteSecureChat(roomId: string): Promise<void> {
   await http(`/secure-chats/${roomId}`, { method: "DELETE" });
 }
+// Create a Zoom meeting for this chat (call-center advocates). Returns the
+// join URL for participants and the host start URL.
+export type ZoomMeeting = { joinUrl: string; startUrl: string; meetingId: string };
+export async function createZoomMeeting(roomId: string): Promise<ZoomMeeting> {
+  const d = asDict(await http(`/secure-chats/${roomId}/zoom`, { method: "POST", body: JSON.stringify({}) }));
+  return {
+    joinUrl: asStr(d.join_url ?? d.joinUrl),
+    startUrl: asStr(d.start_url ?? d.startUrl ?? d.join_url),
+    meetingId: asStr(d.meeting_id ?? d.id),
+  };
+}
 export async function getSecureMessages(roomId: string): Promise<SecureMessage[]> {
   return listFrom(await http(`/secure-chats/${roomId}/messages`), "messages", "items", "data").map(normSecureMsg);
 }

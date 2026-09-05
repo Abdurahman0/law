@@ -478,7 +478,7 @@ export default function RegisterFlow() {
             <div className="rf__step rf__step--wide">
               <h1 className="rf__title">{t("advocate.expertiseTitle")}</h1>
               <p className="rf__sub">{t("advocate.expertiseSubtitle")}</p>
-              <LegalServicePicker value={p.practiceAreas} onChange={(v) => setProfile({ practiceAreas: v })} />
+              <LegalServicePicker value={p.practiceAreas} onChange={(v) => setProfile({ practiceAreas: v })} isAdvocate={draft.accountType === "advocate"} />
             </div>
           ) : null}
 

@@ -8,9 +8,11 @@ import { IconSearch, IconChevronRight, IconCheck } from "../icons";
 export default function LegalServicePicker({
   value,
   onChange,
+  isAdvocate = true,
 }: {
   value: string[];
   onChange: (next: string[]) => void;
+  isAdvocate?: boolean; // lawyers can't pick advocate-only categories
 }) {
   const locale = useLocale() as CatalogLocale;
   const t = useTranslations("register.services");
@@ -65,16 +67,25 @@ export default function LegalServicePicker({
           <div className="lsp__empty">{t("empty")}</div>
         ) : (
           groups.map(({ cat, services }) => {
-            const expanded = query ? true : open.has(cat.key);
+            const locked = !!cat.advocateOnly && !isAdvocate;
+            const expanded = locked ? false : query ? true : open.has(cat.key);
             const chosen = cat.services.filter((s) => sel.has(s.key)).length;
             return (
-              <div className={`lsp__cat${expanded ? " on" : ""}`} key={cat.key}>
-                <button type="button" className="lsp__head" onClick={() => toggleCat(cat.key)}>
+              <div className={`lsp__cat${expanded ? " on" : ""}${locked ? " lsp__cat--locked" : ""}`} key={cat.key}>
+                <button
+                  type="button"
+                  className="lsp__head"
+                  onClick={() => !locked && toggleCat(cat.key)}
+                  disabled={locked}
+                >
                   <span className="lsp__hlabel">{legalServiceLabel(cat.key, locale)}</span>
+                  {cat.advocateOnly ? <span className="lsp__advonly">{t("advocateOnly")}</span> : null}
                   {chosen > 0 ? <span className="lsp__badge">{chosen}</span> : null}
-                  <span className="lsp__cv">
-                    <IconChevronRight />
-                  </span>
+                  {locked ? null : (
+                    <span className="lsp__cv">
+                      <IconChevronRight />
+                    </span>
+                  )}
                 </button>
                 {expanded ? (
                   <div className="lsp__opts">

@@ -16,6 +16,7 @@ import {
   listCalls,
   setChatAutoDelete,
   deleteSecureChat,
+  createZoomMeeting,
   type SecureMessage,
 } from "@/lib/services/backend";
 import CallRoom from "./CallRoom";
@@ -90,6 +91,31 @@ export default function SecureChat({ roomId }: { roomId: string }) {
     if (!incoming) return;
     setActiveCall({ callId: incoming.callId, callType: incoming.callType, isCaller: false });
     setIncoming(null);
+  }
+
+  // Start a Zoom meeting and share the join link in the chat.
+  async function beginZoom() {
+    if (callBusy) return;
+    setCallBusy(true);
+    try {
+      const z = await createZoomMeeting(roomId);
+      const host = z.startUrl || z.joinUrl;
+      if (host) window.open(host, "_blank", "noopener");
+      const link = z.joinUrl || host;
+      if (link) {
+        const payload = `Zoom: ${link}`;
+        const ws = wsRef.current;
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({ content: payload, message_type: "text", meta: {} }));
+        } else {
+          await sendSecureMessage(roomId, payload).catch(() => {});
+        }
+      }
+    } catch {
+      /* backend Zoom endpoint may not be live yet */
+    } finally {
+      setCallBusy(false);
+    }
   }
 
   // Chat retention controls. The backend keeps a ~1-month archive after delete.
@@ -383,6 +409,15 @@ export default function SecureChat({ roomId }: { roomId: string }) {
               aria-label={t("videoCall")}
             >
               <IconVideo />
+            </button>
+            <button
+              className="schat__zoom"
+              type="button"
+              onClick={beginZoom}
+              disabled={callBusy || !!activeCall}
+              aria-label={t("zoomCall")}
+            >
+              Zoom
             </button>
           </div>
         ) : null}

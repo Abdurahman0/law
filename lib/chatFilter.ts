@@ -9,11 +9,14 @@ const PHONE = /(?:\+?\d[\s\-().]?){9,}\d/g;
 
 const MASK = "•••";
 
+// Zoom meeting links are allowed (calls happen through them).
+const ALLOWED = /zoom\.us|zoom\.com/i;
+
 export function maskContacts(input: string): string {
   if (!input) return input;
   return input
-    .replace(SOCIAL, MASK)
-    .replace(URL, MASK)
+    .replace(SOCIAL, (m) => (ALLOWED.test(m) ? m : MASK))
+    .replace(URL, (m) => (ALLOWED.test(m) ? m : MASK))
     .replace(USERNAME, (m) => m.replace(/@[A-Za-z0-9_.]{2,}/, MASK))
     .replace(PHONE, MASK);
 }

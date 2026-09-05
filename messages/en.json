@@ -2351,7 +2351,8 @@
       "search": "Search services",
       "selected": "{n} selected",
       "empty": "No services available",
-      "emptyText": "The service catalog will load from the backend."
+      "emptyText": "The service catalog will load from the backend.",
+      "advocateOnly": "Advocates only"
     },
     "advocate": {
       "steps": {
@@ -2587,6 +2588,7 @@
       "notifications": "Notifications",
       "bootstrap": "Bootstrap",
       "leads": "Leads",
+      "pipeline": "Sales pipeline",
       "approvals": "Approvals",
       "ads": "Ads",
       "verifications": "Verify lawyers",
@@ -2713,6 +2715,23 @@
         "rejected": "Rejected"
       }
     },
+    "pipeline": {
+      "title": "Sales pipeline",
+      "lead": "Move leads through the stages: new → contacted → qualified → won/lost.",
+      "empty": "No leads",
+      "emptyText": "New leads will appear here.",
+      "noneHere": "Empty",
+      "noInfo": "No info",
+      "moveBack": "Back",
+      "moveFwd": "Forward",
+      "stages": {
+        "new": "New",
+        "contacted": "Contacted",
+        "qualified": "Qualified",
+        "won": "Won",
+        "lost": "Lost"
+      }
+    },
     "approvals": {
       "title": "Approvals",
       "lead": "Refunds and lawyer replacements need admin + manager approval.",
@@ -2795,6 +2814,7 @@
     "audioCall": "Audio call",
     "videoCall": "Video call",
     "chatSettings": "Chat settings",
+    "zoomCall": "Zoom call",
     "ttlTitle": "Auto-delete messages",
     "ttlOff": "Never",
     "ttl24h": "After 24 hours",
