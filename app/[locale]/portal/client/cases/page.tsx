@@ -73,8 +73,8 @@ export default function ClientCases() {
           <div className="creq" key={c.id}>
             <span className="creq__st" />
             <div className="creq__m">
-              <b>{c.caseType || c.caseNumber}</b>
-              <span>{[c.stage, c.caseNumber].filter(Boolean).join(" · ")}</span>
+              <b>{c.caseType || c.title || t("title")}</b>
+              <span>{[c.stage, c.status].filter(Boolean).join(" · ")}</span>
               {c.nextAction ? (
                 <em className="creq__next">
                   <IconArrowRight />

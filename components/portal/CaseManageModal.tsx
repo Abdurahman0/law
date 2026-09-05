@@ -6,6 +6,7 @@ import { updateCase, type BackendCase } from "@/lib/services/backend";
 import { Notice } from "@/components/admin/AdminBits";
 import Modal from "@/components/admin/Modal";
 import Select from "@/components/Select";
+import { IconUser } from "@/components/icons";
 
 const STATUSES = ["new", "active", "investigation", "court", "appeal", "completed", "archived"];
 
@@ -14,7 +15,7 @@ export default function CaseManageModal({
   onClose,
   onSaved,
 }: {
-  target: BackendCase | null;
+  target: (BackendCase & { clientName?: string }) | null;
   onClose: () => void;
   onSaved: () => void;
 }) {
@@ -63,8 +64,8 @@ export default function CaseManageModal({
       {target ? (
         <form className="cform" style={{ maxWidth: "none" }} onSubmit={submit}>
           <div className="cmcase__head">
-            <span className="pcase__id">{target.caseNumber ? `#${target.caseNumber}` : target.caseType || target.title}</span>
-            <b>{target.title || target.caseType}</b>
+            {target.clientName ? <span className="pcase__client"><IconUser />{target.clientName}</span> : null}
+            <b>{target.caseType || target.title || "—"}</b>
             {target.description ? <p className="advmuted">{target.description}</p> : null}
           </div>
           <div>

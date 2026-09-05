@@ -1906,3 +1906,7 @@ body:has(.schat) .fab{display:none}
 .incall__btn--decline:hover{background:#c53a3f}
 @keyframes incallIn{from{opacity:0;transform:translate(-50%,-16px)}to{opacity:1;transform:translate(-50%,0)}}
 @keyframes incallPulse{0%{box-shadow:0 0 0 0 rgba(55,211,155,.5)}70%{box-shadow:0 0 0 12px rgba(55,211,155,0)}100%{box-shadow:0 0 0 0 rgba(55,211,155,0)}}
+
+/* ── Seller case card: client name ── */
+.pcase__client{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:.95rem;color:var(--ink);min-width:0}
+.pcase__client svg{width:15px;height:15px;stroke:var(--b600);flex:none}
