@@ -2164,3 +2164,20 @@ body:has(.schat) .fab{display:none}
 .mtchcard__meta span{display:inline-flex;align-items:center;gap:4px}
 .mtchcard__meta svg{width:13px;height:13px}
 .mtchcard__reason{margin:0;font-size:.82rem;color:var(--gray);line-height:1.4}
+
+/* CEO funnel + channels, B2B, pipeline re-engage */
+.fnl{display:flex;flex-direction:column;gap:9px}
+.fnl__row{display:flex;align-items:center;gap:10px}
+.fnl__l{width:110px;flex:none;font-size:.82rem;color:var(--gray)}
+.fnl__bar{flex:1;background:var(--b50);border-radius:8px;overflow:hidden;height:26px}
+.fnl__bar>span{display:flex;align-items:center;justify-content:flex-end;padding:0 8px;height:100%;background:linear-gradient(90deg,var(--b300,#8ab4ff),var(--b600));color:#fff;font-size:.75rem;font-weight:800;border-radius:8px;min-width:24px}
+.chan{display:flex;flex-direction:column;gap:10px}
+.chan__row{display:flex;align-items:center;gap:10px}
+.chan__n{width:96px;flex:none;font-size:.82rem}
+.chan__bar{flex:1;height:8px;border-radius:4px;background:var(--b50);overflow:hidden}
+.chan__bar>span{display:block;height:100%;background:var(--b600)}
+.chan__v{width:42px;text-align:right;font-size:.78rem;font-weight:700;color:var(--gray)}
+.b2b__val{font-family:var(--fd);font-weight:800;color:#059669;font-size:.9rem}
+.pipe__reengage{width:100%;padding:7px;border:1px dashed #93c5fd;border-radius:8px;background:#eff6ff;color:#2563eb;font-family:inherit;font-size:.78rem;font-weight:700;cursor:pointer}
+.pipe__reengage:hover{background:#dbeafe}
+.pipe__reengage:disabled{opacity:.5;cursor:default}

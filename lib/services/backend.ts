@@ -1615,6 +1615,66 @@ export async function getCallAnalytics(): Promise<CallAnalytics> {
   };
 }
 
+// ── CEO dashboard / analytics / marketing attribution ─────────────
+export type CeoDashboard = {
+  revenue: number; revenueDeltaPct: number; mrr: number;
+  users: number; activeUsers: number; conversionPct: number;
+  funnel: { label: string; value: number }[];
+  channels: { name: string; leads: number; pct: number }[];
+  revenueTrend: { label: string; value: number }[];
+};
+export async function getCeoDashboard(): Promise<CeoDashboard> {
+  const d = asDict(await http("/analytics/ceo"));
+  const pair = (x: unknown) => { const r = asDict(x); return { label: asStr(r.label ?? r.name ?? r.date), value: asNum(r.value ?? r.count) }; };
+  return {
+    revenue: asNum(d.revenue), revenueDeltaPct: asNum(d.revenue_delta_pct), mrr: asNum(d.mrr),
+    users: asNum(d.users ?? d.total_users), activeUsers: asNum(d.active_users), conversionPct: asNum(d.conversion_pct),
+    funnel: asArr(d.funnel).map(pair),
+    channels: asArr(d.channels ?? d.attribution).map((x) => { const r = asDict(x); return { name: asStr(r.name ?? r.channel), leads: asNum(r.leads ?? r.count), pct: asNum(r.pct ?? r.share) }; }),
+    revenueTrend: asArr(d.revenue_trend ?? d.trend).map(pair),
+  };
+}
+
+// ── Quality control ───────────────────────────────────────────────
+export type QualityOverview = {
+  avgRating: number; responseSlaPct: number; complaintRate: number; resolvedPct: number;
+  flagged: { title: string; detail: string; severity: string }[];
+};
+export async function getQualityOverview(): Promise<QualityOverview> {
+  const d = asDict(await http("/quality/overview"));
+  return {
+    avgRating: asNum(d.avg_rating, 0), responseSlaPct: asNum(d.response_sla_pct), complaintRate: asNum(d.complaint_rate), resolvedPct: asNum(d.resolved_pct),
+    flagged: asArr(d.flagged).map((x) => { const r = asDict(x); return { title: asStr(r.title), detail: asStr(r.detail ?? r.description), severity: asStr(r.severity, "low") }; }),
+  };
+}
+export async function adminListComplaints(): Promise<Complaint[]> {
+  return listFrom(await http("/admin/complaints"), "items", "data").map(normComplaint);
+}
+
+// ── B2B CRM ───────────────────────────────────────────────────────
+export type B2bClient = { id: string; name: string; industry: string; contact: string; stage: string; value: number };
+export async function listB2bClients(): Promise<B2bClient[]> {
+  return listFrom(await http("/b2b/clients"), "items", "data", "clients").map((x) => {
+    const d = asDict(x);
+    return { id: asStr(d.id), name: asStr(d.name ?? d.company), industry: asStr(d.industry), contact: asStr(d.contact ?? d.phone), stage: asStr(d.stage, "new"), value: asNum(d.value ?? d.deal_value) };
+  });
+}
+
+// ── Retention & upsell ────────────────────────────────────────────
+export type RetentionOverview = {
+  atRisk: number; churnedThisMonth: number; retainedPct: number;
+  atRiskClients: { name: string; phone: string; reason: string; lastActive: string }[];
+  upsell: { name: string; suggestion: string }[];
+};
+export async function getRetentionOverview(): Promise<RetentionOverview> {
+  const d = asDict(await http("/retention/overview"));
+  return {
+    atRisk: asNum(d.at_risk), churnedThisMonth: asNum(d.churned_this_month), retainedPct: asNum(d.retained_pct),
+    atRiskClients: asArr(d.at_risk_clients).map((x) => { const r = asDict(x); return { name: asStr(r.name), phone: asStr(r.phone), reason: asStr(r.reason), lastActive: asStr(r.last_active) }; }),
+    upsell: asArr(d.upsell).map((x) => { const r = asDict(x); return { name: asStr(r.name), suggestion: asStr(r.suggestion) }; }),
+  };
+}
+
 // ── Payments history ──────────────────────────────────────────────
 export type PaymentHistory = {
   id: string;

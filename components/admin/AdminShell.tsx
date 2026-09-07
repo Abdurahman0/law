@@ -22,6 +22,8 @@ import {
   IconAward,
   IconScale,
   IconTrendingUp,
+  IconTarget,
+  IconBuilding,
   IconLogout,
   IconMenu,
   IconClose,
@@ -32,6 +34,7 @@ type SvgC = ComponentType<{ className?: string }>;
 // bootstrap) are full-admin only. Superadmin/admin see everything.
 const NAV: { href: string; key: string; Icon: SvgC; perm?: string }[] = [
   { href: "/admin", key: "overview", Icon: IconGrid },
+  { href: "/admin/ceo", key: "ceo", Icon: IconTarget },
   { href: "/admin/services", key: "services", Icon: IconBriefcase, perm: "services.manage" },
   { href: "/admin/plans", key: "plans", Icon: IconStar, perm: "subscriptions.manage" },
   { href: "/admin/templates", key: "templates", Icon: IconDocLines, perm: "templates.manage" },
@@ -41,6 +44,9 @@ const NAV: { href: string; key: string; Icon: SvgC; perm?: string }[] = [
   { href: "/admin/leads", key: "leads", Icon: IconUsers, perm: "leads.manage" },
   { href: "/admin/pipeline", key: "pipeline", Icon: IconTrendingUp, perm: "leads.manage" },
   { href: "/admin/call-analytics", key: "callAnalytics", Icon: IconChat, perm: "leads.manage" },
+  { href: "/admin/retention", key: "retention", Icon: IconUsers, perm: "leads.manage" },
+  { href: "/admin/b2b", key: "b2b", Icon: IconBuilding, perm: "leads.manage" },
+  { href: "/admin/quality", key: "quality", Icon: IconShieldCheck, perm: "lawyers.verify" },
   { href: "/admin/verifications", key: "verifications", Icon: IconAward, perm: "lawyers.verify" },
   { href: "/admin/legal-aid", key: "legalAid", Icon: IconScale, perm: "legal_aid.manage" },
   { href: "/admin/approvals", key: "approvals", Icon: IconShieldCheck, perm: "approvals.manage" },

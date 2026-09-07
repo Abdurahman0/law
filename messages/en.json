@@ -2737,6 +2737,10 @@
       "leads": "Leads",
       "pipeline": "Sales pipeline",
       "callAnalytics": "Call analytics",
+      "ceo": "CEO dashboard",
+      "retention": "Retention",
+      "b2b": "B2B clients",
+      "quality": "Quality control",
       "approvals": "Approvals",
       "ads": "Ads",
       "verifications": "Verify lawyers",
@@ -2872,6 +2876,7 @@
       "noInfo": "No info",
       "moveBack": "Back",
       "moveFwd": "Forward",
+      "reengage": "Re-engage",
       "stages": {
         "new": "New",
         "contacted": "Contacted",
@@ -2889,6 +2894,48 @@
       "byDay": "By day",
       "topAgents": "Top agents",
       "noData": "No data"
+    },
+    "ceo": {
+      "title": "CEO dashboard",
+      "revenue": "Revenue",
+      "mrr": "MRR (monthly recurring)",
+      "users": "Users",
+      "active": "active",
+      "conversion": "Conversion",
+      "revenueTrend": "Revenue trend",
+      "funnel": "Funnel",
+      "channels": "Channels (attribution)",
+      "noData": "No data"
+    },
+    "quality": {
+      "title": "Quality control",
+      "avgRating": "Avg rating",
+      "sla": "Response SLA",
+      "complaintRate": "Complaint rate",
+      "resolved": "Resolved",
+      "flagged": "Flagged cases",
+      "noFlagged": "No flagged cases",
+      "complaints": "Complaints",
+      "noComplaints": "No complaints",
+      "noComplaintsText": "New complaints will appear here."
+    },
+    "b2b": {
+      "title": "B2B clients",
+      "lead": "Corporate clients and deals.",
+      "empty": "No B2B clients",
+      "emptyText": "New corporate clients will appear here.",
+      "stage": { "new": "New", "negotiation": "Negotiation", "won": "Won", "lost": "Lost", "active": "Active" }
+    },
+    "retention": {
+      "title": "Retention & upsell",
+      "atRisk": "At risk",
+      "churned": "Churned this month",
+      "retained": "Retained",
+      "atRiskTitle": "At-risk clients",
+      "noRisk": "No at-risk clients",
+      "winBack": "Win back",
+      "upsellTitle": "Upsell suggestions",
+      "noUpsell": "No suggestions"
     },
     "approvals": {
       "title": "Approvals",

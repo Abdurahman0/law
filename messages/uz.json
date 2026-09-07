@@ -2743,6 +2743,10 @@
       "leads": "Lidlar",
       "pipeline": "Sotuv voronkasi",
       "callAnalytics": "Qo'ng'iroq tahlili",
+      "ceo": "CEO paneli",
+      "retention": "Ushlab qolish",
+      "b2b": "B2B mijozlar",
+      "quality": "Sifat nazorati",
       "approvals": "Tasdiqlashlar",
       "ads": "Reklama",
       "verifications": "Advokatlarni tasdiqlash",
@@ -2878,6 +2882,7 @@
       "noInfo": "Ma'lumot yo‘q",
       "moveBack": "Orqaga",
       "moveFwd": "Oldinga",
+      "reengage": "Qayta jalb qilish",
       "stages": {
         "new": "Yangi",
         "contacted": "Aloqa qilingan",
@@ -2895,6 +2900,48 @@
       "byDay": "Kunlar bo'yicha",
       "topAgents": "Faol operatorlar",
       "noData": "Ma'lumot yo'q"
+    },
+    "ceo": {
+      "title": "CEO paneli",
+      "revenue": "Daromad",
+      "mrr": "Oylik takroriy daromad",
+      "users": "Foydalanuvchilar",
+      "active": "faol",
+      "conversion": "Konversiya",
+      "revenueTrend": "Daromad dinamikasi",
+      "funnel": "Voronka",
+      "channels": "Kanallar (attribution)",
+      "noData": "Ma'lumot yo'q"
+    },
+    "quality": {
+      "title": "Sifat nazorati",
+      "avgRating": "O'rtacha reyting",
+      "sla": "Javob SLA",
+      "complaintRate": "Shikoyat darajasi",
+      "resolved": "Hal qilingan",
+      "flagged": "Belgilangan holatlar",
+      "noFlagged": "Belgilangan holat yo'q",
+      "complaints": "Shikoyatlar",
+      "noComplaints": "Shikoyat yo'q",
+      "noComplaintsText": "Yangi shikoyatlar shu yerda."
+    },
+    "b2b": {
+      "title": "B2B mijozlar",
+      "lead": "Korporativ mijozlar va bitimlar.",
+      "empty": "B2B mijoz yo'q",
+      "emptyText": "Yangi korporativ mijozlar shu yerda.",
+      "stage": { "new": "Yangi", "negotiation": "Muzokara", "won": "Yutildi", "lost": "Yo'qotildi", "active": "Faol" }
+    },
+    "retention": {
+      "title": "Ushlab qolish va upsell",
+      "atRisk": "Xavf ostida",
+      "churned": "Bu oy ketgan",
+      "retained": "Ushlab qolindi",
+      "atRiskTitle": "Xavf ostidagi mijozlar",
+      "noRisk": "Xavf ostida mijoz yo'q",
+      "winBack": "Qaytarish",
+      "upsellTitle": "Upsell tavsiyalari",
+      "noUpsell": "Tavsiya yo'q"
     },
     "approvals": {
       "title": "Tasdiqlashlar",

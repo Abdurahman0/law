@@ -55,6 +55,17 @@ export default function AdminPipeline() {
       setBusy(null);
     }
   }
+  async function reengage(l: Lead) {
+    setBusy(l.id);
+    try {
+      await adminUpdateLead(l.id, { status: "new" });
+      reload();
+    } catch {
+      /* ignore */
+    } finally {
+      setBusy(null);
+    }
+  }
 
   return (
     <div className="ppanel">
@@ -91,6 +102,11 @@ export default function AdminPipeline() {
                         {[l.phone, l.category, l.region].filter(Boolean).join(" · ") || t("noInfo")}
                       </span>
                       {l.note ? <span className="pipe__note">{l.note}</span> : null}
+                      {s === "lost" ? (
+                        <button type="button" className="pipe__reengage" disabled={busy === l.id} onClick={() => reengage(l)}>
+                          {t("reengage")}
+                        </button>
+                      ) : null}
                       <div className="pipe__actions">
                         <button
                           type="button"

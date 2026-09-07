@@ -40,11 +40,11 @@ Status legend: ✅ already built · 🟡 partial (needs polish) · 🔴 missing 
 - [x] B3. #235 Call Recording & Analytics (admin) — done, verified
 
 ### Phase C — admin / CEO
-- [ ] C1. #254 CEO Dashboard + #269 Analytics + #251 Marketing Attribution
-- [ ] C2. #241 Retention + #242 Upsell/Cross-sell
-- [ ] C3. #244 Quality Control + complaint admin (#245)
-- [ ] C4. #248 B2B CRM + #249 B2B Pipeline + #250 B2B Tasks
-- [ ] C5. #216 Re-engage lost leads
+- [x] C1. #254 CEO Dashboard + #269 Analytics + #251 Marketing Attribution — done, verified
+- [x] C2. #241 Retention + #242 Upsell/Cross-sell — done, verified
+- [x] C3. #244 Quality Control + complaint admin (#245) — done, verified
+- [x] C4. #248 B2B CRM (clients) — done
+- [x] C5. #216 Re-engage lost leads (pipeline action) — done
 
 ### Phase D — AI
 - [ ] D1. #256 AI Problem Classification (intake → call-center lead)
