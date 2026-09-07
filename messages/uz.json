@@ -2814,6 +2814,9 @@
       "audit": "Audit jurnali",
       "reviews": "Sharh moderatsiyasi",
       "payouts": "To'lovlar (payout)",
+      "callCenter": "Call-markaz",
+      "workflow": "Avtomatlashtirish",
+      "integrations": "Integratsiyalar",
       "approvals": "Tasdiqlashlar",
       "ads": "Reklama",
       "verifications": "Advokatlarni tasdiqlash",
@@ -3023,6 +3026,35 @@
       "lead": "Tizimdagi barcha muhim harakatlar jurnali.",
       "empty": "Yozuv yo'q",
       "emptyText": "Audit yozuvlari shu yerda ko'rinadi."
+    },
+    "integrations": {
+      "title": "Integratsiyalar",
+      "lead": "Tashqi servislar ulanish holati.",
+      "empty": "Integratsiya yo'q",
+      "keys": { "website_api": "Veb-sayt API", "mobile_api": "Mobil API", "lexgo_ai": "LexGo.AI", "telegram": "Telegram", "sms": "SMS", "email": "Email" },
+      "status": { "connected": "Ulangan", "planned": "Rejalashtirilgan", "error": "Xato", "disconnected": "Uzilgan" }
+    },
+    "workflow": {
+      "rules": "Avtomatlashtirish qoidalari",
+      "lead": "Voqealarga qarab avtomatik amallar.",
+      "noRules": "Qoida yo'q",
+      "noRulesText": "Yangi qoidalar shu yerda ko'rinadi.",
+      "run": "Ishga tushirish",
+      "running": "Bajarilmoqda…",
+      "runs": "Ishga tushirishlar tarixi",
+      "noRuns": "Hali ishga tushirilmagan.",
+      "completed": "Bajarildi",
+      "status": { "active": "Faol", "paused": "To'xtatilgan" }
+    },
+    "callCenter": {
+      "search": "Mijoz qidirish",
+      "searchPh": "Ism yoki telefon…",
+      "searchHint": "Mijozni qidirish uchun ism yoki telefon kiriting.",
+      "noResults": "Natija yo'q",
+      "logCall": "Qo'ng'iroq yozish",
+      "recent": "So'nggi qo'ng'iroqlar",
+      "noCalls": "Qo'ng'iroq yo'q.",
+      "dir": { "incoming": "Kiruvchi", "outgoing": "Chiquvchi" }
     },
     "reviews": {
       "title": "Sharh moderatsiyasi",

@@ -1876,6 +1876,103 @@ export async function getReconciliation(): Promise<Reconciliation> {
   };
 }
 
+// ── Entitlements (client plan/family access) ──────────────────────
+export type Entitlements = { hasActiveSubscription: boolean; activeSubscriptions: string[]; sharedFamily: number; aiLimit: string };
+export async function getEntitlements(): Promise<Entitlements> {
+  const d = asDict(await http("/clients/me/entitlements"));
+  return {
+    hasActiveSubscription: Boolean(d.has_active_subscription),
+    activeSubscriptions: asArr(d.active_subscriptions).map((x) => { const r = asDict(x); return asStr(r.plan_name ?? r.name ?? x); }),
+    sharedFamily: asArr(d.shared_family_members).length,
+    aiLimit: asStr(d.ai_limit),
+  };
+}
+
+// ── Integrations status ───────────────────────────────────────────
+export type Integration = { key: string; status: string; healthy: boolean };
+export async function getIntegrationsStatus(): Promise<Integration[]> {
+  return listFrom(await http("/integrations/status"), "items", "data", "integrations").map((x) => {
+    const d = asDict(x);
+    return { key: asStr(d.key ?? d.name), status: asStr(d.status), healthy: Boolean(d.healthy) };
+  });
+}
+
+// ── Workflow automation ───────────────────────────────────────────
+export type WorkflowRule = { id: string; title: string; status: string; description: string };
+function normRule(v: unknown): WorkflowRule {
+  const d = asDict(v); const p = asDict(d.payload);
+  return { id: asStr(d.id), title: asStr(d.title ?? d.name), status: asStr(d.status, "active"), description: asStr(d.description ?? p.description) };
+}
+export async function listWorkflowRules(): Promise<WorkflowRule[]> {
+  return listFrom(await http("/workflow/rules"), "items", "data", "rules").map(normRule);
+}
+export async function runWorkflowRule(id: string): Promise<void> {
+  await http(`/workflow/rules/${id}/run`, { method: "POST", body: JSON.stringify({ input: {} }) });
+}
+export type WorkflowRun = { id: string; title: string; status: string; createdAt: string };
+export async function listWorkflowRuns(): Promise<WorkflowRun[]> {
+  return listFrom(await http("/workflow/runs"), "items", "data", "runs").map((x) => {
+    const d = asDict(x);
+    return { id: asStr(d.id), title: asStr(d.title), status: asStr(d.status, "completed"), createdAt: asStr(d.created_at) };
+  });
+}
+
+// ── Call-center CRM console ───────────────────────────────────────
+export type CcClient = { id: string; lexgoId: string; name: string; phone: string; status: string };
+export async function ccSearchClients(q: string): Promise<CcClient[]> {
+  return listFrom(await http(`/call-center/clients/search?q=${encodeURIComponent(q)}`), "items", "data").map((x) => {
+    const d = asDict(x);
+    return { id: asStr(d.id), lexgoId: asStr(d.lexgo_id), name: asStr(d.name), phone: asStr(d.phone), status: asStr(d.account_status, "active") };
+  });
+}
+export type CcCall = { id: string; direction: string; phone: string; status: string; createdAt: string };
+export async function listCcCalls(): Promise<CcCall[]> {
+  return listFrom(await http("/call-center/calls"), "items", "data", "calls").map((x) => {
+    const d = asDict(x); const p = asDict(d.payload);
+    return { id: asStr(d.id), direction: asStr(d.record_type ?? p.direction, "incoming"), phone: asStr(d.title ?? p.phone), status: asStr(d.status, "completed"), createdAt: asStr(d.created_at) };
+  });
+}
+export async function logCcCall(input: { phone: string; direction?: string; note?: string; client_user_id?: string }): Promise<void> {
+  await http("/call-center/calls", { method: "POST", body: JSON.stringify({ direction: "outgoing", ...input }) });
+}
+
+// ── Retention queue + upsell offers ───────────────────────────────
+export type RetentionItem = { id: string; title: string; status: string; offer: string; note: string };
+export async function listRetentionQueue(): Promise<RetentionItem[]> {
+  return listFrom(await http("/retention/queue"), "items", "data").map((x) => {
+    const d = asDict(x); const p = asDict(d.payload);
+    return { id: asStr(d.id), title: asStr(d.title), status: asStr(d.status, "new"), offer: asStr(p.offer), note: asStr(p.note) };
+  });
+}
+export type UpsellOffer = { id: string; title: string; status: string; targetPlan: string };
+export async function listUpsellOffers(): Promise<UpsellOffer[]> {
+  return listFrom(await http("/upsell/offers"), "items", "data", "offers").map((x) => {
+    const d = asDict(x); const p = asDict(d.payload);
+    return { id: asStr(d.id), title: asStr(d.title), status: asStr(d.status, "new"), targetPlan: asStr(p.target_plan ?? p.plan) };
+  });
+}
+
+// ── B2B pipeline (kanban) + tasks ─────────────────────────────────
+export type B2bStage = { stage: string; count: number; value: number; items: { id: string; name: string; value: number }[] };
+export async function getB2bPipeline(): Promise<B2bStage[]> {
+  const d = asDict(await http("/b2b/pipeline"));
+  return asArr(d.stages).map((x) => {
+    const r = asDict(x);
+    return {
+      stage: asStr(r.stage), count: asNum(r.count), value: asNum(r.value),
+      items: asArr(r.items).map((y) => { const i = asDict(y); return { id: asStr(i.id), name: asStr(i.name ?? i.title), value: asNum(i.value) }; }),
+    };
+  });
+}
+export async function listB2bTasks(): Promise<WorkTask[]> {
+  return listFrom(await http("/b2b/tasks"), "items", "data", "tasks").map(normTask);
+}
+
+// ── Security events / 2FA ─────────────────────────────────────────
+export async function listSecurityEvents(): Promise<ActivityEntry[]> {
+  return listFrom(await http("/auth/security-events"), "items", "data", "events").map(normActivity);
+}
+
 // ── Payments history ──────────────────────────────────────────────
 export type PaymentHistory = {
   id: string;

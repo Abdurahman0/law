@@ -2808,6 +2808,9 @@
       "audit": "Audit trail",
       "reviews": "Review moderation",
       "payouts": "Payouts",
+      "callCenter": "Call center",
+      "workflow": "Automation",
+      "integrations": "Integrations",
       "approvals": "Approvals",
       "ads": "Ads",
       "verifications": "Verify lawyers",
@@ -3017,6 +3020,35 @@
       "lead": "Log of all important actions in the system.",
       "empty": "No records",
       "emptyText": "Audit records will appear here."
+    },
+    "integrations": {
+      "title": "Integrations",
+      "lead": "Connection status of external services.",
+      "empty": "No integrations",
+      "keys": { "website_api": "Website API", "mobile_api": "Mobile API", "lexgo_ai": "LexGo.AI", "telegram": "Telegram", "sms": "SMS", "email": "Email" },
+      "status": { "connected": "Connected", "planned": "Planned", "error": "Error", "disconnected": "Disconnected" }
+    },
+    "workflow": {
+      "rules": "Automation rules",
+      "lead": "Automatic actions triggered by events.",
+      "noRules": "No rules",
+      "noRulesText": "New rules will appear here.",
+      "run": "Run",
+      "running": "Running…",
+      "runs": "Run history",
+      "noRuns": "Nothing run yet.",
+      "completed": "Completed",
+      "status": { "active": "Active", "paused": "Paused" }
+    },
+    "callCenter": {
+      "search": "Find a client",
+      "searchPh": "Name or phone…",
+      "searchHint": "Enter a name or phone to find a client.",
+      "noResults": "No results",
+      "logCall": "Log call",
+      "recent": "Recent calls",
+      "noCalls": "No calls.",
+      "dir": { "incoming": "Incoming", "outgoing": "Outgoing" }
     },
     "reviews": {
       "title": "Review moderation",
