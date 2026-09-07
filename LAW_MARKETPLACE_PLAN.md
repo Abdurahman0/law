@@ -35,9 +35,9 @@ Status legend: ✅ already built · 🟡 partial (needs polish) · 🔴 missing 
 - [x] A6. #270 Academy (portal) — done, verified
 
 ### Phase B — advocate / lawyer
-- [ ] B1. #227 Automatic Lawyer Matching (results UI)
-- [ ] B2. #223 Task Management board
-- [ ] B3. #235 Call Recording & Analytics
+- [x] B1. #227 Automatic Lawyer Matching (results UI) — done, verified
+- [x] B2. #223 Task Management board (lawyer + advocate) — done, verified
+- [x] B3. #235 Call Recording & Analytics (admin) — done, verified
 
 ### Phase C — admin / CEO
 - [ ] C1. #254 CEO Dashboard + #269 Analytics + #251 Marketing Attribution

@@ -1548,6 +1548,73 @@ export async function listAcademyCourses(): Promise<AcademyCourse[]> {
   return listFrom(await http("/academy/courses/catalog"), "items", "data", "courses").map(normAcademyCourse);
 }
 
+// ── Personal task board (lawyer / advocate) ───────────────────────
+export type WorkTask = { id: string; title: string; status: string; priority: string; dueDate?: string; caseTitle?: string };
+function normTask(v: unknown): WorkTask {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    title: asStr(d.title ?? d.name),
+    status: asStr(d.status, "todo"),
+    priority: asStr(d.priority, "medium"),
+    dueDate: asStr(d.due_date ?? d.deadline) || undefined,
+    caseTitle: asStr(d.case_title ?? d.case) || undefined,
+  };
+}
+export async function listMyTasks(): Promise<WorkTask[]> {
+  return listFrom(await http("/tasks/me"), "items", "data", "tasks").map(normTask);
+}
+export async function updateTaskStatus(id: string, status: string): Promise<void> {
+  await http(`/tasks/${id}/status`, { method: "PATCH", body: JSON.stringify({ status }) });
+}
+
+// ── Call-center analytics ─────────────────────────────────────────
+export type CallAnalytics = {
+  total: number;
+  answered: number;
+  missed: number;
+  avgDurationSec: number;
+  byDay: { label: string; value: number }[];
+  topAgents: { name: string; calls: number }[];
+};
+// ── Automatic lawyer matching (client) ────────────────────────────
+export type LawyerMatch = { id: string; lawyerUserId?: string; name: string; area: string; region: string; rating: number; matchPct: number; reason: string; kind: "advocate" | "lawyer" };
+export async function getMyMatches(): Promise<LawyerMatch[]> {
+  return listFrom(await http("/matching/me"), "items", "data", "matches").map((x) => {
+    const d = asDict(x);
+    const st = asStr(d.seller_type).toLowerCase();
+    return {
+      id: asStr(d.id ?? d.lawyer_user_id),
+      lawyerUserId: asStr(d.lawyer_user_id) || undefined,
+      name: asStr(d.name ?? d.lawyer_name),
+      area: asStr(d.area ?? d.specialization),
+      region: asStr(d.region),
+      rating: asNum(d.rating, 5),
+      matchPct: asNum(d.match_pct ?? d.score),
+      reason: asStr(d.reason),
+      kind: st.includes("advokat") ? "advocate" : "lawyer",
+    };
+  });
+}
+
+export async function getCallAnalytics(): Promise<CallAnalytics> {
+  const d = asDict(await http("/calls/analytics"));
+  return {
+    total: asNum(d.total ?? d.total_calls),
+    answered: asNum(d.answered ?? d.answered_calls),
+    missed: asNum(d.missed ?? d.missed_calls),
+    avgDurationSec: asNum(d.avg_duration_sec ?? d.avg_duration),
+    byDay: asArr(d.by_day ?? d.daily).map((x) => {
+      const r = asDict(x);
+      return { label: asStr(r.label ?? r.date), value: asNum(r.value ?? r.count) };
+    }),
+    topAgents: asArr(d.top_agents ?? d.agents).map((x) => {
+      const r = asDict(x);
+      return { name: asStr(r.name), calls: asNum(r.calls ?? r.count) };
+    }),
+  };
+}
+
 // ── Payments history ──────────────────────────────────────────────
 export type PaymentHistory = {
   id: string;

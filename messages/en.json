@@ -1680,11 +1680,24 @@
       "accepted": "Accepted",
       "declined": "Declined"
     },
+    "tasks": {
+      "title": "Tasks",
+      "lead": "Manage your work by stage.",
+      "empty": "No tasks",
+      "emptyText": "New tasks will appear here.",
+      "noneHere": "Empty",
+      "due": "Due",
+      "back": "Back",
+      "fwd": "Forward",
+      "stages": { "todo": "To do", "doing": "In progress", "done": "Done" },
+      "priority": { "low": "Low", "medium": "Medium", "high": "High" }
+    },
     "sidebar": {
       "lawyer": {
         "dashboard": "Dashboard",
         "marketplace": "Case Marketplace",
         "cases": "My Cases",
+        "tasks": "Tasks",
         "calendar": "Calendar",
         "clients": "Clients",
         "documents": "Documents",
@@ -1701,6 +1714,7 @@
         "cases": "My Cases",
         "payments": "Payments",
         "lawyers": "Advocates & lawyers",
+        "matches": "Best matches",
         "subscription": "Subscription",
         "gifts": "Gifts",
         "referrals": "Refer a friend",
@@ -1719,6 +1733,7 @@
         "dashboard": "Dashboard",
         "opportunities": "Opportunities",
         "cases": "My Cases",
+        "tasks": "Tasks",
         "profile": "Profile",
         "promotion": "Promotion",
         "subscription": "Subscription",
@@ -1896,6 +1911,15 @@
         "empty": "No payments yet",
         "emptyText": "Your payments and receipts will appear here.",
         "receipt": "Receipt"
+      },
+      "matches": {
+        "title": "Best matches for you",
+        "subtitle": "AI picked the specialists that fit your request.",
+        "empty": "No recommendations yet",
+        "emptyText": "Describe your problem — we'll find matching lawyers.",
+        "describe": "Describe the problem",
+        "view": "View",
+        "kind": { "advocate": "Advocate", "lawyer": "Lawyer" }
       },
       "complaints": {
         "title": "Complaints",
@@ -2712,6 +2736,7 @@
       "bootstrap": "Bootstrap",
       "leads": "Leads",
       "pipeline": "Sales pipeline",
+      "callAnalytics": "Call analytics",
       "approvals": "Approvals",
       "ads": "Ads",
       "verifications": "Verify lawyers",
@@ -2854,6 +2879,16 @@
         "won": "Won",
         "lost": "Lost"
       }
+    },
+    "callAnalytics": {
+      "title": "Call analytics",
+      "total": "Total calls",
+      "answered": "Answered",
+      "missed": "Missed",
+      "avg": "Avg duration",
+      "byDay": "By day",
+      "topAgents": "Top agents",
+      "noData": "No data"
     },
     "approvals": {
       "title": "Approvals",

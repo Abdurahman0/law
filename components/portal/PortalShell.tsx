@@ -34,6 +34,7 @@ import {
   IconGraduation,
   IconClipboardCheck,
   IconShieldCheck,
+  IconTarget,
 } from "../icons";
 
 type SvgC = ComponentType<{ className?: string }>;
@@ -43,6 +44,7 @@ const LAWYER_NAV: NavItem[] = [
   { href: "/portal/lawyer", key: "dashboard", Icon: IconGrid },
   { href: "/portal/lawyer/marketplace", key: "marketplace", Icon: IconBriefcase },
   { href: "/portal/lawyer/cases", key: "cases", Icon: IconFileText },
+  { href: "/portal/lawyer/tasks", key: "tasks", Icon: IconClipboardCheck },
   { href: "/portal/lawyer/calendar", key: "calendar", Icon: IconCalendar },
   { href: "/portal/lawyer/clients", key: "clients", Icon: IconUsers },
   { href: "/portal/lawyer/documents", key: "documents", Icon: IconDocLines },
@@ -58,6 +60,7 @@ const ADVOCATE_NAV: NavItem[] = [
   { href: "/portal/advocate", key: "dashboard", Icon: IconGrid },
   { href: "/portal/advocate/opportunities", key: "opportunities", Icon: IconBriefcase },
   { href: "/portal/advocate/cases", key: "cases", Icon: IconFileText },
+  { href: "/portal/advocate/tasks", key: "tasks", Icon: IconClipboardCheck },
   { href: "/portal/advocate/messages", key: "messages", Icon: IconChat },
   { href: "/portal/advocate/notifications", key: "notifications", Icon: IconBell },
   { href: "/portal/advocate/organization", key: "organization", Icon: IconBuilding },
@@ -78,6 +81,7 @@ const CLIENT_NAV: NavItem[] = [
   { href: "/portal/client/ai", key: "ai", Icon: IconSparkle },
   { href: "/portal/client/academy", key: "academy", Icon: IconGraduation },
   { href: "/portal/client/lawyers", key: "lawyers", Icon: IconUser },
+  { href: "/portal/client/matches", key: "matches", Icon: IconTarget },
   { href: "/portal/client/subscription", key: "subscription", Icon: IconShield },
   { href: "/portal/client/payments", key: "payments", Icon: IconCard },
   { href: "/portal/client/gifts", key: "gifts", Icon: IconGift },

@@ -1686,11 +1686,24 @@
       "accepted": "Qabul qilindi",
       "declined": "Rad etildi"
     },
+    "tasks": {
+      "title": "Vazifalar",
+      "lead": "Ishlaringizni bosqichlar bo'yicha boshqaring.",
+      "empty": "Vazifa yo'q",
+      "emptyText": "Yangi vazifalar shu yerda ko'rinadi.",
+      "noneHere": "Bo'sh",
+      "due": "Muddat",
+      "back": "Orqaga",
+      "fwd": "Oldinga",
+      "stages": { "todo": "Bajarilishi kerak", "doing": "Jarayonda", "done": "Bajarildi" },
+      "priority": { "low": "Past", "medium": "O'rta", "high": "Yuqori" }
+    },
     "sidebar": {
       "lawyer": {
         "dashboard": "Boshqaruv paneli",
         "marketplace": "Ishlar bozori",
         "cases": "Mening ishlarim",
+        "tasks": "Vazifalar",
         "calendar": "Kalendar",
         "clients": "Mijozlar",
         "documents": "Hujjatlar",
@@ -1707,6 +1720,7 @@
         "cases": "Mening ishlarim",
         "payments": "To'lovlar",
         "lawyers": "Advokat va yuristlar",
+        "matches": "Mos advokatlar",
         "subscription": "Obuna",
         "gifts": "Sovg'alar",
         "referrals": "Do'stni taklif qilish",
@@ -1725,6 +1739,7 @@
         "dashboard": "Boshqaruv paneli",
         "opportunities": "Imkoniyatlar",
         "cases": "Mening ishlarim",
+        "tasks": "Vazifalar",
         "profile": "Profil",
         "promotion": "Targ'ibot",
         "subscription": "Obuna",
@@ -1902,6 +1917,15 @@
         "empty": "Hozircha to'lov yo'q",
         "emptyText": "To'lovlar va cheklar shu yerda ko'rinadi.",
         "receipt": "Chek"
+      },
+      "matches": {
+        "title": "Siz uchun mos advokatlar",
+        "subtitle": "Sun'iy intellekt so'rovingizga mos mutaxassislarni tanladi.",
+        "empty": "Hali tavsiya yo'q",
+        "emptyText": "Muammoingizni tasvirlang — biz mos advokatlarni topamiz.",
+        "describe": "Muammoni tasvirlash",
+        "view": "Ko'rish",
+        "kind": { "advocate": "Advokat", "lawyer": "Yurist" }
       },
       "complaints": {
         "title": "Shikoyatlar",
@@ -2718,6 +2742,7 @@
       "bootstrap": "Bootstrap",
       "leads": "Lidlar",
       "pipeline": "Sotuv voronkasi",
+      "callAnalytics": "Qo'ng'iroq tahlili",
       "approvals": "Tasdiqlashlar",
       "ads": "Reklama",
       "verifications": "Advokatlarni tasdiqlash",
@@ -2860,6 +2885,16 @@
         "won": "Yutildi",
         "lost": "Yo‘qotildi"
       }
+    },
+    "callAnalytics": {
+      "title": "Qo'ng'iroq tahlili",
+      "total": "Jami qo'ng'iroqlar",
+      "answered": "Javob berilgan",
+      "missed": "O'tkazib yuborilgan",
+      "avg": "O'rtacha davomiylik",
+      "byDay": "Kunlar bo'yicha",
+      "topAgents": "Faol operatorlar",
+      "noData": "Ma'lumot yo'q"
     },
     "approvals": {
       "title": "Tasdiqlashlar",

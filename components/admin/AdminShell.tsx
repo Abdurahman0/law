@@ -40,6 +40,7 @@ const NAV: { href: string; key: string; Icon: SvgC; perm?: string }[] = [
   { href: "/admin/register-requests", key: "registerRequests", Icon: IconUserPlus, perm: "users.manage" },
   { href: "/admin/leads", key: "leads", Icon: IconUsers, perm: "leads.manage" },
   { href: "/admin/pipeline", key: "pipeline", Icon: IconTrendingUp, perm: "leads.manage" },
+  { href: "/admin/call-analytics", key: "callAnalytics", Icon: IconChat, perm: "leads.manage" },
   { href: "/admin/verifications", key: "verifications", Icon: IconAward, perm: "lawyers.verify" },
   { href: "/admin/legal-aid", key: "legalAid", Icon: IconScale, perm: "legal_aid.manage" },
   { href: "/admin/approvals", key: "approvals", Icon: IconShieldCheck, perm: "approvals.manage" },
