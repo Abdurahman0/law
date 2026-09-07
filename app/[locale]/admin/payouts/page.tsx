@@ -4,8 +4,9 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { listAdminPayouts, updatePayout, getReconciliation } from "@/lib/services/backend";
 import { useResource, useResourceOne } from "@/lib/useResource";
-import { useReload } from "@/components/admin/AdminBits";
+import { useReload, Notice } from "@/components/admin/AdminBits";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
+import { ApiError } from "@/lib/http";
 import { IconCard, IconCheck } from "@/components/icons";
 
 const som = (n: number) => n.toLocaleString("ru-RU").replace(/,/g, " ");
@@ -17,15 +18,17 @@ export default function AdminPayouts() {
   const rec = useResourceOne(getReconciliation, [key]);
   const list = useResource(() => listAdminPayouts(), [key]);
   const [busy, setBusy] = useState<string | null>(null);
+  const [err, setErr] = useState<string | null>(null);
   const r = rec.data ?? REC0;
 
   async function mark(id: string, status: string) {
     setBusy(id);
+    setErr(null);
     try {
       await updatePayout(id, status);
       reload();
-    } catch {
-      /* ignore */
+    } catch (e) {
+      setErr(e instanceof ApiError ? e.detail || t("error") : t("error"));
     } finally {
       setBusy(null);
     }
@@ -50,6 +53,7 @@ export default function AdminPayouts() {
 
       <div className="ppanel">
         <div className="ppanel__h"><b>{t("listTitle")}</b><span className="advmuted">{list.data.length}</span></div>
+        {err ? <Notice ok={false} msg={err} /> : null}
         {list.status === "loading" ? (
           <Skeleton rows={3} />
         ) : !list.data.length ? (

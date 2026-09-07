@@ -63,14 +63,17 @@ export default function SecureChat({ roomId }: { roomId: string }) {
   const [callBusy, setCallBusy] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [ttl, setTtl] = useState(0); // auto-delete window in hours (0 = off)
+  const [callErr, setCallErr] = useState<string | null>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const seen = useRef<Set<string>>(new Set());
+  const dismissedCalls = useRef<Set<string>>(new Set());
   const wsRef = useRef<WebSocket | null>(null);
 
   // Start a call, or join the one already active in this room.
   async function beginCall(kind: "audio" | "video") {
     if (callBusy || activeCall) return;
     setCallBusy(true);
+    setCallErr(null);
     try {
       const calls = await listCalls(roomId);
       const live = calls.find((c) => c.status === "active" || c.status === "ringing");
@@ -82,7 +85,7 @@ export default function SecureChat({ roomId }: { roomId: string }) {
       }
       setIncoming(null);
     } catch {
-      /* ignore */
+      setCallErr(t("callFailed"));
     } finally {
       setCallBusy(false);
     }
@@ -97,12 +100,14 @@ export default function SecureChat({ roomId }: { roomId: string }) {
   async function beginZoom() {
     if (callBusy) return;
     setCallBusy(true);
+    setCallErr(null);
     try {
       const z = await createZoomMeeting(roomId);
       const host = z.startUrl || z.joinUrl;
-      if (host) window.open(host, "_blank", "noopener");
+      const opened = host ? window.open(host, "_blank", "noopener") : null;
       const link = z.joinUrl || host;
       if (link) {
+        // Always drop the join link into chat (also the fallback if the popup was blocked).
         const payload = `Zoom: ${link}`;
         const ws = wsRef.current;
         if (ws && ws.readyState === WebSocket.OPEN) {
@@ -110,9 +115,10 @@ export default function SecureChat({ roomId }: { roomId: string }) {
         } else {
           await sendSecureMessage(roomId, payload).catch(() => {});
         }
+        if (!opened) setCallErr(t("zoomPopup"));
       }
     } catch {
-      /* backend Zoom endpoint may not be live yet */
+      setCallErr(t("callFailed"));
     } finally {
       setCallBusy(false);
     }
@@ -120,22 +126,25 @@ export default function SecureChat({ roomId }: { roomId: string }) {
 
   // Chat retention controls. The backend keeps a ~1-month archive after delete.
   async function applyTtl(hours: number) {
+    const prev = ttl;
     setTtl(hours);
     setMenuOpen(false);
     try {
       await setChatAutoDelete(roomId, hours);
     } catch {
-      /* backend may not support this yet */
+      setTtl(prev); // revert — the change did not persist
+      setCallErr(t("settingsFailed"));
     }
   }
   async function removeChat() {
     setMenuOpen(false);
+    if (typeof window !== "undefined" && !window.confirm(t("deleteConfirm"))) return;
     try {
       await deleteSecureChat(roomId);
+      router.back();
     } catch {
-      /* ignore */
+      setCallErr(t("deleteFailed"));
     }
-    router.back();
   }
   const TTL_OPTS: { h: number; key: string }[] = [
     { h: 0, key: "ttlOff" },
@@ -152,7 +161,7 @@ export default function SecureChat({ roomId }: { roomId: string }) {
       try {
         const calls = await listCalls(roomId);
         const live = calls.find(
-          (c) => (c.status === "active" || c.status === "ringing") && c.callerUserId !== session.id,
+          (c) => (c.status === "active" || c.status === "ringing") && c.callerUserId !== session.id && !dismissedCalls.current.has(c.id),
         );
         if (alive) setIncoming(live && !activeCall ? { callId: live.id, callType: live.callType === "video" ? "video" : "audio" } : null);
       } catch {
@@ -460,6 +469,14 @@ export default function SecureChat({ roomId }: { roomId: string }) {
         </div>
       </div>
 
+      {callErr ? (
+        <div className="schat__err" role="alert">
+          <IconAlert />
+          {callErr}
+          <button type="button" className="schat__errx" aria-label={t("close")} onClick={() => setCallErr(null)}><IconClose /></button>
+        </div>
+      ) : null}
+
       {incoming && !activeCall ? (
         <div className="schat__callbar">
           <span className="schat__callbar-l">
@@ -468,7 +485,14 @@ export default function SecureChat({ roomId }: { roomId: string }) {
             {t("incomingCall")}
           </span>
           <div className="schat__callbar-a">
-            <button className="btn btn--line btn--sm" type="button" onClick={() => setIncoming(null)}>
+            <button
+              className="btn btn--line btn--sm"
+              type="button"
+              onClick={() => {
+                if (incoming) dismissedCalls.current.add(incoming.callId);
+                setIncoming(null);
+              }}
+            >
               {t("callDismiss")}
             </button>
             <button className="btn btn--sm schat__joincall" type="button" onClick={joinIncoming}>

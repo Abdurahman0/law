@@ -2032,6 +2032,7 @@
         "mins": "{n} daq",
         "start": "Boshlash",
         "continue": "Davom etish",
+        "soon": "Tez orada",
         "level": { "beginner": "Boshlang'ich", "intermediate": "O'rta", "advanced": "Yuqori" }
       },
       "sos": {
@@ -2263,7 +2264,7 @@
         "sub": "Professional platformangiz — natijalarni kuzating, mijoz yutib oling, amaliyotni o'stiring.",
         "completeness": "Profil to'liqligi",
         "completenessHint": "Yuqori o'rin uchun profilni to'ldiring",
-        "completeCta": "Profilni to'ldirish",
+        "completeCta": "Profilni ko'rish",
         "profileViews": "Profil ko'rishlari",
         "contactRequests": "Bog'lanish so'rovlari",
         "thisWeek": "shu hafta",
@@ -2692,6 +2693,8 @@
     "downgrade": "Bepulga o'tish",
     "processing": "Amalga oshirilmoqda…",
     "activated": "{plan} rejasi faollashtirildi!",
+    "payRedirect": "To'lov yangi oynada ochildi — to'lovni yakunlang, so'ng reja faollashadi.",
+    "purchaseError": "To'lovni amalga oshirib bo'lmadi. Qayta urining.",
     "mostPopular": "Eng ommabop",
     "free": {
       "name": "Bepul",
@@ -2773,7 +2776,8 @@
     "popular": "Eng foydali",
     "boostNote": "Targ'ibot faqat ko'rinuvchanlikni oshiradi. Yuridik natijaga ta'sir qilmaydi.",
     "empty": "Targ'ibot tez orada",
-    "emptyText": "Ko'rinuvchanlik paketlari va qamrov tahlili shu yerda ko'rinadi."
+    "emptyText": "Ko'rinuvchanlik paketlari va qamrov tahlili shu yerda ko'rinadi.",
+    "checkoutError": "To'lovni amalga oshirib bo'lmadi. Qayta urining."
   },
   "auth": {
     "headline": "Yuridik yordam — yangicha.",
@@ -2935,6 +2939,7 @@
       "note": "Izoh",
       "region": "Viloyat",
       "delete": "O‘chirish",
+      "deleteConfirm": "Bu lidni o‘chirasizmi?",
       "statusLabel": "Holat",
       "status": {
         "new": "Yangi",
@@ -3018,6 +3023,9 @@
       "atRiskTitle": "Xavf ostidagi mijozlar",
       "noRisk": "Xavf ostida mijoz yo'q",
       "winBack": "Qaytarish",
+      "winBackDone": "{name} win-back navbatiga qo'shildi",
+      "adding": "Qo'shilmoqda…",
+      "error": "Xatolik. Qayta urining.",
       "upsellTitle": "Upsell tavsiyalari",
       "noUpsell": "Tavsiya yo'q"
     },
@@ -3063,6 +3071,7 @@
       "emptyText": "Yangi sharhlar shu yerda ko'rinadi.",
       "approve": "Tasdiqlash",
       "reject": "Rad etish",
+      "error": "Amalni bajarib bo'lmadi.",
       "status": { "pending": "Kutilmoqda", "approved": "Tasdiqlangan", "rejected": "Rad etilgan" }
     },
     "payouts": {
@@ -3077,6 +3086,7 @@
       "empty": "Payout yo'q",
       "emptyText": "Payout yozuvlari shu yerda ko'rinadi.",
       "markPaid": "To'langan deb belgilash",
+      "error": "Amalni bajarib bo'lmadi.",
       "status": { "queued": "Navbatda", "processing": "Jarayonda", "paid": "To'langan", "held": "Ushlab turilgan", "failed": "Xato", "calculated": "Hisoblangan", "cancelled": "Bekor qilingan" }
     },
     "approvals": {
@@ -3169,6 +3179,11 @@
     "ttl30d": "30 kundan so‘ng",
     "deleteChat": "Chatni o‘chirish",
     "archiveNote": "O‘chirilgan chat bazamizda 1 oy arxivda saqlanadi.",
+    "callFailed": "Qo‘ng‘iroqni boshlab bo‘lmadi. Qayta urining.",
+    "zoomPopup": "Zoom oynasi bloklandi — havola chatga yuborildi.",
+    "settingsFailed": "Sozlama saqlanmadi.",
+    "deleteFailed": "Chatni o‘chirib bo‘lmadi.",
+    "deleteConfirm": "Chatni o‘chirasizmi? U 1 oy arxivda saqlanadi.",
     "callActive": "Qo‘ng‘iroq davom etmoqda",
     "callJoin": "Qo‘shilish",
     "callEnd": "Tugatish",

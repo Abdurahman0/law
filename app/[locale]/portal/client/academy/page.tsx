@@ -57,7 +57,7 @@ export default function ClientAcademy() {
                 {c.progress > 0 ? (
                   <div className="course__prog"><span style={{ width: `${Math.min(c.progress, 100)}%` }} /></div>
                 ) : null}
-                <button className="btn btn--soft btn--sm btn--full">{c.progress > 0 ? t("continue") : t("start")}</button>
+                <button className="btn btn--soft btn--sm btn--full" disabled title={t("soon")}>{t("soon")}</button>
               </div>
             </article>
           ))}

@@ -1945,6 +1945,9 @@ export async function listRetentionQueue(): Promise<RetentionItem[]> {
   });
 }
 export type UpsellOffer = { id: string; title: string; status: string; targetPlan: string };
+export async function addRetentionQueue(input: { client_user_id?: string; phone?: string; offer?: string; note?: string }): Promise<void> {
+  await http("/retention/queue", { method: "POST", body: JSON.stringify(input) });
+}
 export async function listUpsellOffers(): Promise<UpsellOffer[]> {
   return listFrom(await http("/upsell/offers"), "items", "data", "offers").map((x) => {
     const d = asDict(x); const p = asDict(d.payload);

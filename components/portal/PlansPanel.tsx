@@ -39,20 +39,25 @@ export default function PlansPanel() {
   const [term, setTerm] = useState<Term>(6);
   const [upfront, setUpfront] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
-  const [done, setDone] = useState<string | null>(null);
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
   const bills = payments.data.filter((p) => !p.kind || p.kind === "subscription");
 
   async function choose(plan: BackendPlan) {
     if (busy) return;
     setBusy(plan.id);
-    setDone(null);
+    setMsg(null);
     try {
       const r = await demoPlanPurchase(plan.id);
-      if (r.paymentUrl) window.open(r.paymentUrl, "_blank");
-      setDone(plan.name);
+      if (r.paymentUrl) {
+        // Checkout opens in a new tab — the plan is NOT active until paid.
+        window.open(r.paymentUrl, "_blank");
+        setMsg({ ok: true, text: t("payRedirect") });
+      } else {
+        setMsg({ ok: true, text: t("activated", { plan: plan.name }) });
+      }
     } catch {
-      /* ignore */
+      setMsg({ ok: false, text: t("purchaseError") });
     } finally {
       setBusy(null);
     }
@@ -79,7 +84,7 @@ export default function PlansPanel() {
         </label>
       ) : null}
 
-      {done ? <div className="plans__toast">{t("activated", { plan: done })}</div> : null}
+      {msg ? <div className={`plans__toast${msg.ok ? "" : " plans__toast--err"}`}>{msg.text}</div> : null}
 
       {res.status === "loading" ? (
         <Skeleton rows={3} />

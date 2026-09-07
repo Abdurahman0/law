@@ -4,8 +4,9 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { listAdminReviews, moderateReview } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
-import { useReload } from "@/components/admin/AdminBits";
+import { useReload, Notice } from "@/components/admin/AdminBits";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
+import { ApiError } from "@/lib/http";
 import { IconStar, IconCheck, IconClose } from "@/components/icons";
 
 function Stars({ n }: { n: number }) {
@@ -23,14 +24,16 @@ export default function AdminReviews() {
   const [key, reload] = useReload();
   const res = useResource(() => listAdminReviews(), [key]);
   const [busy, setBusy] = useState<string | null>(null);
+  const [err, setErr] = useState<string | null>(null);
 
   async function moderate(id: string, status: string) {
     setBusy(id);
+    setErr(null);
     try {
       await moderateReview(id, status);
       reload();
-    } catch {
-      /* ignore */
+    } catch (e) {
+      setErr(e instanceof ApiError ? e.detail || t("error") : t("error"));
     } finally {
       setBusy(null);
     }
@@ -40,6 +43,7 @@ export default function AdminReviews() {
     <div className="ppanel">
       <div className="ppanel__h"><b>{t("title")}</b><span className="advmuted">{res.data.length}</span></div>
       <p className="ppanel__note">{t("lead")}</p>
+      {err ? <Notice ok={false} msg={err} /> : null}
       {res.status === "loading" ? (
         <Skeleton rows={4} />
       ) : !res.data.length ? (

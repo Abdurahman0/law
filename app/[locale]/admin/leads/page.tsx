@@ -10,7 +10,7 @@ import {
 } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
-import { AdminForm, useReload } from "@/components/admin/AdminBits";
+import { AdminForm, useReload, Notice } from "@/components/admin/AdminBits";
 import Modal from "@/components/admin/Modal";
 import Select from "@/components/Select";
 import { IconUsers, IconPlus, IconClose } from "@/components/icons";
@@ -23,25 +23,29 @@ export default function AdminLeads() {
   const res = useResource(listLeads, [key]);
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
+  const [err, setErr] = useState<string | null>(null);
 
   async function setStatus(id: string, status: string) {
     setBusy(id);
+    setErr(null);
     try {
       await adminUpdateLead(id, { status });
       reload();
     } catch {
-      /* ignore */
+      setErr(t("form.error"));
     } finally {
       setBusy(null);
     }
   }
   async function remove(id: string) {
+    if (typeof window !== "undefined" && !window.confirm(t("leads.deleteConfirm"))) return;
     setBusy(id);
+    setErr(null);
     try {
       await adminDeleteLead(id);
       reload();
     } catch {
-      /* ignore */
+      setErr(t("form.error"));
     } finally {
       setBusy(null);
     }
@@ -62,6 +66,7 @@ export default function AdminLeads() {
         </span>
       </div>
       <p className="advmuted" style={{ marginBottom: 16 }}>{t("leads.lead")}</p>
+      {err ? <Notice ok={false} msg={err} /> : null}
 
       {res.status === "loading" ? (
         <Skeleton rows={4} />

@@ -2026,6 +2026,7 @@
         "mins": "{n} min",
         "start": "Start",
         "continue": "Continue",
+        "soon": "Coming soon",
         "level": { "beginner": "Beginner", "intermediate": "Intermediate", "advanced": "Advanced" }
       },
       "sos": {
@@ -2257,7 +2258,7 @@
         "sub": "Your professional platform — track performance, win clients, grow your practice.",
         "completeness": "Profile completeness",
         "completenessHint": "Complete your profile to rank higher",
-        "completeCta": "Complete profile",
+        "completeCta": "View profile",
         "profileViews": "Profile views",
         "contactRequests": "Contact requests",
         "thisWeek": "this week",
@@ -2686,6 +2687,8 @@
     "downgrade": "Switch to Free",
     "processing": "Processing…",
     "activated": "{plan} plan activated!",
+    "payRedirect": "Checkout opened in a new tab — finish payment and the plan activates.",
+    "purchaseError": "Couldn't complete the payment. Please try again.",
     "mostPopular": "Most popular",
     "free": {
       "name": "Free",
@@ -2767,7 +2770,8 @@
     "popular": "Best value",
     "boostNote": "Promotion increases visibility only. It does not affect legal outcomes.",
     "empty": "Promotion coming soon",
-    "emptyText": "Visibility packages and reach analytics will appear here."
+    "emptyText": "Visibility packages and reach analytics will appear here.",
+    "checkoutError": "Couldn't complete the payment. Please try again."
   },
   "auth": {
     "headline": "Legal help, reimagined.",
@@ -2929,6 +2933,7 @@
       "note": "Note",
       "region": "Region",
       "delete": "Delete",
+      "deleteConfirm": "Delete this lead?",
       "statusLabel": "Status",
       "status": {
         "new": "New",
@@ -3012,6 +3017,9 @@
       "atRiskTitle": "At-risk clients",
       "noRisk": "No at-risk clients",
       "winBack": "Win back",
+      "winBackDone": "{name} added to the win-back queue",
+      "adding": "Adding…",
+      "error": "Error. Please try again.",
       "upsellTitle": "Upsell suggestions",
       "noUpsell": "No suggestions"
     },
@@ -3057,6 +3065,7 @@
       "emptyText": "New reviews will appear here.",
       "approve": "Approve",
       "reject": "Reject",
+      "error": "Couldn't complete the action.",
       "status": { "pending": "Pending", "approved": "Approved", "rejected": "Rejected" }
     },
     "payouts": {
@@ -3071,6 +3080,7 @@
       "empty": "No payouts",
       "emptyText": "Payout records will appear here.",
       "markPaid": "Mark as paid",
+      "error": "Couldn't complete the action.",
       "status": { "queued": "Queued", "processing": "Processing", "paid": "Paid", "held": "Held", "failed": "Failed", "calculated": "Calculated", "cancelled": "Cancelled" }
     },
     "approvals": {
@@ -3163,6 +3173,11 @@
     "ttl30d": "After 30 days",
     "deleteChat": "Delete chat",
     "archiveNote": "A deleted chat stays in our archive for 1 month.",
+    "callFailed": "Couldn't start the call. Please try again.",
+    "zoomPopup": "Zoom popup was blocked — the link was sent to the chat.",
+    "settingsFailed": "Setting wasn't saved.",
+    "deleteFailed": "Couldn't delete the chat.",
+    "deleteConfirm": "Delete this chat? It stays archived for 1 month.",
     "callActive": "Call in progress",
     "callJoin": "Join",
     "callEnd": "End",

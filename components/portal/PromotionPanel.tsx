@@ -139,7 +139,7 @@ export default function PromotionPanel() {
                 );
               })}
             </div>
-            {err ? <p className="disc" style={{ color: "#C0392B" }}>{t("emptyText")}</p> : null}
+            {err ? <p className="disc" style={{ color: "#C0392B" }}>{t("checkoutError")}</p> : null}
             <p className="promo__note">{t("boostNote")}</p>
           </>
         )}

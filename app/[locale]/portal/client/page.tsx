@@ -21,10 +21,10 @@ import {
 const QUICK_ACTIONS = [
   { key: "describe", icon: "IconChatDots", href: "/portal/client/ai", primary: true },
   { key: "findSpecialist", icon: "IconSearch", href: "/portal/client/lawyers" },
-  { key: "consultation", icon: "IconVideo", href: "/portal/client/lawyers" },
+  { key: "consultation", icon: "IconVideo", href: "/portal/client/matches" },
   { key: "track", icon: "IconClipboardCheck", href: "/portal/client/cases" },
   { key: "askAi", icon: "IconSparkle", href: "/portal/client/ai" },
-  { key: "upload", icon: "IconDownload", href: "/portal/client/ai" },
+  { key: "upload", icon: "IconDownload", href: "/portal/client/doc-analysis" },
 ];
 
 export default function ClientDashboard() {
