@@ -31,6 +31,9 @@ import {
   IconBell,
   IconFolder,
   IconAlert,
+  IconGraduation,
+  IconClipboardCheck,
+  IconShieldCheck,
 } from "../icons";
 
 type SvgC = ComponentType<{ className?: string }>;
@@ -73,12 +76,15 @@ const CLIENT_NAV: NavItem[] = [
   { href: "/portal/client/messages", key: "messages", Icon: IconChat },
   { href: "/portal/client/notifications", key: "notifications", Icon: IconBell },
   { href: "/portal/client/ai", key: "ai", Icon: IconSparkle },
+  { href: "/portal/client/academy", key: "academy", Icon: IconGraduation },
   { href: "/portal/client/lawyers", key: "lawyers", Icon: IconUser },
   { href: "/portal/client/subscription", key: "subscription", Icon: IconShield },
   { href: "/portal/client/payments", key: "payments", Icon: IconCard },
   { href: "/portal/client/gifts", key: "gifts", Icon: IconGift },
   { href: "/portal/client/referrals", key: "referrals", Icon: IconUsers },
   { href: "/portal/client/reviews", key: "reviews", Icon: IconStar },
+  { href: "/portal/client/warranty", key: "warranty", Icon: IconShieldCheck },
+  { href: "/portal/client/complaints", key: "complaints", Icon: IconClipboardCheck },
   { href: "/portal/client/profile", key: "profile", Icon: IconUser },
 ];
 

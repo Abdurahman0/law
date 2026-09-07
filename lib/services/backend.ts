@@ -1490,6 +1490,64 @@ export async function submitReview(input: {
   await http("/reviews", { method: "POST", body: JSON.stringify(input) });
 }
 
+// ── Complaints ────────────────────────────────────────────────────
+export type Complaint = { id: string; category: string; subject: string; description: string; status: string; createdAt: string };
+function normComplaint(v: unknown): Complaint {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    category: asStr(d.category),
+    subject: asStr(d.subject ?? d.title),
+    description: asStr(d.description ?? d.text),
+    status: asStr(d.status, "new"),
+    createdAt: asStr(d.created_at ?? d.createdAt),
+  };
+}
+export async function listComplaints(): Promise<Complaint[]> {
+  return listFrom(await http("/complaints"), "items", "data").map(normComplaint);
+}
+export async function createComplaint(input: { category: string; subject: string; description: string; case_id?: string }): Promise<Complaint> {
+  return normComplaint(await http("/complaints", { method: "POST", body: JSON.stringify(input) }));
+}
+
+// ── Warranty / lawyer replacement ─────────────────────────────────
+export type WarrantyClaim = { id: string; caseTitle: string; reason: string; status: string; createdAt: string };
+function normClaim(v: unknown): WarrantyClaim {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    caseTitle: asStr(d.case_title ?? d.case ?? d.title),
+    reason: asStr(d.reason),
+    status: asStr(d.status, "new"),
+    createdAt: asStr(d.created_at ?? d.createdAt),
+  };
+}
+export async function listWarrantyClaims(): Promise<WarrantyClaim[]> {
+  return listFrom(await http("/warranty/claims"), "items", "data").map(normClaim);
+}
+export async function createWarrantyClaim(input: { case_id?: string; reason: string; kind?: string }): Promise<WarrantyClaim> {
+  return normClaim(await http("/warranty/claims", { method: "POST", body: JSON.stringify({ kind: "replacement", ...input }) }));
+}
+
+// ── Academy (legal courses) ───────────────────────────────────────
+export type AcademyCourse = { id: string; title: string; category: string; lessons: number; durationMin: number; level: string; progress: number; cover?: string };
+function normAcademyCourse(v: unknown): AcademyCourse {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    title: asStr(d.title ?? d.name),
+    category: asStr(d.category),
+    lessons: asNum(d.lessons_count ?? d.lessons),
+    durationMin: asNum(d.duration_min ?? d.duration),
+    level: asStr(d.level, "beginner"),
+    progress: asNum(d.progress),
+    cover: asStr(d.cover_url ?? d.cover) || undefined,
+  };
+}
+export async function listAcademyCourses(): Promise<AcademyCourse[]> {
+  return listFrom(await http("/academy/courses/catalog"), "items", "data", "courses").map(normAcademyCourse);
+}
+
 // ── Payments history ──────────────────────────────────────────────
 export type PaymentHistory = {
   id: string;

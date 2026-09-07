@@ -1,0 +1,111 @@
+"use client";
+
+import { useState } from "react";
+import { useTranslations } from "next-intl";
+import { listWarrantyClaims, createWarrantyClaim } from "@/lib/services/backend";
+import { useResource } from "@/lib/useResource";
+import { useReload, Notice } from "@/components/admin/AdminBits";
+import { Skeleton } from "@/components/portal/DataState";
+import { IconShieldCheck, IconCheck } from "@/components/icons";
+
+function fmt(s: string) {
+  const d = new Date(s);
+  return Number.isNaN(d.getTime()) ? s : d.toLocaleDateString("ru-RU");
+}
+
+export default function ClientWarranty() {
+  const t = useTranslations("portal.client.warranty");
+  const [key, reload] = useReload();
+  const claims = useResource(() => listWarrantyClaims(), [key]);
+  const [caseTitle, setCaseTitle] = useState("");
+  const [reason, setReason] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
+
+  const points = ["p1", "p2", "p3"] as const;
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    if (busy || !reason.trim()) {
+      setNote({ ok: false, msg: t("error") });
+      return;
+    }
+    setBusy(true);
+    setNote(null);
+    try {
+      await createWarrantyClaim({ reason: `${caseTitle ? caseTitle + ": " : ""}${reason.trim()}` });
+      setNote({ ok: true, msg: t("sent") });
+      setReason("");
+      setCaseTitle("");
+      reload();
+    } catch {
+      setNote({ ok: false, msg: t("error") });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="war">
+      <div className="war__hero">
+        <span className="war__ico"><IconShieldCheck /></span>
+        <div>
+          <h1 className="war__title">{t("title")}</h1>
+          <p className="war__sub">{t("subtitle")}</p>
+        </div>
+      </div>
+
+      <div className="war__points">
+        {points.map((p) => (
+          <div className="war__point" key={p}>
+            <span className="war__check"><IconCheck /></span>
+            <span>{t(p)}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="pgrid2">
+        <div className="ppanel">
+          <div className="ppanel__h"><b>{t("requestTitle")}</b></div>
+          <p className="ppanel__note">{t("requestLead")}</p>
+          <form className="cform" style={{ maxWidth: "none" }} onSubmit={submit}>
+            <div>
+              <label>{t("caseLabel")}</label>
+              <input value={caseTitle} onChange={(e) => setCaseTitle(e.target.value)} placeholder={t("casePh")} />
+            </div>
+            <div>
+              <label>{t("reasonLabel")}</label>
+              <textarea rows={4} value={reason} onChange={(e) => setReason(e.target.value)} placeholder={t("reasonPh")} />
+            </div>
+            {note ? <Notice ok={note.ok} msg={note.msg} /> : null}
+            <button className="btn btn--pri btn--full" type="submit" disabled={busy}>
+              {busy ? t("sending") : t("submit")}
+            </button>
+          </form>
+        </div>
+
+        <div className="ppanel">
+          <div className="ppanel__h"><b>{t("claimsTitle")}</b></div>
+          {claims.status === "loading" ? (
+            <Skeleton rows={2} />
+          ) : !claims.data.length ? (
+            <p className="ppanel__note">{t("noClaims")}</p>
+          ) : (
+            <div className="alist">
+              {claims.data.map((c) => (
+                <div className="creq" key={c.id}>
+                  <span className="creq__st" />
+                  <div className="creq__m">
+                    <b>{c.caseTitle || t("claim")}</b>
+                    <span>{[c.reason, fmt(c.createdAt)].filter(Boolean).join(" · ")}</span>
+                  </div>
+                  <span className="creq__badge">{t.has(`status.${c.status}`) ? t(`status.${c.status}`) : c.status}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
