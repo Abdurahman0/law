@@ -1697,6 +1697,7 @@
       },
       "client": {
         "dashboard": "Dashboard",
+        "sos": "SOS — Emergency",
         "cases": "My Cases",
         "payments": "Payments",
         "lawyers": "Advocates & lawyers",
@@ -1890,6 +1891,35 @@
         "empty": "No payments yet",
         "emptyText": "Your payments and receipts will appear here.",
         "receipt": "Receipt"
+      },
+      "sos": {
+        "title": "Emergency legal help",
+        "subtitle": "One tap — a duty lawyer reaches out to you.",
+        "badge247": "24/7 duty",
+        "badgePrivate": "Confidential",
+        "badgeFast": "Fast response",
+        "catLabel": "Situation type",
+        "cat": {
+          "arrest": "Detained",
+          "police": "Police called",
+          "court": "Court process",
+          "search": "Search / raid",
+          "contract": "Urgent contract",
+          "other": "Other"
+        },
+        "descLabel": "Briefly: what happened?",
+        "descPh": "Describe the situation in a line or two…",
+        "connect": "Connect to a duty lawyer",
+        "hint": "Tapping the button alerts a duty lawyer immediately.",
+        "connecting": "Connecting…",
+        "connectingSub": "Finding a duty lawyer",
+        "connectedTitle": "Lawyer found",
+        "dutyLawyer": "Duty lawyer",
+        "dutyRole": "Duty legal help",
+        "openChat": "Open chat",
+        "sentTitle": "Request received",
+        "sentSub": "A duty lawyer will contact you shortly.",
+        "again": "Send again"
       },
       "gifts": {
         "title": "Gifts",

@@ -1393,6 +1393,35 @@ export async function listMyActivity(): Promise<ActivityEntry[]> {
   return listFrom(await http("/users/me/activity"), "items", "data", "logs").map(normActivity);
 }
 
+// ── SOS / emergency legal help ────────────────────────────────────
+export type SosRequest = {
+  id: string;
+  status: string;
+  category: string;
+  dutyName?: string;
+  roomId?: string;
+  createdAt: string;
+};
+function normSos(v: unknown): SosRequest {
+  const d = asDict(v);
+  const duty = asDict(d.duty_lawyer ?? d.assigned_to);
+  return {
+    id: asStr(d.id),
+    status: asStr(d.status, "pending"),
+    category: asStr(d.category),
+    dutyName: (asStr(duty.name) || asStr(d.duty_name)) || undefined,
+    roomId: asStr(d.chat_room_id ?? d.room_id) || undefined,
+    createdAt: asStr(d.created_at ?? d.createdAt),
+  };
+}
+export async function createSosRequest(input: {
+  category: string;
+  description: string;
+  phone?: string;
+}): Promise<SosRequest> {
+  return normSos(await http("/sos", { method: "POST", body: JSON.stringify(input) }));
+}
+
 // ── Payments history ──────────────────────────────────────────────
 export type PaymentHistory = {
   id: string;

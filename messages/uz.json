@@ -1703,6 +1703,7 @@
       },
       "client": {
         "dashboard": "Boshqaruv paneli",
+        "sos": "SOS — Shoshilinch",
         "cases": "Mening ishlarim",
         "payments": "To'lovlar",
         "lawyers": "Advokat va yuristlar",
@@ -1896,6 +1897,35 @@
         "empty": "Hozircha to'lov yo'q",
         "emptyText": "To'lovlar va cheklar shu yerda ko'rinadi.",
         "receipt": "Chek"
+      },
+      "sos": {
+        "title": "Shoshilinch yuridik yordam",
+        "subtitle": "Bir tugma — va navbatchi advokat siz bilan bog'lanadi.",
+        "badge247": "24/7 navbatchi",
+        "badgePrivate": "Maxfiy",
+        "badgeFast": "Tezkor javob",
+        "catLabel": "Vaziyat turi",
+        "cat": {
+          "arrest": "Hibsga olindi",
+          "police": "Politsiya chaqirdi",
+          "court": "Sud jarayoni",
+          "search": "Tintuv",
+          "contract": "Shoshilinch shartnoma",
+          "other": "Boshqa"
+        },
+        "descLabel": "Qisqacha nima bo'ldi?",
+        "descPh": "Vaziyatni bir-ikki jumlada yozing…",
+        "connect": "Navbatchi advokatga ulanish",
+        "hint": "Tugmani bosganingizda navbatchi advokat darhol xabardor qilinadi.",
+        "connecting": "Ulanmoqda…",
+        "connectingSub": "Navbatchi advokat qidirilmoqda",
+        "connectedTitle": "Advokat topildi",
+        "dutyLawyer": "Navbatchi advokat",
+        "dutyRole": "Navbatchi yuridik yordam",
+        "openChat": "Chatni ochish",
+        "sentTitle": "So'rovingiz qabul qilindi",
+        "sentSub": "Navbatchi advokat tez orada siz bilan bog'lanadi.",
+        "again": "Qaytadan yuborish"
       },
       "gifts": {
         "title": "Sovg'alar",
