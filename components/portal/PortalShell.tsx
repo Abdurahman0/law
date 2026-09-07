@@ -77,6 +77,8 @@ const CLIENT_NAV: NavItem[] = [
   { href: "/portal/client/subscription", key: "subscription", Icon: IconShield },
   { href: "/portal/client/payments", key: "payments", Icon: IconCard },
   { href: "/portal/client/gifts", key: "gifts", Icon: IconGift },
+  { href: "/portal/client/referrals", key: "referrals", Icon: IconUsers },
+  { href: "/portal/client/reviews", key: "reviews", Icon: IconStar },
   { href: "/portal/client/profile", key: "profile", Icon: IconUser },
 ];
 

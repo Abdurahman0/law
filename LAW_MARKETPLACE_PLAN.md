@@ -27,9 +27,9 @@ Status legend: ✅ already built · 🟡 partial (needs polish) · 🔴 missing 
 ## Build order (missing UI — this is the working queue)
 
 ### Phase A — client portal (most visible)
-- [ ] A1. #240 SOS / Shoshilinch yuridik yordam (+ #231 duty lawyer)
-- [ ] A2. #243 Referral System
-- [ ] A3. #247 Rating & Review
+- [x] A1. #240 SOS / Shoshilinch yuridik yordam (+ #231 duty lawyer) — done, verified
+- [x] A2. #243 Referral System — done, verified
+- [x] A3. #247 Rating & Review — done, verified
 - [ ] A4. #245 Complaint Management
 - [ ] A5. #246 LexGo Warranty / Lawyer Replacement (portal flow)
 - [ ] A6. #270 Academy (portal)

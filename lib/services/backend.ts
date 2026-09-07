@@ -1422,6 +1422,74 @@ export async function createSosRequest(input: {
   return normSos(await http("/sos", { method: "POST", body: JSON.stringify(input) }));
 }
 
+// ── Referral program ──────────────────────────────────────────────
+export type ReferralInvite = { name: string; phone: string; status: string; reward: number; joinedAt: string };
+export type Referral = {
+  code: string;
+  link: string;
+  invited: number;
+  joined: number;
+  rewardBalance: number;
+  items: ReferralInvite[];
+};
+export async function getMyReferral(): Promise<Referral> {
+  const d = asDict(await http("/referrals/me"));
+  return {
+    code: asStr(d.code),
+    link: asStr(d.link ?? d.share_url),
+    invited: asNum(d.invited_count ?? d.invited),
+    joined: asNum(d.joined_count ?? d.joined),
+    rewardBalance: asNum(d.reward_balance ?? d.balance),
+    items: asArr(d.items ?? d.referrals).map((x) => {
+      const r = asDict(x);
+      return {
+        name: asStr(r.name),
+        phone: asStr(r.phone),
+        status: asStr(r.status, "invited"),
+        reward: asNum(r.reward),
+        joinedAt: asStr(r.joined_at ?? r.created_at),
+      };
+    }),
+  };
+}
+
+// ── Ratings & reviews ─────────────────────────────────────────────
+export type ReviewTarget = { id: string; caseId?: string; lawyerUserId?: string; lawyerName: string; service: string; completedAt: string };
+export type MyReview = { id: string; lawyerName: string; rating: number; comment: string; createdAt: string };
+export async function listReviewable(): Promise<ReviewTarget[]> {
+  return listFrom(await http("/reviews/pending"), "items", "data").map((x) => {
+    const d = asDict(x);
+    return {
+      id: asStr(d.id ?? d.case_id),
+      caseId: asStr(d.case_id) || undefined,
+      lawyerUserId: asStr(d.lawyer_user_id) || undefined,
+      lawyerName: asStr(d.lawyer_name ?? d.lawyer ?? d.name),
+      service: asStr(d.service ?? d.title ?? d.category),
+      completedAt: asStr(d.completed_at ?? d.created_at),
+    };
+  });
+}
+export async function listMyReviews(): Promise<MyReview[]> {
+  return listFrom(await http("/reviews/me"), "items", "data").map((x) => {
+    const d = asDict(x);
+    return {
+      id: asStr(d.id),
+      lawyerName: asStr(d.lawyer_name ?? d.lawyer ?? d.name),
+      rating: asNum(d.rating),
+      comment: asStr(d.comment ?? d.text),
+      createdAt: asStr(d.created_at ?? d.createdAt),
+    };
+  });
+}
+export async function submitReview(input: {
+  case_id?: string;
+  lawyer_user_id?: string;
+  rating: number;
+  comment?: string;
+}): Promise<void> {
+  await http("/reviews", { method: "POST", body: JSON.stringify(input) });
+}
+
 // ── Payments history ──────────────────────────────────────────────
 export type PaymentHistory = {
   id: string;
