@@ -51,6 +51,7 @@ const NAV: { href: string; key: string; Icon: SvgC; perm?: string }[] = [
   { href: "/admin/legal-aid", key: "legalAid", Icon: IconScale, perm: "legal_aid.manage" },
   { href: "/admin/approvals", key: "approvals", Icon: IconShieldCheck, perm: "approvals.manage" },
   { href: "/admin/notifications", key: "notifications", Icon: IconChat, perm: "notifications.manage" },
+  { href: "/admin/audit-trail", key: "audit", Icon: IconShieldCheck },
   { href: "/admin/bootstrap", key: "bootstrap", Icon: IconBolt },
 ];
 

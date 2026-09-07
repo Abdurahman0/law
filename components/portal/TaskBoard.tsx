@@ -2,11 +2,13 @@
 
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { listMyTasks, updateTaskStatus, type WorkTask } from "@/lib/services/backend";
+import { listMyTasks, updateTaskStatus, createTask, type WorkTask } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
-import { useReload } from "@/components/admin/AdminBits";
+import { useReload, Notice } from "@/components/admin/AdminBits";
+import Modal from "@/components/admin/Modal";
+import Select from "@/components/Select";
 import { Skeleton, EmptyState } from "./DataState";
-import { IconClipboardCheck, IconChevronLeft, IconChevronRight } from "@/components/icons";
+import { IconClipboardCheck, IconChevronLeft, IconChevronRight, IconPlus } from "@/components/icons";
 
 const STAGES = ["todo", "doing", "done"] as const;
 type Stage = (typeof STAGES)[number];
@@ -22,6 +24,31 @@ export default function TaskBoard() {
   const [key, reload] = useReload();
   const res = useResource(() => listMyTasks(), [key]);
   const [busy, setBusy] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState("");
+  const [prio, setPrio] = useState("medium");
+  const [due, setDue] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
+
+  async function addTask(e: React.FormEvent) {
+    e.preventDefault();
+    if (saving || !title.trim()) return;
+    setSaving(true);
+    setNote(null);
+    try {
+      await createTask({ title: title.trim(), priority: prio, due_date: due || undefined });
+      setNote({ ok: true, msg: t("created") });
+      setTitle("");
+      setDue("");
+      reload();
+      setTimeout(() => setOpen(false), 800);
+    } catch {
+      setNote({ ok: false, msg: t("errorCreate") });
+    } finally {
+      setSaving(false);
+    }
+  }
 
   const cols = useMemo(() => {
     const by: Record<Stage, WorkTask[]> = { todo: [], doing: [], done: [] };
@@ -48,9 +75,33 @@ export default function TaskBoard() {
     <div className="ppanel">
       <div className="ppanel__h">
         <b>{t("title")}</b>
-        <span className="advmuted">{res.data.length}</span>
+        <span className="ahdr">
+          <span className="advmuted">{res.data.length}</span>
+          <button className="btn btn--pri btn--sm" type="button" onClick={() => setOpen(true)}><IconPlus />{t("add")}</button>
+        </span>
       </div>
       <p className="ppanel__note">{t("lead")}</p>
+
+      <Modal open={open} onClose={() => setOpen(false)} title={t("add")}>
+        <form className="cform" style={{ maxWidth: "none" }} onSubmit={addTask}>
+          <div>
+            <label>{t("taskTitle")}</label>
+            <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t("taskTitlePh")} />
+          </div>
+          <div className="cform__row2">
+            <div>
+              <label>{t("priorityLabel")}</label>
+              <Select value={prio} onChange={setPrio} options={["low", "medium", "high"].map((p) => ({ value: p, label: t(`priority.${p}`) }))} ariaLabel={t("priorityLabel")} />
+            </div>
+            <div>
+              <label>{t("due")}</label>
+              <input type="date" value={due} onChange={(e) => setDue(e.target.value)} />
+            </div>
+          </div>
+          {note ? <Notice ok={note.ok} msg={note.msg} /> : null}
+          <button className="btn btn--pri btn--full" type="submit" disabled={saving}>{saving ? t("saving") : t("save")}</button>
+        </form>
+      </Modal>
 
       {res.status === "loading" ? (
         <Skeleton rows={4} />

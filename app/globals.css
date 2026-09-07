@@ -2219,3 +2219,13 @@ body:has(.schat) .fab{display:none}
 .doca__recs li{display:flex;gap:9px;align-items:flex-start;font-size:.9rem;line-height:1.4}
 .doca__recs svg{width:16px;height:16px;color:#059669;flex:none;margin-top:2px}
 .asist__text{margin:0;white-space:pre-wrap;line-height:1.6}
+
+/* Profile: my-id, notification-preference toggles */
+.pkv__id{font-family:var(--fd);letter-spacing:.04em;color:var(--b600)}
+.prefs{display:flex;flex-direction:column;gap:2px}
+.prefs__row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 6px;border:0;border-bottom:1px solid var(--line);background:none;font-family:inherit;font-size:.92rem;color:var(--ink);cursor:pointer;text-align:left}
+.prefs__row:last-child{border-bottom:0}
+.prefs__sw{width:40px;height:23px;border-radius:999px;background:var(--line);position:relative;flex:none;transition:background .16s}
+.prefs__sw::after{content:"";position:absolute;top:2px;left:2px;width:19px;height:19px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform .16s}
+.prefs__row.on .prefs__sw{background:var(--b600)}
+.prefs__row.on .prefs__sw::after{transform:translateX(17px)}

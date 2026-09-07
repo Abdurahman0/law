@@ -16,6 +16,8 @@ import { scoreCompleteness, registerAccount } from "./services/registration";
 import {
   apiLogin,
   apiMe,
+  apiLogout,
+  apiRefresh,
   registerStart,
   registerVerify,
   type BackendRole,
@@ -27,10 +29,13 @@ export type Session = {
   name: string;
   phone: string;
   id: string;
+  lexgoId?: string;
+  accountStatus?: string;
   plan: PlanTier;
   completeness: number;
   profile?: ProfessionalProfile;
   token?: string;
+  refreshToken?: string;
   roles?: string[];
   permissions?: string[];
 };
@@ -93,18 +98,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(stored);
       // Refresh roles/permissions in the background for real (tokened) sessions.
       if (stored.token) {
+        const applyMe = (u: Awaited<ReturnType<typeof apiMe>>) =>
+          persist({
+            ...stored!,
+            name: u.name || stored!.name,
+            phone: u.phone || stored!.phone,
+            lexgoId: u.lexgoId || stored!.lexgoId,
+            accountStatus: u.accountStatus || stored!.accountStatus,
+            roles: u.roles,
+            permissions: u.permissions,
+          });
         apiMe()
-          .then((u) =>
-            persist({
-              ...stored!,
-              name: u.name || stored!.name,
-              phone: u.phone || stored!.phone,
-              roles: u.roles,
-              permissions: u.permissions,
-            }),
-          )
-          .catch((e) => {
-            if (e instanceof ApiError && e.status === 401) persist(null);
+          .then(applyMe)
+          .catch(async (e) => {
+            if (!(e instanceof ApiError) || e.status !== 401) return;
+            // Access token expired → try one refresh before dropping the session.
+            if (stored!.refreshToken) {
+              try {
+                const r = await apiRefresh(stored!.refreshToken);
+                setToken(r.token);
+                persist({ ...stored!, token: r.token, refreshToken: r.refreshToken });
+                await apiMe().then(applyMe).catch(() => {});
+                return;
+              } catch {
+                /* fall through */
+              }
+            }
+            persist(null);
           });
       }
     }
@@ -115,16 +135,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     async (rawPhone: string, password: string, fallback?: { role: Role; name: string }) => {
       const phone = normUzPhone(rawPhone);
       try {
-        const { token, user } = await apiLogin(phone, password);
+        const { token, refreshToken, user } = await apiLogin(phone, password);
         setToken(token);
         const s: Session = {
           role: fromBackendRole(user.role),
           name: user.name || fallback?.name || "",
           phone: user.phone || phone,
           id: user.id,
+          lexgoId: user.lexgoId,
+          accountStatus: user.accountStatus,
           plan: "free",
           completeness: user.role === "advokat" ? 60 : 100,
           token,
+          refreshToken,
           roles: user.roles,
           permissions: user.permissions,
         };
@@ -203,6 +226,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         name: user.name || draft.profile.name,
         phone: user.phone || normUzPhone(draft.phone),
         id: user.id,
+        lexgoId: user.lexgoId,
+        accountStatus: user.accountStatus,
         plan: "free",
         completeness,
         profile: draft.profile,
@@ -223,7 +248,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const logout = useCallback(() => persist(null), [persist]);
+  const logout = useCallback(() => {
+    // Best-effort server-side session revocation, then clear locally.
+    apiLogout();
+    persist(null);
+  }, [persist]);
 
   return (
     <Ctx.Provider value={{ session, ready, login, startRegistration, register, update, logout }}>

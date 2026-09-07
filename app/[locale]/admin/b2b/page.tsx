@@ -1,21 +1,47 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { listB2bClients } from "@/lib/services/backend";
+import { listB2bClients, createB2bClient } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
+import { useReload, AdminForm } from "@/components/admin/AdminBits";
+import Modal from "@/components/admin/Modal";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
-import { IconBuilding } from "@/components/icons";
+import { IconBuilding, IconPlus } from "@/components/icons";
 
 const som = (n: number) => n.toLocaleString("ru-RU").replace(/,/g, " ");
 
 export default function AdminB2b() {
   const t = useTranslations("admin.b2b");
-  const res = useResource(() => listB2bClients(), []);
+  const [key, reload] = useReload();
+  const res = useResource(() => listB2bClients(), [key]);
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="ppanel">
-      <div className="ppanel__h"><b>{t("title")}</b><span className="advmuted">{res.data.length}</span></div>
+      <div className="ppanel__h">
+        <b>{t("title")}</b>
+        <span className="ahdr">
+          <span className="advmuted">{res.data.length}</span>
+          <button className="btn btn--pri btn--sm" type="button" onClick={() => setOpen(true)}><IconPlus />{t("add")}</button>
+        </span>
+      </div>
       <p className="ppanel__note">{t("lead")}</p>
+      <Modal open={open} onClose={() => setOpen(false)} title={t("add")}>
+        <AdminForm
+          fields={[
+            { name: "name", label: t("cName"), required: true },
+            { name: "industry", label: t("cIndustry") },
+            { name: "contact", label: t("cContact"), placeholder: "+998 __ ___ __ __" },
+          ]}
+          onSubmit={async (v) => void (await createB2bClient({ name: String(v.name), industry: String(v.industry), contact: String(v.contact) }))}
+          submitLabel={t("save")}
+          busyLabel={t("saving")}
+          okMsg={t("created")}
+          errMsg={t("error")}
+          onDone={() => { reload(); setOpen(false); }}
+        />
+      </Modal>
       {res.status === "loading" ? (
         <Skeleton rows={4} />
       ) : !res.data.length ? (

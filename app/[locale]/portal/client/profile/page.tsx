@@ -14,6 +14,12 @@ import {
   listPaymentMethods,
   addPaymentMethod,
   deletePaymentMethod,
+  getNotificationPreferences,
+  updateNotificationPreferences,
+  listSessions,
+  revokeSession,
+  NOTIF_KEYS,
+  type NotifPrefs,
 } from "@/lib/services/backend";
 import { ApiError } from "@/lib/http";
 import { useResource, useResourceOne } from "@/lib/useResource";
@@ -38,7 +44,30 @@ export default function ClientProfile() {
   const family = useResource(() => listFamilyMembers(), [key]);
   const methods = useResource(() => listPaymentMethods(), [key]);
   const activity = useResource(() => listMyActivity(), [key]);
+  const prefs = useResourceOne(getNotificationPreferences, [key]);
+  const sessions = useResource(() => listSessions(), [key]);
   const [famErr, setFamErr] = useState<string | null>(null);
+  const [prefsLocal, setPrefsLocal] = useState<NotifPrefs | null>(null);
+  const pf = prefsLocal ?? prefs.data ?? null;
+
+  async function togglePref(k: keyof NotifPrefs) {
+    if (!pf) return;
+    const next = { ...pf, [k]: !pf[k] };
+    setPrefsLocal(next);
+    try {
+      await updateNotificationPreferences({ [k]: next[k] });
+    } catch {
+      setPrefsLocal(pf); // revert on failure
+    }
+  }
+  async function revoke(id: string) {
+    try {
+      await revokeSession(id);
+      reload();
+    } catch {
+      /* ignore */
+    }
+  }
 
   async function toggleShare(id: string, next: boolean) {
     setFamErr(null);
@@ -74,6 +103,9 @@ export default function ClientProfile() {
           <Skeleton rows={2} />
         ) : (
           <div className="pkv">
+            {session?.lexgoId ? (
+              <div className="pkv__i"><label>{t("myId")}</label><b className="pkv__id">{session.lexgoId}</b></div>
+            ) : null}
             <div className="pkv__i"><label>{t("name")}</label><b>{name}</b></div>
             <div className="pkv__i"><label>{t("phone")}</label><b>{phone}</b></div>
             <div className="pkv__i"><label>{t("email")}</label><b>{email || t("notSet")}</b></div>
@@ -175,6 +207,42 @@ export default function ClientProfile() {
             ? `${p.subscription.planName} · ${p.subscription.status}`
             : t("subActive")}
         </p>
+      </div>
+
+      <div className="pgrid2">
+        <div className="ppanel">
+          <div className="ppanel__h"><b>{t("notifPrefs")}</b></div>
+          {prefs.status === "loading" || !pf ? (
+            <Skeleton rows={2} />
+          ) : (
+            <div className="prefs">
+              {NOTIF_KEYS.map((k) => (
+                <button key={k} type="button" className={`prefs__row${pf[k] ? " on" : ""}`} onClick={() => togglePref(k)} aria-pressed={pf[k]}>
+                  <span>{t.has(`notif.${k}`) ? t(`notif.${k}`) : k}</span>
+                  <span className="prefs__sw" />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="ppanel">
+          <div className="ppanel__h"><b>{t("sessions")}</b></div>
+          {sessions.status === "loading" ? (
+            <Skeleton rows={2} />
+          ) : !sessions.data.length ? (
+            <p className="advmuted">{t("noSessions")}</p>
+          ) : (
+            <div className="alist">
+              {sessions.data.map((s) => (
+                <div className="creq" key={s.id}>
+                  <span className="creq__st" />
+                  <div className="creq__m"><b>{s.deviceLabel || s.ip || t("device")}</b><span>{[s.ip, s.lastUsedAt].filter(Boolean).join(" · ")}</span></div>
+                  <button className="btn btn--line btn--sm" type="button" onClick={() => revoke(s.id)}>{t("revoke")}</button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="ppanel">

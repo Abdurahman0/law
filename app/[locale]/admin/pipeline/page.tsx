@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { listLeads, adminUpdateLead, type Lead } from "@/lib/services/backend";
+import { listLeads, adminUpdateLead, reengageLead, type Lead } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
 import { useReload } from "@/components/admin/AdminBits";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
@@ -58,7 +58,8 @@ export default function AdminPipeline() {
   async function reengage(l: Lead) {
     setBusy(l.id);
     try {
-      await adminUpdateLead(l.id, { status: "new" });
+      // Dedicated endpoint records callback metadata + moves the lead back.
+      await reengageLead(l.id).catch(() => adminUpdateLead(l.id, { status: "new" }));
       reload();
     } catch {
       /* ignore */

@@ -18,13 +18,15 @@ export type BackendRole =
   | "sales";
 export type AuthUser = {
   id: string;
+  lexgoId: string;
+  accountStatus: string;
   role: BackendRole;
   name: string;
   phone: string;
   roles: string[];
   permissions: string[];
 };
-export type AuthResult = { token: string; user: AuthUser };
+export type AuthResult = { token: string; refreshToken: string; user: AuthUser };
 
 const ROLE_SET: BackendRole[] = [
   "client", "yurist", "advokat", "advokat_tashkiloti", "admin", "manager", "call_center", "sales",
@@ -34,6 +36,8 @@ function normUser(v: unknown): AuthUser {
   const rawRole = asStr(d.role) as BackendRole;
   return {
     id: asStr(d.id ?? d.user_id),
+    lexgoId: asStr(d.lexgo_id ?? d.lexgoId),
+    accountStatus: asStr(d.account_status ?? d.status, "active"),
     role: ROLE_SET.includes(rawRole) ? rawRole : "client",
     name: asStr(d.name),
     phone: asStr(d.phone),
@@ -46,8 +50,36 @@ function normAuth(v: unknown): AuthResult {
   const d = asDict(v);
   return {
     token: asStr(d.access_token ?? d.token),
+    refreshToken: asStr(d.refresh_token ?? d.refreshToken),
     user: normUser(d.user ?? d),
   };
+}
+
+// ── Sessions, refresh, logout ─────────────────────────────────────
+export async function apiRefresh(refreshToken: string): Promise<{ token: string; refreshToken: string }> {
+  const d = asDict(await http("/auth/refresh", { method: "POST", body: JSON.stringify({ refresh_token: refreshToken }) }));
+  return { token: asStr(d.access_token ?? d.token), refreshToken: asStr(d.refresh_token ?? refreshToken) };
+}
+export async function apiLogout(): Promise<void> {
+  await http("/auth/logout", { method: "POST", body: JSON.stringify({}) }).catch(() => {});
+}
+export type UserSession = { id: string; deviceLabel: string; ip: string; status: string; lastUsedAt: string; expiresAt: string; current?: boolean };
+export async function listSessions(): Promise<UserSession[]> {
+  return listFrom(await http("/auth/sessions"), "items", "data", "sessions").map((x) => {
+    const d = asDict(x);
+    return {
+      id: asStr(d.id),
+      deviceLabel: asStr(d.device_label ?? d.device) || "",
+      ip: asStr(d.ip ?? d.ip_address),
+      status: asStr(d.status, "active"),
+      lastUsedAt: asStr(d.last_used_at ?? d.last_active),
+      expiresAt: asStr(d.expires_at),
+      current: Boolean(d.current ?? d.is_current),
+    };
+  });
+}
+export async function revokeSession(id: string): Promise<void> {
+  await http(`/auth/sessions/${id}`, { method: "DELETE" });
 }
 
 // Two-step OTP registration. /auth/register now behaves like /auth/register/start
@@ -1718,6 +1750,65 @@ export async function getRetentionOverview(): Promise<RetentionOverview> {
     atRiskClients: asArr(d.at_risk_clients).map((x) => { const r = asDict(x); return { name: asStr(r.name), phone: asStr(r.phone), reason: asStr(r.reason), lastActive: asStr(r.last_active) }; }),
     upsell: asArr(d.upsell).map((x) => { const r = asDict(x); return { name: asStr(r.name), suggestion: asStr(r.suggestion) }; }),
   };
+}
+
+// ── Notification preferences ──────────────────────────────────────
+export type NotifPrefs = { push: boolean; sms: boolean; telegram: boolean; email: boolean; orders: boolean; payments: boolean; messages: boolean; marketing: boolean };
+export const NOTIF_KEYS: (keyof NotifPrefs)[] = ["push", "sms", "telegram", "email", "orders", "payments", "messages", "marketing"];
+export async function getNotificationPreferences(): Promise<NotifPrefs> {
+  const d = asDict(await http("/notifications/preferences"));
+  const out = {} as NotifPrefs;
+  for (const k of NOTIF_KEYS) out[k] = Boolean(d[k]);
+  return out;
+}
+export async function updateNotificationPreferences(p: Partial<NotifPrefs>): Promise<void> {
+  await http("/notifications/preferences", { method: "PUT", body: JSON.stringify(p) });
+}
+
+// ── Payouts / payment split (sellers) ─────────────────────────────
+export type Payout = { id: string; amount: number; currency: string; status: string; period: string; createdAt: string };
+export async function listMyPayouts(): Promise<Payout[]> {
+  return listFrom(await http("/payouts/me"), "items", "data").map((x) => {
+    const d = asDict(x);
+    return { id: asStr(d.id), amount: asNum(d.amount ?? d.seller_share), currency: asStr(d.currency, "UZS"), status: asStr(d.status, "pending"), period: asStr(d.period ?? d.month), createdAt: asStr(d.created_at) };
+  });
+}
+export type PaymentSplit = { total: number; platformFee: number; providerFee: number; sellerShare: number; currency: string };
+export async function getPaymentSplit(paymentId: string): Promise<PaymentSplit> {
+  const d = asDict(await http(`/payments/${paymentId}/split`));
+  return { total: asNum(d.total ?? d.amount), platformFee: asNum(d.platform_fee), providerFee: asNum(d.provider_fee), sellerShare: asNum(d.seller_share), currency: asStr(d.currency, "UZS") };
+}
+
+// ── Orders (status + history) ─────────────────────────────────────
+export type OrderStatusEntry = { status: string; note: string; at: string };
+export async function updateOrderStatus(orderId: string, status: string, note?: string): Promise<void> {
+  await http(`/orders/${orderId}/status`, { method: "PATCH", body: JSON.stringify({ status, note }) });
+}
+export async function getOrderStatusHistory(orderId: string): Promise<OrderStatusEntry[]> {
+  return listFrom(await http(`/orders/${orderId}/status-history`), "items", "data", "history").map((x) => {
+    const d = asDict(x);
+    return { status: asStr(d.status ?? d.stage), note: asStr(d.note), at: asStr(d.created_at ?? d.at) };
+  });
+}
+
+// ── Admin audit trail ─────────────────────────────────────────────
+export async function listAuditTrail(): Promise<ActivityEntry[]> {
+  return listFrom(await http("/admin/audit-trail"), "items", "data", "logs").map(normActivity);
+}
+
+// ── Dedicated lead re-engage ──────────────────────────────────────
+export async function reengageLead(leadId: string, note?: string): Promise<void> {
+  await http(`/admin/leads/${leadId}/re-engage`, { method: "POST", body: JSON.stringify({ note: note ?? "" }) });
+}
+
+// ── Create task / B2B client ──────────────────────────────────────
+export async function createTask(input: { title: string; priority?: string; due_date?: string; case_title?: string }): Promise<WorkTask> {
+  return normTask(await http("/tasks", { method: "POST", body: JSON.stringify(input) }));
+}
+export async function createB2bClient(input: { name: string; industry?: string; contact?: string }): Promise<B2bClient> {
+  const d = asDict(await http("/b2b/clients", { method: "POST", body: JSON.stringify(input) }));
+  const p = asDict(d.payload);
+  return { id: asStr(d.id), name: asStr(d.name ?? d.title), industry: asStr(d.industry ?? p.industry), contact: asStr(d.contact ?? p.contact), stage: asStr(d.stage ?? d.status ?? d.record_type, "new"), value: asNum(d.value ?? d.price ?? p.value) };
 }
 
 // ── Payments history ──────────────────────────────────────────────
