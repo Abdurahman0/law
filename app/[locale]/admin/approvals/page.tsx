@@ -44,7 +44,7 @@ export default function AdminApprovals() {
             <div className="aitem" key={a.id}>
               <span className="aitem__n">{i + 1}</span>
               <div className="aitem__m">
-                <b>{a.type || t("approvals.item")}</b>
+                <b>{a.type ? (t.has(`approvals.type.${a.type}`) ? t(`approvals.type.${a.type}`) : a.type) : t("approvals.item")}</b>
                 <div className="aitem__tags">
                   <em className={`atag${a.adminApproved ? " atag--ok" : " atag--muted"}`}>
                     {t("approvals.admin")}{a.adminApproved ? " ✓" : ""}
@@ -52,7 +52,7 @@ export default function AdminApprovals() {
                   <em className={`atag${a.managerApproved ? " atag--ok" : " atag--muted"}`}>
                     {t("approvals.manager")}{a.managerApproved ? " ✓" : ""}
                   </em>
-                  <em className="atag">{a.status}</em>
+                  <em className="atag">{a.status ? (t.has(`approvals.status.${a.status}`) ? t(`approvals.status.${a.status}`) : a.status) : ""}</em>
                 </div>
               </div>
               <div className="aitem__r" style={{ display: "flex", gap: 8 }}>

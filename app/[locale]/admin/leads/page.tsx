@@ -90,7 +90,7 @@ export default function AdminLeads() {
                     onChange={(v) => setStatus(l.id, v)}
                     options={statusOpts}
                     ariaLabel={t("leads.statusLabel")}
-                    placeholder={l.status || t("leads.statusLabel")}
+                    placeholder={l.status ? (t.has(`leads.status.${l.status}`) ? t(`leads.status.${l.status}`) : l.status) : t("leads.statusLabel")}
                   />
                 </div>
                 <button

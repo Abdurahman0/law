@@ -2806,6 +2806,7 @@
     "badge": "Админ",
     "backToPortal": "Назад в портал",
     "logout": "Выйти",
+    "menu": "Меню",
     "nav": {
       "overview": "Обзор",
       "services": "Услуги",
@@ -2847,6 +2848,15 @@
       "roles": "Роли",
       "empty": "Пока нет данных панели",
       "emptyText": "Метрики и графики появятся при активности.",
+      "metrics": {
+        "users": "Пользователи", "clients": "Клиенты", "yurists": "Юристы", "advokats": "Адвокаты",
+        "organizations": "Организации", "services": "Услуги", "orders": "Заказы", "cases": "Дела",
+        "leads": "Лиды", "payments": "Платежи", "tasks": "Задачи", "b2b_clients": "B2B клиенты", "reviews": "Отзывы"
+      },
+      "charts": {
+        "orders_by_status": "Заказы по статусу", "leads_by_score": "Лиды по баллам", "sellers_by_role": "Продавцы по роли",
+        "payments": "Платежи", "channels_attribution": "Каналы (атрибуция)", "revenue_trend": "Динамика выручки"
+      },
       "seed": "Заполнить демо-данными",
       "seeding": "Заполнение…",
       "seedDone": "Добавлено {templates} шаблонов, {ads} рекл. продуктов.",
@@ -2950,7 +2960,11 @@
       "status": {
         "new": "Новый",
         "in_progress": "В работе",
+        "contacted": "Контакт",
+        "qualified": "Квалифицирован",
         "converted": "Конверсия",
+        "won": "Выиграно",
+        "lost": "Потеряно",
         "rejected": "Отклонён"
       }
     },
@@ -2964,6 +2978,7 @@
       "moveBack": "Назад",
       "moveFwd": "Вперёд",
       "reengage": "Вернуть в работу",
+      "source": { "web": "Сайт", "website": "Сайт", "referral": "Реферал", "ad": "Реклама", "ads": "Реклама", "organic": "Органика", "manual": "Вручную", "phone": "Телефон", "call": "Звонок", "chat": "Чат", "ai": "AI", "social": "Соцсети", "seo": "SEO" },
       "stages": {
         "new": "Новый",
         "contacted": "Контакт",
@@ -3004,7 +3019,10 @@
       "noFlagged": "Нет отмеченных",
       "complaints": "Жалобы",
       "noComplaints": "Нет жалоб",
-      "noComplaintsText": "Новые жалобы появятся здесь."
+      "noComplaintsText": "Новые жалобы появятся здесь.",
+      "severity": { "high": "Высокая", "medium": "Средняя", "low": "Низкая" },
+      "status": { "open": "Открыта", "in_progress": "В работе", "resolved": "Решена", "closed": "Закрыта", "pending": "Ожидает", "rejected": "Отклонена" },
+      "category": { "service": "Услуга", "payment": "Платёж", "quality": "Качество", "fraud": "Мошенничество", "other": "Другое" }
     },
     "b2b": {
       "title": "B2B клиенты",
@@ -3058,7 +3076,7 @@
       "runs": "История запусков",
       "noRuns": "Ещё не запускалось.",
       "completed": "Готово",
-      "status": { "active": "Активно", "paused": "Приостановлено" }
+      "status": { "active": "Активно", "paused": "Приостановлено", "pending": "Ожидает", "running": "Выполняется", "completed": "Завершено", "success": "Успешно", "failed": "Не удалось", "error": "Ошибка", "queued": "В очереди" }
     },
     "callCenter": {
       "search": "Поиск клиента",
@@ -3068,7 +3086,8 @@
       "logCall": "Записать звонок",
       "recent": "Последние звонки",
       "noCalls": "Нет звонков.",
-      "dir": { "incoming": "Входящий", "outgoing": "Исходящий" }
+      "dir": { "incoming": "Входящий", "outgoing": "Исходящий" },
+      "status": { "active": "Активен", "inactive": "Неактивен", "lead": "Лид", "completed": "Завершён", "missed": "Пропущен", "no_answer": "Нет ответа", "busy": "Занято", "failed": "Не удался", "answered": "Отвечен" }
     },
     "reviews": {
       "title": "Модерация отзывов",
@@ -3104,14 +3123,18 @@
       "manager": "Менеджер",
       "adminApprove": "Одобрить (админ)",
       "managerApprove": "Одобрить (менеджер)",
-      "item": "Одобрение"
+      "item": "Одобрение",
+      "type": { "payout": "Выплата", "refund": "Возврат", "plan_change": "Смена тарифа", "verification": "Верификация", "service": "Услуга", "ad": "Реклама", "withdrawal": "Вывод средств", "advocate_change": "Замена юриста" },
+      "status": { "pending": "Ожидает", "approved": "Одобрено", "rejected": "Отклонено", "partial": "Частично", "completed": "Завершено" }
     },
     "ads": {
       "title": "Реклама и продвижение",
       "lead": "Продвигаемые объявления и рекламные продукты.",
       "empty": "Рекламы пока нет",
       "emptyText": "Создайте первый рекламный продукт.",
-      "create": "Новая реклама"
+      "create": "Новая реклама",
+      "recordType": { "banner": "Баннер", "featured": "Рекомендуемое", "promotion": "Акция", "boost": "Продвижение", "ad": "Реклама", "sponsored": "Спонсорское" },
+      "status": { "draft": "Черновик", "active": "Активна", "paused": "Приостановлена", "expired": "Истекла", "pending": "Ожидает", "approved": "Одобрена", "rejected": "Отклонена" }
     },
     "verifications": {
       "title": "Верификация юристов и адвокатов",
@@ -3123,7 +3146,9 @@
       "pending": "На проверке",
       "unverified": "Не верифицирован",
       "empty": "Юристов пока нет",
-      "emptyText": "Зарегистрированные юристы появятся здесь для проверки."
+      "emptyText": "Зарегистрированные юристы появятся здесь для проверки.",
+      "years": "{n} лет",
+      "sellerType": { "yurist": "Юрист", "advokat": "Адвокат", "lawyer": "Юрист", "advocate": "Адвокат", "law_firm": "Юрфирма", "organization": "Организация" }
     },
     "legalAid": {
       "title": "Заявки на правовую помощь",
@@ -3131,7 +3156,8 @@
       "empty": "Заявок пока нет",
       "emptyText": "Новые заявки появятся здесь.",
       "anon": "Аноним",
-      "new": "Новая"
+      "new": "Новая",
+      "status": { "new": "Новая", "in_progress": "В работе", "assigned": "Назначена", "resolved": "Решена", "closed": "Закрыта", "pending": "Ожидает", "rejected": "Отклонена" }
     },
     "registerRequests": {
       "title": "Заявки на регистрацию специалистов",
@@ -3143,7 +3169,9 @@
       "reject": "Отклонить",
       "rejecting": "Отклонение…",
       "accepted": "Одобрено",
-      "rejected": "Отклонено"
+      "rejected": "Отклонено",
+      "role": { "yurist": "Юрист", "advokat": "Адвокат", "lawyer": "Юрист", "advocate": "Адвокат", "client": "Клиент", "organization": "Организация", "law_firm": "Юрфирма" },
+      "status": { "pending": "На рассмотрении", "approved": "Одобрено", "accepted": "Одобрено", "rejected": "Отклонено", "new": "Новая" }
     }
   },
   "secureChat": {

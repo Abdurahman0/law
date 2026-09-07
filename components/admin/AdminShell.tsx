@@ -149,7 +149,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
 
       <div className="pmain">
         <header className="ptop">
-          <button className="ptop__burger" type="button" aria-label="Menu" onClick={() => setOpen((v) => !v)}>
+          <button className="ptop__burger" type="button" aria-label={t("menu")} onClick={() => setOpen((v) => !v)}>
             {open ? <IconClose /> : <IconMenu />}
           </button>
           <h1>{title}</h1>

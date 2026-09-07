@@ -81,8 +81,12 @@ export default function AdminRegisterRequests() {
               key={r.id || i}
               index={i + 1}
               title={r.name || "—"}
-              meta={[cap(r.role), r.phone, fmtDate(r.createdAt)].filter(Boolean).join(" · ")}
-              tags={[{ label: r.status || "pending", tone: "muted" }]}
+              meta={[
+                r.role ? (t.has(`role.${r.role}`) ? t(`role.${r.role}`) : cap(r.role.replace(/_/g, " "))) : "",
+                r.phone,
+                fmtDate(r.createdAt),
+              ].filter(Boolean).join(" · ")}
+              tags={[{ label: r.status ? (t.has(`status.${r.status}`) ? t(`status.${r.status}`) : r.status) : t("status.pending"), tone: "muted" }]}
               right={<Actions id={r.id} onDone={reload} />}
             />
           ))}

@@ -34,7 +34,7 @@ export default function AdminQuality() {
                 <div className="alist">
                   {q.flagged.map((f, i) => (
                     <div className="aitem" key={i}>
-                      <span className={`tprio tprio--${f.severity === "high" ? "high" : f.severity === "medium" ? "medium" : "low"}`}>{f.severity}</span>
+                      <span className={`tprio tprio--${f.severity === "high" ? "high" : f.severity === "medium" ? "medium" : "low"}`}>{t.has(`severity.${f.severity}`) ? t(`severity.${f.severity}`) : f.severity}</span>
                       <div className="aitem__m"><b>{f.title}</b><span className="aitem__meta">{f.detail}</span></div>
                     </div>
                   ))}
@@ -56,8 +56,8 @@ export default function AdminQuality() {
             {comp.data.map((c) => (
               <div className="creq" key={c.id}>
                 <span className="creq__st" />
-                <div className="creq__m"><b>{c.subject || c.category}</b><span>{c.description}</span></div>
-                <span className="creq__badge">{c.status}</span>
+                <div className="creq__m"><b>{c.subject || (t.has(`category.${c.category}`) ? t(`category.${c.category}`) : c.category)}</b><span>{c.description}</span></div>
+                <span className="creq__badge">{t.has(`status.${c.status}`) ? t(`status.${c.status}`) : c.status}</span>
               </div>
             ))}
           </div>

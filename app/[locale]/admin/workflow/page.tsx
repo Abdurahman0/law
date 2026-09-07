@@ -48,7 +48,7 @@ export default function AdminWorkflow() {
                 <span className="aitem__n"><IconBolt /></span>
                 <div className="aitem__m">
                   <b>{r.title || "—"}</b>
-                  <span className="aitem__meta">{r.description || t.has(`status.${r.status}`) && t(`status.${r.status}`)}</span>
+                  <span className="aitem__meta">{r.description || (r.status ? (t.has(`status.${r.status}`) ? t(`status.${r.status}`) : r.status) : "")}</span>
                 </div>
                 <button className="btn btn--pri btn--sm" type="button" disabled={busy === r.id} onClick={() => run(r.id)}>{busy === r.id ? t("running") : t("run")}</button>
               </div>
@@ -69,7 +69,7 @@ export default function AdminWorkflow() {
               <div className="creq" key={r.id}>
                 <span className="creq__st" />
                 <div className="creq__m"><b>{r.title || "—"}</b><span>{fmt(r.createdAt)}</span></div>
-                <span className="creq__badge">{r.status === "completed" ? <><IconCheck /> {t("completed")}</> : r.status}</span>
+                <span className="creq__badge">{r.status === "completed" ? <><IconCheck /> {t("completed")}</> : (r.status ? (t.has(`status.${r.status}`) ? t(`status.${r.status}`) : r.status) : "")}</span>
               </div>
             ))}
           </div>

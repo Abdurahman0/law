@@ -2806,6 +2806,7 @@
     "badge": "Admin",
     "backToPortal": "Back to portal",
     "logout": "Log out",
+    "menu": "Menu",
     "nav": {
       "overview": "Overview",
       "services": "Services",
@@ -2847,6 +2848,15 @@
       "roles": "Roles",
       "empty": "No dashboard data yet",
       "emptyText": "Metrics and charts appear once there is activity.",
+      "metrics": {
+        "users": "Users", "clients": "Clients", "yurists": "Lawyers", "advokats": "Advocates",
+        "organizations": "Organizations", "services": "Services", "orders": "Orders", "cases": "Cases",
+        "leads": "Leads", "payments": "Payments", "tasks": "Tasks", "b2b_clients": "B2B clients", "reviews": "Reviews"
+      },
+      "charts": {
+        "orders_by_status": "Orders by status", "leads_by_score": "Leads by score", "sellers_by_role": "Sellers by role",
+        "payments": "Payments", "channels_attribution": "Channels (attribution)", "revenue_trend": "Revenue trend"
+      },
       "seed": "Seed demo data",
       "seeding": "Seeding…",
       "seedDone": "Seeded {templates} templates, {ads} ad products.",
@@ -2863,10 +2873,10 @@
       "active": "Active",
       "category": "Category",
       "selectCategory": "Select category",
-      "basePrice": "Base price (so'm)",
+      "basePrice": "Base price (UZS)",
       "deliveryMinutes": "Delivery (minutes)",
-      "monthlyPrice": "Monthly price (so'm)",
-      "price": "Price (so'm)",
+      "monthlyPrice": "Monthly price (UZS)",
+      "price": "Price (UZS)",
       "inactive": "Inactive",
       "add": "Add"
     },
@@ -2950,7 +2960,11 @@
       "status": {
         "new": "New",
         "in_progress": "In progress",
+        "contacted": "Contacted",
+        "qualified": "Qualified",
         "converted": "Converted",
+        "won": "Won",
+        "lost": "Lost",
         "rejected": "Rejected"
       }
     },
@@ -2964,6 +2978,7 @@
       "moveBack": "Back",
       "moveFwd": "Forward",
       "reengage": "Re-engage",
+      "source": { "web": "Website", "website": "Website", "referral": "Referral", "ad": "Ad", "ads": "Ads", "organic": "Organic", "manual": "Manual", "phone": "Phone", "call": "Call", "chat": "Chat", "ai": "AI", "social": "Social", "seo": "SEO" },
       "stages": {
         "new": "New",
         "contacted": "Contacted",
@@ -3004,7 +3019,10 @@
       "noFlagged": "No flagged cases",
       "complaints": "Complaints",
       "noComplaints": "No complaints",
-      "noComplaintsText": "New complaints will appear here."
+      "noComplaintsText": "New complaints will appear here.",
+      "severity": { "high": "High", "medium": "Medium", "low": "Low" },
+      "status": { "open": "Open", "in_progress": "In progress", "resolved": "Resolved", "closed": "Closed", "pending": "Pending", "rejected": "Rejected" },
+      "category": { "service": "Service", "payment": "Payment", "quality": "Quality", "fraud": "Fraud", "other": "Other" }
     },
     "b2b": {
       "title": "B2B clients",
@@ -3058,7 +3076,7 @@
       "runs": "Run history",
       "noRuns": "Nothing run yet.",
       "completed": "Completed",
-      "status": { "active": "Active", "paused": "Paused" }
+      "status": { "active": "Active", "paused": "Paused", "pending": "Pending", "running": "Running", "completed": "Completed", "success": "Success", "failed": "Failed", "error": "Error", "queued": "Queued" }
     },
     "callCenter": {
       "search": "Find a client",
@@ -3068,7 +3086,8 @@
       "logCall": "Log call",
       "recent": "Recent calls",
       "noCalls": "No calls.",
-      "dir": { "incoming": "Incoming", "outgoing": "Outgoing" }
+      "dir": { "incoming": "Incoming", "outgoing": "Outgoing" },
+      "status": { "active": "Active", "inactive": "Inactive", "lead": "Lead", "completed": "Completed", "missed": "Missed", "no_answer": "No answer", "busy": "Busy", "failed": "Failed", "answered": "Answered" }
     },
     "reviews": {
       "title": "Review moderation",
@@ -3104,14 +3123,18 @@
       "manager": "Manager",
       "adminApprove": "Admin approve",
       "managerApprove": "Manager approve",
-      "item": "Approval"
+      "item": "Approval",
+      "type": { "payout": "Payout", "refund": "Refund", "plan_change": "Plan change", "verification": "Verification", "service": "Service", "ad": "Ad", "withdrawal": "Withdrawal", "advocate_change": "Lawyer change" },
+      "status": { "pending": "Pending", "approved": "Approved", "rejected": "Rejected", "partial": "Partial", "completed": "Completed" }
     },
     "ads": {
       "title": "Ads & promotions",
       "lead": "Promoted listings and ad products.",
       "empty": "No ads yet",
       "emptyText": "Create the first ad product.",
-      "create": "New ad"
+      "create": "New ad",
+      "recordType": { "banner": "Banner", "featured": "Featured", "promotion": "Promotion", "boost": "Boost", "ad": "Ad", "sponsored": "Sponsored" },
+      "status": { "draft": "Draft", "active": "Active", "paused": "Paused", "expired": "Expired", "pending": "Pending", "approved": "Approved", "rejected": "Rejected" }
     },
     "verifications": {
       "title": "Verify lawyers & advocates",
@@ -3123,7 +3146,9 @@
       "pending": "Pending",
       "unverified": "Not verified",
       "empty": "No lawyers yet",
-      "emptyText": "Registered lawyers will appear here for review."
+      "emptyText": "Registered lawyers will appear here for review.",
+      "years": "{n} yrs",
+      "sellerType": { "yurist": "Lawyer", "advokat": "Advocate", "lawyer": "Lawyer", "advocate": "Advocate", "law_firm": "Law firm", "organization": "Organization" }
     },
     "legalAid": {
       "title": "Legal aid requests",
@@ -3131,7 +3156,8 @@
       "empty": "No requests yet",
       "emptyText": "New legal aid requests will appear here.",
       "anon": "Anonymous",
-      "new": "New"
+      "new": "New",
+      "status": { "new": "New", "in_progress": "In progress", "assigned": "Assigned", "resolved": "Resolved", "closed": "Closed", "pending": "Pending", "rejected": "Rejected" }
     },
     "registerRequests": {
       "title": "Seller registration requests",
@@ -3143,7 +3169,9 @@
       "reject": "Reject",
       "rejecting": "Rejecting…",
       "accepted": "Accepted",
-      "rejected": "Rejected"
+      "rejected": "Rejected",
+      "role": { "yurist": "Lawyer", "advokat": "Advocate", "lawyer": "Lawyer", "advocate": "Advocate", "client": "Client", "organization": "Organization", "law_firm": "Law firm" },
+      "status": { "pending": "Pending", "approved": "Approved", "accepted": "Accepted", "rejected": "Rejected", "new": "New" }
     }
   },
   "secureChat": {

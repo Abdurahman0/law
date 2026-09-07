@@ -2812,6 +2812,7 @@
     "badge": "Admin",
     "backToPortal": "Portalga qaytish",
     "logout": "Chiqish",
+    "menu": "Menyu",
     "nav": {
       "overview": "Umumiy",
       "services": "Xizmatlar",
@@ -2853,9 +2854,18 @@
       "roles": "Rollar",
       "empty": "Hozircha panel ma‘lumoti yo‘q",
       "emptyText": "Faollik paydo bo‘lgach ko‘rsatkichlar va grafiklar ko‘rinadi.",
+      "metrics": {
+        "users": "Foydalanuvchilar", "clients": "Mijozlar", "yurists": "Yuristlar", "advokats": "Advokatlar",
+        "organizations": "Tashkilotlar", "services": "Xizmatlar", "orders": "Buyurtmalar", "cases": "Ishlar",
+        "leads": "Lidlar", "payments": "To'lovlar", "tasks": "Vazifalar", "b2b_clients": "B2B mijozlar", "reviews": "Sharhlar"
+      },
+      "charts": {
+        "orders_by_status": "Buyurtmalar holati bo'yicha", "leads_by_score": "Lidlar bali bo'yicha", "sellers_by_role": "Sotuvchilar roli bo'yicha",
+        "payments": "To'lovlar", "channels_attribution": "Kanallar (attribution)", "revenue_trend": "Daromad dinamikasi"
+      },
       "seed": "Demo ma'lumot",
       "seeding": "Yuklanmoqda…",
-      "seedDone": "{templates} shablon, {ads} reklama qo‘shildi.",
+      "seedDone": "{templates} ta namuna, {ads} ta reklama qo‘shildi.",
       "seedError": "Xatolik yuz berdi."
     },
     "form": {
@@ -2956,7 +2966,11 @@
       "status": {
         "new": "Yangi",
         "in_progress": "Jarayonda",
+        "contacted": "Aloqa qilingan",
+        "qualified": "Malakali",
         "converted": "Konvertatsiya",
+        "won": "Yutildi",
+        "lost": "Yo‘qotildi",
         "rejected": "Rad etilgan"
       }
     },
@@ -2970,6 +2984,7 @@
       "moveBack": "Orqaga",
       "moveFwd": "Oldinga",
       "reengage": "Qayta jalb qilish",
+      "source": { "web": "Veb-sayt", "website": "Veb-sayt", "referral": "Tavsiya", "ad": "Reklama", "ads": "Reklama", "organic": "Organik", "manual": "Qo'lda", "phone": "Telefon", "call": "Qo'ng'iroq", "chat": "Chat", "ai": "AI", "social": "Ijtimoiy tarmoq", "seo": "SEO" },
       "stages": {
         "new": "Yangi",
         "contacted": "Aloqa qilingan",
@@ -3010,7 +3025,10 @@
       "noFlagged": "Belgilangan holat yo'q",
       "complaints": "Shikoyatlar",
       "noComplaints": "Shikoyat yo'q",
-      "noComplaintsText": "Yangi shikoyatlar shu yerda."
+      "noComplaintsText": "Yangi shikoyatlar shu yerda.",
+      "severity": { "high": "Yuqori", "medium": "O'rta", "low": "Past" },
+      "status": { "open": "Ochiq", "in_progress": "Ko'rilmoqda", "resolved": "Hal qilindi", "closed": "Yopilgan", "pending": "Kutilmoqda", "rejected": "Rad etildi" },
+      "category": { "service": "Xizmat", "payment": "To'lov", "quality": "Sifat", "fraud": "Firibgarlik", "other": "Boshqa" }
     },
     "b2b": {
       "title": "B2B mijozlar",
@@ -3064,7 +3082,7 @@
       "runs": "Ishga tushirishlar tarixi",
       "noRuns": "Hali ishga tushirilmagan.",
       "completed": "Bajarildi",
-      "status": { "active": "Faol", "paused": "To'xtatilgan" }
+      "status": { "active": "Faol", "paused": "To'xtatilgan", "pending": "Kutilmoqda", "running": "Bajarilmoqda", "completed": "Bajarildi", "success": "Muvaffaqiyatli", "failed": "Amalga oshmadi", "error": "Xato", "queued": "Navbatda" }
     },
     "callCenter": {
       "search": "Mijoz qidirish",
@@ -3074,7 +3092,8 @@
       "logCall": "Qo'ng'iroq yozish",
       "recent": "So'nggi qo'ng'iroqlar",
       "noCalls": "Qo'ng'iroq yo'q.",
-      "dir": { "incoming": "Kiruvchi", "outgoing": "Chiquvchi" }
+      "dir": { "incoming": "Kiruvchi", "outgoing": "Chiquvchi" },
+      "status": { "active": "Faol", "inactive": "Nofaol", "lead": "Lid", "completed": "Yakunlandi", "missed": "O'tkazib yuborilgan", "no_answer": "Javob yo'q", "busy": "Band", "failed": "Amalga oshmadi", "answered": "Javob berilgan" }
     },
     "reviews": {
       "title": "Sharh moderatsiyasi",
@@ -3093,7 +3112,7 @@
       "providerFee": "Provayder to'lovi",
       "sellerShare": "Sotuvchi ulushi",
       "paidCount": "To'langan / jami",
-      "fees": "To'lovlar",
+      "fees": "Komissiyalar",
       "listTitle": "Payout yozuvlari",
       "empty": "Payout yo'q",
       "emptyText": "Payout yozuvlari shu yerda ko'rinadi.",
@@ -3110,14 +3129,18 @@
       "manager": "Menejer",
       "adminApprove": "Admin tasdiqlashi",
       "managerApprove": "Menejer tasdiqlashi",
-      "item": "Tasdiqlash"
+      "item": "Tasdiqlash",
+      "type": { "payout": "To'lov chiqarish", "refund": "Qaytarish", "plan_change": "Tarif o'zgarishi", "verification": "Tasdiqlash", "service": "Xizmat", "ad": "Reklama", "withdrawal": "Yechib olish", "advocate_change": "Advokat almashtirish" },
+      "status": { "pending": "Kutilmoqda", "approved": "Tasdiqlangan", "rejected": "Rad etilgan", "partial": "Qisman", "completed": "Yakunlangan" }
     },
     "ads": {
       "title": "Reklama va promo",
       "lead": "Reklama e’lonlari va promo mahsulotlar.",
       "empty": "Hozircha reklama yo‘q",
       "emptyText": "Birinchi reklama mahsulotini yarating.",
-      "create": "Yangi reklama"
+      "create": "Yangi reklama",
+      "recordType": { "banner": "Banner", "featured": "Tavsiya etilgan", "promotion": "Aksiya", "boost": "Ko'tarish", "ad": "Reklama", "sponsored": "Homiylik" },
+      "status": { "draft": "Qoralama", "active": "Faol", "paused": "To'xtatilgan", "expired": "Muddati tugagan", "pending": "Kutilmoqda", "approved": "Tasdiqlangan", "rejected": "Rad etilgan" }
     },
     "verifications": {
       "title": "Yurist va advokatlarni tasdiqlash",
@@ -3129,7 +3152,9 @@
       "pending": "Kutilmoqda",
       "unverified": "Tasdiqlanmagan",
       "empty": "Hozircha advokatlar yo‘q",
-      "emptyText": "Ro‘yxatdan o‘tgan advokatlar shu yerda ko‘rinadi."
+      "emptyText": "Ro‘yxatdan o‘tgan advokatlar shu yerda ko‘rinadi.",
+      "years": "{n} yil",
+      "sellerType": { "yurist": "Yurist", "advokat": "Advokat", "lawyer": "Yurist", "advocate": "Advokat", "law_firm": "Yuridik firma", "organization": "Tashkilot" }
     },
     "legalAid": {
       "title": "Yuridik yordam so‘rovlari",
@@ -3137,7 +3162,8 @@
       "empty": "Hozircha so‘rovlar yo‘q",
       "emptyText": "Yangi so‘rovlar shu yerda ko‘rinadi.",
       "anon": "Anonim",
-      "new": "Yangi"
+      "new": "Yangi",
+      "status": { "new": "Yangi", "in_progress": "Ko'rilmoqda", "assigned": "Biriktirilgan", "resolved": "Hal qilindi", "closed": "Yopilgan", "pending": "Kutilmoqda", "rejected": "Rad etildi" }
     },
     "registerRequests": {
       "title": "Sotuvchi ro‘yxatdan o‘tish so‘rovlari",
@@ -3149,7 +3175,9 @@
       "reject": "Rad etish",
       "rejecting": "Rad etilmoqda…",
       "accepted": "Qabul qilindi",
-      "rejected": "Rad etildi"
+      "rejected": "Rad etildi",
+      "role": { "yurist": "Yurist", "advokat": "Advokat", "lawyer": "Yurist", "advocate": "Advokat", "client": "Mijoz", "organization": "Tashkilot", "law_firm": "Yuridik firma" },
+      "status": { "pending": "Kutilmoqda", "approved": "Tasdiqlangan", "accepted": "Qabul qilindi", "rejected": "Rad etildi", "new": "Yangi" }
     }
   },
   "secureChat": {

@@ -60,7 +60,7 @@ export default function AdminOverview() {
               {dash.data.totals.map((s) => (
                 <div className="amet__c" key={s.label}>
                   <b>{fmt(s.value)}</b>
-                  <span className="amet__l">{human(s.label)}</span>
+                  <span className="amet__l">{t.has(`metrics.${s.label}`) ? t(`metrics.${s.label}`) : human(s.label)}</span>
                 </div>
               ))}
             </div>
@@ -75,7 +75,7 @@ export default function AdminOverview() {
                   return (
                     <div className="ppanel" key={c.key}>
                       <div className="ppanel__h">
-                        <b>{human(c.key)}</b>
+                        <b>{t.has(`charts.${c.key}`) ? t(`charts.${c.key}`) : human(c.key)}</b>
                       </div>
                       <div className="dchart">
                         {c.points.slice(-14).map((p, i) => (

@@ -57,7 +57,11 @@ export default function AdminVerifications() {
               key={l.id || i}
               index={i + 1}
               title={l.name || "—"}
-              meta={[cap(l.sellerType), l.region, l.experienceYears ? `${l.experienceYears} yil` : ""]
+              meta={[
+                l.sellerType ? (t.has(`sellerType.${l.sellerType}`) ? t(`sellerType.${l.sellerType}`) : cap(l.sellerType)) : "",
+                l.region,
+                l.experienceYears ? t("years", { n: l.experienceYears }) : "",
+              ]
                 .filter(Boolean)
                 .join(" · ")}
               tags={

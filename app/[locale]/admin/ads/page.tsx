@@ -43,9 +43,9 @@ export default function AdminAds() {
               key={a.id}
               index={i + 1}
               title={a.title}
-              meta={a.recordType}
+              meta={a.recordType ? (t.has(`ads.recordType.${a.recordType}`) ? t(`ads.recordType.${a.recordType}`) : a.recordType) : undefined}
               right={som(a.price)}
-              tags={a.status ? [{ label: a.status }] : undefined}
+              tags={a.status ? [{ label: t.has(`ads.status.${a.status}`) ? t(`ads.status.${a.status}`) : a.status }] : undefined}
             />
           ))}
         </div>

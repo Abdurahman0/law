@@ -146,7 +146,7 @@ export default function AdminPipeline() {
                         >
                           <IconChevronLeft />
                         </button>
-                        <span className="pipe__src">{l.source || <IconUsers />}</span>
+                        <span className="pipe__src">{l.source ? (t.has(`source.${l.source}`) ? t(`source.${l.source}`) : l.source) : <IconUsers />}</span>
                         <button
                           type="button"
                           className="pipe__mv"

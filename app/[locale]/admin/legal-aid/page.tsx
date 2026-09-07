@@ -40,7 +40,7 @@ export default function AdminLegalAid() {
                 <div className="laitem__h">
                   <b>{name}</b>
                   <span className={`aitem__st aitem__st--${(r.status || "new").toLowerCase()}`}>
-                    {r.status || t("new")}
+                    {r.status ? (t.has(`status.${r.status}`) ? t(`status.${r.status}`) : r.status) : t("new")}
                   </span>
                 </div>
                 {phone ? (

@@ -67,7 +67,7 @@ export default function AdminCallCenter() {
                 <span className="aitem__n"><IconUser /></span>
                 <div className="aitem__m">
                   <b>{c.name || c.phone}</b>
-                  <span className="aitem__meta">{[c.lexgoId, c.phone, c.status].filter(Boolean).join(" · ")}</span>
+                  <span className="aitem__meta">{[c.lexgoId, c.phone, c.status ? (t.has(`status.${c.status}`) ? t(`status.${c.status}`) : c.status) : ""].filter(Boolean).join(" · ")}</span>
                 </div>
                 <button className="btn btn--pri btn--sm" type="button" disabled={busy === c.id} onClick={() => logCall(c)}><IconPhone />{t("logCall")}</button>
               </div>
@@ -88,7 +88,7 @@ export default function AdminCallCenter() {
               <div className="creq" key={c.id}>
                 <span className="creq__st" />
                 <div className="creq__m"><b>{c.phone || "—"}</b><span>{[t.has(`dir.${c.direction}`) ? t(`dir.${c.direction}`) : c.direction, fmt(c.createdAt)].filter(Boolean).join(" · ")}</span></div>
-                <span className="creq__badge">{c.status}</span>
+                <span className="creq__badge">{c.status ? (t.has(`status.${c.status}`) ? t(`status.${c.status}`) : c.status) : ""}</span>
               </div>
             ))}
           </div>
