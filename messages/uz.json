@@ -2812,6 +2812,8 @@
       "b2b": "B2B mijozlar",
       "quality": "Sifat nazorati",
       "audit": "Audit jurnali",
+      "reviews": "Sharh moderatsiyasi",
+      "payouts": "To'lovlar (payout)",
       "approvals": "Tasdiqlashlar",
       "ads": "Reklama",
       "verifications": "Advokatlarni tasdiqlash",
@@ -3021,6 +3023,29 @@
       "lead": "Tizimdagi barcha muhim harakatlar jurnali.",
       "empty": "Yozuv yo'q",
       "emptyText": "Audit yozuvlari shu yerda ko'rinadi."
+    },
+    "reviews": {
+      "title": "Sharh moderatsiyasi",
+      "lead": "Yangi sharhlar tasdiqlanishini kutadi.",
+      "empty": "Sharh yo'q",
+      "emptyText": "Yangi sharhlar shu yerda ko'rinadi.",
+      "approve": "Tasdiqlash",
+      "reject": "Rad etish",
+      "status": { "pending": "Kutilmoqda", "approved": "Tasdiqlangan", "rejected": "Rad etilgan" }
+    },
+    "payouts": {
+      "title": "To'lovlarni yarashtirish",
+      "gross": "Umumiy summa",
+      "platformFee": "Platforma ulushi",
+      "providerFee": "Provayder to'lovi",
+      "sellerShare": "Sotuvchi ulushi",
+      "paidCount": "To'langan / jami",
+      "fees": "To'lovlar",
+      "listTitle": "Payout yozuvlari",
+      "empty": "Payout yo'q",
+      "emptyText": "Payout yozuvlari shu yerda ko'rinadi.",
+      "markPaid": "To'langan deb belgilash",
+      "status": { "queued": "Navbatda", "processing": "Jarayonda", "paid": "To'langan", "held": "Ushlab turilgan", "failed": "Xato", "calculated": "Hisoblangan", "cancelled": "Bekor qilingan" }
     },
     "approvals": {
       "title": "Tasdiqlashlar",

@@ -2806,6 +2806,8 @@
       "b2b": "B2B clients",
       "quality": "Quality control",
       "audit": "Audit trail",
+      "reviews": "Review moderation",
+      "payouts": "Payouts",
       "approvals": "Approvals",
       "ads": "Ads",
       "verifications": "Verify lawyers",
@@ -3015,6 +3017,29 @@
       "lead": "Log of all important actions in the system.",
       "empty": "No records",
       "emptyText": "Audit records will appear here."
+    },
+    "reviews": {
+      "title": "Review moderation",
+      "lead": "New reviews await approval.",
+      "empty": "No reviews",
+      "emptyText": "New reviews will appear here.",
+      "approve": "Approve",
+      "reject": "Reject",
+      "status": { "pending": "Pending", "approved": "Approved", "rejected": "Rejected" }
+    },
+    "payouts": {
+      "title": "Payout reconciliation",
+      "gross": "Gross amount",
+      "platformFee": "Platform fee",
+      "providerFee": "Provider fee",
+      "sellerShare": "Seller share",
+      "paidCount": "Paid / total",
+      "fees": "Fees",
+      "listTitle": "Payout records",
+      "empty": "No payouts",
+      "emptyText": "Payout records will appear here.",
+      "markPaid": "Mark as paid",
+      "status": { "queued": "Queued", "processing": "Processing", "paid": "Paid", "held": "Held", "failed": "Failed", "calculated": "Calculated", "cancelled": "Cancelled" }
     },
     "approvals": {
       "title": "Approvals",

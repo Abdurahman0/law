@@ -1810,6 +1810,71 @@ export async function createB2bClient(input: { name: string; industry?: string; 
   const p = asDict(d.payload);
   return { id: asStr(d.id), name: asStr(d.name ?? d.title), industry: asStr(d.industry ?? p.industry), contact: asStr(d.contact ?? p.contact), stage: asStr(d.stage ?? d.status ?? d.record_type, "new"), value: asNum(d.value ?? d.price ?? p.value) };
 }
+export async function deleteTask(id: string): Promise<void> {
+  await http(`/tasks/${id}`, { method: "DELETE" });
+}
+export async function getLeadTimeline(leadId: string): Promise<ActivityEntry[]> {
+  return listFrom(await http(`/admin/leads/${leadId}/timeline`), "items", "data", "timeline").map(normActivity);
+}
+
+// ── Admin: review moderation ──────────────────────────────────────
+export type AdminReview = { id: string; status: string; lawyerName: string; rating: number; comment: string; note: string; createdAt: string };
+function normAdminReview(v: unknown): AdminReview {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    status: asStr(d.status, "pending"),
+    lawyerName: asStr(d.lawyer_name ?? d.lawyer ?? d.name),
+    rating: asNum(d.rating),
+    comment: asStr(d.comment ?? d.text),
+    note: asStr(d.moderation_note ?? d.note),
+    createdAt: asStr(d.created_at ?? d.createdAt),
+  };
+}
+export async function listAdminReviews(): Promise<AdminReview[]> {
+  return listFrom(await http("/admin/reviews"), "items", "data", "reviews").map(normAdminReview);
+}
+export async function moderateReview(id: string, status: string, note?: string): Promise<void> {
+  await http(`/admin/reviews/${id}/moderate`, { method: "PATCH", body: JSON.stringify({ status, note: note ?? "" }) });
+}
+
+// ── Admin: payouts + reconciliation ───────────────────────────────
+export type AdminPayout = { id: string; paymentId: string; gross: number; platformFee: number; providerFee: number; sellerShare: number; sellerUserId: string; status: string; currency: string; createdAt: string };
+function normAdminPayout(v: unknown): AdminPayout {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    paymentId: asStr(d.payment_id),
+    gross: asNum(d.gross_amount ?? d.gross),
+    platformFee: asNum(d.platform_fee),
+    providerFee: asNum(d.provider_fee),
+    sellerShare: asNum(d.seller_share),
+    sellerUserId: asStr(d.seller_user_id),
+    status: asStr(d.status, "queued"),
+    currency: asStr(d.currency, "UZS"),
+    createdAt: asStr(d.created_at ?? d.createdAt),
+  };
+}
+export async function listAdminPayouts(): Promise<AdminPayout[]> {
+  return listFrom(await http("/admin/payouts"), "items", "data", "payouts").map(normAdminPayout);
+}
+export async function updatePayout(id: string, status: string, note?: string): Promise<void> {
+  await http(`/admin/payouts/${id}`, { method: "PATCH", body: JSON.stringify({ status, note: note ?? "" }) });
+}
+export type Reconciliation = {
+  paymentsCount: number; paidCount: number; gross: number; platformFee: number; providerFee: number; sellerShare: number;
+  payoutStatuses: Record<string, number>;
+  byProvider: { provider: string; count: number; amount: number }[];
+};
+export async function getReconciliation(): Promise<Reconciliation> {
+  const d = asDict(await http("/payments/reconciliation"));
+  return {
+    paymentsCount: asNum(d.payments_count), paidCount: asNum(d.paid_count),
+    gross: asNum(d.gross_amount), platformFee: asNum(d.platform_fee), providerFee: asNum(d.provider_fee), sellerShare: asNum(d.seller_share),
+    payoutStatuses: asDict(d.payout_statuses) as Record<string, number>,
+    byProvider: asArr(d.by_provider).map((x) => { const r = asDict(x); return { provider: asStr(r.provider), count: asNum(r.count), amount: asNum(r.amount) }; }),
+  };
+}
 
 // ── Payments history ──────────────────────────────────────────────
 export type PaymentHistory = {
