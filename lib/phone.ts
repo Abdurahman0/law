@@ -2,7 +2,10 @@
 // gets a clean E.164 number.
 export function formatUzPhone(input: string): string {
   let d = input.replace(/\D/g, "");
-  if (d.startsWith("998")) d = d.slice(3);
+  // Strip the 998 country code — repeatedly, so a paste that lands next to an
+  // existing "+998 " (e.g. "+998 +998901234567") does not keep a stray "998".
+  // Guard on length so a real 9-digit "99 8.." subscriber number is untouched.
+  while (d.startsWith("998") && d.length > 9) d = d.slice(3);
   d = d.slice(0, 9);
   let out = "+998";
   if (d.length) out += " " + d.slice(0, 2);
@@ -15,7 +18,7 @@ export function formatUzPhone(input: string): string {
 // E.164 form for the API, e.g. "+998901234567".
 export function normUzPhone(input: string): string {
   let d = input.replace(/\D/g, "");
-  if (d.startsWith("998")) d = d.slice(3);
+  while (d.startsWith("998") && d.length > 9) d = d.slice(3);
   d = d.slice(0, 9);
   return "+998" + d;
 }
