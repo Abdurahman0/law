@@ -346,3 +346,35 @@ Bularni faqat kontekst uchun sanaymiz — backend o'zgarishi shart emas:
 - Qo'ng'iroq boshlash — faqat call-center advokatlari.
 - Chat kontakt filtri (Zoom bundan mustasno).
 - Oila `shared_access` + faol tarif → tarifdan foydalanish.
+
+---
+
+## 15. Law Marketplace modullari — yangi endpointlar (2-sessiya)
+
+CIMS project 14 modul kartalari uchun UI qurildi. Quyidagi endpointlar frontend tomonidan chaqiriladi (hozircha **fail-soft**; backend qo’shishi kerak). Hammasi `Authorization: Bearer` bilan.
+
+| Modul | Metod | Path | Izoh |
+|---|---|---|---|
+| SOS / shoshilinch | POST | `/sos` | `{category,description,phone?}` → `{id,status,duty_lawyer{name},chat_room_id}` |
+| Referral | GET | `/referrals/me` | `{code,link,invited_count,joined_count,reward_balance,items[]}` |
+| Reviews | GET | `/reviews/pending` | baholanmagan ishlar `[{id,case_id,lawyer_user_id,lawyer_name,service,completed_at}]` |
+| Reviews | POST | `/reviews` | `{case_id?,lawyer_user_id?,rating,comment?}` |
+| Reviews | GET | `/reviews/me` | `[{id,lawyer_name,rating,comment,created_at}]` |
+| Complaints | GET/POST | `/complaints` | POST `{category,subject,description,case_id?}` |
+| Complaints (admin) | GET | `/admin/complaints` | admin ko’rinishi |
+| Warranty | GET/POST | `/warranty/claims` | POST `{case_id?,reason,kind:"replacement"}` |
+| Academy | GET | `/academy/courses/catalog` | `[{id,title,category,lessons_count,duration_min,level,progress,cover_url}]` |
+| Tasks | GET | `/tasks/me` | `[{id,title,status,priority,due_date,case_title}]` |
+| Tasks | PATCH | `/tasks/{id}/status` | `{status: todo|doing|done}` |
+| Matching | GET | `/matching/me` | `[{lawyer_user_id,name,area,region,rating,match_pct,reason,seller_type}]` |
+| Call analytics | GET | `/calls/analytics` | `{total,answered,missed,avg_duration_sec,by_day[],top_agents[]}` |
+| CEO dashboard | GET | `/analytics/ceo` | `{revenue,revenue_delta_pct,mrr,users,active_users,conversion_pct,funnel[],channels[],revenue_trend[]}` |
+| Quality | GET | `/quality/overview` | `{avg_rating,response_sla_pct,complaint_rate,resolved_pct,flagged[]}` |
+| B2B | GET | `/b2b/clients` | `[{id,name,industry,contact,stage,value}]` |
+| Retention | GET | `/retention/overview` | `{at_risk,churned_this_month,retained_pct,at_risk_clients[],upsell[]}` |
+| AI classify | POST | `/ai/classify` | `{text}` → `{category,urgency,summary,recommended_service,confidence,lead_id,routed_to}` (call-center’ga lead) |
+| AI doc analysis | POST | `/ai/document-analysis` | `{text}` → `{summary,risks[{level,text}],recommendations[]}` |
+| AI assistant | POST | `/ai/assistant` | `{prompt,context?}` → `{answer}` |
+
+Pipeline (mavjud `/admin/leads`, `PATCH /admin/leads/{id}`) status qiymatlari: `new,contacted,qualified,won,lost` (+ `re-engage` = lost→new).
+To’liq reja va holat: `LAW_MARKETPLACE_PLAN.md`.
