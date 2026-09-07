@@ -1459,12 +1459,13 @@ export type MyReview = { id: string; lawyerName: string; rating: number; comment
 export async function listReviewable(): Promise<ReviewTarget[]> {
   return listFrom(await http("/reviews/pending"), "items", "data").map((x) => {
     const d = asDict(x);
+    const p = asDict(d.payload);
     return {
       id: asStr(d.id ?? d.case_id),
-      caseId: asStr(d.case_id) || undefined,
-      lawyerUserId: asStr(d.lawyer_user_id) || undefined,
-      lawyerName: asStr(d.lawyer_name ?? d.lawyer ?? d.name),
-      service: asStr(d.service ?? d.title ?? d.category),
+      caseId: asStr(d.case_id ?? p.case_id) || undefined,
+      lawyerUserId: asStr(d.lawyer_user_id ?? p.lawyer_user_id) || undefined,
+      lawyerName: asStr(d.lawyer_name ?? d.lawyer ?? d.name ?? d.title),
+      service: asStr(d.service ?? d.title ?? d.category ?? d.record_type ?? p.service),
       completedAt: asStr(d.completed_at ?? d.created_at),
     };
   });
@@ -1472,11 +1473,12 @@ export async function listReviewable(): Promise<ReviewTarget[]> {
 export async function listMyReviews(): Promise<MyReview[]> {
   return listFrom(await http("/reviews/me"), "items", "data").map((x) => {
     const d = asDict(x);
+    const p = asDict(d.payload);
     return {
       id: asStr(d.id),
-      lawyerName: asStr(d.lawyer_name ?? d.lawyer ?? d.name),
-      rating: asNum(d.rating),
-      comment: asStr(d.comment ?? d.text),
+      lawyerName: asStr(d.lawyer_name ?? d.lawyer ?? d.name ?? d.title),
+      rating: asNum(d.rating ?? p.rating),
+      comment: asStr(d.comment ?? d.text ?? p.comment),
       createdAt: asStr(d.created_at ?? d.createdAt),
     };
   });
@@ -1494,11 +1496,12 @@ export async function submitReview(input: {
 export type Complaint = { id: string; category: string; subject: string; description: string; status: string; createdAt: string };
 function normComplaint(v: unknown): Complaint {
   const d = asDict(v);
+  const p = asDict(d.payload);
   return {
     id: asStr(d.id),
-    category: asStr(d.category),
+    category: asStr(d.category ?? d.record_type),
     subject: asStr(d.subject ?? d.title),
-    description: asStr(d.description ?? d.text),
+    description: asStr(d.description ?? d.text ?? p.description),
     status: asStr(d.status, "new"),
     createdAt: asStr(d.created_at ?? d.createdAt),
   };
@@ -1514,10 +1517,11 @@ export async function createComplaint(input: { category: string; subject: string
 export type WarrantyClaim = { id: string; caseTitle: string; reason: string; status: string; createdAt: string };
 function normClaim(v: unknown): WarrantyClaim {
   const d = asDict(v);
+  const p = asDict(d.payload);
   return {
     id: asStr(d.id),
-    caseTitle: asStr(d.case_title ?? d.case ?? d.title),
-    reason: asStr(d.reason),
+    caseTitle: asStr(d.case_title ?? d.case ?? p.case_title ?? d.title),
+    reason: asStr(d.reason ?? p.reason),
     status: asStr(d.status, "new"),
     createdAt: asStr(d.created_at ?? d.createdAt),
   };
@@ -1552,13 +1556,14 @@ export async function listAcademyCourses(): Promise<AcademyCourse[]> {
 export type WorkTask = { id: string; title: string; status: string; priority: string; dueDate?: string; caseTitle?: string };
 function normTask(v: unknown): WorkTask {
   const d = asDict(v);
+  const p = asDict(d.payload);
   return {
     id: asStr(d.id),
     title: asStr(d.title ?? d.name),
     status: asStr(d.status, "todo"),
-    priority: asStr(d.priority, "medium"),
-    dueDate: asStr(d.due_date ?? d.deadline) || undefined,
-    caseTitle: asStr(d.case_title ?? d.case) || undefined,
+    priority: asStr(d.priority ?? p.priority, "medium"),
+    dueDate: asStr(d.due_date ?? d.deadline ?? p.due_date) || undefined,
+    caseTitle: asStr(d.case_title ?? d.case ?? p.case_title) || undefined,
   };
 }
 export async function listMyTasks(): Promise<WorkTask[]> {
@@ -1656,7 +1661,15 @@ export type B2bClient = { id: string; name: string; industry: string; contact: s
 export async function listB2bClients(): Promise<B2bClient[]> {
   return listFrom(await http("/b2b/clients"), "items", "data", "clients").map((x) => {
     const d = asDict(x);
-    return { id: asStr(d.id), name: asStr(d.name ?? d.company), industry: asStr(d.industry), contact: asStr(d.contact ?? d.phone), stage: asStr(d.stage, "new"), value: asNum(d.value ?? d.deal_value) };
+    const p = asDict(d.payload);
+    return {
+      id: asStr(d.id),
+      name: asStr(d.name ?? d.company ?? d.title),
+      industry: asStr(d.industry ?? p.industry),
+      contact: asStr(d.contact ?? d.phone ?? p.contact ?? p.phone),
+      stage: asStr(d.stage ?? d.status ?? d.record_type, "new"),
+      value: asNum(d.value ?? d.deal_value ?? d.price ?? p.value),
+    };
   });
 }
 
