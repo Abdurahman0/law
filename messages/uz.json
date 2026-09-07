@@ -1724,6 +1724,7 @@
         "tasks": "Vazifalar",
         "calendar": "Kalendar",
         "clients": "Mijozlar",
+        "services": "Xizmatlarim",
         "documents": "Hujjatlar",
         "chat": "Xavfsiz chat",
         "ai": "Sun'iy intellekt Yordamchi",
@@ -1836,6 +1837,14 @@
         "conflictAlert": "Manfaatlar to'qnashuvi ehtimoli — qabul qilishdan oldin tekshiring",
         "empty": "Hozircha mijoz yo'q",
         "emptyText": "Ish olganingizdan so'ng mijozlar shu yerda ko'rinadi."
+      },
+      "services": {
+        "title": "Mening xizmatlarim",
+        "lead": "Ko'rsatadigan yuridik xizmatlarni tanlang — LexGo mos mijoz so'rovlarini yo'naltiradi.",
+        "save": "Saqlash",
+        "saving": "Saqlanmoqda…",
+        "saved": "Xizmatlar saqlandi",
+        "error": "Xatolik. Qayta urining."
       },
       "documents": {
         "title": "Hujjatlar",

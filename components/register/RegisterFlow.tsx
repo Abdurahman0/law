@@ -17,7 +17,6 @@ import { IconLogo, IconChevronLeft, IconArrowRight, IconCheck } from "../icons";
 import PhoneStep from "./PhoneStep";
 import AccountTypeCards from "./AccountTypeCards";
 import PhotoUpload from "./PhotoUpload";
-import ServiceSelector from "./ServiceSelector";
 import LegalServicePicker from "./LegalServicePicker";
 import StatsEditor from "./StatsEditor";
 import WorkHistoryEditor from "./WorkHistoryEditor";
@@ -32,7 +31,9 @@ const ZERO_STATS: AdvocateStats = {
 
 const STEPS_BY_TYPE: Record<AccountType, string[]> = {
   client: ["clientInfo"],
-  lawyer: ["lawyerBasic", "lawyerServices"],
+  // Service selection moved out of registration → lawyers pick offered
+  // services later in "My services" (app/[locale]/portal/lawyer/services).
+  lawyer: ["lawyerBasic"],
   // NOTE: the "experience" (work history) step is intentionally NOT here — it
   // belongs in the advocate profile editor. See ADVOCATE_PROFILE_TODO.md.
   advocate: ["personal", "professional", "expertise", "stats", "review"],
@@ -211,9 +212,6 @@ export default function RegisterFlow() {
         needName();
         if (!p.region) m.push(t("fields.region"));
         needPw();
-        break;
-      case "lawyerServices":
-        if (!p.services.length) m.push(t("lawyer.servicesTitle"));
         break;
       case "professional":
         if (!p.licenseNumber?.trim()) m.push(t("advocate.license"));
@@ -402,18 +400,6 @@ export default function RegisterFlow() {
                 </div>
                 {pwField}
               </div>
-            </div>
-          ) : null}
-
-          {step === "lawyerServices" ? (
-            <div className="rf__step rf__step--wide">
-              <h1 className="rf__title">{t("lawyer.servicesTitle")}</h1>
-              <p className="rf__sub">{t("lawyer.servicesSubtitle")}</p>
-              <div className="rf__match">
-                <IconArrowRight />
-                {t("lawyer.matchNote")}
-              </div>
-              <ServiceSelector value={p.services} onChange={(v) => setProfile({ services: v })} />
             </div>
           ) : null}
 

@@ -47,6 +47,7 @@ const LAWYER_NAV: NavItem[] = [
   { href: "/portal/lawyer/tasks", key: "tasks", Icon: IconClipboardCheck },
   { href: "/portal/lawyer/calendar", key: "calendar", Icon: IconCalendar },
   { href: "/portal/lawyer/clients", key: "clients", Icon: IconUsers },
+  { href: "/portal/lawyer/services", key: "services", Icon: IconBriefcase },
   { href: "/portal/lawyer/documents", key: "documents", Icon: IconDocLines },
   { href: "/portal/lawyer/workspace", key: "workspace", Icon: IconFolder },
   { href: "/portal/lawyer/chat", key: "chat", Icon: IconChat },

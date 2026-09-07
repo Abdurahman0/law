@@ -1718,6 +1718,7 @@
         "tasks": "Tasks",
         "calendar": "Calendar",
         "clients": "Clients",
+        "services": "My services",
         "documents": "Documents",
         "chat": "Secure Chat",
         "ai": "AI Assistant",
@@ -1830,6 +1831,14 @@
         "conflictAlert": "Possible conflict of interest — check before accepting",
         "empty": "No clients yet",
         "emptyText": "Your clients will appear here once you take on cases."
+      },
+      "services": {
+        "title": "My services",
+        "lead": "Pick the legal services you offer — LexGo routes matching client requests to you.",
+        "save": "Save",
+        "saving": "Saving…",
+        "saved": "Services saved",
+        "error": "Error. Please try again."
       },
       "documents": {
         "title": "Documents",
