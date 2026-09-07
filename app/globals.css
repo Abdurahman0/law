@@ -2259,3 +2259,10 @@ body:has(.schat) .fab{display:none}
 .btn--gated:hover{transform:none}
 .rf__missing{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;margin:0 0 10px;padding:10px 13px;border:1px solid #fecaca;background:#fef2f2;border-radius:11px;color:#dc2626;font-size:.86rem}
 .rf__missing b{font-weight:700}
+
+/* Kanban drag-and-drop */
+.pipe__card{cursor:grab}
+.pipe__card:active{cursor:grabbing}
+.pipe__card--drag{opacity:.45}
+.pipe__col--over{outline:2px dashed var(--b600);outline-offset:-3px;background:var(--b100)}
+.pipe__col--over .pipe__cards{min-height:60px}

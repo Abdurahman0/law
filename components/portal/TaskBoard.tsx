@@ -24,6 +24,8 @@ export default function TaskBoard() {
   const [key, reload] = useReload();
   const res = useResource(() => listMyTasks(), [key]);
   const [busy, setBusy] = useState<string | null>(null);
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [overStage, setOverStage] = useState<Stage | null>(null);
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [prio, setPrio] = useState("medium");
@@ -60,9 +62,13 @@ export default function TaskBoard() {
     const i = STAGES.indexOf(stageOf(x.status));
     const next = STAGES[Math.min(STAGES.length - 1, Math.max(0, i + dir))];
     if (next === STAGES[i]) return;
+    await moveTo(x, next);
+  }
+  async function moveTo(x: WorkTask, stage: Stage) {
+    if (stageOf(x.status) === stage) return;
     setBusy(x.id);
     try {
-      await updateTaskStatus(x.id, next);
+      await updateTaskStatus(x.id, stage);
       reload();
     } catch {
       /* ignore */
@@ -110,7 +116,13 @@ export default function TaskBoard() {
       ) : (
         <div className="pipe">
           {STAGES.map((s, si) => (
-            <div className={`pipe__col pipe__col--${s === "todo" ? "new" : s === "doing" ? "contacted" : "won"}`} key={s}>
+            <div
+              className={`pipe__col pipe__col--${s === "todo" ? "new" : s === "doing" ? "contacted" : "won"}${overStage === s ? " pipe__col--over" : ""}`}
+              key={s}
+              onDragOver={(e) => { if (dragId) { e.preventDefault(); setOverStage(s); } }}
+              onDragLeave={() => setOverStage((cur) => (cur === s ? null : cur))}
+              onDrop={() => { const x = res.data.find((z) => z.id === dragId); if (x) moveTo(x, s); setDragId(null); setOverStage(null); }}
+            >
               <div className="pipe__head">
                 <span className="pipe__dot" />
                 <b>{t(`stages.${s}`)}</b>
@@ -121,7 +133,13 @@ export default function TaskBoard() {
                   <div className="pipe__empty">{t("noneHere")}</div>
                 ) : (
                   cols[s].map((x) => (
-                    <div className="pipe__card" key={x.id}>
+                    <div
+                      className={`pipe__card${dragId === x.id ? " pipe__card--drag" : ""}`}
+                      key={x.id}
+                      draggable
+                      onDragStart={(e) => { setDragId(x.id); e.dataTransfer.effectAllowed = "move"; }}
+                      onDragEnd={() => { setDragId(null); setOverStage(null); }}
+                    >
                       <div className="pipe__ctop">
                         <b>{x.title || "—"}</b>
                         <span className={`tprio tprio--${x.priority}`}>{t.has(`priority.${x.priority}`) ? t(`priority.${x.priority}`) : x.priority}</span>

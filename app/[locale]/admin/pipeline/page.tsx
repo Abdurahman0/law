@@ -34,6 +34,22 @@ export default function AdminPipeline() {
   const [key, reload] = useReload();
   const res = useResource(listLeads, [key]);
   const [busy, setBusy] = useState<string | null>(null);
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [overStage, setOverStage] = useState<Stage | null>(null);
+
+  async function moveTo(id: string, stage: Stage) {
+    const lead = res.data.find((l) => l.id === id);
+    if (!lead || stageOf(lead.status) === stage) return;
+    setBusy(id);
+    try {
+      await adminUpdateLead(id, { status: stage });
+      reload();
+    } catch {
+      /* ignore */
+    } finally {
+      setBusy(null);
+    }
+  }
 
   const columns = useMemo(() => {
     const by: Record<Stage, Lead[]> = { new: [], contacted: [], qualified: [], won: [], lost: [] };
@@ -83,7 +99,13 @@ export default function AdminPipeline() {
       ) : (
         <div className="pipe">
           {STAGES.map((s, si) => (
-            <div className={`pipe__col pipe__col--${s}`} key={s}>
+            <div
+              className={`pipe__col pipe__col--${s}${overStage === s ? " pipe__col--over" : ""}`}
+              key={s}
+              onDragOver={(e) => { if (dragId) { e.preventDefault(); setOverStage(s); } }}
+              onDragLeave={() => setOverStage((cur) => (cur === s ? null : cur))}
+              onDrop={() => { if (dragId) moveTo(dragId, s); setDragId(null); setOverStage(null); }}
+            >
               <div className="pipe__head">
                 <span className="pipe__dot" />
                 <b>{t(`stages.${s}`)}</b>
@@ -94,7 +116,13 @@ export default function AdminPipeline() {
                   <div className="pipe__empty">{t("noneHere")}</div>
                 ) : (
                   columns[s].map((l) => (
-                    <div className="pipe__card" key={l.id}>
+                    <div
+                      className={`pipe__card${dragId === l.id ? " pipe__card--drag" : ""}`}
+                      key={l.id}
+                      draggable
+                      onDragStart={(e) => { setDragId(l.id); e.dataTransfer.effectAllowed = "move"; }}
+                      onDragEnd={() => { setDragId(null); setOverStage(null); }}
+                    >
                       <div className="pipe__ctop">
                         <b>{l.name || l.phone || l.category || "—"}</b>
                         {l.score ? <span className="pipe__score">{l.score}</span> : null}
