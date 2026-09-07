@@ -189,6 +189,18 @@ export const IconScale = (p: P) => (
   </svg>
 );
 
+// Judge's gavel — used for the advocate account type.
+export const IconGavel = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="m14.5 12.5-8 8a2.119 2.119 0 1 1-3-3l8-8" />
+    <path d="m16 16 6-6" />
+    <path d="m8 8 6-6" />
+    <path d="m9 7 8 8" />
+    <path d="m21 11-8-8" />
+    <path d="M4 22h10" />
+  </svg>
+);
+
 export const IconEdit = (p: P) => (
   <svg {...base} {...p}>
     <path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
@@ -446,6 +458,7 @@ const ICON_MAP: Record<string, ComponentType<P>> = {
   IconCard,
   IconBriefcase,
   IconScale,
+  IconGavel,
   IconShield,
   IconShieldCheck,
   IconSparkle,

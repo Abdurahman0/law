@@ -54,6 +54,7 @@ export default function RegisterFlow() {
   const [draft, setDraft] = useState<RegistrationDraft>(emptyDraft());
   const [idx, setIdx] = useState(0);
   const [creating, setCreating] = useState(false);
+  const [missing, setMissing] = useState<string[]>([]); // shown in red when a gated button is tapped
 
   // OTP verification state
   const [verificationId, setVerificationId] = useState("");
@@ -102,12 +103,25 @@ export default function RegisterFlow() {
   );
 
   function next() {
+    setMissing([]);
     setIdx((i) => Math.min(i + 1, steps.length - 1));
   }
   function back() {
+    setMissing([]);
     setIdx((i) => Math.max(i - 1, 0));
   }
+  // A gated primary button was tapped: continue if ready, else reveal what's missing.
+  function tryAdvance(action: () => void) {
+    const m = missingFields();
+    if (m.length) {
+      setMissing(m);
+      return;
+    }
+    setMissing([]);
+    action();
+  }
   function chooseType(type: AccountType) {
+    setMissing([]);
     setDraft((d) => ({
       ...d,
       accountType: type,
@@ -177,23 +191,38 @@ export default function RegisterFlow() {
   }));
 
   const pwOk = draft.password.length >= 8;
-  const nameOk = !!p.firstName?.trim() && !!p.lastName?.trim();
-  function canContinue(): boolean {
+  // Required-field labels still missing on the current step (empty = ready).
+  function missingFields(): string[] {
+    const m: string[] = [];
+    const needName = () => {
+      if (!p.firstName?.trim()) m.push(t("fields.firstName"));
+      if (!p.lastName?.trim()) m.push(t("fields.lastName"));
+    };
+    const needPw = () => {
+      if (!pwOk) m.push(t("fields.password"));
+    };
     switch (step) {
       case "clientInfo":
-        return nameOk && pwOk;
+        needName();
+        needPw();
+        break;
       case "lawyerBasic":
-        return nameOk && !!p.region && pwOk;
-      case "lawyerServices":
-        return p.services.length > 0;
       case "personal":
-        return nameOk && !!p.region && pwOk;
+        needName();
+        if (!p.region) m.push(t("fields.region"));
+        needPw();
+        break;
+      case "lawyerServices":
+        if (!p.services.length) m.push(t("lawyer.servicesTitle"));
+        break;
       case "professional":
-        return !!p.licenseNumber?.trim() && !!p.specialization?.trim();
-      default:
-        return true;
+        if (!p.licenseNumber?.trim()) m.push(t("advocate.license"));
+        if (!p.specialization?.trim()) m.push(t("advocate.specialization"));
+        break;
     }
+    return m;
   }
+  const canContinue = () => missingFields().length === 0;
 
   // The last profile step is right before "verify".
   const lastProfileStep = !!draft.accountType && idx === steps.length - 2;
@@ -501,23 +530,41 @@ export default function RegisterFlow() {
         </div>
 
         {showFooter ? (
-          <div className="rf__foot">
-            <button type="button" className="btn btn--ghost" onClick={back}>
-              <IconChevronLeft />
-              {t("back")}
-            </button>
-            {lastProfileStep ? (
-              <button type="button" className="btn btn--grad btn--lg" onClick={startReg} disabled={!canContinue() || starting}>
-                {starting ? t("verify.sending") : t("verify.getCode")}
-                {starting ? null : <IconArrowRight />}
+          <>
+            {missing.length ? (
+              <div className="rf__missing" role="alert">
+                <b>{t("fillFirst")}</b>
+                <span>{missing.join(", ")}</span>
+              </div>
+            ) : null}
+            <div className="rf__foot">
+              <button type="button" className="btn btn--ghost" onClick={back}>
+                <IconChevronLeft />
+                {t("back")}
               </button>
-            ) : (
-              <button type="button" className="btn btn--grad btn--lg" onClick={next} disabled={!canContinue()}>
-                {t("continue")}
-                <IconArrowRight />
-              </button>
-            )}
-          </div>
+              {lastProfileStep ? (
+                <button
+                  type="button"
+                  className={`btn btn--grad btn--lg${canContinue() ? "" : " btn--gated"}`}
+                  aria-disabled={!canContinue()}
+                  onClick={() => (starting ? null : tryAdvance(startReg))}
+                >
+                  {starting ? t("verify.sending") : t("verify.getCode")}
+                  {starting ? null : <IconArrowRight />}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className={`btn btn--grad btn--lg${canContinue() ? "" : " btn--gated"}`}
+                  aria-disabled={!canContinue()}
+                  onClick={() => tryAdvance(next)}
+                >
+                  {t("continue")}
+                  <IconArrowRight />
+                </button>
+              )}
+            </div>
+          </>
         ) : null}
       </div>
 

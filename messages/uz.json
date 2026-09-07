@@ -2461,6 +2461,7 @@
     "progress": "{total} dan {n}-qadam",
     "back": "Orqaga",
     "continue": "Davom etish",
+    "fillFirst": "Avval to'ldiring:",
     "finish": "Ro'yxatdan o'tishni yakunlash",
     "optional": "ixtiyoriy",
     "phone": {
@@ -2781,7 +2782,7 @@
   },
   "auth": {
     "headline": "Yuridik yordam — yangicha.",
-    "sub": "LexGo bilan yuridik masalalarni tezroq hal qilayotgan minglab foydalanuvchilarga qo‘shiling — Sun'iy intellekt yo‘l-yo‘riq, tasdiqlangan mutaxassislar va haqiqiy natijalar.",
+    "sub": "LexGo bilan yuridik masalalarni tezroq hal qilayotgan minglab foydalanuvchilarga qo‘shiling — Sun'iy intellekt yo‘l-yo‘riq, tasdiqlangan yurist va advokatlar, haqiqiy natijalar.",
     "features": [
       "Sun'iy intellekt asosidagi yuridik yo‘l-yo‘riq",
       "Tasdiqlangan yurist va advokatlar",
@@ -2790,8 +2791,10 @@
     ],
     "stat1n": "12k+",
     "stat1l": "mijoz",
-    "stat2n": "1 200+",
-    "stat2l": "mutaxassis",
+    "stat2n": "800+",
+    "stat2l": "yurist",
+    "stat4n": "400+",
+    "stat4l": "advokat",
     "stat3n": "4.9",
     "stat3l": "o‘rtacha reyting"
   },

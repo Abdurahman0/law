@@ -2455,6 +2455,7 @@
     "progress": "Step {n} of {total}",
     "back": "Back",
     "continue": "Continue",
+    "fillFirst": "Fill in first:",
     "finish": "Complete registration",
     "optional": "optional",
     "phone": {
@@ -2775,7 +2776,7 @@
   },
   "auth": {
     "headline": "Legal help, reimagined.",
-    "sub": "Join thousands who resolve legal matters faster with LexGo — AI guidance, verified specialists and real results.",
+    "sub": "Join thousands who resolve legal matters faster with LexGo — AI guidance, verified lawyers and advocates, real results.",
     "features": [
       "AI-powered legal guidance",
       "Verified lawyers & advocates",
@@ -2784,8 +2785,10 @@
     ],
     "stat1n": "12k+",
     "stat1l": "clients",
-    "stat2n": "1 200+",
-    "stat2l": "specialists",
+    "stat2n": "800+",
+    "stat2l": "lawyers",
+    "stat4n": "400+",
+    "stat4l": "advocates",
     "stat3n": "4.9",
     "stat3l": "avg. rating"
   },

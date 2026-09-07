@@ -11,6 +11,7 @@ export default function AuthSplit({ children }: { children: ReactNode }) {
   const stats = [
     { n: t("stat1n"), l: t("stat1l") },
     { n: t("stat2n"), l: t("stat2l") },
+    { n: t("stat4n"), l: t("stat4l") },
     { n: t("stat3n"), l: t("stat3l") },
   ];
   return (

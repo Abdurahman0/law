@@ -2253,3 +2253,9 @@ body:has(.schat) .fab{display:none}
 .schat__err svg{width:16px;height:16px;flex:none}
 .schat__errx{margin-left:auto;border:0;background:none;color:inherit;cursor:pointer;padding:2px;line-height:0}
 .schat__errx svg{width:14px;height:14px}
+
+/* Register: gated primary button + missing-fields hint */
+.btn--gated{opacity:.5;filter:grayscale(.3);box-shadow:none}
+.btn--gated:hover{transform:none}
+.rf__missing{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;margin:0 0 10px;padding:10px 13px;border:1px solid #fecaca;background:#fef2f2;border-radius:11px;color:#dc2626;font-size:.86rem}
+.rf__missing b{font-weight:700}
