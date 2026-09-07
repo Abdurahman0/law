@@ -1692,6 +1692,16 @@
       "stages": { "todo": "To do", "doing": "In progress", "done": "Done" },
       "priority": { "low": "Low", "medium": "Medium", "high": "High" }
     },
+    "assistant": {
+      "title": "AI assistant",
+      "subtitle": "Quick case help: draft a reply, summarize, find practice.",
+      "placeholder": "Type your question or pick one of the options…",
+      "ask": "Ask",
+      "thinking": "Thinking…",
+      "answer": "Answer",
+      "failed": "Couldn't answer right now.",
+      "tool": { "draft": "Draft a reply", "summarize": "Summarize the case", "precedents": "Find similar practice", "explain": "Explain the law" }
+    },
     "sidebar": {
       "lawyer": {
         "dashboard": "Dashboard",
@@ -1703,6 +1713,7 @@
         "documents": "Documents",
         "chat": "Secure Chat",
         "ai": "AI Assistant",
+        "assistant": "AI assistant",
         "promotion": "Promotion",
         "subscription": "Subscription",
         "notifications": "Notifications",
@@ -1723,6 +1734,8 @@
         "warranty": "Warranty",
         "complaints": "Complaints",
         "ai": "LexGo.AI",
+        "intake": "Problem analysis",
+        "docAnalysis": "Document analysis",
         "profile": "Profile",
         "services": "Services",
         "documents": "Document templates",
@@ -1740,7 +1753,8 @@
         "messages": "Messages",
         "organization": "Organization",
         "notifications": "Notifications",
-        "workspace": "Workspace"
+        "workspace": "Workspace",
+        "assistant": "AI assistant"
       }
     },
     "lawyer": {
@@ -1911,6 +1925,40 @@
         "empty": "No payments yet",
         "emptyText": "Your payments and receipts will appear here.",
         "receipt": "Receipt"
+      },
+      "intake": {
+        "title": "AI problem analysis",
+        "subtitle": "Describe your problem — AI detects the type and suggests a direction.",
+        "label": "Your problem",
+        "placeholder": "e.g. my employer hasn't paid my salary for two months…",
+        "analyze": "Analyze",
+        "analyzing": "Analyzing…",
+        "hint": "The AI analysis is then routed to a call-center operator as a lead.",
+        "resultTitle": "Analysis result",
+        "category": "Direction",
+        "recommended": "Recommended service",
+        "toMatches": "See matched lawyers",
+        "orSos": "Urgent — SOS",
+        "urgency": { "low": "Low", "normal": "Normal", "high": "High", "critical": "Critical" },
+        "failedTitle": "Couldn't analyze",
+        "failedText": "Please try again later or contact a specialist directly."
+      },
+      "docAnalysis": {
+        "title": "Document analysis",
+        "subtitle": "Paste the document text — AI shows risks and recommendations.",
+        "label": "Document text",
+        "placeholder": "Paste the contract or document text here…",
+        "analyze": "Analyze",
+        "analyzing": "Analyzing…",
+        "hint": "The analysis is advisory and does not replace a legal opinion.",
+        "summary": "Summary",
+        "noSummary": "No summary",
+        "risks": "Risks",
+        "noRisks": "No risks found",
+        "recommendations": "Recommendations",
+        "level": { "low": "Low", "medium": "Medium", "high": "High" },
+        "failedTitle": "Couldn't analyze",
+        "failedText": "Please try again later."
       },
       "matches": {
         "title": "Best matches for you",

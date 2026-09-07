@@ -1698,6 +1698,16 @@
       "stages": { "todo": "Bajarilishi kerak", "doing": "Jarayonda", "done": "Bajarildi" },
       "priority": { "low": "Past", "medium": "O'rta", "high": "Yuqori" }
     },
+    "assistant": {
+      "title": "SI yordamchi",
+      "subtitle": "Ish bo'yicha tez yordam: javob loyihasi, xulosa, amaliyot.",
+      "placeholder": "Savolingizni yozing yoki quyidagilardan birini tanlang…",
+      "ask": "So'rash",
+      "thinking": "O'ylayapti…",
+      "answer": "Javob",
+      "failed": "Hozircha javob berib bo'lmadi.",
+      "tool": { "draft": "Javob loyihasini tuzish", "summarize": "Ishni qisqacha bayon qil", "precedents": "O'xshash amaliyotlarni top", "explain": "Qonunni tushuntir" }
+    },
     "sidebar": {
       "lawyer": {
         "dashboard": "Boshqaruv paneli",
@@ -1709,6 +1719,7 @@
         "documents": "Hujjatlar",
         "chat": "Xavfsiz chat",
         "ai": "Sun'iy intellekt Yordamchi",
+        "assistant": "SI yordamchi",
         "promotion": "Targ'ibot",
         "subscription": "Obuna",
         "notifications": "Bildirishnomalar",
@@ -1729,6 +1740,8 @@
         "warranty": "Kafolat",
         "complaints": "Shikoyatlar",
         "ai": "LexGo.AI",
+        "intake": "Muammo tahlili",
+        "docAnalysis": "Hujjat tahlili",
         "profile": "Profil",
         "services": "Xizmatlar",
         "documents": "Hujjat namunalari",
@@ -1746,7 +1759,8 @@
         "messages": "Xabarlar",
         "organization": "Tashkilot",
         "notifications": "Bildirishnomalar",
-        "workspace": "Ish maydoni"
+        "workspace": "Ish maydoni",
+        "assistant": "SI yordamchi"
       }
     },
     "lawyer": {
@@ -1917,6 +1931,40 @@
         "empty": "Hozircha to'lov yo'q",
         "emptyText": "To'lovlar va cheklar shu yerda ko'rinadi.",
         "receipt": "Chek"
+      },
+      "intake": {
+        "title": "AI muammo tahlili",
+        "subtitle": "Muammoingizni yozing — AI turini aniqlaydi va mos yo'nalishni ko'rsatadi.",
+        "label": "Muammoingiz",
+        "placeholder": "Masalan: ish beruvchi ikki oydan beri maoshni to'lamayapti…",
+        "analyze": "Tahlil qilish",
+        "analyzing": "Tahlil qilinmoqda…",
+        "hint": "AI tahlili keyin call-center operatoriga lead sifatida uzatiladi.",
+        "resultTitle": "Tahlil natijasi",
+        "category": "Yo'nalish",
+        "recommended": "Tavsiya etilgan xizmat",
+        "toMatches": "Mos advokatlarni ko'rish",
+        "orSos": "Shoshilinch bo'lsa — SOS",
+        "urgency": { "low": "Past", "normal": "O'rtacha", "high": "Yuqori", "critical": "Juda shoshilinch" },
+        "failedTitle": "Tahlil qilinmadi",
+        "failedText": "Iltimos, keyinroq urining yoki to'g'ridan-to'g'ri mutaxassisga murojaat qiling."
+      },
+      "docAnalysis": {
+        "title": "Hujjat tahlili",
+        "subtitle": "Hujjat matnini joylang — AI xatar va tavsiyalarni ko'rsatadi.",
+        "label": "Hujjat matni",
+        "placeholder": "Shartnoma yoki hujjat matnini shu yerga joylang…",
+        "analyze": "Tahlil qilish",
+        "analyzing": "Tahlil qilinmoqda…",
+        "hint": "AI tahlili maslahat xarakteriga ega, yuridik xulosa o'rnini bosmaydi.",
+        "summary": "Qisqacha",
+        "noSummary": "Qisqacha ma'lumot yo'q",
+        "risks": "Xatarlar",
+        "noRisks": "Xatar topilmadi",
+        "recommendations": "Tavsiyalar",
+        "level": { "low": "Past", "medium": "O'rta", "high": "Yuqori" },
+        "failedTitle": "Tahlil qilinmadi",
+        "failedText": "Iltimos, keyinroq urining."
       },
       "matches": {
         "title": "Siz uchun mos advokatlar",

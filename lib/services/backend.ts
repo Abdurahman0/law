@@ -1666,6 +1666,38 @@ export type RetentionOverview = {
   atRiskClients: { name: string; phone: string; reason: string; lastActive: string }[];
   upsell: { name: string; suggestion: string }[];
 };
+// ── AI: problem classification (intake → lead) ────────────────────
+export type AiClassification = { category: string; urgency: string; summary: string; recommendedService: string; confidence: number; leadId?: string; routedTo?: string };
+export async function classifyProblem(text: string): Promise<AiClassification> {
+  const d = asDict(await http("/ai/classify", { method: "POST", body: JSON.stringify({ text }) }));
+  return {
+    category: asStr(d.category),
+    urgency: asStr(d.urgency, "normal"),
+    summary: asStr(d.summary),
+    recommendedService: asStr(d.recommended_service ?? d.service),
+    confidence: asNum(d.confidence),
+    leadId: asStr(d.lead_id) || undefined,
+    routedTo: asStr(d.routed_to ?? d.assigned_to) || undefined,
+  };
+}
+
+// ── AI: document analysis ─────────────────────────────────────────
+export type DocAnalysis = { summary: string; risks: { level: string; text: string }[]; recommendations: string[] };
+export async function analyzeDocument(text: string): Promise<DocAnalysis> {
+  const d = asDict(await http("/ai/document-analysis", { method: "POST", body: JSON.stringify({ text }) }));
+  return {
+    summary: asStr(d.summary),
+    risks: asArr(d.risks).map((x) => { const r = asDict(x); return { level: asStr(r.level, "low"), text: asStr(r.text ?? r.risk) }; }),
+    recommendations: asArr(d.recommendations).map((x) => asStr(x)),
+  };
+}
+
+// ── AI: operator / case assistant ─────────────────────────────────
+export async function askAiAssistant(prompt: string, context?: string): Promise<string> {
+  const d = asDict(await http("/ai/assistant", { method: "POST", body: JSON.stringify({ prompt, context }) }));
+  return asStr(d.answer ?? d.text ?? d.reply);
+}
+
 export async function getRetentionOverview(): Promise<RetentionOverview> {
   const d = asDict(await http("/retention/overview"));
   return {

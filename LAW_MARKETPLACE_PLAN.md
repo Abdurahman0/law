@@ -47,9 +47,11 @@ Status legend: ✅ already built · 🟡 partial (needs polish) · 🔴 missing 
 - [x] C5. #216 Re-engage lost leads (pipeline action) — done
 
 ### Phase D — AI
-- [ ] D1. #256 AI Problem Classification (intake → call-center lead)
-- [ ] D2. #257 AI Document Analysis
-- [ ] D3. #258 AI Operator Assistant + #259 AI Case Assistant
+- [x] D1. #256 AI Problem Classification (intake → call-center lead) — done, verified
+- [x] D2. #257 AI Document Analysis — done
+- [x] D3. #258 AI Operator Assistant + #259 AI Case Assistant — done, verified
+
+## All queued phases (A–D) complete. Backend endpoints in BACKEND_INTEGRATION_NOTES.md.
 
 Out of web scope: #260/#261 mobile apps, #264 security, #265 audit (backend),
 #267 integration, #268 workflow engine.
