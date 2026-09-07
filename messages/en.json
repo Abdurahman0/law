@@ -2123,6 +2123,7 @@
         "addFamily": "Add family member",
         "noFamily": "No family members added",
         "familyShareNote": "If you have an active plan, allowed family members can use it.",
+        "familyPlanRequired": "You need an active plan first to enable this.",
         "share": "Allow",
         "shared": "Allowed",
         "activity": "Activity log",

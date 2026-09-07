@@ -15,6 +15,7 @@ import {
   addPaymentMethod,
   deletePaymentMethod,
 } from "@/lib/services/backend";
+import { ApiError } from "@/lib/http";
 import { useResource, useResourceOne } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
 import { Notice } from "@/components/admin/AdminBits";
@@ -37,6 +38,18 @@ export default function ClientProfile() {
   const family = useResource(() => listFamilyMembers(), [key]);
   const methods = useResource(() => listPaymentMethods(), [key]);
   const activity = useResource(() => listMyActivity(), [key]);
+  const [famErr, setFamErr] = useState<string | null>(null);
+
+  async function toggleShare(id: string, next: boolean) {
+    setFamErr(null);
+    try {
+      await setFamilyMemberAccess(id, next);
+      reload();
+    } catch (e) {
+      // 402 = the account owner has no active plan to share.
+      setFamErr(e instanceof ApiError && e.status === 402 ? t("familyPlanRequired") : t("error"));
+    }
+  }
 
   const [editOpen, setEditOpen] = useState(false);
   const [famOpen, setFamOpen] = useState(false);
@@ -79,6 +92,7 @@ export default function ClientProfile() {
             </button>
           </div>
           <p className="ppanel__note">{t("familyShareNote")}</p>
+          {famErr ? <Notice ok={false} msg={famErr} /> : null}
           {family.status === "loading" ? (
             <Skeleton rows={2} />
           ) : !family.data.length ? (
@@ -96,7 +110,7 @@ export default function ClientProfile() {
                     type="button"
                     className={`famshare${m.sharedAccess ? " on" : ""}`}
                     aria-pressed={m.sharedAccess}
-                    onClick={() => setFamilyMemberAccess(m.id, !m.sharedAccess).then(reload).catch(() => {})}
+                    onClick={() => toggleShare(m.id, !m.sharedAccess)}
                   >
                     {m.sharedAccess ? <IconCheck /> : null}
                     {m.sharedAccess ? t("shared") : t("share")}

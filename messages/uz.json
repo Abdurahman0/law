@@ -2129,6 +2129,7 @@
         "addFamily": "Oila a'zosini qo'shish",
         "noFamily": "Oila a'zolari qo'shilmagan",
         "familyShareNote": "Faol tarifingiz bo'lsa, ruxsat berilgan oila a'zolari undan foydalanishi mumkin.",
+        "familyPlanRequired": "Buning uchun avval faol tarif sotib olishingiz kerak.",
         "share": "Ruxsat berish",
         "shared": "Ruxsat berilgan",
         "activity": "Faoliyat tarixi",
