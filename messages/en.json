@@ -971,7 +971,7 @@
         "features": [
           "Unlimited 30-minute consultations on new matters",
           "A lawyer reviews contracts and key documents — up to 10 pages",
-          "150+ ready legal document templates",
+          "200+ ready legal document templates",
           "25% off additional services in the lawyer network",
           "10% off LexGo products, including LexGo.AI",
           "Your spouse is covered too"
@@ -986,7 +986,7 @@
           "Legal check of the business: a 1-hour consultation once a year",
           "One copyright registration each month",
           "10% off company registration and trademark patenting",
-          "150+ template base for business and personal matters",
+          "200+ template base for business and personal matters",
           "Parents, spouse and dependent children"
         ],
         "cta": "Choose Premium"
@@ -1030,8 +1030,8 @@
         },
         {
           "feature": "Template base",
-          "standard": "150+",
-          "premium": "150+"
+          "standard": "200+",
+          "premium": "200+"
         },
         {
           "feature": "Business legal check",
@@ -1263,8 +1263,8 @@
     "earningsTitle": "What it means for you",
     "earnings": [
       {
-        "value": "0%",
-        "label": "Fee on your own clients"
+        "value": "18%",
+        "label": "Fee per completed order"
       },
       {
         "value": "48h",
@@ -1438,7 +1438,7 @@
       },
       {
         "q": "How do I become a lawyer on LexGo?",
-        "a": "Register with your bar licence and diploma, pass verification, build your profile with wins and pricing, and start receiving matched cases. You pay no platform fee on your own clients."
+        "a": "Register with your bar licence and diploma, pass verification, build your profile with wins and pricing, and start receiving matched cases. The platform takes 18% only on completed orders — there is no upfront fee."
       }
     ]
   },
@@ -1539,7 +1539,7 @@
         "meta": ""
       },
       "subscription": {
-        "text": "There are two plans.\n\nStandard — unlimited 30-minute consultations, document review up to 10 pages, 150+ templates, your spouse is covered too.\n\nPremium — plus a business-audit consultation, one copyright each month, coverage for parents and children.\n\nA 12-month plan is 10% cheaper, and paying in full is another 10% off.",
+        "text": "There are two plans.\n\nStandard — unlimited 30-minute consultations, document review up to 10 pages, 200+ templates, your spouse is covered too.\n\nPremium — plus a business-audit consultation, one copyright each month, coverage for parents and children.\n\nA 12-month plan is 10% cheaper, and paying in full is another 10% off.",
         "meta": "Lawyers and jurists get 50% off the LexGo.AI subscription"
       },
       "price": {

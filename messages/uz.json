@@ -977,7 +977,7 @@
         "features": [
           "Yangi masalalar bo'yicha cheksiz 30 daqiqalik konsultatsiyalar",
           "Shartnoma va muhim hujjatlarni advokat ko'rib chiqadi — 10 sahifagacha",
-          "150+ tayyor yuridik hujjat shabloni",
+          "200+ tayyor yuridik hujjat shabloni",
           "Advokatlar tarmog'idagi qo'shimcha xizmatlarga 25% chegirma",
           "LexGo mahsulotlariga, jumladan LexGo.AI ga 10% chegirma",
           "Turmush o'rtog'ingiz ham qamrab olinadi"
@@ -992,7 +992,7 @@
           "Biznesni huquqiy tekshirish: yiliga 1 marta 1 soatlik konsultatsiya",
           "Har oy 1 ta mualliflik huquqini ro'yxatdan o'tkazish",
           "Kompaniya ochish va savdo belgisini patentlashga 10% chegirma",
-          "Biznes va shaxsiy masalalar uchun 150+ shablon bazasi",
+          "Biznes va shaxsiy masalalar uchun 200+ shablon bazasi",
           "Ota-ona, turmush o'rtoq va qaramog'dagi farzandlar"
         ],
         "cta": "Premiumni tanlash"
@@ -1036,8 +1036,8 @@
         },
         {
           "feature": "Shablon bazasi",
-          "standard": "150+",
-          "premium": "150+"
+          "standard": "200+",
+          "premium": "200+"
         },
         {
           "feature": "Biznesni huquqiy tekshirish",
@@ -1269,8 +1269,8 @@
     "earningsTitle": "Bu siz uchun nimani anglatadi",
     "earnings": [
       {
-        "value": "0%",
-        "label": "O'z mijozlaringizdan komissiya"
+        "value": "18%",
+        "label": "Yakunlangan buyurtmadan komissiya"
       },
       {
         "value": "48 soat",
@@ -1444,7 +1444,7 @@
       },
       {
         "q": "LexGo da qanday advokat bo'laman?",
-        "a": "Advokatlik litsenziyasi va diplomingiz bilan ro'yxatdan o'ting, tekshiruvdan o'ting, profilingizni g'alaba va narxlar bilan to'ldiring va mos ishlarni qabul qilishni boshlang. O'z mijozlaringizdan platforma komissiyasini to'lamaysiz."
+        "a": "Advokatlik litsenziyasi va diplomingiz bilan ro'yxatdan o'ting, tekshiruvdan o'ting, profilingizni g'alaba va narxlar bilan to'ldiring va mos ishlarni qabul qilishni boshlang. Platforma faqat yakunlangan buyurtmalardan 18% komissiya oladi — oldindan hech qanday to'lov yo'q."
       }
     ]
   },
@@ -1545,7 +1545,7 @@
         "meta": ""
       },
       "subscription": {
-        "text": "Ikki tarif bor.\n\nStandart — cheksiz 30 daqiqalik konsultatsiyalar, hujjat ko'rigi 10 sahifagacha, 150+ shablon, turmush o'rtog'ingiz ham qamrab olinadi.\n\nPremium — bularga qo'shimcha biznes-audit konsultatsiyasi, har oy 1 ta mualliflik huquqi, ota-ona va farzandlar qamrovi.\n\n12 oylik olinsa 10%, to'lov bir yo'la qilinsa yana 10% arzon bo'ladi.",
+        "text": "Ikki tarif bor.\n\nStandart — cheksiz 30 daqiqalik konsultatsiyalar, hujjat ko'rigi 10 sahifagacha, 200+ shablon, turmush o'rtog'ingiz ham qamrab olinadi.\n\nPremium — bularga qo'shimcha biznes-audit konsultatsiyasi, har oy 1 ta mualliflik huquqi, ota-ona va farzandlar qamrovi.\n\n12 oylik olinsa 10%, to'lov bir yo'la qilinsa yana 10% arzon bo'ladi.",
         "meta": "Advokat va yuristlarga LexGo.AI obunasiga 50% chegirma"
       },
       "price": {
