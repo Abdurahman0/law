@@ -2852,6 +2852,15 @@
     "backToPortal": "Portalga qaytish",
     "logout": "Chiqish",
     "menu": "Menyu",
+    "groups": {
+      "command": "Boshqaruv",
+      "sales": "Mijozlar va sotuv",
+      "catalog": "Katalog va buyurtmalar",
+      "sellers": "Sotuvchilar",
+      "finance": "To'lov va moliya",
+      "support": "Yordam va huquq",
+      "system": "Avtomatlashtirish va tizim"
+    },
     "nav": {
       "overview": "Umumiy",
       "services": "Xizmatlar",

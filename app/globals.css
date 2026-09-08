@@ -2389,3 +2389,7 @@ body:has(.schat) .fab{display:none}
 .rf__benefit{background:var(--b50);border:1px solid #bcd4ff;border-radius:12px;padding:13px 15px;margin-top:2px}
 .rf__benefit b{display:block;font-size:.9rem;color:var(--b600);margin-bottom:4px}
 .rf__benefit p{margin:0;font-size:.84rem;color:var(--gray2);line-height:1.5}
+/* Admin CRM sidebar groups */
+.psb__group{display:flex;flex-direction:column;gap:2px}
+.psb__group + .psb__group{margin-top:14px}
+.psb__glabel{font-size:.66rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--gray2);padding:4px 13px 3px}

@@ -2846,6 +2846,15 @@
     "backToPortal": "Back to portal",
     "logout": "Log out",
     "menu": "Menu",
+    "groups": {
+      "command": "Command",
+      "sales": "Clients & sales",
+      "catalog": "Catalog & orders",
+      "sellers": "Sellers",
+      "finance": "Payments & finance",
+      "support": "Support & legal",
+      "system": "Automation & system"
+    },
     "nav": {
       "overview": "Overview",
       "services": "Services",

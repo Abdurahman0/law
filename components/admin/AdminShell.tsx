@@ -32,35 +32,73 @@ import {
 } from "../icons";
 
 type SvgC = ComponentType<{ className?: string }>;
-// `perm` = the backend permission a page needs. Items without a perm (overview,
-// bootstrap) are full-admin only. Superadmin/admin see everything.
-const NAV: { href: string; key: string; Icon: SvgC; perm?: string }[] = [
-  { href: "/admin", key: "overview", Icon: IconGrid },
-  { href: "/admin/ceo", key: "ceo", Icon: IconTarget },
-  { href: "/admin/services", key: "services", Icon: IconBriefcase, perm: "services.manage" },
-  { href: "/admin/plans", key: "plans", Icon: IconStar, perm: "subscriptions.manage" },
-  { href: "/admin/templates", key: "templates", Icon: IconDocLines, perm: "templates.manage" },
-  { href: "/admin/ads", key: "ads", Icon: IconRocket, perm: "ads.manage" },
-  { href: "/admin/roles", key: "roles", Icon: IconShield, perm: "roles.manage" },
-  { href: "/admin/register-requests", key: "registerRequests", Icon: IconUserPlus, perm: "users.manage" },
-  { href: "/admin/leads", key: "leads", Icon: IconUsers, perm: "leads.manage" },
-  { href: "/admin/pipeline", key: "pipeline", Icon: IconTrendingUp, perm: "leads.manage" },
-  { href: "/admin/call-analytics", key: "callAnalytics", Icon: IconChat, perm: "leads.manage" },
-  { href: "/admin/retention", key: "retention", Icon: IconUsers, perm: "leads.manage" },
-  { href: "/admin/b2b", key: "b2b", Icon: IconBuilding, perm: "leads.manage" },
-  { href: "/admin/quality", key: "quality", Icon: IconShieldCheck, perm: "lawyers.verify" },
-  { href: "/admin/reviews", key: "reviews", Icon: IconStar, perm: "lawyers.verify" },
-  { href: "/admin/payouts", key: "payouts", Icon: IconCard, perm: "subscriptions.manage" },
-  { href: "/admin/call-center", key: "callCenter", Icon: IconPhone, perm: "leads.manage" },
-  { href: "/admin/workflow", key: "workflow", Icon: IconRocket },
-  { href: "/admin/integrations", key: "integrations", Icon: IconBolt },
-  { href: "/admin/verifications", key: "verifications", Icon: IconAward, perm: "lawyers.verify" },
-  { href: "/admin/legal-aid", key: "legalAid", Icon: IconScale, perm: "legal_aid.manage" },
-  { href: "/admin/approvals", key: "approvals", Icon: IconShieldCheck, perm: "approvals.manage" },
-  { href: "/admin/notifications", key: "notifications", Icon: IconChat, perm: "notifications.manage" },
-  { href: "/admin/audit-trail", key: "audit", Icon: IconShieldCheck },
-  { href: "/admin/bootstrap", key: "bootstrap", Icon: IconBolt },
+type NavItem = { href: string; key: string; Icon: SvgC; perm?: string };
+// CRM modules grouped per the platform plan. `perm` = the backend permission a
+// page needs; items without a perm (overview, ceo, bootstrap…) are full-admin
+// only. Superadmin/admin see everything.
+const NAV_GROUPS: { group: string; items: NavItem[] }[] = [
+  {
+    group: "command",
+    items: [
+      { href: "/admin", key: "overview", Icon: IconGrid },
+      { href: "/admin/ceo", key: "ceo", Icon: IconTarget },
+    ],
+  },
+  {
+    group: "sales",
+    items: [
+      { href: "/admin/leads", key: "leads", Icon: IconUsers, perm: "leads.manage" },
+      { href: "/admin/pipeline", key: "pipeline", Icon: IconTrendingUp, perm: "leads.manage" },
+      { href: "/admin/call-center", key: "callCenter", Icon: IconPhone, perm: "leads.manage" },
+      { href: "/admin/call-analytics", key: "callAnalytics", Icon: IconChat, perm: "leads.manage" },
+      { href: "/admin/retention", key: "retention", Icon: IconUsers, perm: "leads.manage" },
+      { href: "/admin/b2b", key: "b2b", Icon: IconBuilding, perm: "leads.manage" },
+    ],
+  },
+  {
+    group: "catalog",
+    items: [
+      { href: "/admin/services", key: "services", Icon: IconBriefcase, perm: "services.manage" },
+      { href: "/admin/plans", key: "plans", Icon: IconStar, perm: "subscriptions.manage" },
+      { href: "/admin/templates", key: "templates", Icon: IconDocLines, perm: "templates.manage" },
+      { href: "/admin/ads", key: "ads", Icon: IconRocket, perm: "ads.manage" },
+    ],
+  },
+  {
+    group: "sellers",
+    items: [
+      { href: "/admin/register-requests", key: "registerRequests", Icon: IconUserPlus, perm: "users.manage" },
+      { href: "/admin/verifications", key: "verifications", Icon: IconAward, perm: "lawyers.verify" },
+      { href: "/admin/quality", key: "quality", Icon: IconShieldCheck, perm: "lawyers.verify" },
+      { href: "/admin/reviews", key: "reviews", Icon: IconStar, perm: "lawyers.verify" },
+    ],
+  },
+  {
+    group: "finance",
+    items: [
+      { href: "/admin/payouts", key: "payouts", Icon: IconCard, perm: "subscriptions.manage" },
+      { href: "/admin/approvals", key: "approvals", Icon: IconShieldCheck, perm: "approvals.manage" },
+    ],
+  },
+  {
+    group: "support",
+    items: [
+      { href: "/admin/legal-aid", key: "legalAid", Icon: IconScale, perm: "legal_aid.manage" },
+      { href: "/admin/notifications", key: "notifications", Icon: IconChat, perm: "notifications.manage" },
+    ],
+  },
+  {
+    group: "system",
+    items: [
+      { href: "/admin/workflow", key: "workflow", Icon: IconRocket },
+      { href: "/admin/integrations", key: "integrations", Icon: IconBolt },
+      { href: "/admin/roles", key: "roles", Icon: IconShield, perm: "roles.manage" },
+      { href: "/admin/audit-trail", key: "audit", Icon: IconShieldCheck },
+      { href: "/admin/bootstrap", key: "bootstrap", Icon: IconBolt },
+    ],
+  },
 ];
+const NAV: NavItem[] = NAV_GROUPS.flatMap((g) => g.items);
 
 export default function AdminShell({ children }: { children: ReactNode }) {
   const t = useTranslations("admin");
@@ -125,13 +163,22 @@ export default function AdminShell({ children }: { children: ReactNode }) {
           <span className="psb__role">{t("badge")}</span>
         </div>
         <nav className="psb__nav">
-          {visibleNav.map(({ href, key, Icon }) => {
-            const on = active?.href === href;
+          {NAV_GROUPS.map((g) => {
+            const items = g.items.filter((n) => (n.perm ? isSuper || perms.includes(n.perm) : isFullAdmin));
+            if (!items.length) return null;
             return (
-              <Link key={href} href={href} className={`psb__link${on ? " on" : ""}`}>
-                <Icon />
-                {t(`nav.${key}`)}
-              </Link>
+              <div className="psb__group" key={g.group}>
+                <span className="psb__glabel">{t(`groups.${g.group}`)}</span>
+                {items.map(({ href, key, Icon }) => {
+                  const on = active?.href === href;
+                  return (
+                    <Link key={href} href={href} className={`psb__link${on ? " on" : ""}`}>
+                      <Icon />
+                      {t(`nav.${key}`)}
+                    </Link>
+                  );
+                })}
+              </div>
             );
           })}
         </nav>
