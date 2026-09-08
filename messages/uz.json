@@ -1621,6 +1621,18 @@
       "text": "Profilingizni to'ldirishingiz va sozlashingiz mumkin. Bozor amallari (ishlar, mijozlar, e'lonlar) admin tasdig'idan keyin ochiladi.",
       "locked": "Admin tasdig'idan keyin ochiladi"
     },
+    "payment": {
+      "som": "so'm",
+      "total": "Umumiy summa",
+      "advance": "Oldindan to'lov ({pct}%)",
+      "paid": "To'langan",
+      "locked": "Maxfiy chatni ochish uchun yana {amount} to'lang.",
+      "unlocked": "To'lov yetarli — maxfiy chat ochildi.",
+      "payAdvance": "{pct}% oldindan to'lash",
+      "paying": "To'lov amalga oshirilmoqda…",
+      "openChat": "Maxfiy chatni ochish",
+      "error": "To'lovni amalga oshirib bo'lmadi. Qayta urining."
+    },
     "login": {
       "title": "LexGo ga kirish",
       "subtitle": "Telefon raqamingiz bilan tizimga kiring",

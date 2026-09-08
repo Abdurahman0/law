@@ -2302,3 +2302,15 @@ body:has(.schat) .fab{display:none}
 .oquote__row--disc{color:var(--ok);font-weight:600}
 .oquote__row--total{margin-top:6px;padding-top:8px;border-top:1px solid var(--line)}
 .oquote__row--total b{font-family:var(--fd);font-size:1.2rem;color:var(--b600)}
+/* Staged order payment (10% advance) */
+.opay{display:flex;flex-direction:column;gap:14px}
+.opay__rows{display:flex;flex-direction:column;gap:8px;background:var(--b50);border-radius:14px;padding:14px 16px}
+.opay__row{display:flex;justify-content:space-between;align-items:center;font-size:.9rem;color:var(--ink)}
+.opay__row span:first-child{color:var(--gray)}
+.opay__row b{font-family:var(--fd);color:var(--b600)}
+.opay__bar{height:8px;border-radius:6px;background:var(--line);overflow:hidden}
+.opay__bar span{display:block;height:100%;background:var(--b600);border-radius:6px;transition:width .3s}
+.opay__note,.opay__ok{display:flex;align-items:center;gap:8px;font-size:.86rem;font-weight:600;margin:0}
+.opay__note{color:var(--gray2)}
+.opay__ok{color:var(--ok)}
+.opay__note svg,.opay__ok svg{width:16px;height:16px;flex:none}

@@ -7,12 +7,13 @@ import {
   getServiceCategories,
   getServices,
   listLawyers,
-  demoPurchase,
+  createOrder,
   getPricingQuote,
   type BackendService,
   type BackendLawyer,
   type PriceQuote,
 } from "@/lib/services/backend";
+import OrderPayment from "@/components/portal/OrderPayment";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
 import Modal from "@/components/admin/Modal";
@@ -41,6 +42,7 @@ export default function ClientServices() {
   const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
   const [quote, setQuote] = useState<PriceQuote | null>(null);
   const [quoteLoading, setQuoteLoading] = useState(false);
+  const [payOrderId, setPayOrderId] = useState<string | null>(null);
 
   const list = useMemo(() => {
     const query = q.trim().toLowerCase();
@@ -57,6 +59,7 @@ export default function ClientServices() {
     setSellerId("");
     setNote(null);
     setQuote(null);
+    setPayOrderId(null);
     listLawyers({ service_id: order.id })
       .then((rows) => setSellers(rows))
       .catch(() => setSellers([]))
@@ -81,21 +84,27 @@ export default function ClientServices() {
     };
   }, [order, sellerId]);
 
+  // Create the order first, then move to the staged payment step (10% advance
+  // unlocks the private chat) instead of paying in one shot.
   async function buy() {
     if (!order || !sellerId || buying) return;
     setBuying(true);
     setNote(null);
     try {
-      const r = await demoPurchase({ service_id: order.id, lawyer_user_id: sellerId });
+      const o = await createOrder({ service_id: order.id, lawyer_user_id: sellerId });
       setBuying(false);
-      setOrder(null);
-      if (r.chatRoomId) router.push(`/portal/chat/${r.chatRoomId}`);
-      else if (r.paymentUrl) window.open(r.paymentUrl, "_blank");
+      if (o.id) setPayOrderId(o.id);
       else router.push("/portal/client/cases");
     } catch {
       setBuying(false);
       setNote({ ok: false, msg: t("orderError") });
     }
+  }
+  function afterPay(roomId?: string) {
+    setPayOrderId(null);
+    setOrder(null);
+    if (roomId) router.push(`/portal/chat/${roomId}`);
+    else router.push("/portal/client/cases");
   }
 
   return (
@@ -143,7 +152,10 @@ export default function ClientServices() {
         </div>
       )}
 
-      <Modal open={!!order} onClose={() => setOrder(null)} title={order?.name || t("orderTitle")}>
+      <Modal open={!!order} onClose={() => { setOrder(null); setPayOrderId(null); }} title={order?.name || t("orderTitle")}>
+        {payOrderId ? (
+          <OrderPayment orderId={payOrderId} onChat={afterPay} />
+        ) : (
         <div className="cform" style={{ maxWidth: "none" }}>
           {quote ? (
             <div className="oquote">
@@ -197,6 +209,7 @@ export default function ClientServices() {
           </button>
           <p className="rf__hint">{t("orderNote")}</p>
         </div>
+        )}
       </Modal>
     </div>
   );

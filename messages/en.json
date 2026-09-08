@@ -1615,6 +1615,18 @@
       "text": "You can fill in and set up your profile. Marketplace actions (cases, clients, listings) unlock after an admin approves your account.",
       "locked": "Unlocks after admin approval"
     },
+    "payment": {
+      "som": "UZS",
+      "total": "Total",
+      "advance": "Advance ({pct}%)",
+      "paid": "Paid",
+      "locked": "Pay {amount} more to open the private chat.",
+      "unlocked": "Enough paid — the private chat is open.",
+      "payAdvance": "Pay {pct}% advance",
+      "paying": "Processing payment…",
+      "openChat": "Open private chat",
+      "error": "Could not complete the payment. Please try again."
+    },
     "login": {
       "title": "Log in to LexGo",
       "subtitle": "Sign in with your phone number",

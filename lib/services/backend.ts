@@ -499,11 +499,13 @@ export async function createOrder(input: {
   lawyer_user_id?: string;
   source?: string;
   details?: Record<string, unknown>;
-}): Promise<unknown> {
-  return http("/orders", {
-    method: "POST",
-    body: JSON.stringify({ source: "web", ...input }),
-  });
+}): Promise<BackendOrder> {
+  return normOrder(
+    await http("/orders", {
+      method: "POST",
+      body: JSON.stringify({ source: "web", ...input }),
+    }),
+  );
 }
 
 // ── Pricing quote (GET /pricing/quote) ────────────────────────────
