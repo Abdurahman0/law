@@ -1610,6 +1610,11 @@
   },
   "portal": {
     "metaTitle": "Portal",
+    "pending": {
+      "title": "Account awaiting admin approval",
+      "text": "You can fill in and set up your profile. Marketplace actions (cases, clients, listings) unlock after an admin approves your account.",
+      "locked": "Unlocks after admin approval"
+    },
     "login": {
       "title": "Log in to LexGo",
       "subtitle": "Sign in with your phone number",

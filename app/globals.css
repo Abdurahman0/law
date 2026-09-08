@@ -2280,3 +2280,11 @@ body:has(.schat) .fab{display:none}
 .lsp__checkall.on,.lsp__checkall.some{background:var(--b600);border-color:var(--b600);color:#fff}
 .lsp__dash{width:10px;height:2px;background:#fff;border-radius:1px;display:block}
 .lsp__cat--locked .lsp__headmain{cursor:not-allowed}
+/* Pending-seller approval banner + gated nav links */
+.pend-banner{display:flex;gap:12px;align-items:flex-start;background:#FFF7E6;border:1.5px solid #FFE1A6;border-radius:14px;padding:14px 16px;margin-bottom:18px}
+.pend-banner__ic{flex:none;width:34px;height:34px;border-radius:10px;background:#FFE1A6;color:#8a5a00;display:grid;place-items:center}
+.pend-banner__ic svg{width:18px;height:18px}
+.pend-banner b{display:block;font-size:.95rem;color:#7a4f00;margin-bottom:2px}
+.pend-banner p{font-size:.85rem;color:#8a6320;line-height:1.45;margin:0}
+.psb__link--locked{opacity:.4;cursor:not-allowed;pointer-events:none}
+.psb__link--locked svg:last-child{margin-left:auto;width:14px;height:14px}

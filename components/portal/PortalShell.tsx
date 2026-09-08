@@ -35,10 +35,21 @@ import {
   IconClipboardCheck,
   IconShieldCheck,
   IconTarget,
+  IconLock,
+  IconClock,
 } from "../icons";
 
 type SvgC = ComponentType<{ className?: string }>;
 type NavItem = { href: string; key: string; Icon: SvgC };
+
+// While a seller (lawyer/advocate) is `pending` admin approval they can only
+// reach onboarding/account screens; operational marketplace actions are gated
+// (the backend also returns 403 on those endpoints until approval).
+const PENDING_ALLOWED: Record<Role, Set<string>> = {
+  client: new Set(),
+  lawyer: new Set(["dashboard", "services", "subscription", "notifications"]),
+  advocate: new Set(["dashboard", "profile", "subscription", "notifications"]),
+};
 
 const LAWYER_NAV: NavItem[] = [
   { href: "/portal/lawyer", key: "dashboard", Icon: IconGrid },
@@ -110,20 +121,36 @@ export default function PortalShell({
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
-  // Guard: require a session; keep role and route in sync.
+  // Guard: require a session; keep role and route in sync. Pending sellers are
+  // bounced off gated (operational) routes back to their dashboard.
   useEffect(() => {
     if (!ready) return;
     if (!session) {
       router.replace("/login");
-    } else if (session.role !== role) {
-      router.replace(`/portal/${session.role}`);
+      return;
     }
-  }, [ready, session, role, router]);
+    if (session.role !== role) {
+      router.replace(`/portal/${session.role}`);
+      return;
+    }
+    if (role !== "client" && session.accountStatus === "pending") {
+      const navList = role === "advocate" ? ADVOCATE_NAV : LAWYER_NAV;
+      const cur = navList
+        .slice()
+        .sort((a, b) => b.href.length - a.href.length)
+        .find((n) => pathname === n.href || pathname.startsWith(n.href + "/"));
+      if (cur && !PENDING_ALLOWED[role].has(cur.key)) {
+        router.replace(`/portal/${role}`);
+      }
+    }
+  }, [ready, session, role, router, pathname]);
 
   useEffect(() => setOpen(false), [pathname]);
 
   if (!ready || !session || session.role !== role) return null;
 
+  const pending = role !== "client" && session.accountStatus === "pending";
+  const allowed = PENDING_ALLOWED[role];
   const nav =
     role === "advocate" ? ADVOCATE_NAV : role === "lawyer" ? LAWYER_NAV : CLIENT_NAV;
   const active = nav
@@ -154,6 +181,21 @@ export default function PortalShell({
         <nav className="psb__nav">
           {nav.map(({ href, key, Icon }) => {
             const on = active?.href === href;
+            const locked = pending && !allowed.has(key);
+            if (locked) {
+              return (
+                <span
+                  key={href}
+                  className="psb__link psb__link--locked"
+                  aria-disabled="true"
+                  title={t("pending.locked")}
+                >
+                  <Icon />
+                  {t(`sidebar.${role}.${key}`)}
+                  <IconLock />
+                </span>
+              );
+            }
             return (
               <Link key={href} href={href} className={`psb__link${on ? " on" : ""}`}>
                 <Icon />
@@ -197,7 +239,18 @@ export default function PortalShell({
           </div>
         </header>
         <div className="pbody">
-          <div className="pbody__in">{children}</div>
+          <div className="pbody__in">
+            {pending ? (
+              <div className="pend-banner" role="status">
+                <span className="pend-banner__ic"><IconClock /></span>
+                <div>
+                  <b>{t("pending.title")}</b>
+                  <p>{t("pending.text")}</p>
+                </div>
+              </div>
+            ) : null}
+            {children}
+          </div>
         </div>
       </div>
     </div>

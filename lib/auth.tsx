@@ -219,7 +219,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           message: res.message || "Ro'yxatdan o'tish so'rovi adminga yuborildi",
         };
       }
-      const { token, user } = res;
+      const { token, refreshToken, user } = res;
       setToken(token);
       return finish({
         role,
@@ -232,6 +232,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         completeness,
         profile: draft.profile,
         token,
+        refreshToken,
         roles: user.roles,
         permissions: user.permissions,
       });

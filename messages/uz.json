@@ -1616,6 +1616,11 @@
   },
   "portal": {
     "metaTitle": "Portal",
+    "pending": {
+      "title": "Akkaunt admin tasdig'ini kutmoqda",
+      "text": "Profilingizni to'ldirishingiz va sozlashingiz mumkin. Bozor amallari (ishlar, mijozlar, e'lonlar) admin tasdig'idan keyin ochiladi.",
+      "locked": "Admin tasdig'idan keyin ochiladi"
+    },
     "login": {
       "title": "LexGo ga kirish",
       "subtitle": "Telefon raqamingiz bilan tizimga kiring",

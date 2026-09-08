@@ -114,10 +114,12 @@ export async function registerStart(input: {
     message: asStr(d.message),
   };
 }
-// Seller registration is approval-based: verify does NOT return a token for
-// seller roles — it queues a request for admin review.
+// Seller verify now creates the account immediately and returns auth tokens;
+// the user comes back with account_status "pending" until an admin approves.
+// The pending branch is only used when the backend returns no token at all
+// (legacy queue-a-request behavior / offline).
 export type RegisterVerifyResult =
-  | { pending: false; token: string; user: AuthUser }
+  | { pending: false; token: string; refreshToken: string; user: AuthUser }
   | { pending: true; requestId: string; status: string; role: string; message: string };
 
 export async function registerVerify(verificationId: string, code: string): Promise<RegisterVerifyResult> {
@@ -128,7 +130,7 @@ export async function registerVerify(verificationId: string, code: string): Prom
     }),
   );
   const token = asStr(d.access_token ?? d.token);
-  if (!token || asStr(d.status) === "pending" || d.request_id) {
+  if (!token) {
     return {
       pending: true,
       requestId: asStr(d.request_id),
@@ -137,7 +139,12 @@ export async function registerVerify(verificationId: string, code: string): Prom
       message: asStr(d.message),
     };
   }
-  return { pending: false, token, user: normUser(d.user ?? d) };
+  return {
+    pending: false,
+    token,
+    refreshToken: asStr(d.refresh_token ?? d.refreshToken),
+    user: normUser(d.user ?? d),
+  };
 }
 
 export async function apiLogin(phone: string, password: string): Promise<AuthResult> {
