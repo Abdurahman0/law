@@ -178,6 +178,10 @@ export type BackendLawyer = {
   verified: boolean;
   verificationStatus: string;
   sellerType: string;
+  totalCases: number;
+  winsCount: number;
+  partialWins: number;
+  successRate: number;
 };
 
 function normLawyer(v: unknown): BackendLawyer {
@@ -200,6 +204,10 @@ function normLawyer(v: unknown): BackendLawyer {
     verified: Boolean(d.verified ?? d.is_verified),
     verificationStatus: asStr(d.verification_status),
     sellerType: asStr(d.seller_type),
+    totalCases: asNum(d.total_cases),
+    winsCount: asNum(d.wins_count),
+    partialWins: asNum(d.partial_wins_count),
+    successRate: asNum(d.success_rate),
   };
 }
 
@@ -259,6 +267,7 @@ export async function upsertMyLawyer(
       languages: p.languages,
       bio: p.bio ?? "",
       education: p.education ?? "",
+      total_cases: p.stats?.totalCases ?? 0,
       wins_count: p.stats?.fullyWonCases ?? 0,
       partial_wins_count: p.stats?.partiallyWonCases ?? 0,
       base_hourly_price: 0,
@@ -288,12 +297,12 @@ export async function getMyLawyer(): Promise<ProfessionalProfile> {
     lawyerYears: asNum(d.lawyer_experience_years),
     experienceYears: asNum(d.experience_years) || asNum(d.lawyer_experience_years),
     stats: {
-      // Backend persists only won / partially-won counts; total cases and the
-      // derived success rate live in the UI (recomputed from these on edit).
-      totalCases: 0,
+      totalCases: asNum(d.total_cases),
       fullyWonCases: asNum(d.wins_count),
       partiallyWonCases: asNum(d.partial_wins_count),
-      successRate: 0,
+      // Backend computes success_rate; StatsEditor recomputes the same formula
+      // on edit, so this is just the initial value.
+      successRate: asNum(d.success_rate),
     },
   };
 }

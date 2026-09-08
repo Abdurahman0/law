@@ -2415,6 +2415,7 @@
       "saving": "Saqlanmoqda…",
       "saved": "Profil saqlandi.",
       "saveError": "Saqlab bo'lmadi. Qayta urinib ko'ring.",
+      "statsError": "Jami ishlar soni to'liq va qisman yutuqlar yig'indisidan kam bo'lmasligi kerak.",
       "servicesTitle": "Mening xizmatlarim",
         "servicesEmpty": "Hozircha xizmatlar yo‘q",
         "servicesEmptyText": "Xizmatlarni ro‘yxatdan o‘tishda yoki profil sozlamalarida qo‘shing."

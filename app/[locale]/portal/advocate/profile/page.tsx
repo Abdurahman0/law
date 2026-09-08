@@ -76,6 +76,12 @@ function ProfileEditor({ initial }: { initial: ProfessionalProfile }) {
 
   async function save() {
     if (busy) return;
+    // Backend rejects total_cases < wins + partial (422); catch it early.
+    const won = (stats.fullyWonCases || 0) + (stats.partiallyWonCases || 0);
+    if (stats.totalCases < won) {
+      setNote({ ok: false, msg: t("statsError") });
+      return;
+    }
     setBusy(true);
     setNote(null);
     try {
