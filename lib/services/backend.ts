@@ -252,7 +252,9 @@ export async function upsertMyLawyer(
       advocate_structure: p.advocateStructure ?? "",
       organization_name: p.orgName ?? "",
       experience_years: p.advocateYears ?? p.experienceYears ?? 0,
-      lawyer_experience_years: p.lawyerYears ?? 0,
+      // For a yurist there is no separate advocate/lawyer split — mirror their
+      // years here too so ranking/matching (which reads lawyer experience) uses it.
+      lawyer_experience_years: p.lawyerYears ?? p.experienceYears ?? 0,
       specializations: p.practiceAreas,
       languages: p.languages,
       bio: p.bio ?? "",
@@ -1069,6 +1071,32 @@ export async function adminCreateLead(input: {
 }
 export async function adminUpdateLead(leadId: string, patch: Record<string, unknown>): Promise<Lead> {
   return normLead(await http(`/admin/leads/${leadId}`, { method: "PATCH", body: JSON.stringify(patch) }));
+}
+// Backend-driven lead kanban (GET /admin/leads/kanban, PATCH .../move).
+export type KanbanCard = { lead: Lead; position: number };
+export type KanbanColumn = { key: string; title: string; color: string; order: number; isFinal: boolean; count: number; cards: KanbanCard[] };
+export async function getLeadKanban(): Promise<KanbanColumn[]> {
+  const cols = listFrom(await http("/admin/leads/kanban"), "columns", "items", "data");
+  return cols
+    .map((c) => {
+      const d = asDict(c);
+      return {
+        key: asStr(d.key),
+        title: asStr(d.title),
+        color: asStr(d.color),
+        order: asNum(d.order),
+        isFinal: Boolean(d.is_final),
+        count: asNum(d.count),
+        cards: asArr(d.leads).map((x) => {
+          const l = asDict(x);
+          return { lead: normLead(l.lead ?? l), position: asNum(l.position) };
+        }),
+      };
+    })
+    .sort((a, b) => a.order - b.order);
+}
+export async function moveLeadKanban(leadId: string, columnKey: string, position: number): Promise<void> {
+  await http(`/admin/leads/${leadId}/move`, { method: "PATCH", body: JSON.stringify({ column_key: columnKey, position }) });
 }
 export async function adminDeleteLead(leadId: string): Promise<void> {
   await http(`/admin/leads/${leadId}`, { method: "DELETE" });
