@@ -4,9 +4,28 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { createSosRequest, type SosRequest } from "@/lib/services/backend";
-import { IconAlert, IconChat, IconShieldCheck, IconClock, IconPhone } from "@/components/icons";
+import {
+  IconAlert,
+  IconChat,
+  IconShieldCheck,
+  IconClock,
+  IconPhone,
+  IconScale,
+  IconSearch,
+  IconFileText,
+  IconShield,
+} from "@/components/icons";
 
-const CATS = ["arrest", "police", "court", "search", "contract", "other"];
+const CATS = [
+  { key: "arrest", Icon: IconShield },
+  { key: "police", Icon: IconAlert },
+  { key: "court", Icon: IconScale },
+  { key: "search", Icon: IconSearch },
+  { key: "contract", Icon: IconFileText },
+  { key: "other", Icon: IconChat },
+] as const;
+
+const HOTLINE = "+998 78 777 00 00";
 
 export default function ClientSos() {
   const t = useTranslations("portal.client.sos");
@@ -34,14 +53,15 @@ export default function ClientSos() {
   }
 
   return (
-    <div className="sos">
-      <div className="sos__hero">
-        <span className="sos__pulse">
+    <div className="sos2">
+      <div className="sos2__hero">
+        <div className="sos2__glow" />
+        <span className="sos2__pulse">
           <IconAlert />
         </span>
-        <h1 className="sos__title">{t("title")}</h1>
-        <p className="sos__sub">{t("subtitle")}</p>
-        <div className="sos__badges">
+        <h1 className="sos2__title">{t("title")}</h1>
+        <p className="sos2__sub">{t("subtitle")}</p>
+        <div className="sos2__badges">
           <span><IconClock />{t("badge247")}</span>
           <span><IconShieldCheck />{t("badgePrivate")}</span>
           <span><IconPhone />{t("badgeFast")}</span>
@@ -49,45 +69,72 @@ export default function ClientSos() {
       </div>
 
       {stage === "idle" ? (
-        <div className="sos__form">
-          <label className="sos__lbl">{t("catLabel")}</label>
-          <div className="sos__cats">
-            {CATS.map((c) => (
-              <button key={c} type="button" className={`sos__cat${cat === c ? " on" : ""}`} onClick={() => setCat(c)}>
-                {t(`cat.${c}`)}
-              </button>
-            ))}
+        <div className="sos2__grid">
+          <div className="sos2__form">
+            <h2 className="sos2__h2">{t("formTitle")}</h2>
+            <label className="sos2__lbl">{t("catLabel")}</label>
+            <div className="sos2__cats">
+              {CATS.map(({ key, Icon }) => (
+                <button
+                  key={key}
+                  type="button"
+                  className={`sos2__cat${cat === key ? " on" : ""}`}
+                  onClick={() => setCat(key)}
+                >
+                  <span className="sos2__cati"><Icon /></span>
+                  {t(`cat.${key}`)}
+                </button>
+              ))}
+            </div>
+            <label className="sos2__lbl">{t("descLabel")}</label>
+            <textarea
+              className="sos2__desc"
+              rows={3}
+              value={desc}
+              onChange={(e) => setDesc(e.target.value)}
+              placeholder={t("descPh")}
+            />
+            <button className="sos2__btn" type="button" onClick={trigger} disabled={busy}>
+              <IconAlert />
+              {t("connect")}
+            </button>
+            <p className="sos2__hint">{t("hint")}</p>
           </div>
-          <label className="sos__lbl">{t("descLabel")}</label>
-          <textarea
-            className="sos__desc"
-            rows={3}
-            value={desc}
-            onChange={(e) => setDesc(e.target.value)}
-            placeholder={t("descPh")}
-          />
-          <button className="sos__btn" type="button" onClick={trigger} disabled={busy}>
-            <IconAlert />
-            {t("connect")}
-          </button>
-          <p className="sos__hint">{t("hint")}</p>
+
+          <aside className="sos2__side">
+            <a className="sos2__call" href={`tel:${HOTLINE.replace(/[^+\d]/g, "")}`}>
+              <span className="sos2__calli"><IconPhone /></span>
+              <span className="sos2__callt">
+                <span className="sos2__calll">{t("callNow")}</span>
+                <b>{HOTLINE}</b>
+              </span>
+            </a>
+            <div className="sos2__how">
+              <h3 className="sos2__h3">{t("howTitle")}</h3>
+              <ol className="sos2__steps">
+                <li><span>1</span>{t("step1")}</li>
+                <li><span>2</span>{t("step2")}</li>
+                <li><span>3</span>{t("step3")}</li>
+              </ol>
+            </div>
+          </aside>
         </div>
       ) : null}
 
       {stage === "connecting" ? (
-        <div className="sos__status">
-          <span className="sos__spin" aria-hidden />
+        <div className="sos2__status">
+          <span className="sos2__spin" aria-hidden />
           <b>{t("connecting")}</b>
           <span>{t("connectingSub")}</span>
         </div>
       ) : null}
 
       {stage === "connected" && req ? (
-        <div className="sos__panel">
-          <span className="sos__ok"><IconShieldCheck /></span>
+        <div className="sos2__panel">
+          <span className="sos2__ok"><IconShieldCheck /></span>
           <b>{t("connectedTitle")}</b>
-          <div className="sos__duty">
-            <span className="sos__av">{(req.dutyName || "A").slice(0, 1)}</span>
+          <div className="sos2__duty">
+            <span className="sos2__av">{(req.dutyName || "A").slice(0, 1)}</span>
             <div>
               <b>{req.dutyName || t("dutyLawyer")}</b>
               <span>{t("dutyRole")}</span>
@@ -105,10 +152,17 @@ export default function ClientSos() {
       ) : null}
 
       {stage === "sent" ? (
-        <div className="sos__panel">
-          <span className="sos__ok"><IconShieldCheck /></span>
+        <div className="sos2__panel">
+          <span className="sos2__ok"><IconShieldCheck /></span>
           <b>{t("sentTitle")}</b>
-          <span className="sos__psub">{t("sentSub")}</span>
+          <span className="sos2__psub">{t("sentSub")}</span>
+          <a className="sos2__call sos2__call--sm" href={`tel:${HOTLINE.replace(/[^+\d]/g, "")}`}>
+            <span className="sos2__calli"><IconPhone /></span>
+            <span className="sos2__callt">
+              <span className="sos2__calll">{t("callNow")}</span>
+              <b>{HOTLINE}</b>
+            </span>
+          </a>
           <button className="btn btn--soft" type="button" onClick={() => setStage("idle")}>
             {t("again")}
           </button>

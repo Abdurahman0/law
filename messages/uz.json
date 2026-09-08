@@ -1,4 +1,8 @@
 {
+  "a11y": {
+    "showPassword": "Parolni ko'rsatish",
+    "hidePassword": "Parolni yashirish"
+  },
   "meta": {
     "siteName": "LexGo",
     "title": "LexGo — yuridik yordam, bir necha tegishda",
@@ -2088,7 +2092,13 @@
         "openChat": "Chatni ochish",
         "sentTitle": "So'rovingiz qabul qilindi",
         "sentSub": "Navbatchi advokat tez orada siz bilan bog'lanadi.",
-        "again": "Qaytadan yuborish"
+        "again": "Qaytadan yuborish",
+        "formTitle": "Vaziyatni tanlang",
+        "callNow": "Hoziroq qo'ng'iroq qiling",
+        "howTitle": "Qanday ishlaydi",
+        "step1": "Vaziyat turini tanlang va qisqacha yozing.",
+        "step2": "Navbatchi advokatga so'rov darhol yuboriladi.",
+        "step3": "Advokat maxfiy chat yoki qo'ng'iroq orqali bog'lanadi."
       },
       "referrals": {
         "title": "Do'stni taklif qiling",
@@ -2286,7 +2296,10 @@
         "open": "Ochish",
         "download": "Yuklab olish",
         "error": "Xatolik yuz berdi. Qayta urining.",
-        "processing": "To'lov amalga oshirilmoqda — birozdan so'ng holatni tekshiring."
+        "processing": "To'lov amalga oshirilmoqda — birozdan so'ng holatni tekshiring.",
+        "pendingTitle": "To'lov amalga oshirilmoqda",
+        "pendingSub": "To'lovingiz tasdiqlanmoqda. Hujjat tayyor bo'lishi bilan avtomatik ochiladi — bu oynani yopishingiz mumkin.",
+        "pendingStatus": "Kutilmoqda"
       }
     },
     "advocate": {

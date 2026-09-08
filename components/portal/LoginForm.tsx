@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/auth";
 import { Link, useRouter } from "@/i18n/navigation";
 import { formatUzSubscriber, uzSubscriber } from "@/lib/phone";
 import { IconLogo } from "../icons";
+import PasswordInput from "../PasswordInput";
 
 export default function LoginForm() {
   const t = useTranslations("portal.login");
@@ -78,9 +79,8 @@ export default function LoginForm() {
           </div>
           <div>
             <label htmlFor="l-pw">{t("password")}</label>
-            <input
+            <PasswordInput
               id="l-pw"
-              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder={t("passwordPh")}

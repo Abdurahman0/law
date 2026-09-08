@@ -21,6 +21,7 @@ import LegalServicePicker from "./LegalServicePicker";
 import StatsEditor from "./StatsEditor";
 import WorkHistoryEditor from "./WorkHistoryEditor";
 import ProfilePreview from "./ProfilePreview";
+import PasswordInput from "../PasswordInput";
 
 const ZERO_STATS: AdvocateStats = {
   totalCases: 0,
@@ -92,8 +93,7 @@ export default function RegisterFlow() {
   const pwField = (
     <div>
       <label>{t("fields.password")}</label>
-      <input
-        type="password"
+      <PasswordInput
         value={draft.password}
         onChange={(e) => setDraft((d) => ({ ...d, password: e.target.value }))}
         placeholder={t("fields.passwordPh")}

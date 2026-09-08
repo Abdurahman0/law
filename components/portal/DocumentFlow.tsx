@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   getDocumentTemplates,
@@ -15,7 +15,7 @@ import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "./DataState";
 import { Notice } from "@/components/admin/AdminBits";
 import Modal from "@/components/admin/Modal";
-import { IconDocLines, IconDownload, IconExternal, IconCheck } from "@/components/icons";
+import { IconDocLines, IconDownload, IconExternal, IconCheck, IconClock } from "@/components/icons";
 
 const som = (n?: number) => (n ? n.toLocaleString("ru-RU").replace(/,/g, " ") : "");
 
@@ -46,7 +46,7 @@ export default function DocumentFlow() {
 
   const [req, setReq] = useState<DocumentRequest | null>(null);
   const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [stage, setStage] = useState<"answers" | "pay" | "done">("answers");
+  const [stage, setStage] = useState<"answers" | "pay" | "pending" | "done">("answers");
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
 
@@ -98,8 +98,8 @@ export default function DocumentFlow() {
       let r = await payDocumentRequest(req.id, "payme", req.price);
       if (r.status !== "file_ready") r = await getDocumentRequest(req.id);
       setReq(r);
-      if (r.status === "file_ready") setStage("done");
-      else setNote({ ok: false, msg: t("processing") });
+      // Not ready yet → show a visible pending state (auto-polls below).
+      setStage(r.status === "file_ready" ? "done" : "pending");
     } catch {
       setNote({ ok: false, msg: t("error") });
     } finally {
@@ -121,6 +121,26 @@ export default function DocumentFlow() {
       setBusy(false);
     }
   }
+
+  // While a payment is processing, poll the backend so the document opens
+  // automatically once it's generated — no manual refresh needed.
+  useEffect(() => {
+    if (stage !== "pending" || !req) return;
+    let alive = true;
+    const timer = setInterval(async () => {
+      const r = await getDocumentRequest(req.id).catch(() => null);
+      if (!alive || !r) return;
+      setReq(r);
+      if (r.status === "file_ready") {
+        setStage("done");
+        setNote(null);
+      }
+    }, 4000);
+    return () => {
+      alive = false;
+      clearInterval(timer);
+    };
+  }, [stage, req]);
 
   return (
     <div className="ppanel">
@@ -189,6 +209,21 @@ export default function DocumentFlow() {
                   {t("checkStatus")}
                 </button>
               </>
+            ) : null}
+
+            {stage === "pending" ? (
+              <div className="docpend">
+                <span className="docpend__ic"><IconClock /></span>
+                <b>{t("pendingTitle")}</b>
+                <span className="docpend__sub">{t("pendingSub")}</span>
+                <span className="docpend__badge">
+                  <span className="docpend__dot" />
+                  {t("pendingStatus")}
+                </span>
+                <button className="btn btn--soft btn--full" type="button" onClick={refresh} disabled={busy}>
+                  {busy ? t("processingShort") : t("checkStatus")}
+                </button>
+              </div>
             ) : null}
 
             {stage === "done" && req.contractFile ? (

@@ -372,6 +372,14 @@ export const IconEye = (p: P) => (
   </svg>
 );
 
+export const IconEyeOff = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+    <path d="M6.61 6.61A18.5 18.5 0 0 0 1 12s4 8 11 8a9.12 9.12 0 0 0 5.39-1.61" />
+    <line x1="1" y1="1" x2="23" y2="23" />
+  </svg>
+);
+
 export const IconRocket = (p: P) => (
   <svg {...base} {...p}>
     <path d="M5 15c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.9.7-2.2-.1-3-.8-.8-2.1-.8-2.9 0z" />
@@ -474,6 +482,7 @@ const ICON_MAP: Record<string, ComponentType<P>> = {
   IconAward,
   IconTrendingUp,
   IconEye,
+  IconEyeOff,
   IconRocket,
   IconTarget,
   IconGraduation,

@@ -1,4 +1,8 @@
 {
+  "a11y": {
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
+  },
   "meta": {
     "siteName": "LexGo",
     "title": "LexGo — legal help in a few taps",
@@ -2082,7 +2086,13 @@
         "openChat": "Open chat",
         "sentTitle": "Request received",
         "sentSub": "A duty lawyer will contact you shortly.",
-        "again": "Send again"
+        "again": "Send again",
+        "formTitle": "Choose the situation",
+        "callNow": "Call now",
+        "howTitle": "How it works",
+        "step1": "Pick the situation type and describe it briefly.",
+        "step2": "The request goes to the on-duty lawyer instantly.",
+        "step3": "The lawyer reaches you via private chat or a call."
       },
       "referrals": {
         "title": "Refer a friend",
@@ -2280,7 +2290,10 @@
         "open": "Open",
         "download": "Download",
         "error": "Something went wrong. Try again.",
-        "processing": "Payment is processing — check status in a moment."
+        "processing": "Payment is processing — check status in a moment.",
+        "pendingTitle": "Payment is processing",
+        "pendingSub": "Your payment is being confirmed. The document opens automatically once it's ready — you can close this window.",
+        "pendingStatus": "Pending"
       }
     },
     "advocate": {
