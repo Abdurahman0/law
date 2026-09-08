@@ -16,8 +16,8 @@ import {
   listCalls,
   setChatAutoDelete,
   deleteSecureChat,
-  createZoomMeeting,
   type SecureMessage,
+  type LiveKitJoin,
 } from "@/lib/services/backend";
 import CallRoom from "./CallRoom";
 import {
@@ -58,7 +58,7 @@ export default function SecureChat({ roomId }: { roomId: string }) {
   const [sending, setSending] = useState(false);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [conn, setConn] = useState<Conn>("connecting");
-  const [activeCall, setActiveCall] = useState<{ callId: string; callType: "audio" | "video"; isCaller: boolean } | null>(null);
+  const [activeCall, setActiveCall] = useState<{ callId: string; callType: "audio" | "video"; isCaller: boolean; lk?: LiveKitJoin | null } | null>(null);
   const [incoming, setIncoming] = useState<{ callId: string; callType: "audio" | "video" } | null>(null);
   const [callBusy, setCallBusy] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -81,7 +81,13 @@ export default function SecureChat({ roomId }: { roomId: string }) {
         setActiveCall({ callId: live.id, callType: live.callType === "video" ? "video" : "audio", isCaller: false });
       } else {
         const c = await startCall(roomId, kind, t(kind === "video" ? "videoCall" : "audioCall"));
-        setActiveCall({ callId: c.id, callType: kind, isCaller: true });
+        // Caller already has its LiveKit token from the create response.
+        setActiveCall({
+          callId: c.id,
+          callType: kind,
+          isCaller: true,
+          lk: c.livekitToken ? { url: c.livekitUrl, room: c.livekitRoom, token: c.livekitToken } : null,
+        });
       }
       setIncoming(null);
     } catch {
@@ -94,34 +100,6 @@ export default function SecureChat({ roomId }: { roomId: string }) {
     if (!incoming) return;
     setActiveCall({ callId: incoming.callId, callType: incoming.callType, isCaller: false });
     setIncoming(null);
-  }
-
-  // Start a Zoom meeting and share the join link in the chat.
-  async function beginZoom() {
-    if (callBusy) return;
-    setCallBusy(true);
-    setCallErr(null);
-    try {
-      const z = await createZoomMeeting(roomId);
-      const host = z.startUrl || z.joinUrl;
-      const opened = host ? window.open(host, "_blank", "noopener") : null;
-      const link = z.joinUrl || host;
-      if (link) {
-        // Always drop the join link into chat (also the fallback if the popup was blocked).
-        const payload = `Zoom: ${link}`;
-        const ws = wsRef.current;
-        if (ws && ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify({ content: payload, message_type: "text", meta: {} }));
-        } else {
-          await sendSecureMessage(roomId, payload).catch(() => {});
-        }
-        if (!opened) setCallErr(t("zoomPopup"));
-      }
-    } catch {
-      setCallErr(t("callFailed"));
-    } finally {
-      setCallBusy(false);
-    }
   }
 
   // Chat retention controls. The backend keeps a ~1-month archive after delete.
@@ -419,15 +397,6 @@ export default function SecureChat({ roomId }: { roomId: string }) {
             >
               <IconVideo />
             </button>
-            <button
-              className="schat__zoom"
-              type="button"
-              onClick={beginZoom}
-              disabled={callBusy || !!activeCall}
-              aria-label={t("zoomCall")}
-            >
-              Zoom
-            </button>
           </div>
         ) : null}
         <span className="schat__lock" title={t("secured")}>
@@ -508,7 +477,7 @@ export default function SecureChat({ roomId }: { roomId: string }) {
           callId={activeCall.callId}
           callType={activeCall.callType}
           isCaller={activeCall.isCaller}
-          myUserId={session.id}
+          lk={activeCall.lk}
           onEnd={() => setActiveCall(null)}
         />
       ) : null}

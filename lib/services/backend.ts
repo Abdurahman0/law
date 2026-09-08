@@ -2203,6 +2203,12 @@ export type CallSession = {
   joinUrl: string;
   startedAt: string;
   endedAt?: string;
+  // LiveKit (in-app SFU) connection details, when the backend provides them.
+  provider: string;
+  livekitUrl: string;
+  livekitRoom: string;
+  livekitToken: string;
+  turnDomain: string;
 };
 function normCall(v: unknown): CallSession {
   const d = asDict(v);
@@ -2216,6 +2222,21 @@ function normCall(v: unknown): CallSession {
     joinUrl: backendUrl(asStr(d.join_url)),
     startedAt: asStr(d.started_at),
     endedAt: asStr(d.ended_at) || undefined,
+    provider: asStr(d.provider),
+    livekitUrl: asStr(d.livekit_url),
+    livekitRoom: asStr(d.livekit_room),
+    livekitToken: asStr(d.livekit_token),
+    turnDomain: asStr(d.turn_domain),
+  };
+}
+// Client/seller fetch their own LiveKit token to join an existing call.
+export type LiveKitJoin = { url: string; room: string; token: string };
+export async function getCallJoinToken(roomId: string, callId: string): Promise<LiveKitJoin> {
+  const d = asDict(await http(`/secure-chats/${roomId}/calls/${callId}/join-token`));
+  return {
+    url: asStr(d.livekit_url ?? d.url),
+    room: asStr(d.livekit_room ?? d.room),
+    token: asStr(d.livekit_token ?? d.token),
   };
 }
 export async function startCall(roomId: string, callType: "audio" | "video", title: string): Promise<CallSession> {

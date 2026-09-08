@@ -1871,7 +1871,8 @@ body:has(.schat) .fab{display:none}
 .schat__joincall{background:#37D39B;color:#06231a;border:0;font-weight:700}
 .callroom{position:fixed;inset:0;z-index:80;background:#0B1B3A;display:flex;flex-direction:column}
 .callroom__stage{position:relative;flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.callroom__remote{width:100%;height:100%;object-fit:cover;background:#0B1B3A}
+.callroom__remote{position:relative;width:100%;height:100%;background:#0B1B3A}
+.callroom__rvid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .callroom__audio{display:flex;align-items:center;justify-content:center;width:100%;height:100%}
 .callroom__avatar{width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.08);display:grid;place-items:center}
 .callroom__avatar svg{width:64px;height:64px;stroke:#fff}
