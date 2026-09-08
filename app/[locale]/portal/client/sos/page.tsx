@@ -56,16 +56,22 @@ export default function ClientSos() {
     <div className="sos2">
       <div className="sos2__hero">
         <div className="sos2__glow" />
-        <span className="sos2__pulse">
-          <IconAlert />
-        </span>
-        <h1 className="sos2__title">{t("title")}</h1>
-        <p className="sos2__sub">{t("subtitle")}</p>
-        <div className="sos2__badges">
-          <span><IconClock />{t("badge247")}</span>
-          <span><IconShieldCheck />{t("badgePrivate")}</span>
-          <span><IconPhone />{t("badgeFast")}</span>
+        <div className="sos2__heromain">
+          <span className="sos2__pulse">
+            <IconAlert />
+          </span>
+          <div>
+            <h1 className="sos2__title">{t("title")}</h1>
+            <p className="sos2__sub">{t("subtitle")}</p>
+          </div>
         </div>
+        <a className="sos2__herocall" href={`tel:${HOTLINE.replace(/[^+\d]/g, "")}`}>
+          <span className="sos2__calli"><IconPhone /></span>
+          <span className="sos2__callt">
+            <span className="sos2__calll">{t("callNow")}</span>
+            <b>{HOTLINE}</b>
+          </span>
+        </a>
       </div>
 
       {stage === "idle" ? (
@@ -89,7 +95,7 @@ export default function ClientSos() {
             <label className="sos2__lbl">{t("descLabel")}</label>
             <textarea
               className="sos2__desc"
-              rows={3}
+              rows={4}
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
               placeholder={t("descPh")}
@@ -102,13 +108,6 @@ export default function ClientSos() {
           </div>
 
           <aside className="sos2__side">
-            <a className="sos2__call" href={`tel:${HOTLINE.replace(/[^+\d]/g, "")}`}>
-              <span className="sos2__calli"><IconPhone /></span>
-              <span className="sos2__callt">
-                <span className="sos2__calll">{t("callNow")}</span>
-                <b>{HOTLINE}</b>
-              </span>
-            </a>
             <div className="sos2__how">
               <h3 className="sos2__h3">{t("howTitle")}</h3>
               <ol className="sos2__steps">
@@ -116,6 +115,14 @@ export default function ClientSos() {
                 <li><span>2</span>{t("step2")}</li>
                 <li><span>3</span>{t("step3")}</li>
               </ol>
+            </div>
+            <div className="sos2__how">
+              <h3 className="sos2__h3">{t("whyTitle")}</h3>
+              <ul className="sos2__trust">
+                <li><IconClock />{t("badge247")}</li>
+                <li><IconShieldCheck />{t("badgePrivate")}</li>
+                <li><IconPhone />{t("badgeFast")}</li>
+              </ul>
             </div>
           </aside>
         </div>
