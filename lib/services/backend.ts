@@ -527,13 +527,18 @@ export async function getPricingQuote(params: {
   region?: string;
 }): Promise<PriceQuote> {
   const q = new URLSearchParams();
-  for (const [k, v] of Object.entries(params)) if (v) q.set(k, String(v));
+  q.set("service_id", params.service_id);
+  if (params.package_id) q.set("package_id", params.package_id);
+  // Backend expects `seller_user_id`; modifiers only apply when it's sent.
+  if (params.lawyer_user_id) q.set("seller_user_id", params.lawyer_user_id);
+  if (params.region) q.set("region", params.region);
   const d = asDict(await http(`/pricing/quote?${q.toString()}`));
+  const rd = asDict(d.referral_discount);
   return {
-    baseAmount: asNum(d.base_amount ?? d.base),
-    totalAmount: asNum(d.total_amount ?? d.total),
+    baseAmount: asNum(d.base_amount ?? d.subtotal ?? d.base),
+    totalAmount: asNum(d.total_amount ?? d.total ?? d.price),
     currency: asStr(d.currency, "UZS"),
-    referralDiscountPercent: asNum(d.referral_discount_percent) || undefined,
+    referralDiscountPercent: (asNum(d.discount_percent) || asNum(rd.discount_percent)) || undefined,
     modifiers: asArr(d.modifiers).map((x) => {
       const m = asDict(x);
       return {
@@ -560,12 +565,19 @@ export type PaymentPolicy = {
 };
 export async function getPaymentPolicy(orderId: string): Promise<PaymentPolicy> {
   const d = asDict(await http(`/orders/${orderId}/payment-policy`));
+  const advanceAmount = asNum(d.advance_amount ?? d.upfront_amount);
+  const paidAmount = asNum(d.paid_amount ?? d.paid);
+  // Backend doesn't return remaining_to_unlock — derive it from the advance.
+  const remaining =
+    d.remaining_to_unlock != null || d.remaining != null
+      ? asNum(d.remaining_to_unlock ?? d.remaining)
+      : Math.max(0, advanceAmount - paidAmount);
   return {
-    totalAmount: asNum(d.total_amount ?? d.total),
+    totalAmount: asNum(d.total_amount ?? d.total ?? d.price),
     advancePercent: asNum(d.advance_percent ?? d.upfront_percent, 10),
-    advanceAmount: asNum(d.advance_amount ?? d.upfront_amount),
-    paidAmount: asNum(d.paid_amount ?? d.paid),
-    remainingToUnlock: asNum(d.remaining_to_unlock ?? d.remaining),
+    advanceAmount,
+    paidAmount,
+    remainingToUnlock: remaining,
     contactUnlocked: Boolean(d.contact_unlocked),
     currency: asStr(d.currency, "UZS"),
   };
