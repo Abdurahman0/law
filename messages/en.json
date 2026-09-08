@@ -3093,7 +3093,20 @@
         "timeline": "Timeline",
         "noTimeline": "No events yet",
         "delete": "Delete lead",
-        "deleteConfirm": "Delete this lead?"
+        "deleteConfirm": "Delete this lead?",
+        "actions": "Actions",
+        "call": "Call",
+        "logCall": "Log call",
+        "callLogged": "Call logged",
+        "notePh": "Write a note…",
+        "addNote": "Add note",
+        "reminder": "Reminder date",
+        "setReminder": "Set reminder",
+        "reminderSet": "Reminder created",
+        "reminderTitle": "Follow up lead",
+        "saving": "Saving…",
+        "done": "Done",
+        "err": "Something went wrong. Try again."
       },
       "source": { "web": "Website", "website": "Website", "referral": "Referral", "ad": "Ad", "ads": "Ads", "organic": "Organic", "manual": "Manual", "phone": "Phone", "call": "Call", "chat": "Chat", "ai": "AI", "social": "Social", "seo": "SEO" },
       "stages": {

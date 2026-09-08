@@ -3099,7 +3099,20 @@
         "timeline": "Tarix",
         "noTimeline": "Hozircha voqea yo'q",
         "delete": "Lidni o'chirish",
-        "deleteConfirm": "Bu lidni o'chirasizmi?"
+        "deleteConfirm": "Bu lidni o'chirasizmi?",
+        "actions": "Amallar",
+        "call": "Qo'ng'iroq",
+        "logCall": "Qo'ng'iroqni belgilash",
+        "callLogged": "Qo'ng'iroq qayd etildi",
+        "notePh": "Izoh yozing…",
+        "addNote": "Izoh qo'shish",
+        "reminder": "Eslatma sanasi",
+        "setReminder": "Eslatma qo'yish",
+        "reminderSet": "Eslatma qo'yildi",
+        "reminderTitle": "Lidga qayta aloqa",
+        "saving": "Saqlanmoqda…",
+        "done": "Bajarildi",
+        "err": "Xatolik. Qayta urining."
       },
       "source": { "web": "Veb-sayt", "website": "Veb-sayt", "referral": "Tavsiya", "ad": "Reklama", "ads": "Reklama", "organic": "Organik", "manual": "Qo'lda", "phone": "Telefon", "call": "Qo'ng'iroq", "chat": "Chat", "ai": "Sun'iy intellekt", "social": "Ijtimoiy tarmoq", "seo": "SEO" },
       "stages": {

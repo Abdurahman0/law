@@ -2541,3 +2541,9 @@ body:has(.schat) .fab{display:none}
 .ldrw__tl span{display:block;font-size:.8rem;color:var(--gray2)}
 .ldrw__tl em{font-size:.72rem;color:var(--gray);font-style:normal}
 .ldrw__foot{padding:14px 22px;border-top:1px solid var(--line)}
+.ldrw__acts{display:flex;gap:8px;flex-wrap:wrap}
+.ldrw__noteadd{display:flex;flex-direction:column;gap:8px}
+.ldrw__noteadd textarea{border:1.5px solid var(--line);border-radius:10px;padding:9px 11px;font-family:inherit;font-size:.88rem;resize:vertical;outline:none}
+.ldrw__noteadd textarea:focus{border-color:var(--b400)}
+.ldrw__remind{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ldrw__remind .mpick,.ldrw__remind .dpick{flex:1;min-width:150px}
