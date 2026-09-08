@@ -49,13 +49,16 @@ export default function LegalServicePicker({
   }
 
   // When searching, only show categories/subservices that match, and expand them.
+  // Lawyers (non-advocates) never see advocate-only subservices such as
+  // "ensuring a lawyer's participation in court".
   const groups = LEGAL_SERVICES.map((cat) => {
     const catLabel = legalServiceLabel(cat.key, locale).toLowerCase();
     const catMatches = !query || catLabel.includes(query);
-    const services = cat.services.filter(
+    const eligible = cat.services.filter((s) => isAdvocate || !s.advocateOnly);
+    const services = eligible.filter(
       (s) => !query || catMatches || legalServiceLabel(s.key, locale).toLowerCase().includes(query),
     );
-    return { cat, services };
+    return { cat, eligible, services };
   }).filter((g) => g.services.length > 0);
 
   return (
@@ -76,10 +79,10 @@ export default function LegalServicePicker({
         {groups.length === 0 ? (
           <div className="lsp__empty">{t("empty")}</div>
         ) : (
-          groups.map(({ cat, services }) => {
+          groups.map(({ cat, eligible, services }) => {
             const locked = !!cat.advocateOnly && !isAdvocate;
             const expanded = locked ? false : query ? true : open.has(cat.key);
-            const allKeys = cat.services.map((s) => s.key);
+            const allKeys = eligible.map((s) => s.key);
             const chosen = allKeys.filter((k) => sel.has(k)).length;
             const allOn = chosen === allKeys.length && allKeys.length > 0;
             const someOn = chosen > 0 && !allOn;

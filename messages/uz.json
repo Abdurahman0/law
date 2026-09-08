@@ -1444,7 +1444,7 @@
       },
       {
         "q": "LexGo da qanday advokat bo'laman?",
-        "a": "Advokatlik litsenziyasi va diplomingiz bilan ro'yxatdan o'ting, tekshiruvdan o'ting, profilingizni g'alaba va narxlar bilan to'ldiring va mos ishlarni qabul qilishni boshlang. Platforma faqat yakunlangan buyurtmalardan 18% komissiya oladi — oldindan hech qanday to'lov yo'q."
+        "a": "Advokatlik litsenziyasi va diplomingiz bilan ro'yxatdan o'ting, tekshiruvdan o'ting, profilingizni g'alaba va narxlar bilan to'ldiring va mos ishlarni qabul qilishni boshlang. Platforma faqat yakunlangan buyurtmalardan 18% komissiya oladi — oldindan hech qanday to'lov yo'q. 5 ta va undan ortiq hamkasbingizni taklif qilsangiz, komissiyangiz 5% gacha kamayadi."
       }
     ]
   },
@@ -2080,7 +2080,7 @@
       },
       "referrals": {
         "title": "Do'stni taklif qiling",
-        "subtitle": "Har bir do'stingiz uchun bonus oling.",
+        "subtitle": "Har bir do'stingiz uchun bonus. 5 ta va undan ortiq do'stingiz obuna bo'lsa, obunangizga 5% gacha chegirma.",
         "copy": "Nusxa olish",
         "copied": "Nusxa olindi",
         "link": "Havola",

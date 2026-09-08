@@ -7,6 +7,7 @@ export type CatalogLocale = "uz" | "ru" | "en";
 export type LegalSubservice = {
   key: string; // globally unique, kebab-case, category-prefixed
   label: Record<CatalogLocale, string>;
+  advocateOnly?: boolean; // this single service needs an advocate even if its category doesn't
 };
 
 export type LegalCategory = {
@@ -313,7 +314,6 @@ export const LEGAL_SERVICES: LegalCategory[] = [
   },
   {
     key: "court",
-    advocateOnly: true,
     label: {
       uz: "Sud va nizolar",
       ru: "Суд и споры",
@@ -386,6 +386,7 @@ export const LEGAL_SERVICES: LegalCategory[] = [
       },
       {
         key: "court-lawyer-participation",
+        advocateOnly: true,
         label: {
           uz: "Sudda advokat ishtirokini ta'minlash",
           ru: "Обеспечение участия адвоката в суде",
