@@ -2547,3 +2547,10 @@ body:has(.schat) .fab{display:none}
 .ldrw__noteadd textarea:focus{border-color:var(--b400)}
 .ldrw__remind{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .ldrw__remind .mpick,.ldrw__remind .dpick{flex:1;min-width:150px}
+/* Sales KPI strip + filter bar */
+.lkpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:14px}
+.lkpi__c{background:var(--b50);border-radius:14px;padding:12px 16px;display:flex;flex-direction:column;gap:2px}
+.lkpi__c b{font-family:var(--fd);font-size:1.4rem;color:var(--b600)}
+.lkpi__c span{font-size:.78rem;color:var(--gray)}
+.lfilters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.lfilters .svsel__search{flex:1 1 200px}

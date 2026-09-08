@@ -6,9 +6,10 @@ import { getLeadKanban, moveLeadKanban, adminCreateLead, adminDeleteLead, type K
 import { useResource } from "@/lib/useResource";
 import { AdminForm, useReload } from "@/components/admin/AdminBits";
 import Modal from "@/components/admin/Modal";
+import Select from "@/components/Select";
 import LeadDrawer from "@/components/admin/LeadDrawer";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
-import { IconTrendingUp, IconChevronLeft, IconChevronRight, IconUsers, IconGrid, IconDocLines, IconPlus } from "@/components/icons";
+import { IconTrendingUp, IconChevronLeft, IconChevronRight, IconUsers, IconGrid, IconDocLines, IconPlus, IconSearch } from "@/components/icons";
 
 export default function AdminPipeline() {
   const t = useTranslations("admin.pipeline");
@@ -32,6 +33,27 @@ export default function AdminPipeline() {
   const colTitle = (k: string) => cols.find((c) => c.key === k)?.title || k;
   const colColor = (k: string) => cols.find((c) => c.key === k)?.color || "";
   const orderOf = (k: string) => cols.findIndex((c) => c.key === k);
+
+  // Filters (client-side over the loaded board).
+  const [q, setQ] = useState("");
+  const [fSource, setFSource] = useState("");
+  const [fRegion, setFRegion] = useState("");
+  const [fStage, setFStage] = useState("");
+  const query = q.trim().toLowerCase();
+  const matchLead = (l: Lead) =>
+    (!query || `${l.name} ${l.phone} ${l.category}`.toLowerCase().includes(query)) &&
+    (!fSource || l.source === fSource) &&
+    (!fRegion || l.region === fRegion);
+  const sources = useMemo(() => [...new Set(allCards.map((x) => x.lead.source).filter(Boolean))], [allCards]);
+  const regions = useMemo(() => [...new Set(allCards.map((x) => x.lead.region).filter(Boolean))], [allCards]);
+  const viewCols = useMemo(() => cols.map((c) => ({ ...c, cards: c.cards.filter((x) => matchLead(x.lead)) })), [cols, query, fSource, fRegion]);
+  const rows = allCards.filter((x) => matchLead(x.lead) && (!fStage || x.colKey === fStage));
+
+  // KPI (from the full board, not the filtered view).
+  const finalTotal = cols.filter((c) => c.isFinal).reduce((n, c) => n + c.count, 0);
+  const wonCount = (cols.find((c) => c.key === "won") ?? cols.filter((c) => c.isFinal)[0])?.count ?? 0;
+  const active = total - finalTotal;
+  const conv = total ? Math.round((wonCount / total) * 100) : 0;
 
   async function moveTo(leadId: string, columnKey: string, position: number) {
     setBusy(leadId);
@@ -76,7 +98,26 @@ export default function AdminPipeline() {
           <button className="btn btn--pri btn--sm" type="button" onClick={() => setAddOpen(true)}><IconPlus />{ta("form.add")}</button>
         </span>
       </div>
-      <p className="advmuted" style={{ marginBottom: 16 }}>{t("lead")}</p>
+      <p className="advmuted" style={{ marginBottom: 14 }}>{t("lead")}</p>
+
+      {cols.length ? (
+        <>
+          <div className="lkpi">
+            <div className="lkpi__c"><b>{total}</b><span>{t("kpi.total")}</span></div>
+            <div className="lkpi__c"><b>{active}</b><span>{t("kpi.active")}</span></div>
+            <div className="lkpi__c"><b>{wonCount}</b><span>{t("kpi.won")}</span></div>
+            <div className="lkpi__c"><b>{conv}%</b><span>{t("kpi.conv")}</span></div>
+          </div>
+          <div className="lfilters">
+            <span className="svsel__search"><IconSearch /><input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("f.search")} aria-label={t("f.search")} /></span>
+            <Select value={fSource} onChange={setFSource} ariaLabel={t("d.source")} options={[{ value: "", label: t("f.allSource") }, ...sources.map((s) => ({ value: s, label: t.has(`source.${s}`) ? t(`source.${s}`) : s }))]} />
+            <Select value={fRegion} onChange={setFRegion} ariaLabel={t("d.region")} options={[{ value: "", label: t("f.allRegion") }, ...regions.map((r) => ({ value: r, label: r }))]} />
+            {view === "table" ? (
+              <Select value={fStage} onChange={setFStage} ariaLabel={t("d.stage")} options={[{ value: "", label: t("f.allStage") }, ...cols.map((c) => ({ value: c.key, label: c.title }))]} />
+            ) : null}
+          </div>
+        </>
+      ) : null}
 
       {res.status === "loading" ? (
         <Skeleton rows={4} />
@@ -84,7 +125,7 @@ export default function AdminPipeline() {
         <EmptyState icon={<IconTrendingUp />} title={t("empty")} text={t("emptyText")} />
       ) : view === "kanban" ? (
         <div className="pipe">
-          {cols.map((col, ci) => (
+          {viewCols.map((col, ci) => (
             <div
               className={`pipe__col${overCol === col.key ? " pipe__col--over" : ""}`}
               key={col.key}
@@ -96,7 +137,7 @@ export default function AdminPipeline() {
               <div className="pipe__head">
                 <span className="pipe__dot" style={col.color ? { background: col.color } : undefined} />
                 <b>{col.title}</b>
-                <span className="pipe__count">{col.count}</span>
+                <span className="pipe__count">{query || fSource || fRegion ? col.cards.length : col.count}</span>
               </div>
               <div className="pipe__cards">
                 <div className={`pipe__slot${overCol === col.key && dragId ? " on" : ""}`} aria-hidden />
@@ -132,10 +173,10 @@ export default function AdminPipeline() {
         </div>
       ) : (
         <div className="alist">
-          {allCards.length === 0 ? (
+          {rows.length === 0 ? (
             <EmptyState icon={<IconUsers />} title={t("empty")} text={t("emptyText")} />
           ) : (
-            allCards.map(({ lead: l, colKey }, i) => (
+            rows.map(({ lead: l, colKey }, i) => (
               <button type="button" className="aitem aitem--link" key={l.id} onClick={() => setSelId(l.id)}>
                 <span className="aitem__n">{i + 1}</span>
                 <div className="aitem__m">

@@ -3085,6 +3085,8 @@
       "reengage": "Qayta jalb qilish",
       "viewKanban": "Kanban",
       "viewTable": "Jadval",
+      "kpi": { "total": "Jami lid", "active": "Faol", "won": "Yutildi", "conv": "Konversiya" },
+      "f": { "search": "Ism yoki telefon…", "allSource": "Barcha manba", "allRegion": "Barcha hudud", "allStage": "Barcha bosqich" },
       "d": {
         "close": "Yopish",
         "stage": "Bosqich",

@@ -3079,6 +3079,8 @@
       "reengage": "Re-engage",
       "viewKanban": "Kanban",
       "viewTable": "Table",
+      "kpi": { "total": "Total leads", "active": "Active", "won": "Won", "conv": "Conversion" },
+      "f": { "search": "Name or phone…", "allSource": "All sources", "allRegion": "All regions", "allStage": "All stages" },
       "d": {
         "close": "Close",
         "stage": "Stage",
