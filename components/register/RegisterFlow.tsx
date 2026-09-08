@@ -394,9 +394,19 @@ export default function RegisterFlow() {
                     <input value={p.lastName ?? ""} onChange={(e) => setName({ lastName: e.target.value })} placeholder={t("fields.lastNamePh")} />
                   </div>
                 </div>
-                <div>
-                  <label>{t("fields.region")}</label>
-                  <Select value={p.region ?? ""} onChange={(v) => setProfile({ region: v })} options={regionOpts} ariaLabel={t("fields.region")} placeholder={t("fields.regionPh")} />
+                <div className="cform__row2">
+                  <div>
+                    <label>{t("fields.region")}</label>
+                    <Select value={p.region ?? ""} onChange={(v) => setProfile({ region: v })} options={regionOpts} ariaLabel={t("fields.region")} placeholder={t("fields.regionPh")} />
+                  </div>
+                  <div>
+                    <label>{t("lawyer.expLabel")}</label>
+                    <input type="number" min={0} value={p.experienceYears ?? ""} onChange={(e) => setProfile({ experienceYears: parseInt(e.target.value || "0", 10) || 0 })} placeholder={t("fields.experiencePh")} />
+                  </div>
+                </div>
+                <div className="rf__benefit">
+                  <b>{t("advocate.expBenefitTitle")}</b>
+                  <p>{t("lawyer.expBenefit")}</p>
                 </div>
                 {pwField}
               </div>
