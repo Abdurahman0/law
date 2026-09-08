@@ -2496,3 +2496,13 @@ body:has(.schat) .fab{display:none}
 .idv__prov:hover{border-color:var(--b300);background:var(--b50)}
 .idv__prov b{font-family:var(--fd);font-size:1.05rem;color:var(--ink)}
 .idv__prov span{font-size:.8rem;color:var(--gray)}
+/* Handmade day date picker (calendar) */
+.dpick .mpick__pop{right:auto;width:264px;max-width:calc(100vw - 32px)}
+.dpick__wd{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px}
+.dpick__wd span{text-align:center;font-size:.68rem;font-weight:700;color:var(--gray2);padding:4px 0}
+.dpick__grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.dpick__d{border:0;background:transparent;border-radius:9px;padding:8px 0;font-size:.82rem;font-weight:600;color:var(--ink);cursor:pointer;transition:.12s}
+.dpick__d:hover:not(:disabled){background:var(--b50);color:var(--b600)}
+.dpick__d.on{background:var(--grad);color:#fff;box-shadow:var(--sblue)}
+.dpick__d:disabled{color:var(--line);cursor:default}
+.dpick__blank{padding:8px 0}

@@ -7,6 +7,7 @@ import { useResource } from "@/lib/useResource";
 import { useReload, Notice } from "@/components/admin/AdminBits";
 import Modal from "@/components/admin/Modal";
 import Select from "@/components/Select";
+import DatePicker from "@/components/DatePicker";
 import { Skeleton, EmptyState } from "./DataState";
 import { IconClipboardCheck, IconChevronLeft, IconChevronRight, IconPlus } from "@/components/icons";
 
@@ -101,7 +102,7 @@ export default function TaskBoard() {
             </div>
             <div>
               <label>{t("due")}</label>
-              <input type="date" value={due} onChange={(e) => setDue(e.target.value)} />
+              <DatePicker value={due} onChange={setDue} placeholder={t("due")} ariaLabel={t("due")} />
             </div>
           </div>
           {note ? <Notice ok={note.ok} msg={note.msg} /> : null}

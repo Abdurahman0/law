@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { shortDate, fmtDate } from "@/lib/date";
+import DatePicker from "@/components/DatePicker";
 
 // Responsive SVG line chart for time series (revenue trend etc.) with a
 // date-range selector and hover tooltips. X labels are localized dates.
@@ -56,9 +57,9 @@ export default function LineChart({
     <div className="lchart">
       <div className="lchart__ranges">
         <div className="lchart__dates">
-          <input type="date" value={from} max={to || undefined} aria-label={t("from")} onChange={(e) => { setFrom(e.target.value); setHover(null); }} />
+          <DatePicker value={from} max={to || undefined} placeholder={t("from")} ariaLabel={t("from")} onChange={(v) => { setFrom(v); setHover(null); }} />
           <span>–</span>
-          <input type="date" value={to} min={from || undefined} aria-label={t("to")} onChange={(e) => { setTo(e.target.value); setHover(null); }} />
+          <DatePicker value={to} min={from || undefined} placeholder={t("to")} ariaLabel={t("to")} onChange={(v) => { setTo(v); setHover(null); }} />
           {custom ? (
             <button type="button" className="lchart__clear" onClick={() => { setFrom(""); setTo(""); }} aria-label={t("clear")}>×</button>
           ) : null}
