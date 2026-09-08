@@ -47,7 +47,6 @@ const NAV_GROUPS: { group: string; items: NavItem[] }[] = [
   {
     group: "sales",
     items: [
-      { href: "/admin/leads", key: "leads", Icon: IconUsers, perm: "leads.manage" },
       { href: "/admin/pipeline", key: "pipeline", Icon: IconTrendingUp, perm: "leads.manage" },
       { href: "/admin/call-center", key: "callCenter", Icon: IconPhone, perm: "leads.manage" },
       { href: "/admin/call-analytics", key: "callAnalytics", Icon: IconChat, perm: "leads.manage" },
