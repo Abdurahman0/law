@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { formatUzPhone, isValidUzPhone } from "@/lib/phone";
+import { formatUzSubscriber, uzSubscriber, isValidUzPhone } from "@/lib/phone";
 import { IconPhone, IconArrowRight } from "../icons";
 
 export default function PhoneStep({
@@ -38,22 +38,24 @@ export default function PhoneStep({
       <div className="cform" style={{ maxWidth: "none", marginTop: 22 }}>
         <div>
           <label htmlFor="rf-phone">{t("label")}</label>
-          <input
-            id="rf-phone"
-            type="tel"
-            inputMode="tel"
-            value={formatUzPhone(phone)}
-            onChange={(e) => onChange(formatUzPhone(e.target.value))}
-            onFocus={(e) => {
-              if (!phone) onChange("+998");
-              requestAnimationFrame(() => e.target.setSelectionRange(e.target.value.length, e.target.value.length));
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") submit();
-            }}
-            placeholder="+998 90 123 45 67"
-            autoComplete="tel"
-          />
+          <div className="phonf">
+            <span className="phonf__cc">+998</span>
+            <input
+              id="rf-phone"
+              type="tel"
+              inputMode="tel"
+              value={formatUzSubscriber(phone)}
+              onChange={(e) => {
+                const d = uzSubscriber(e.target.value);
+                onChange(d ? "+998" + d : "");
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") submit();
+              }}
+              placeholder="90 123 45 67"
+              autoComplete="tel"
+            />
+          </div>
         </div>
         {err ? <p className="rf__err">{err}</p> : null}
         <button className="btn btn--grad btn--full btn--lg" type="button" onClick={submit}>

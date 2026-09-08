@@ -2266,3 +2266,7 @@ body:has(.schat) .fab{display:none}
 .pipe__card--drag{opacity:.45}
 .pipe__col--over{outline:2px dashed var(--b600);outline-offset:-3px;background:var(--b100)}
 .pipe__col--over .pipe__cards{min-height:60px}
+/* Phone field: fixed +998 chip + subscriber-only input */
+.phonf{display:flex;align-items:stretch;gap:8px}
+.phonf__cc{display:flex;align-items:center;padding:0 15px;border-radius:14px;background:#F7FAFE;box-shadow:inset 0 0 0 1.5px var(--line);font-weight:600;font-size:.95rem;color:var(--gray2);white-space:nowrap;user-select:none}
+.phonf input{flex:1;min-width:0}

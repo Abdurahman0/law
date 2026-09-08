@@ -4,7 +4,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/lib/auth";
 import { Link, useRouter } from "@/i18n/navigation";
-import { formatUzPhone } from "@/lib/phone";
+import { formatUzSubscriber, uzSubscriber } from "@/lib/phone";
 import { IconLogo } from "../icons";
 
 export default function LoginForm() {
@@ -60,19 +60,21 @@ export default function LoginForm() {
         <div className="cform" style={{ maxWidth: "none", marginTop: 20 }}>
           <div>
             <label htmlFor="l-phone">{t("phone")}</label>
-            <input
-              id="l-phone"
-              type="tel"
-              inputMode="tel"
-              value={formatUzPhone(phone)}
-              onChange={(e) => setPhone(formatUzPhone(e.target.value))}
-              onFocus={(e) => {
-                if (!phone) setPhone("+998");
-                requestAnimationFrame(() => e.target.setSelectionRange(e.target.value.length, e.target.value.length));
-              }}
-              placeholder="+998 90 123 45 67"
-              autoComplete="tel"
-            />
+            <div className="phonf">
+              <span className="phonf__cc">+998</span>
+              <input
+                id="l-phone"
+                type="tel"
+                inputMode="tel"
+                value={formatUzSubscriber(phone)}
+                onChange={(e) => {
+                  const d = uzSubscriber(e.target.value);
+                  setPhone(d ? "+998" + d : "");
+                }}
+                placeholder="90 123 45 67"
+                autoComplete="tel"
+              />
+            </div>
           </div>
           <div>
             <label htmlFor="l-pw">{t("password")}</label>
