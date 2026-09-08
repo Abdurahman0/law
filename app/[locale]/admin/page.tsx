@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useAuth } from "@/lib/auth";
+import { fmtDate } from "@/lib/date";
 import {
-  getAdminDashboard,
   getCeoDashboard,
   getRetentionOverview,
   getQualityOverview,
@@ -13,6 +13,7 @@ import {
 } from "@/lib/services/backend";
 import { useResourceOne } from "@/lib/useResource";
 import { Skeleton } from "@/components/portal/DataState";
+import LineChart from "@/components/admin/LineChart";
 import {
   IconBolt,
   IconUsers,
@@ -25,11 +26,9 @@ import {
   IconArrowRight,
 } from "@/components/icons";
 
-const human = (s: string) => s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 const fmt = (n: number) => (Math.abs(n) >= 1000 ? n.toLocaleString("ru-RU").replace(/,/g, " ") : String(n));
 const DASH = "—";
 
-// CRM module quick-links surfaced on the command dashboard.
 const MODULES = [
   { href: "/admin/leads", key: "leads", Icon: IconUsers },
   { href: "/admin/pipeline", key: "pipeline", Icon: IconTrendingUp },
@@ -59,8 +58,8 @@ export default function AdminOverview() {
   const t = useTranslations("admin.overview");
   const tc = useTranslations("admin.overview.crm");
   const tn = useTranslations("admin");
+  const locale = useLocale();
   const { session } = useAuth();
-  const dash = useResourceOne(getAdminDashboard, []);
   const ceo = useResourceOne(getCeoDashboard, []);
   const ret = useResourceOne(getRetentionOverview, []);
   const qual = useResourceOne(getQualityOverview, []);
@@ -86,10 +85,11 @@ export default function AdminOverview() {
   const q = qual.data;
   const money = (n?: number) => (n ? `${fmt(n)} ${tc("som")}` : DASH);
   const pct = (n?: number) => (n || n === 0 ? `${Math.round(n)}%` : DASH);
-  const arpu = c && c.users ? Math.round(c.revenue / c.users) : 0;
   const funnel = c?.funnel ?? [];
-  const fMax = Math.max(...funnel.map((f) => f.value), 1);
-
+  const fMax = Math.max(...funnel.map((f2) => f2.value), 1);
+  const trend = c?.revenueTrend ?? [];
+  const lastPoint = trend[trend.length - 1];
+  const lastDate = lastPoint ? fmtDate(lastPoint.label, locale) : "";
   const loading = ceo.status === "loading" && ret.status === "loading" && qual.status === "loading";
 
   return (
@@ -109,81 +109,44 @@ export default function AdminOverview() {
         </div>
       </div>
 
-      {loading ? <Skeleton rows={4} /> : null}
+      {loading ? <Skeleton rows={3} /> : null}
 
-      {/* KPI command grid — grouped per the platform plan */}
-      <div className="kgrid">
-        <section className="ksec">
-          <h3 className="ksec__h">{tc("growth")}</h3>
-          <div className="ksec__tiles">
-            <Tile label={tc("users")} value={c ? fmt(c.users) : DASH} />
-            <Tile label={tc("active")} value={c ? fmt(c.activeUsers) : DASH} />
-            <Tile label={tc("conversion")} value={pct(c?.conversionPct)} />
-          </div>
-        </section>
-
-        <section className="ksec">
-          <h3 className="ksec__h">{tc("monetization")}</h3>
-          <div className="ksec__tiles">
-            <Tile label={tc("revenue")} value={money(c?.revenue)} delta={c?.revenueDeltaPct} />
-            <Tile label={tc("mrr")} value={money(c?.mrr)} />
-            <Tile label={tc("arpu")} value={arpu ? money(arpu) : DASH} />
-          </div>
-        </section>
-
-        <section className="ksec">
-          <h3 className="ksec__h">{tc("retention")}</h3>
-          <div className="ksec__tiles">
-            <Tile label={tc("retained")} value={pct(r?.retainedPct)} />
-            <Tile label={tc("churn")} value={r ? fmt(r.churnedThisMonth) : DASH} />
-            <Tile label={tc("atRisk")} value={r ? fmt(r.atRisk) : DASH} />
-          </div>
-        </section>
-
-        <section className="ksec">
-          <h3 className="ksec__h">{tc("quality")}</h3>
-          <div className="ksec__tiles">
-            <Tile label={tc("rating")} value={q?.avgRating ? q.avgRating.toFixed(1) : DASH} />
-            <Tile label={tc("sla")} value={pct(q?.responseSlaPct)} />
-            <Tile label={tc("complaints")} value={pct(q?.complaintRate)} />
-            <Tile label={tc("resolved")} value={pct(q?.resolvedPct)} />
-          </div>
-        </section>
+      {/* Headline KPIs — one clean panel */}
+      <div className="ppanel">
+        <div className="kpanel">
+          <Tile label={tc("revenue")} value={money(c?.revenue)} delta={c?.revenueDeltaPct} />
+          <Tile label={tc("mrr")} value={money(c?.mrr)} />
+          <Tile label={tc("users")} value={c ? fmt(c.users) : DASH} />
+          <Tile label={tc("conversion")} value={pct(c?.conversionPct)} />
+          <Tile label={tc("retained")} value={pct(r?.retainedPct)} />
+          <Tile label={tc("rating")} value={q?.avgRating ? q.avgRating.toFixed(1) : DASH} />
+          <Tile label={tc("sla")} value={pct(q?.responseSlaPct)} />
+          <Tile label={tc("atRisk")} value={r ? fmt(r.atRisk) : DASH} />
+        </div>
       </div>
 
       <div className="pgrid2">
-        {/* Sales funnel */}
+        {/* Revenue trend — line chart */}
+        <div className="ppanel">
+          <div className="ppanel__h">
+            <b>{tc("revenueTrend")}</b>
+            {lastPoint ? <span className="advmuted">{lastDate} · {money(lastPoint.value)}</span> : null}
+          </div>
+          {trend.length ? <LineChart points={trend} /> : <p className="advmuted">{t("empty")}</p>}
+        </div>
+
+        {/* Sales funnel — bar chart */}
         <div className="ppanel">
           <div className="ppanel__h"><b>{tc("funnel")}</b></div>
           {funnel.length ? (
             <div className="kfunnel">
-              {funnel.map((f, i) => (
+              {funnel.map((fn, i) => (
                 <div className="kfunnel__row" key={i}>
-                  <span className="kfunnel__lbl">{f.label}</span>
-                  <span className="kfunnel__bar"><span style={{ width: `${Math.max(4, (f.value / fMax) * 100)}%` }} /></span>
-                  <b className="kfunnel__v">{fmt(f.value)}</b>
+                  <span className="kfunnel__lbl">{fn.label}</span>
+                  <span className="kfunnel__bar"><span style={{ width: `${Math.max(4, (fn.value / fMax) * 100)}%` }} /></span>
+                  <b className="kfunnel__v">{fmt(fn.value)}</b>
                 </div>
               ))}
-            </div>
-          ) : (
-            <p className="advmuted">{t("empty")}</p>
-          )}
-        </div>
-
-        {/* Revenue trend (from admin dashboard charts) */}
-        <div className="ppanel">
-          <div className="ppanel__h"><b>{tc("revenueTrend")}</b></div>
-          {c?.revenueTrend?.length ? (
-            <div className="dchart">
-              {c.revenueTrend.slice(-14).map((p, i) => {
-                const max = Math.max(...c.revenueTrend.map((x) => x.value), 1);
-                return (
-                  <div className="dbar" key={i} title={`${p.label}: ${fmt(p.value)}`}>
-                    <span className="dbar__fill" style={{ height: `${Math.max(4, (p.value / max) * 100)}%` }} />
-                    <span className="dbar__lbl">{p.label.slice(-5)}</span>
-                  </div>
-                );
-              })}
             </div>
           ) : (
             <p className="advmuted">{t("empty")}</p>
@@ -204,18 +167,6 @@ export default function AdminOverview() {
           ))}
         </div>
       </div>
-
-      {/* Raw backend totals (counts) kept for completeness */}
-      {dash.data?.totals?.length ? (
-        <div className="amet">
-          {dash.data.totals.map((s) => (
-            <div className="amet__c" key={s.label}>
-              <b>{fmt(s.value)}</b>
-              <span className="amet__l">{t.has(`metrics.${s.label}`) ? t(`metrics.${s.label}`) : human(s.label)}</span>
-            </div>
-          ))}
-        </div>
-      ) : null}
     </>
   );
 }

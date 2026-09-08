@@ -2417,3 +2417,9 @@ body:has(.schat) .fab{display:none}
 .kmod__i svg{width:18px;height:18px}
 .kmod__t{flex:1;font-weight:600;font-size:.9rem;min-width:0;overflow-wrap:anywhere}
 .kmod__a{width:16px;height:16px;color:var(--gray);flex:none}
+/* CRM overview: KPI panel + line chart */
+.kpanel{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(140px,100%),1fr));gap:20px 26px}
+.lchart{display:flex;flex-direction:column;gap:8px}
+.lchart__svg{width:100%;height:180px;display:block}
+.lchart__x{display:flex;justify-content:space-between;font-size:.72rem;color:var(--gray)}
+.lchart__empty{font-size:.9rem;color:var(--gray);padding:8px 0}

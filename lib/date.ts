@@ -23,6 +23,23 @@ export function fmtDate(iso: string, locale: string): string {
   return `${d} ${months[m - 1]} ${y}`;
 }
 
+// Short month names for compact chart axes.
+const MONTHS_SHORT: Record<string, string[]> = {
+  uz: ["Yan", "Fev", "Mar", "Apr", "May", "Iyn", "Iyl", "Avg", "Sen", "Okt", "Noy", "Dek"],
+  ru: ["янв", "фев", "мар", "апр", "мая", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"],
+  en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+};
+
+// Compact date for chart axes, e.g. uz "31 Avg", ru "31 авг", en "Aug 31".
+export function shortDate(iso: string, locale: string): string {
+  if (!iso) return "";
+  const parts = iso.split(/[-T ]/).map((n) => parseInt(n, 10));
+  const [y, m, d] = parts;
+  if (!y || !m || !d || m < 1 || m > 12) return iso;
+  const months = MONTHS_SHORT[locale] || MONTHS_SHORT.uz;
+  return locale === "en" ? `${months[m - 1]} ${d}` : `${d} ${months[m - 1]}`;
+}
+
 // Nominative month names (for headers like "Avgust 2026").
 const MONTHS_NOM: Record<string, string[]> = {
   uz: MONTHS.uz,
