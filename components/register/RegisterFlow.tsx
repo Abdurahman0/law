@@ -480,6 +480,10 @@ export default function RegisterFlow() {
                     <input type="number" min={0} value={p.lawyerYears ?? ""} onChange={(e) => setProfile({ lawyerYears: parseInt(e.target.value || "0", 10) || 0 })} placeholder={t("fields.experiencePh")} />
                   </div>
                 </div>
+                <div className="rf__benefit">
+                  <b>{t("advocate.expBenefitTitle")}</b>
+                  <p>{t("advocate.expBenefit")}</p>
+                </div>
                 <div className="rf__wh">
                   <label>{t("advocate.work.title")}</label>
                   <p className="rf__hint">{t("advocate.work.subtitle")}</p>

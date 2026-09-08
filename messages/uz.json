@@ -2650,6 +2650,8 @@
       },
       "advExp": "Advokat sifatida tajriba (yil)",
       "lawExp": "Yurist sifatida tajriba (yil)",
+      "expBenefitTitle": "Tajriba nima uchun muhim?",
+      "expBenefit": "Tajribangiz xizmat narxingizni belgilaydi: 3–5 yil +10%, 6–10 yil +15%, 10 yildan ortiq +20%. Advokatlikdan oldingi soha tajribangiz (5+ yil) shu yo'nalishda 30% gacha qo'shimcha narx imkonini beradi. Ko'proq tajriba — yuqori reyting, ko'proq mijoz va \"Super advokat\" maqomi.",
       "structure": "Advokatlik tuzilmasi",
       "structurePlaceholder": "Tuzilmani tanlang",
       "structureOptions": {

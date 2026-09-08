@@ -2644,6 +2644,8 @@
       },
       "advExp": "Experience as advocate (years)",
       "lawExp": "Experience as lawyer (years)",
+      "expBenefitTitle": "Why experience matters",
+      "expBenefit": "Your experience sets your service price: 3–5 yrs +10%, 6–10 yrs +15%, 10+ yrs +20%. Field experience before the bar (5+ yrs) allows up to +30% for that area. More experience means a higher rating, more clients and \"Super lawyer\" status.",
       "structure": "Advocate structure",
       "structurePlaceholder": "Select a structure",
       "structureOptions": {

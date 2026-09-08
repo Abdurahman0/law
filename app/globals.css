@@ -2384,3 +2384,7 @@ body:has(.schat) .fab{display:none}
 .docpend__sub{color:var(--gray);font-size:.9rem;line-height:1.45;max-width:360px}
 .docpend__badge{display:inline-flex;align-items:center;gap:7px;padding:6px 13px;border-radius:999px;background:#fff7e6;color:#b7791f;font-weight:700;font-size:.82rem}
 .docpend__dot{width:8px;height:8px;border-radius:50%;background:#f0b429;animation:dpPulse 1.4s ease-in-out infinite}
+/* Register: experience benefit note */
+.rf__benefit{background:var(--b50);border:1px solid #bcd4ff;border-radius:12px;padding:13px 15px;margin-top:2px}
+.rf__benefit b{display:block;font-size:.9rem;color:var(--b600);margin-bottom:4px}
+.rf__benefit p{margin:0;font-size:.84rem;color:var(--gray2);line-height:1.5}
