@@ -945,7 +945,7 @@ body:has(.plogin) .fab{display:none}
 .prow__m span{font-size:.8rem;color:var(--gray2)}
 
 /* two-column info grid */
-.pgrid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pgrid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
 .pkv{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
 .pkv__i label{display:block;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--gray2);margin-bottom:3px}
 .pkv__i b{font-size:.96rem}
@@ -1598,8 +1598,8 @@ body:has(.auth) .fab{display:none}
 
 
 /* ═══════════════ ADMIN PANEL ═══════════════ */
-.agrid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
-@media (max-width:1000px){.agrid{grid-template-columns:1fr}}
+.agrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:1100px){.agrid{grid-template-columns:minmax(0,1fr)}}
 .alist{display:grid;gap:2px;margin-bottom:6px}
 .arow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 2px;border-bottom:1px solid var(--line);font-size:.92rem}
 .arow:last-child{border-bottom:0}
@@ -2442,14 +2442,18 @@ body:has(.schat) .fab{display:none}
    full-height, internally-scrolling region so the data always uses the whole
    screen regardless of how the list is nested. Header sticks to the top. */
 .pbody__in:has(> .ppanel:only-child){height:100%;min-height:0}
-.pbody__in > .ppanel:only-child{height:100%;min-height:0;overflow-y:auto}
-.pbody__in > .ppanel:only-child > .ppanel__h{position:sticky;top:0;z-index:3;background:#fff;margin:-20px -20px 0;padding:20px 20px 12px}
+.pbody__in > .ppanel:only-child{height:100%;min-height:0;overflow-y:auto;padding-top:0}
+/* header pinned to the very top of the scrolling panel — no negative margins
+   (which broke sticky and let items slip above it); solid bg + high z-index so
+   rows scroll cleanly behind it */
+.pbody__in > .ppanel:only-child > .ppanel__h{position:sticky;top:0;z-index:5;background:#fff;padding-top:20px}
 /* the panel is the scroller here — let inner lists grow to full height
    instead of capping at their own max-height/overflow */
 .pbody__in > .ppanel:only-child .alist,
 .pbody__in > .ppanel:only-child .laist{max-height:none;overflow:visible;padding-right:0}
 /* kanban board: fill the panel; columns take full height, cards scroll inside */
-.pbody__in > .ppanel:only-child:has(.pipe){display:flex;flex-direction:column;overflow:hidden}
+.pbody__in > .ppanel:only-child:has(.pipe){display:flex;flex-direction:column;overflow:hidden;padding-top:20px}
+.pbody__in > .ppanel:only-child:has(.pipe) > .ppanel__h{position:static;padding-top:0}
 .pbody__in > .ppanel:only-child > .pipe{flex:1 1 auto;min-height:0}
 .pbody__in > .ppanel:only-child .pipe__col{max-height:100%}
 /* Kanban animated drop slot (euroflowers-style) */
