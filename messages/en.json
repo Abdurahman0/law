@@ -2574,7 +2574,8 @@
       "selected": "{n} selected",
       "empty": "No services available",
       "emptyText": "The service catalog will load from the backend.",
-      "advocateOnly": "Advocates only"
+      "advocateOnly": "Advocates only",
+      "selectAll": "Select all"
     },
     "advocate": {
       "steps": {

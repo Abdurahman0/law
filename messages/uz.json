@@ -2580,7 +2580,8 @@
       "selected": "{n} ta tanlandi",
       "empty": "Xizmatlar mavjud emas",
       "emptyText": "Xizmatlar katalogi backenddan yuklanadi.",
-      "advocateOnly": "Faqat advokatlar"
+      "advocateOnly": "Faqat advokatlar",
+      "selectAll": "Hammasini tanlash"
     },
     "advocate": {
       "steps": {

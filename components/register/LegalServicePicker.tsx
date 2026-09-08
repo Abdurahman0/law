@@ -29,6 +29,16 @@ export default function LegalServicePicker({
     onChange([...next]);
   }
 
+  // Whole-group toggle: if every service in the category is already picked,
+  // clear them all; otherwise select the entire group at once.
+  function toggleAll(keys: string[]) {
+    const next = new Set(sel);
+    const allOn = keys.length > 0 && keys.every((k) => next.has(k));
+    if (allOn) keys.forEach((k) => next.delete(k));
+    else keys.forEach((k) => next.add(k));
+    onChange([...next]);
+  }
+
   function toggleCat(key: string) {
     setOpen((prev) => {
       const next = new Set(prev);
@@ -69,24 +79,41 @@ export default function LegalServicePicker({
           groups.map(({ cat, services }) => {
             const locked = !!cat.advocateOnly && !isAdvocate;
             const expanded = locked ? false : query ? true : open.has(cat.key);
-            const chosen = cat.services.filter((s) => sel.has(s.key)).length;
+            const allKeys = cat.services.map((s) => s.key);
+            const chosen = allKeys.filter((k) => sel.has(k)).length;
+            const allOn = chosen === allKeys.length && allKeys.length > 0;
+            const someOn = chosen > 0 && !allOn;
             return (
               <div className={`lsp__cat${expanded ? " on" : ""}${locked ? " lsp__cat--locked" : ""}`} key={cat.key}>
-                <button
-                  type="button"
-                  className="lsp__head"
-                  onClick={() => !locked && toggleCat(cat.key)}
-                  disabled={locked}
-                >
-                  <span className="lsp__hlabel">{legalServiceLabel(cat.key, locale)}</span>
-                  {cat.advocateOnly ? <span className="lsp__advonly">{t("advocateOnly")}</span> : null}
-                  {chosen > 0 ? <span className="lsp__badge">{chosen}</span> : null}
+                <div className="lsp__head">
                   {locked ? null : (
-                    <span className="lsp__cv">
-                      <IconChevronRight />
-                    </span>
+                    <button
+                      type="button"
+                      className={`lsp__box lsp__checkall${allOn ? " on" : ""}${someOn ? " some" : ""}`}
+                      onClick={() => toggleAll(allKeys)}
+                      role="checkbox"
+                      aria-checked={allOn ? true : someOn ? "mixed" : false}
+                      aria-label={t("selectAll")}
+                    >
+                      {allOn ? <IconCheck /> : someOn ? <span className="lsp__dash" /> : null}
+                    </button>
                   )}
-                </button>
+                  <button
+                    type="button"
+                    className="lsp__headmain"
+                    onClick={() => !locked && toggleCat(cat.key)}
+                    disabled={locked}
+                  >
+                    <span className="lsp__hlabel">{legalServiceLabel(cat.key, locale)}</span>
+                    {cat.advocateOnly ? <span className="lsp__advonly">{t("advocateOnly")}</span> : null}
+                    {chosen > 0 ? <span className="lsp__badge">{chosen}</span> : null}
+                    {locked ? null : (
+                      <span className="lsp__cv">
+                        <IconChevronRight />
+                      </span>
+                    )}
+                  </button>
+                </div>
                 {expanded ? (
                   <div className="lsp__opts">
                     {services.map((s) => {
