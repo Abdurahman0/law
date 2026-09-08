@@ -8,6 +8,7 @@ import { initials } from "@/lib/lawyers";
 import LanguageSwitcher from "../LanguageSwitcher";
 import NotificationBell from "./NotificationBell";
 import IncomingCallWatcher from "./IncomingCallWatcher";
+import GrowthBanner from "./GrowthBanner";
 import {
   IconLogo,
   IconGrid,
@@ -248,6 +249,8 @@ export default function PortalShell({
                   <p>{t("pending.text")}</p>
                 </div>
               </div>
+            ) : role !== "client" ? (
+              <GrowthBanner role={role} completeness={session.completeness} />
             ) : null}
             {children}
           </div>

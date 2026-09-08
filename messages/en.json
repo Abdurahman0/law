@@ -1708,7 +1708,18 @@
       "admin": "Admin",
       "accepting": "Accepting…",
       "accepted": "Accepted",
-      "declined": "Declined"
+      "declined": "Declined",
+      "growth": {
+        "title": "Your profile is {pct}% complete",
+        "tier0": "Great start! A few more steps and clients will start finding you in search.",
+        "tier1": "Almost there. Fill in the rest — a stronger profile ranks higher in search.",
+        "tier2": "One step left! Finish your profile and earn the \"verified specialist\" badge.",
+        "perk1": "More clients",
+        "perk2": "Higher in search",
+        "perk3": "Trust badge",
+        "cta": "Complete profile",
+        "dismiss": "Dismiss"
+      }
     },
     "tasks": {
       "title": "Tasks",

@@ -17,8 +17,6 @@ import { IconLogo, IconChevronLeft, IconArrowRight, IconCheck } from "../icons";
 import PhoneStep from "./PhoneStep";
 import AccountTypeCards from "./AccountTypeCards";
 import PhotoUpload from "./PhotoUpload";
-import LegalServicePicker from "./LegalServicePicker";
-import StatsEditor from "./StatsEditor";
 import WorkHistoryEditor from "./WorkHistoryEditor";
 import ProfilePreview from "./ProfilePreview";
 import PasswordInput from "../PasswordInput";
@@ -35,9 +33,10 @@ const STEPS_BY_TYPE: Record<AccountType, string[]> = {
   // Service selection moved out of registration → lawyers pick offered
   // services later in "My services" (app/[locale]/portal/lawyer/services).
   lawyer: ["lawyerBasic"],
-  // NOTE: the "experience" (work history) step is intentionally NOT here — it
-  // belongs in the advocate profile editor. See ADVOCATE_PROFILE_TODO.md.
-  advocate: ["personal", "professional", "expertise", "stats", "review"],
+  // NOTE: work history, practice-area (expertise) selection and case stats are
+  // intentionally NOT collected at registration — they belong in the seller's
+  // profile editor so sign-up stays short. See ADVOCATE_PROFILE_TODO.md.
+  advocate: ["personal", "professional", "review"],
 };
 
 const ADV_STEPS = STEPS_BY_TYPE.advocate;
@@ -500,22 +499,6 @@ export default function RegisterFlow() {
                   <WorkHistoryEditor value={p.workHistory} onChange={(v) => setProfile({ workHistory: v })} />
                 </div>
               </div>
-            </div>
-          ) : null}
-
-          {step === "expertise" ? (
-            <div className="rf__step rf__step--wide">
-              <h1 className="rf__title">{t("advocate.expertiseTitle")}</h1>
-              <p className="rf__sub">{t("advocate.expertiseSubtitle")}</p>
-              <LegalServicePicker value={p.practiceAreas} onChange={(v) => setProfile({ practiceAreas: v })} isAdvocate={draft.accountType === "advocate"} />
-            </div>
-          ) : null}
-
-          {step === "stats" ? (
-            <div className="rf__step rf__step--wide">
-              <h1 className="rf__title">{t("advocate.stats.title")}</h1>
-              <p className="rf__sub">{t("advocate.stats.subtitle")}</p>
-              <StatsEditor value={p.stats ?? ZERO_STATS} onChange={(v) => setProfile({ stats: v })} />
             </div>
           ) : null}
 

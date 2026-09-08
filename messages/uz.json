@@ -1714,7 +1714,18 @@
       "admin": "Admin",
       "accepting": "Qabul qilinmoqda…",
       "accepted": "Qabul qilindi",
-      "declined": "Rad etildi"
+      "declined": "Rad etildi",
+      "growth": {
+        "title": "Profilingiz {pct}% to'ldirilgan",
+        "tier0": "Yaxshi boshladingiz! Yana bir necha qadam — va mijozlar sizni qidiruvda ko'ra boshlaydi.",
+        "tier1": "Deyarli tayyor. Qolgan maydonlarni to'ldiring — profilingiz kuchayib, qidiruvda yuqoriroqda chiqadi.",
+        "tier2": "Bir qadam qoldi! Profilni yakunlang va \"tasdiqlangan mutaxassis\" nishonini qo'lga kiriting.",
+        "perk1": "Ko'proq mijoz",
+        "perk2": "Qidiruvda yuqorida",
+        "perk3": "Ishonch nishoni",
+        "cta": "Profilni to'ldirish",
+        "dismiss": "Yopish"
+      }
     },
     "tasks": {
       "title": "Vazifalar",
