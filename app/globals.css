@@ -871,7 +871,7 @@ body:has(.plogin) .fab{display:none}
 .plogin__note{font-size:.78rem;color:var(--gray2);margin:16px 0 0;text-align:center}
 
 /* portal shell */
-.portal{display:grid;grid-template-columns:252px 1fr;height:100dvh;background:var(--b50);position:relative}
+.portal{display:grid;grid-template-columns:252px minmax(0,1fr);height:100dvh;background:var(--b50);position:relative}
 .psb{background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
 .psb__logo{display:flex;align-items:center;gap:9px;font-family:var(--fd);font-weight:800;font-size:1.2rem;letter-spacing:-.03em;padding:16px 18px;color:var(--ink)}
 .psb__logo .logo__m{width:30px;height:30px;border-radius:9px;flex:none}
@@ -2444,6 +2444,10 @@ body:has(.schat) .fab{display:none}
 .pbody__in:has(> .ppanel:only-child){height:100%;min-height:0}
 .pbody__in > .ppanel:only-child{height:100%;min-height:0;overflow-y:auto}
 .pbody__in > .ppanel:only-child > .ppanel__h{position:sticky;top:0;z-index:3;background:#fff;margin:-20px -20px 0;padding:20px 20px 12px}
+/* the panel is the scroller here — let inner lists grow to full height
+   instead of capping at their own max-height/overflow */
+.pbody__in > .ppanel:only-child .alist,
+.pbody__in > .ppanel:only-child .laist{max-height:none;overflow:visible;padding-right:0}
 /* Kanban animated drop slot (euroflowers-style) */
 .pipe__slot{height:0;border:2px dashed transparent;border-radius:12px;box-sizing:border-box;transition:height .2s ease,margin .2s ease,border-color .2s ease,background .2s ease}
 .pipe__slot.on{height:60px;margin-bottom:10px;border-color:var(--b600);background:var(--b50)}
