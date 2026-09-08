@@ -1707,7 +1707,7 @@
       "priority": { "low": "Past", "medium": "O'rta", "high": "Yuqori" }
     },
     "assistant": {
-      "title": "SI yordamchi",
+      "title": "Sun'iy intellekt yordamchi",
       "subtitle": "Ish bo'yicha tez yordam: javob loyihasi, xulosa, amaliyot.",
       "placeholder": "Savolingizni yozing yoki quyidagilardan birini tanlang…",
       "ask": "So'rash",
@@ -1727,8 +1727,8 @@
         "services": "Xizmatlarim",
         "documents": "Hujjatlar",
         "chat": "Xavfsiz chat",
-        "ai": "Sun'iy intellekt Yordamchi",
-        "assistant": "SI yordamchi",
+        "ai": "Sun'iy intellekt yordamchi",
+        "assistant": "Sun'iy intellekt yordamchi",
         "promotion": "Targ'ibot",
         "subscription": "Obuna",
         "notifications": "Bildirishnomalar",
@@ -1769,7 +1769,7 @@
         "organization": "Tashkilot",
         "notifications": "Bildirishnomalar",
         "workspace": "Ish maydoni",
-        "assistant": "SI yordamchi"
+        "assistant": "Sun'iy intellekt yordamchi"
       }
     },
     "lawyer": {
@@ -1950,13 +1950,13 @@
         "receipt": "Chek"
       },
       "intake": {
-        "title": "AI muammo tahlili",
-        "subtitle": "Muammoingizni yozing — AI turini aniqlaydi va mos yo'nalishni ko'rsatadi.",
+        "title": "Sun'iy intellekt muammo tahlili",
+        "subtitle": "Muammoingizni yozing — Sun'iy intellekt turini aniqlaydi va mos yo'nalishni ko'rsatadi.",
         "label": "Muammoingiz",
         "placeholder": "Masalan: ish beruvchi ikki oydan beri maoshni to'lamayapti…",
         "analyze": "Tahlil qilish",
         "analyzing": "Tahlil qilinmoqda…",
-        "hint": "AI tahlili keyin call-center operatoriga lead sifatida uzatiladi.",
+        "hint": "Sun'iy intellekt tahlili keyin call-center operatoriga lead sifatida uzatiladi.",
         "resultTitle": "Tahlil natijasi",
         "category": "Yo'nalish",
         "recommended": "Tavsiya etilgan xizmat",
@@ -1968,12 +1968,12 @@
       },
       "docAnalysis": {
         "title": "Hujjat tahlili",
-        "subtitle": "Hujjat matnini joylang — AI xatar va tavsiyalarni ko'rsatadi.",
+        "subtitle": "Hujjat matnini joylang — Sun'iy intellekt xatar va tavsiyalarni ko'rsatadi.",
         "label": "Hujjat matni",
         "placeholder": "Shartnoma yoki hujjat matnini shu yerga joylang…",
         "analyze": "Tahlil qilish",
         "analyzing": "Tahlil qilinmoqda…",
-        "hint": "AI tahlili maslahat xarakteriga ega, yuridik xulosa o'rnini bosmaydi.",
+        "hint": "Sun'iy intellekt tahlili maslahat xarakteriga ega, yuridik xulosa o'rnini bosmaydi.",
         "summary": "Qisqacha",
         "noSummary": "Qisqacha ma'lumot yo'q",
         "risks": "Xatarlar",
@@ -2984,7 +2984,7 @@
       "moveBack": "Orqaga",
       "moveFwd": "Oldinga",
       "reengage": "Qayta jalb qilish",
-      "source": { "web": "Veb-sayt", "website": "Veb-sayt", "referral": "Tavsiya", "ad": "Reklama", "ads": "Reklama", "organic": "Organik", "manual": "Qo'lda", "phone": "Telefon", "call": "Qo'ng'iroq", "chat": "Chat", "ai": "AI", "social": "Ijtimoiy tarmoq", "seo": "SEO" },
+      "source": { "web": "Veb-sayt", "website": "Veb-sayt", "referral": "Tavsiya", "ad": "Reklama", "ads": "Reklama", "organic": "Organik", "manual": "Qo'lda", "phone": "Telefon", "call": "Qo'ng'iroq", "chat": "Chat", "ai": "Sun'iy intellekt", "social": "Ijtimoiy tarmoq", "seo": "SEO" },
       "stages": {
         "new": "Yangi",
         "contacted": "Aloqa qilingan",
