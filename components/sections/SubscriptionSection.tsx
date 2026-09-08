@@ -84,8 +84,8 @@ export default function SubscriptionSection() {
           <p className="lead">{t("lead")}</p>
         </div>
 
+        {/* Module 6: personal-advocate subscription is 6 or 12 months only. */}
         <div className="switch" role="group">
-          <button type="button" aria-pressed={term === 1} onClick={() => setTerm(1)}>{t("term1")}</button>
           <button type="button" aria-pressed={term === 6} onClick={() => setTerm(6)}>{t("term6")}</button>
           <button type="button" aria-pressed={term === 12} onClick={() => setTerm(12)}>{t("term12")}</button>
         </div>

@@ -993,6 +993,7 @@
           "200+ tayyor yuridik hujjat shabloni",
           "Advokatlar tarmog'idagi qo'shimcha xizmatlarga 25% chegirma",
           "LexGo mahsulotlariga, jumladan LexGo.AI ga 10% chegirma",
+          "Tezkor vaziyatlarda (jinoiy-ma'muriy soha) eng yaqin tajribali advokatni 25% chegirmada zudlik bilan yuboramiz",
           "Turmush o'rtog'ingiz ham qamrab olinadi"
         ],
         "cta": "Standartni tanlash"
@@ -1002,11 +1003,14 @@
         "for": "Biznesi bor va oilasini ham qamrab olmoqchi bo'lganlar uchun.",
         "features": [
           "Standart tarifdagi barcha imkoniyatlar",
-          "Biznesni huquqiy tekshirish: yiliga 1 marta 1 soatlik konsultatsiya",
+          "Shartnoma va hujjatlarni advokat ko'rib chiqadi — 25 sahifagacha",
+          "Biznesni huquqiy tekshirish: har 3 oyda 1 soatlik konsultatsiya (6 oydan keyin ochiladi)",
+          "Biznes va shaxsiy masalalar uchun 200+ shablon bazasidan bepul foydalanish",
           "Har oy 1 ta mualliflik huquqini ro'yxatdan o'tkazish",
-          "Kompaniya ochish va savdo belgisini patentlashga 10% chegirma",
-          "Biznes va shaxsiy masalalar uchun 200+ shablon bazasi",
-          "Ota-ona, turmush o'rtoq va qaramog'dagi farzandlar"
+          "LexGo.AI paketiga 10% chegirma",
+          "Obunadan tashqari qo'shimcha advokatlik xizmatlariga 25% chegirma",
+          "Tezkor vaziyatlarda (istalgan soha) eng yaqin tajribali advokatni 25% chegirmada zudlik bilan yuboramiz",
+          "Ota-ona, turmush o'rtoq va qaramog'dagi farzandlar qamrab olinadi"
         ],
         "cta": "Premiumni tanlash"
       },
@@ -1045,7 +1049,7 @@
         {
           "feature": "Hujjat ko'rigi",
           "standard": "10 sahifagacha",
-          "premium": "10 sahifagacha"
+          "premium": "25 sahifagacha"
         },
         {
           "feature": "Shablon bazasi",
@@ -1055,12 +1059,17 @@
         {
           "feature": "Biznesni huquqiy tekshirish",
           "standard": "yo'q",
-          "premium": "1×/yil"
+          "premium": "Chorakda 1× · 6 oydan keyin"
         },
         {
           "feature": "Mualliflik huquqini ro'yxatga olish",
           "standard": "yo'q",
           "premium": "1×/oy"
+        },
+        {
+          "feature": "Tezkor SOS advokat",
+          "standard": "Jinoiy-ma'muriy soha · 25%",
+          "premium": "Istalgan soha · 25%"
         },
         {
           "feature": "Oila qamrovi",
@@ -1071,6 +1080,11 @@
           "feature": "Tarmoq xizmatiga chegirma",
           "standard": "25%",
           "premium": "25%"
+        },
+        {
+          "feature": "LexGo.AI chegirma",
+          "standard": "10%",
+          "premium": "10%"
         }
       ]
     },

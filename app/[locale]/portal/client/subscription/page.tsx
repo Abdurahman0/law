@@ -3,5 +3,5 @@
 import PlansPanel from "@/components/portal/PlansPanel";
 
 export default function ClientSubscription() {
-  return <PlansPanel />;
+  return <PlansPanel variant="personal" />;
 }

@@ -987,6 +987,7 @@
           "200+ ready legal document templates",
           "25% off additional services in the lawyer network",
           "10% off LexGo products, including LexGo.AI",
+          "In urgent situations (criminal-administrative field) we immediately dispatch the nearest experienced advocate at a 25% discount",
           "Your spouse is covered too"
         ],
         "cta": "Choose Standard"
@@ -996,11 +997,14 @@
         "for": "For those who run a business and also want to cover their family.",
         "features": [
           "Everything in the Standard plan",
-          "Legal check of the business: a 1-hour consultation once a year",
+          "A lawyer reviews contracts and documents — up to 25 pages",
+          "Legal check of the business: a 1-hour consultation every 3 months (unlocks after 6 months)",
+          "Free access to the 200+ template base for business and personal matters",
           "One copyright registration each month",
-          "10% off company registration and trademark patenting",
-          "200+ template base for business and personal matters",
-          "Parents, spouse and dependent children"
+          "10% off the LexGo.AI package",
+          "25% off extra advocate services beyond the subscription",
+          "In urgent situations (any field) we immediately dispatch the nearest experienced advocate at a 25% discount",
+          "Parents, spouse and dependent children are covered"
         ],
         "cta": "Choose Premium"
       },
@@ -1039,7 +1043,7 @@
         {
           "feature": "Document review",
           "standard": "Up to 10 pages",
-          "premium": "Up to 10 pages"
+          "premium": "Up to 25 pages"
         },
         {
           "feature": "Template base",
@@ -1049,12 +1053,17 @@
         {
           "feature": "Business legal check",
           "standard": "no",
-          "premium": "1×/year"
+          "premium": "1×/quarter · after 6 mo"
         },
         {
           "feature": "Copyright registration",
           "standard": "no",
           "premium": "1×/month"
+        },
+        {
+          "feature": "Urgent SOS advocate",
+          "standard": "Criminal-admin field · 25%",
+          "premium": "Any field · 25%"
         },
         {
           "feature": "Family coverage",
@@ -1065,6 +1074,11 @@
           "feature": "Network service discount",
           "standard": "25%",
           "premium": "25%"
+        },
+        {
+          "feature": "LexGo.AI discount",
+          "standard": "10%",
+          "premium": "10%"
         }
       ]
     },

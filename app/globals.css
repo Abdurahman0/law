@@ -2575,3 +2575,4 @@ body:has(.schat) .fab{display:none}
 .grow__x:hover{background:#fff;color:var(--ink)}
 .grow__x svg{width:15px;height:15px}
 @media(max-width:640px){.grow{flex-wrap:wrap;padding-right:34px}.grow__body{flex-basis:100%;order:3}.grow__cta{order:4;width:100%;justify-content:center}}
+.splan--gift{background:linear-gradient(160deg,#F5F9FF,#EAF7FF);border-color:var(--b200)}
