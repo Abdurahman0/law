@@ -2171,6 +2171,21 @@
         "success": "Sovg‘a yuborildi.",
         "error": "Maydonlarni tekshiring."
       },
+      "identity": {
+        "title": "Shaxsni tasdiqlash",
+        "lead": "OneID yoki MyID orqali shaxsingizni tasdiqlang — ishonch va xavfsizlik uchun.",
+        "verified": "Shaxs tasdiqlangan",
+        "oneidSub": "Davlat xizmatlari ID",
+        "myidSub": "Biometrik ID",
+        "demoHint": "{provider} demo rejimi: quyidagi kodni tasdiqlang.",
+        "codeLabel": "Tasdiqlash kodi",
+        "verify": "Tasdiqlash",
+        "verifying": "Tasdiqlanmoqda…",
+        "cancel": "Bekor qilish",
+        "done": "Shaxs muvaffaqiyatli tasdiqlandi.",
+        "failed": "Tasdiqlanmadi. Qayta urining.",
+        "error": "Xatolik. Qayta urining."
+      },
       "profile": {
         "title": "Profil",
         "personal": "Shaxsiy ma'lumotlar",

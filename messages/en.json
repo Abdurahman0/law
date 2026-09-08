@@ -2165,6 +2165,21 @@
         "success": "Gift sent.",
         "error": "Please check the fields."
       },
+      "identity": {
+        "title": "Identity verification",
+        "lead": "Verify your identity with OneID or MyID — for trust and security.",
+        "verified": "Identity verified",
+        "oneidSub": "Government services ID",
+        "myidSub": "Biometric ID",
+        "demoHint": "{provider} demo mode: confirm the code below.",
+        "codeLabel": "Verification code",
+        "verify": "Verify",
+        "verifying": "Verifying…",
+        "cancel": "Cancel",
+        "done": "Identity verified successfully.",
+        "failed": "Not verified. Please try again.",
+        "error": "Something went wrong. Please try again."
+      },
       "profile": {
         "title": "Profile",
         "personal": "Personal info",

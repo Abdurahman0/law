@@ -28,6 +28,7 @@ import { Notice } from "@/components/admin/AdminBits";
 import Modal from "@/components/admin/Modal";
 import Select from "@/components/Select";
 import { IconEdit, IconPlus, IconClose, IconCard, IconCheck, IconClock } from "@/components/icons";
+import IdentityVerify from "@/components/portal/IdentityVerify";
 
 function fmtDateTime(s: string) {
   if (!s) return "";
@@ -113,6 +114,8 @@ export default function ClientProfile() {
           </div>
         )}
       </div>
+
+      <IdentityVerify />
 
       <div className="pgrid2">
         <div className="ppanel">

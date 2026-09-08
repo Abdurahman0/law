@@ -2471,3 +2471,18 @@ body:has(.schat) .fab{display:none}
 .lchart__clear{border:0;background:var(--b50);color:var(--gray);border-radius:8px;width:24px;height:24px;cursor:pointer;font-size:1rem;line-height:1}
 .lchart__clear:hover{background:var(--b100);color:var(--b600)}
 .lchart__presets{display:flex;gap:6px}
+/* Identity (OneID/MyID) verification */
+.idv__ok{display:flex;align-items:center;gap:12px;background:#E1F6EE;border-radius:14px;padding:14px 16px}
+.idv__oki{width:40px;height:40px;flex:none;border-radius:11px;background:#fff;color:var(--ok);display:grid;place-items:center}
+.idv__oki svg{width:20px;height:20px}
+.idv__ok b{display:block;color:var(--ok);font-size:.95rem}
+.idv__ok span{font-size:.85rem;color:var(--gray2)}
+.idv__flow{display:flex;flex-direction:column;gap:12px;max-width:360px}
+.idv__flow label{display:block;font-size:.82rem;font-weight:700;color:var(--ink);margin-bottom:6px}
+.idv__flow input{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:11px 14px;font-family:inherit;font-size:.95rem;outline:none}
+.idv__flow input:focus{border-color:var(--b400)}
+.idv__providers{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr));gap:12px}
+.idv__prov{display:flex;flex-direction:column;gap:2px;align-items:flex-start;padding:16px;border:1.5px solid var(--line);border-radius:14px;background:#fff;cursor:pointer;transition:.15s;font-family:inherit;text-align:left}
+.idv__prov:hover{border-color:var(--b300);background:var(--b50)}
+.idv__prov b{font-family:var(--fd);font-size:1.05rem;color:var(--ink)}
+.idv__prov span{font-size:.8rem;color:var(--gray)}

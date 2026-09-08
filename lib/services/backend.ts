@@ -1487,6 +1487,41 @@ export async function setFamilyMemberAccess(id: string, sharedAccess: boolean): 
   });
 }
 
+// ── Identity verification (OneID / MyID demo provider) ────────────
+export type IdentityProvider = "oneid" | "myid";
+export type IdentityStatus = { verified: boolean; provider: string; fullName?: string; pinfl?: string };
+function normIdentity(v: unknown): IdentityStatus {
+  const d = asDict(v);
+  return {
+    verified: Boolean(d.verified),
+    provider: asStr(d.provider),
+    fullName: asStr(d.full_name ?? d.name) || undefined,
+    pinfl: asStr(d.pinfl ?? d.pnfl) || undefined,
+  };
+}
+export async function identityStart(provider: IdentityProvider): Promise<{ authUrl: string; state: string; demoCode: string }> {
+  const d = asDict(await http("/identity/start", { method: "POST", body: JSON.stringify({ provider }) }));
+  return { authUrl: asStr(d.auth_url ?? d.authUrl), state: asStr(d.state), demoCode: asStr(d.demo_code ?? d.demoCode) };
+}
+export async function identityVerifyDemo(state: string, code: string): Promise<IdentityStatus> {
+  // Backend expects `code` (the demo_code value), not `demo_code`.
+  return normIdentity(await http("/identity/verify-demo", { method: "POST", body: JSON.stringify({ state, code }) }));
+}
+export async function getIdentity(): Promise<IdentityStatus> {
+  // /identity/me returns a list of verifications; pick a verified one, else the first.
+  const raw = await http("/identity/me");
+  const wrap = asDict(raw);
+  const arr = Array.isArray(raw)
+    ? raw
+    : Array.isArray(wrap.items)
+      ? wrap.items
+      : Array.isArray(wrap.data)
+        ? wrap.data
+        : null;
+  const chosen = arr ? (arr.find((x) => asDict(x).verified) ?? arr[0]) : raw;
+  return normIdentity(chosen ?? {});
+}
+
 // ── User activity log ─────────────────────────────────────────────
 export type ActivityEntry = {
   id: string;
