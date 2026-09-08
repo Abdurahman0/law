@@ -2438,15 +2438,12 @@ body:has(.schat) .fab{display:none}
 .lchart__tip b{font-family:var(--fd);font-size:.9rem}
 .lchart__tip span{opacity:.8;font-size:.72rem}
 
-/* Table/list-only pages fill the viewport height */
+/* Table/list-only pages fill the viewport height: the single panel becomes a
+   full-height, internally-scrolling region so the data always uses the whole
+   screen regardless of how the list is nested. Header sticks to the top. */
 .pbody__in:has(> .ppanel:only-child){height:100%;min-height:0}
-.pbody__in > .ppanel:only-child{height:100%;min-height:0;display:flex;flex-direction:column}
-/* header/lead stay put; the list region scrolls inside the full-height panel */
-.pbody__in > .ppanel:only-child > .alist,
-.pbody__in > .ppanel:only-child > .laist,
-.pbody__in > .ppanel:only-child > .ptable,
-.pbody__in > .ppanel:only-child > .pipe,
-.pbody__in > .ppanel:only-child > .svsel__grid{flex:1 1 auto;min-height:0;overflow-y:auto}
+.pbody__in > .ppanel:only-child{height:100%;min-height:0;overflow-y:auto}
+.pbody__in > .ppanel:only-child > .ppanel__h{position:sticky;top:0;z-index:3;background:#fff;margin:-20px -20px 0;padding:20px 20px 12px}
 /* Kanban animated drop slot (euroflowers-style) */
 .pipe__slot{height:0;border:2px dashed transparent;border-radius:12px;box-sizing:border-box;transition:height .2s ease,margin .2s ease,border-color .2s ease,background .2s ease}
 .pipe__slot.on{height:60px;margin-bottom:10px;border-color:var(--b600);background:var(--b50)}
