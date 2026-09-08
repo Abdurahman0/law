@@ -8,8 +8,10 @@ import {
   getServices,
   listLawyers,
   demoPurchase,
+  getPricingQuote,
   type BackendService,
   type BackendLawyer,
+  type PriceQuote,
 } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
@@ -37,6 +39,8 @@ export default function ClientServices() {
   const [sellerId, setSellerId] = useState("");
   const [buying, setBuying] = useState(false);
   const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
+  const [quote, setQuote] = useState<PriceQuote | null>(null);
+  const [quoteLoading, setQuoteLoading] = useState(false);
 
   const list = useMemo(() => {
     const query = q.trim().toLowerCase();
@@ -52,11 +56,30 @@ export default function ClientServices() {
     setSellersLoading(true);
     setSellerId("");
     setNote(null);
+    setQuote(null);
     listLawyers({ service_id: order.id })
       .then((rows) => setSellers(rows))
       .catch(() => setSellers([]))
       .finally(() => setSellersLoading(false));
   }, [order]);
+
+  // Final price depends on the chosen seller (experience, super-advokat,
+  // region) + any referral discount — ask the backend for the live quote.
+  useEffect(() => {
+    if (!order || !sellerId) {
+      setQuote(null);
+      return;
+    }
+    let alive = true;
+    setQuoteLoading(true);
+    getPricingQuote({ service_id: order.id, lawyer_user_id: sellerId })
+      .then((qr) => alive && setQuote(qr))
+      .catch(() => alive && setQuote(null))
+      .finally(() => alive && setQuoteLoading(false));
+    return () => {
+      alive = false;
+    };
+  }, [order, sellerId]);
 
   async function buy() {
     if (!order || !sellerId || buying) return;
@@ -122,10 +145,33 @@ export default function ClientServices() {
 
       <Modal open={!!order} onClose={() => setOrder(null)} title={order?.name || t("orderTitle")}>
         <div className="cform" style={{ maxWidth: "none" }}>
-          <div className="oprice">
-            <span>{t("price")}</span>
-            <b>{order?.price ? `${som(order.price)} ${t("som")}` : t("byRequest")}</b>
-          </div>
+          {quote ? (
+            <div className="oquote">
+              {quote.baseAmount && quote.baseAmount !== quote.totalAmount ? (
+                <div className="oquote__row"><span>{t("priceBase")}</span><span>{som(quote.baseAmount)} {t("som")}</span></div>
+              ) : null}
+              {quote.modifiers.map((m, i) => (
+                <div className="oquote__row oquote__row--mod" key={i}>
+                  <span>{m.label || m.key}</span>
+                  <span>{m.percent ? `${m.percent > 0 ? "+" : ""}${m.percent}%` : m.amount ? `${som(m.amount)} ${t("som")}` : ""}</span>
+                </div>
+              ))}
+              {quote.referralDiscountPercent ? (
+                <div className="oquote__row oquote__row--disc">
+                  <span>{t("referralDiscount")}</span><span>−{quote.referralDiscountPercent}%</span>
+                </div>
+              ) : null}
+              <div className="oquote__row oquote__row--total">
+                <span>{t("priceTotal")}</span>
+                <b>{som(quote.totalAmount)} {t("som")}</b>
+              </div>
+            </div>
+          ) : (
+            <div className="oprice">
+              <span>{t("price")}</span>
+              <b>{quoteLoading ? t("priceCalc") : order?.price ? `${som(order.price)} ${t("som")}` : t("byRequest")}</b>
+            </div>
+          )}
           <div>
             <label>{t("seller")}</label>
             {sellersLoading ? (

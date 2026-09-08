@@ -2288,3 +2288,17 @@ body:has(.schat) .fab{display:none}
 .pend-banner p{font-size:.85rem;color:#8a6320;line-height:1.45;margin:0}
 .psb__link--locked{opacity:.4;cursor:not-allowed;pointer-events:none}
 .psb__link--locked svg:last-child{margin-left:auto;width:14px;height:14px}
+/* Referral discount progress card */
+.ref__disc{display:flex;align-items:center;gap:12px;margin-top:14px;padding:14px 16px;border-radius:14px;background:#F7FAFE;box-shadow:inset 0 0 0 1.5px var(--line)}
+.ref__disc--on{background:#E1F6EE;box-shadow:inset 0 0 0 1.5px #9be3c4}
+.ref__disci{flex:none;width:34px;height:34px;border-radius:10px;background:#fff;display:grid;place-items:center;color:var(--b600)}
+.ref__disc--on .ref__disci{color:var(--ok)}
+.ref__disci svg{width:18px;height:18px}
+.ref__disc p{margin:0;font-size:.9rem;font-weight:600;color:var(--ink);line-height:1.4}
+/* Live pricing quote breakdown in the order modal */
+.oquote{background:var(--b50);border-radius:14px;padding:12px 16px;display:flex;flex-direction:column;gap:6px}
+.oquote__row{display:flex;justify-content:space-between;align-items:center;font-size:.88rem;color:var(--ink)}
+.oquote__row--mod span:first-child,.oquote__row--disc span:first-child{color:var(--gray)}
+.oquote__row--disc{color:var(--ok);font-weight:600}
+.oquote__row--total{margin-top:6px;padding-top:8px;border-top:1px solid var(--line)}
+.oquote__row--total b{font-family:var(--fd);font-size:1.2rem;color:var(--b600)}

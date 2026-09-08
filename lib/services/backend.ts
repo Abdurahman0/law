@@ -506,6 +506,69 @@ export async function createOrder(input: {
   });
 }
 
+// ── Pricing quote (GET /pricing/quote) ────────────────────────────
+// Backend applies automatic modifiers (region, seller experience,
+// super-advokat, 5% referral discount) and returns the final total. Always
+// call this before checkout and pay `totalAmount`.
+export type PriceModifier = { key: string; label: string; percent?: number; amount?: number };
+export type PriceQuote = {
+  baseAmount: number;
+  totalAmount: number;
+  currency: string;
+  modifiers: PriceModifier[];
+  referralDiscountPercent?: number;
+};
+export async function getPricingQuote(params: {
+  service_id: string;
+  package_id?: string;
+  lawyer_user_id?: string;
+  region?: string;
+}): Promise<PriceQuote> {
+  const q = new URLSearchParams();
+  for (const [k, v] of Object.entries(params)) if (v) q.set(k, String(v));
+  const d = asDict(await http(`/pricing/quote?${q.toString()}`));
+  return {
+    baseAmount: asNum(d.base_amount ?? d.base),
+    totalAmount: asNum(d.total_amount ?? d.total),
+    currency: asStr(d.currency, "UZS"),
+    referralDiscountPercent: asNum(d.referral_discount_percent) || undefined,
+    modifiers: asArr(d.modifiers).map((x) => {
+      const m = asDict(x);
+      return {
+        key: asStr(m.key ?? m.type),
+        label: asStr(m.label ?? m.name),
+        percent: asNum(m.percent) || undefined,
+        amount: asNum(m.amount) || undefined,
+      };
+    }),
+  };
+}
+
+// ── Payment policy (GET /orders/{id}/payment-policy) ──────────────
+// The 10% advance that unlocks private contact/chat. Partial payments are
+// cumulative; contact opens once the paid share crosses the threshold.
+export type PaymentPolicy = {
+  totalAmount: number;
+  advancePercent: number;
+  advanceAmount: number;
+  paidAmount: number;
+  remainingToUnlock: number;
+  contactUnlocked: boolean;
+  currency: string;
+};
+export async function getPaymentPolicy(orderId: string): Promise<PaymentPolicy> {
+  const d = asDict(await http(`/orders/${orderId}/payment-policy`));
+  return {
+    totalAmount: asNum(d.total_amount ?? d.total),
+    advancePercent: asNum(d.advance_percent ?? d.upfront_percent, 10),
+    advanceAmount: asNum(d.advance_amount ?? d.upfront_amount),
+    paidAmount: asNum(d.paid_amount ?? d.paid),
+    remainingToUnlock: asNum(d.remaining_to_unlock ?? d.remaining),
+    contactUnlocked: Boolean(d.contact_unlocked),
+    currency: asStr(d.currency, "UZS"),
+  };
+}
+
 export async function listCases(): Promise<BackendCase[]> {
   return listFrom(await http("/cases"), "cases", "items", "data").map(normCase);
 }
@@ -1469,6 +1532,12 @@ export type Referral = {
   invited: number;
   joined: number;
   rewardBalance: number;
+  // Referral discount (backend applies it automatically once unlocked).
+  discountUnlocked: boolean;
+  discountPercent: number;
+  eligibleAfter: number; // joined referrals needed to unlock
+  remainingToUnlock: number;
+  appliesTo: string; // e.g. "subscription" / "commission"
   items: ReferralInvite[];
 };
 export async function getMyReferral(): Promise<Referral> {
@@ -1479,6 +1548,11 @@ export async function getMyReferral(): Promise<Referral> {
     invited: asNum(d.invited_count ?? d.invited),
     joined: asNum(d.joined_count ?? d.joined),
     rewardBalance: asNum(d.reward_balance ?? d.balance),
+    discountUnlocked: Boolean(d.discount_unlocked),
+    discountPercent: asNum(d.discount_percent),
+    eligibleAfter: asNum(d.eligible_after, 5),
+    remainingToUnlock: asNum(d.remaining_to_unlock),
+    appliesTo: asStr(d.applies_to),
     items: asArr(d.items ?? d.referrals).map((x) => {
       const r = asDict(x);
       return {

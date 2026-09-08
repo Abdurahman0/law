@@ -7,7 +7,11 @@ import { useResourceOne } from "@/lib/useResource";
 import { Skeleton } from "@/components/portal/DataState";
 import { IconGift, IconUsers, IconCheck, IconArrowRight } from "@/components/icons";
 
-const FALLBACK = { code: "LEXGO", link: "", invited: 0, joined: 0, rewardBalance: 0, items: [] };
+const FALLBACK = {
+  code: "LEXGO", link: "", invited: 0, joined: 0, rewardBalance: 0,
+  discountUnlocked: false, discountPercent: 5, eligibleAfter: 5, remainingToUnlock: 5, appliesTo: "subscription",
+  items: [],
+};
 const som = (n: number) => n.toLocaleString("ru-RU").replace(/,/g, " ");
 
 export default function ClientReferrals() {
@@ -59,6 +63,18 @@ export default function ClientReferrals() {
           <div className="ref__stat ref__stat--reward"><b>{som(r.rewardBalance)}</b><span>{t("reward")}</span></div>
         </div>
       )}
+
+      <div className={`ref__disc${r.discountUnlocked ? " ref__disc--on" : ""}`}>
+        <span className="ref__disci"><IconGift /></span>
+        <p>
+          {r.discountUnlocked
+            ? t("discountActive", { percent: r.discountPercent || 5 })
+            : t("discountProgress", {
+                remaining: r.remainingToUnlock || r.eligibleAfter || 5,
+                percent: r.discountPercent || 5,
+              })}
+        </p>
+      </div>
 
       <div className="ref__how">
         <h2 className="ref__h2">{t("howTitle")}</h2>
