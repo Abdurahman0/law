@@ -2448,6 +2448,10 @@ body:has(.schat) .fab{display:none}
    instead of capping at their own max-height/overflow */
 .pbody__in > .ppanel:only-child .alist,
 .pbody__in > .ppanel:only-child .laist{max-height:none;overflow:visible;padding-right:0}
+/* kanban board: fill the panel; columns take full height, cards scroll inside */
+.pbody__in > .ppanel:only-child:has(.pipe){display:flex;flex-direction:column;overflow:hidden}
+.pbody__in > .ppanel:only-child > .pipe{flex:1 1 auto;min-height:0}
+.pbody__in > .ppanel:only-child .pipe__col{max-height:100%}
 /* Kanban animated drop slot (euroflowers-style) */
 .pipe__slot{height:0;border:2px dashed transparent;border-radius:12px;box-sizing:border-box;transition:height .2s ease,margin .2s ease,border-color .2s ease,background .2s ease}
 .pipe__slot.on{height:60px;margin-bottom:10px;border-color:var(--b600);background:var(--b50)}
