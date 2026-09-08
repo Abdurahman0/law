@@ -7,7 +7,10 @@
     "d7": "7 days",
     "d30": "30 days",
     "d90": "90 days",
-    "all": "All"
+    "all": "All",
+    "from": "From",
+    "to": "To",
+    "clear": "Clear"
   },
   "meta": {
     "siteName": "LexGo",

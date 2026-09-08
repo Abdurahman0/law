@@ -102,9 +102,9 @@ export default function AdminPipeline() {
             <div
               className={`pipe__col pipe__col--${s}${overStage === s ? " pipe__col--over" : ""}`}
               key={s}
-              onDragOver={(e) => { if (dragId) { e.preventDefault(); setOverStage(s); } }}
-              onDragLeave={() => setOverStage((cur) => (cur === s ? null : cur))}
-              onDrop={() => { if (dragId) moveTo(dragId, s); setDragId(null); setOverStage(null); }}
+              onDragOver={(e) => { if (dragId) { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setOverStage(s); } }}
+              onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setOverStage((cur) => (cur === s ? null : cur)); }}
+              onDrop={(e) => { e.preventDefault(); if (dragId) moveTo(dragId, s); setDragId(null); setOverStage(null); }}
             >
               <div className="pipe__head">
                 <span className="pipe__dot" />
@@ -112,6 +112,7 @@ export default function AdminPipeline() {
                 <span className="pipe__count">{columns[s].length}</span>
               </div>
               <div className="pipe__cards">
+                <div className={`pipe__slot${overStage === s && dragId ? " on" : ""}`} aria-hidden />
                 {columns[s].length === 0 ? (
                   <div className="pipe__empty">{t("noneHere")}</div>
                 ) : (

@@ -24,10 +24,20 @@ export default function LineChart({
   const t = useTranslations("chart");
   const fmtV = format ?? ((n: number) => String(n));
   const [range, setRange] = useState(3); // default: all
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
   const [hover, setHover] = useState<number | null>(null);
 
-  const n = RANGES[range].n;
-  const pts = (n > 0 ? points.slice(-n) : points).slice(-120);
+  const custom = !!(from || to);
+  const base = custom
+    ? points.filter((p) => {
+        const iso = p.label.slice(0, 10);
+        return (!from || iso >= from) && (!to || iso <= to);
+      })
+    : RANGES[range].n > 0
+      ? points.slice(-RANGES[range].n)
+      : points;
+  const pts = base.slice(-120);
 
   const W = 600, H = 180, P = 6;
   const max = Math.max(...pts.map((p) => p.value), 1);
@@ -45,16 +55,26 @@ export default function LineChart({
   return (
     <div className="lchart">
       <div className="lchart__ranges">
-        {RANGES.map((r, i) => (
-          <button
-            key={r.key}
-            type="button"
-            className={`lchart__range${i === range ? " on" : ""}`}
-            onClick={() => { setRange(i); setHover(null); }}
-          >
-            {t(r.key)}
-          </button>
-        ))}
+        <div className="lchart__dates">
+          <input type="date" value={from} max={to || undefined} aria-label={t("from")} onChange={(e) => { setFrom(e.target.value); setHover(null); }} />
+          <span>–</span>
+          <input type="date" value={to} min={from || undefined} aria-label={t("to")} onChange={(e) => { setTo(e.target.value); setHover(null); }} />
+          {custom ? (
+            <button type="button" className="lchart__clear" onClick={() => { setFrom(""); setTo(""); }} aria-label={t("clear")}>×</button>
+          ) : null}
+        </div>
+        <div className="lchart__presets">
+          {RANGES.map((r, i) => (
+            <button
+              key={r.key}
+              type="button"
+              className={`lchart__range${!custom && i === range ? " on" : ""}`}
+              onClick={() => { setRange(i); setFrom(""); setTo(""); setHover(null); }}
+            >
+              {t(r.key)}
+            </button>
+          ))}
+        </div>
       </div>
 
       {pts.length < 2 ? (

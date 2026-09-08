@@ -5,6 +5,7 @@ import { getCeoDashboard } from "@/lib/services/backend";
 import { useResourceOne } from "@/lib/useResource";
 import { Skeleton } from "@/components/portal/DataState";
 import LineChart from "@/components/admin/LineChart";
+import DonutChart from "@/components/admin/DonutChart";
 import { IconCard, IconStar, IconUsers, IconTarget, IconTrendingUp } from "@/components/icons";
 
 const EMPTY = { revenue: 0, revenueDeltaPct: 0, mrr: 0, users: 0, activeUsers: 0, conversionPct: 0, funnel: [], channels: [], revenueTrend: [] };
@@ -54,15 +55,11 @@ export default function AdminCeo() {
             <div className="cablock">
               <h3>{t("channels")}</h3>
               {d.channels.length ? (
-                <div className="chan">
-                  {d.channels.map((c, i) => (
-                    <div className="chan__row" key={i}>
-                      <span className="chan__n">{c.name}</span>
-                      <div className="chan__bar"><span style={{ width: `${Math.min(c.pct, 100)}%` }} /></div>
-                      <span className="chan__v">{c.pct}%</span>
-                    </div>
-                  ))}
-                </div>
+                <DonutChart
+                  data={d.channels.map((c) => ({ label: c.name, value: c.leads || c.pct }))}
+                  centerLabel={t("channels")}
+                  format={(v) => String(v)}
+                />
               ) : <p className="advmuted">{t("noData")}</p>}
             </div>
           </div>

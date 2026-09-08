@@ -119,9 +119,9 @@ export default function TaskBoard() {
             <div
               className={`pipe__col pipe__col--${s === "todo" ? "new" : s === "doing" ? "contacted" : "won"}${overStage === s ? " pipe__col--over" : ""}`}
               key={s}
-              onDragOver={(e) => { if (dragId) { e.preventDefault(); setOverStage(s); } }}
-              onDragLeave={() => setOverStage((cur) => (cur === s ? null : cur))}
-              onDrop={() => { const x = res.data.find((z) => z.id === dragId); if (x) moveTo(x, s); setDragId(null); setOverStage(null); }}
+              onDragOver={(e) => { if (dragId) { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setOverStage(s); } }}
+              onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setOverStage((cur) => (cur === s ? null : cur)); }}
+              onDrop={(e) => { e.preventDefault(); const x = res.data.find((z) => z.id === dragId); if (x) moveTo(x, s); setDragId(null); setOverStage(null); }}
             >
               <div className="pipe__head">
                 <span className="pipe__dot" />
@@ -129,6 +129,7 @@ export default function TaskBoard() {
                 <span className="pipe__count">{cols[s].length}</span>
               </div>
               <div className="pipe__cards">
+                <div className={`pipe__slot${overStage === s && dragId ? " on" : ""}`} aria-hidden />
                 {cols[s].length === 0 ? (
                   <div className="pipe__empty">{t("noneHere")}</div>
                 ) : (

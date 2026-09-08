@@ -2438,8 +2438,36 @@ body:has(.schat) .fab{display:none}
 .lchart__tip span{opacity:.8;font-size:.72rem}
 
 /* Table/list-only pages fill the viewport height */
-.pbody__in:has(> .ppanel:only-child){min-height:100%}
-.pbody__in > .ppanel:only-child{display:flex;flex-direction:column;min-height:100%}
+.pbody__in:has(> .ppanel:only-child){height:100%;min-height:0}
+.pbody__in > .ppanel:only-child{height:100%;min-height:0;display:flex;flex-direction:column}
+/* header/lead stay put; the list region scrolls inside the full-height panel */
 .pbody__in > .ppanel:only-child > .alist,
+.pbody__in > .ppanel:only-child > .laist,
 .pbody__in > .ppanel:only-child > .ptable,
-.pbody__in > .ppanel:only-child > .laist{flex:1;min-height:0;overflow:auto}
+.pbody__in > .ppanel:only-child > .pipe,
+.pbody__in > .ppanel:only-child > .svsel__grid{flex:1 1 auto;min-height:0;overflow-y:auto}
+/* Kanban animated drop slot (euroflowers-style) */
+.pipe__slot{height:0;border:2px dashed transparent;border-radius:12px;box-sizing:border-box;transition:height .2s ease,margin .2s ease,border-color .2s ease,background .2s ease}
+.pipe__slot.on{height:60px;margin-bottom:10px;border-color:var(--b600);background:var(--b50)}
+
+/* Donut / pie chart */
+.donut{display:grid;grid-template-columns:190px 1fr;gap:16px;align-items:center}
+@media (max-width:520px){.donut{grid-template-columns:1fr}}
+.donut__svg{width:100%;max-width:190px;height:auto;margin:0 auto;display:block}
+.donut__ctxt{font-family:var(--fd);font-size:24px;font-weight:800;fill:var(--ink)}
+.donut__csub{font-size:11px;fill:var(--gray)}
+.donut__legend{display:flex;flex-direction:column;gap:8px}
+.donut__li{display:flex;align-items:center;gap:9px;background:none;border:0;cursor:pointer;font-family:inherit;font-size:.86rem;color:var(--ink);padding:2px 0;text-align:left;width:100%}
+.donut__li:hover{color:var(--b600)}
+.donut__dot{width:11px;height:11px;border-radius:3px;flex:none}
+.donut__ll{flex:1;min-width:0;overflow-wrap:anywhere}
+.donut__li b{font-family:var(--fd);color:var(--gray2)}
+
+/* Line chart date-range picker */
+.lchart__ranges{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.lchart__dates{display:flex;align-items:center;gap:6px}
+.lchart__dates input{border:1.5px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.76rem;font-family:inherit;color:var(--ink);background:#fff}
+.lchart__dates span{color:var(--gray)}
+.lchart__clear{border:0;background:var(--b50);color:var(--gray);border-radius:8px;width:24px;height:24px;cursor:pointer;font-size:1rem;line-height:1}
+.lchart__clear:hover{background:var(--b100);color:var(--b600)}
+.lchart__presets{display:flex;gap:6px}
