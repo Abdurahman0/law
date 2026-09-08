@@ -2393,7 +2393,15 @@
         "verifySending": "Yuborilmoqda…",
         "verifyRequested": "Tasdiqlash so'raldi. Profilingizni ko'rib chiqamiz.",
         "verifyError": "So'rovni yuborib bo'lmadi. Qayta urining.",
-        "servicesTitle": "Mening xizmatlarim",
+        "directionsTitle": "Kasbiy yo'nalishlar",
+      "directionsSub": "Amaliyot olib boradigan yo'nalishlarni tanlang — mijozlar sizni aynan shular bo'yicha topadi.",
+      "statsTitle": "Ishlar statistikasi",
+      "statsSub": "Natijalaringizni ko'rsating — muvaffaqiyat darajasi avtomatik hisoblanadi.",
+      "save": "Saqlash",
+      "saving": "Saqlanmoqda…",
+      "saved": "Profil saqlandi.",
+      "saveError": "Saqlab bo'lmadi. Qayta urinib ko'ring.",
+      "servicesTitle": "Mening xizmatlarim",
         "servicesEmpty": "Hozircha xizmatlar yo‘q",
         "servicesEmptyText": "Xizmatlarni ro‘yxatdan o‘tishda yoki profil sozlamalarida qo‘shing."
       }

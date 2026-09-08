@@ -2387,7 +2387,15 @@
         "verifySending": "Sending…",
         "verifyRequested": "Verification requested. We'll review your profile.",
         "verifyError": "Couldn't send the request. Try again.",
-        "servicesTitle": "My services",
+        "directionsTitle": "Practice areas",
+      "directionsSub": "Pick the areas you practise — this is how clients find you.",
+      "statsTitle": "Case statistics",
+      "statsSub": "Show your results — the success rate is calculated automatically.",
+      "save": "Save",
+      "saving": "Saving…",
+      "saved": "Profile saved.",
+      "saveError": "Couldn't save. Please try again.",
+      "servicesTitle": "My services",
         "servicesEmpty": "No services yet",
         "servicesEmptyText": "Add services from registration or profile setup."
       }

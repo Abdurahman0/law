@@ -47,8 +47,9 @@ export function scoreCompleteness(
           p.services.length > 0,
         ]
       : [
-          // Advocate registration now collects only these; work history,
-          // practice areas and stats moved to the profile editor.
+          // Registration collects the basics; practice areas and case stats are
+          // filled later in the profile editor, so they count toward the score
+          // too — that's what keeps the "complete your profile" nudge honest.
           !!p.name,
           !!p.photo,
           !!p.email,
@@ -56,6 +57,8 @@ export function scoreCompleteness(
           !!p.licenseNumber,
           !!p.specialization,
           !!(p.advocateYears || p.lawyerYears),
+          p.practiceAreas.length > 0,
+          !!(p.stats && (p.stats.fullyWonCases || p.stats.partiallyWonCases)),
         ];
   const done = checks.filter(Boolean).length;
   return Math.round((done / checks.length) * 100);

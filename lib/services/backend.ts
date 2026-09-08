@@ -266,6 +266,38 @@ export async function upsertMyLawyer(
   });
 }
 
+// Load the signed-in seller's own lawyer profile (GET /lawyers/me) and map it
+// back onto our onboarding shape so the profile editor can prefill + merge
+// before saving. Practice areas / case stats moved here out of registration.
+export async function getMyLawyer(): Promise<ProfessionalProfile> {
+  const d = asDict(await http("/lawyers/me"));
+  return {
+    name: asStr(d.lawyer_name),
+    languages: asArr(d.languages).map((v) => asStr(v)),
+    services: [],
+    practiceAreas: asArr(d.specializations).map((v) => asStr(v)),
+    workHistory: [],
+    region: asStr(d.region),
+    bio: asStr(d.bio),
+    education: asStr(d.education),
+    licenseNumber: asStr(d.license_number),
+    barAssociation: asStr(d.bar_association),
+    advocateStructure: asStr(d.advocate_structure),
+    orgName: asStr(d.organization_name),
+    advocateYears: asNum(d.experience_years),
+    lawyerYears: asNum(d.lawyer_experience_years),
+    experienceYears: asNum(d.experience_years) || asNum(d.lawyer_experience_years),
+    stats: {
+      // Backend persists only won / partially-won counts; total cases and the
+      // derived success rate live in the UI (recomputed from these on edit).
+      totalCases: 0,
+      fullyWonCases: asNum(d.wins_count),
+      partiallyWonCases: asNum(d.partial_wins_count),
+      successRate: 0,
+    },
+  };
+}
+
 // ── Service catalog ───────────────────────────────────────────────
 export type BackendService = {
   id: string;

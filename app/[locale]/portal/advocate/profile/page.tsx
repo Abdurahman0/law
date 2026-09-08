@@ -3,37 +3,104 @@
 import { useCallback, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/lib/auth";
-import { requestVerification, getLawyerServices } from "@/lib/services/backend";
-import { useResource } from "@/lib/useResource";
+import {
+  requestVerification,
+  getLawyerServices,
+  getMyLawyer,
+  upsertMyLawyer,
+} from "@/lib/services/backend";
+import { scoreCompleteness } from "@/lib/services/registration";
+import { useResource, useResourceOne } from "@/lib/useResource";
+import type { AdvocateStats, ProfessionalProfile } from "@/lib/types";
+import LegalServicePicker from "@/components/register/LegalServicePicker";
+import StatsEditor from "@/components/register/StatsEditor";
 import ProfilePreview from "@/components/register/ProfilePreview";
 import { EmptyState, Skeleton } from "@/components/portal/DataState";
 import { Notice } from "@/components/admin/AdminBits";
-import { IconInfo, IconUser, IconShieldCheck, IconBriefcase } from "@/components/icons";
+import {
+  IconInfo,
+  IconUser,
+  IconShieldCheck,
+  IconBriefcase,
+  IconTarget,
+} from "@/components/icons";
+
+const ZERO_STATS: AdvocateStats = {
+  totalCases: 0,
+  fullyWonCases: 0,
+  partiallyWonCases: 0,
+  successRate: 0,
+};
 
 export default function AdvocateProfile() {
   const t = useTranslations("portal.advocate.profile");
-  const { session } = useAuth();
-  const profile = session?.profile;
-  const completeness = session?.completeness ?? 0;
+  const res = useResourceOne(getMyLawyer, []);
+
+  if (res.status === "loading") {
+    return (
+      <div className="ppanel">
+        <div className="ppanel__h">
+          <b>{t("title")}</b>
+        </div>
+        <Skeleton rows={4} />
+      </div>
+    );
+  }
+  if (res.status === "error" || !res.data) {
+    return <EmptyState icon={<IconUser />} title={t("emptyTitle")} text={t("emptyText")} />;
+  }
+  return <ProfileEditor initial={res.data} />;
+}
+
+function ProfileEditor({ initial }: { initial: ProfessionalProfile }) {
+  const t = useTranslations("portal.advocate.profile");
+  const { session, update } = useAuth();
+  const [areas, setAreas] = useState<string[]>(initial.practiceAreas ?? []);
+  const [stats, setStats] = useState<AdvocateStats>(initial.stats ?? ZERO_STATS);
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
+  const [vbusy, setVbusy] = useState(false);
+  const [vnote, setVnote] = useState<{ ok: boolean; msg: string } | null>(null);
 
-  async function verify() {
+  // Merge the backend profile with anything already known from sign-up (email,
+  // photo, specialization aren't returned by GET /lawyers/me) plus live edits,
+  // so both the preview and the completeness score stay honest.
+  const merged: ProfessionalProfile = {
+    ...(session?.profile ?? {}),
+    ...initial,
+    practiceAreas: areas,
+    stats,
+  };
+  // Never let the ring drop below what the session already reported.
+  const livePct = Math.max(session?.completeness ?? 0, scoreCompleteness("advocate", merged));
+
+  async function save() {
     if (busy) return;
     setBusy(true);
     setNote(null);
     try {
-      await requestVerification();
-      setNote({ ok: true, msg: t("verifyRequested") });
+      await upsertMyLawyer(merged, "advokat");
+      update({ completeness: livePct, profile: merged });
+      setNote({ ok: true, msg: t("saved") });
     } catch {
-      setNote({ ok: false, msg: t("verifyError") });
+      setNote({ ok: false, msg: t("saveError") });
     } finally {
       setBusy(false);
     }
   }
 
-  if (!profile || !profile.name) {
-    return <EmptyState icon={<IconUser />} title={t("emptyTitle")} text={t("emptyText")} />;
+  async function verify() {
+    if (vbusy) return;
+    setVbusy(true);
+    setVnote(null);
+    try {
+      await requestVerification();
+      setVnote({ ok: true, msg: t("verifyRequested") });
+    } catch {
+      setVnote({ ok: false, msg: t("verifyError") });
+    } finally {
+      setVbusy(false);
+    }
   }
 
   return (
@@ -41,10 +108,10 @@ export default function AdvocateProfile() {
       <div className="ppanel">
         <div className="ppanel__h">
           <b>{t("title")}</b>
-          <span className="advmuted">{t("visibility", { pct: completeness })}</span>
+          <span className="advmuted">{t("visibility", { pct: livePct })}</span>
         </div>
         <div className="meter" style={{ marginBottom: 6 }}>
-          <span style={{ width: `${completeness}%` }} />
+          <span style={{ width: `${livePct}%` }} />
         </div>
         <p className="advmuted" style={{ display: "flex", gap: 8, alignItems: "center" }}>
           <IconInfo style={{ width: 16, height: 16, flex: "none" }} />
@@ -55,15 +122,47 @@ export default function AdvocateProfile() {
             <b>{t("verifyTitle")}</b>
             <span>{t("verifyLead")}</span>
           </div>
-          <button className="btn btn--pri btn--sm" type="button" onClick={verify} disabled={busy}>
+          <button className="btn btn--pri btn--sm" type="button" onClick={verify} disabled={vbusy}>
             <IconShieldCheck />
-            {busy ? t("verifySending") : t("verifyCta")}
+            {vbusy ? t("verifySending") : t("verifyCta")}
           </button>
         </div>
-        {note ? <Notice ok={note.ok} msg={note.msg} /> : null}
+        {vnote ? <Notice ok={vnote.ok} msg={vnote.msg} /> : null}
       </div>
+
+      {/* Practice areas + case stats: moved out of registration, filled here. */}
+      <div className="ppanel">
+        <div className="ppanel__h">
+          <b style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <IconBriefcase style={{ width: 18, height: 18 }} />
+            {t("directionsTitle")}
+          </b>
+          <span className="advmuted">{areas.length}</span>
+        </div>
+        <p className="advmuted" style={{ margin: "0 0 12px" }}>{t("directionsSub")}</p>
+        <LegalServicePicker value={areas} onChange={setAreas} isAdvocate />
+      </div>
+
+      <div className="ppanel">
+        <div className="ppanel__h">
+          <b style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <IconTarget style={{ width: 18, height: 18 }} />
+            {t("statsTitle")}
+          </b>
+        </div>
+        <p className="advmuted" style={{ margin: "0 0 12px" }}>{t("statsSub")}</p>
+        <StatsEditor value={stats} onChange={setStats} />
+        <div className="pverify" style={{ marginTop: 16 }}>
+          {note ? <Notice ok={note.ok} msg={note.msg} /> : <span />}
+          <button className="btn btn--grad btn--sm" type="button" onClick={save} disabled={busy}>
+            <IconShieldCheck />
+            {busy ? t("saving") : t("save")}
+          </button>
+        </div>
+      </div>
+
       <MyServices userId={session?.id ?? ""} />
-      <ProfilePreview p={profile} />
+      <ProfilePreview p={merged} />
     </div>
   );
 }
