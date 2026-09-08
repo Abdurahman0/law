@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { getCeoDashboard } from "@/lib/services/backend";
 import { useResourceOne } from "@/lib/useResource";
 import { Skeleton } from "@/components/portal/DataState";
+import LineChart from "@/components/admin/LineChart";
 import { IconCard, IconStar, IconUsers, IconTarget, IconTrendingUp } from "@/components/icons";
 
 const EMPTY = { revenue: 0, revenueDeltaPct: 0, mrr: 0, users: 0, activeUsers: 0, conversionPct: 0, funnel: [], channels: [], revenueTrend: [] };
@@ -13,7 +14,6 @@ export default function AdminCeo() {
   const t = useTranslations("admin.ceo");
   const res = useResourceOne(getCeoDashboard, []);
   const d = res.data ?? EMPTY;
-  const trendMax = Math.max(1, ...d.revenueTrend.map((x) => x.value));
   const funnelMax = Math.max(1, ...d.funnel.map((x) => x.value));
 
   return (
@@ -33,11 +33,7 @@ export default function AdminCeo() {
           <div className="cachart">
             <h3>{t("revenueTrend")}</h3>
             {d.revenueTrend.length ? (
-              <div className="cachart__bars">
-                {d.revenueTrend.map((x, i) => (
-                  <div className="cachart__bar" key={i}><span style={{ height: `${(x.value / trendMax) * 100}%` }} /><small>{x.label}</small></div>
-                ))}
-              </div>
+              <LineChart points={d.revenueTrend} format={(v) => som(v)} />
             ) : <p className="advmuted">{t("noData")}</p>}
           </div>
 

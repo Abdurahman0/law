@@ -3,6 +3,12 @@
     "showPassword": "Parolni ko'rsatish",
     "hidePassword": "Parolni yashirish"
   },
+  "chart": {
+    "d7": "7 kun",
+    "d30": "30 kun",
+    "d90": "90 kun",
+    "all": "Hammasi"
+  },
   "meta": {
     "siteName": "LexGo",
     "title": "LexGo — yuridik yordam, bir necha tegishda",

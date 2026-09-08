@@ -132,7 +132,7 @@ export default function AdminOverview() {
             <b>{tc("revenueTrend")}</b>
             {lastPoint ? <span className="advmuted">{lastDate} · {money(lastPoint.value)}</span> : null}
           </div>
-          {trend.length ? <LineChart points={trend} /> : <p className="advmuted">{t("empty")}</p>}
+          {trend.length ? <LineChart points={trend} format={(v) => `${fmt(v)} ${tc("som")}`} /> : <p className="advmuted">{t("empty")}</p>}
         </div>
 
         {/* Sales funnel — bar chart */}
