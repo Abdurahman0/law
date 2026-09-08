@@ -2393,3 +2393,27 @@ body:has(.schat) .fab{display:none}
 .psb__group{display:flex;flex-direction:column;gap:2px}
 .psb__group + .psb__group{margin-top:14px}
 .psb__glabel{font-size:.66rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--gray2);padding:4px 13px 3px}
+/* Admin CRM command dashboard */
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:14px;margin-bottom:16px}
+.ksec{background:#fff;border-radius:var(--rl);box-shadow:inset 0 0 0 1.5px var(--line);padding:16px 18px}
+.ksec__h{font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--gray2);margin:0 0 12px}
+.ksec__tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:12px}
+.ktile{display:flex;flex-direction:column;gap:3px;min-width:0}
+.ktile__l{font-size:.76rem;color:var(--gray);line-height:1.3}
+.ktile__v{font-family:var(--fd);font-size:1.35rem;color:var(--ink);overflow-wrap:anywhere}
+.ktile__d{font-size:.72rem;font-weight:700}
+.ktile__d--up{color:var(--ok)}
+.ktile__d--down{color:#e11d48}
+.kfunnel{display:flex;flex-direction:column;gap:10px}
+.kfunnel__row{display:flex;align-items:center;gap:10px}
+.kfunnel__lbl{flex:none;width:120px;font-size:.82rem;color:var(--gray);overflow-wrap:anywhere}
+.kfunnel__bar{flex:1;height:12px;border-radius:6px;background:var(--b50);overflow:hidden;min-width:0}
+.kfunnel__bar span{display:block;height:100%;border-radius:6px;background:var(--grad,var(--b600))}
+.kfunnel__v{flex:none;font-family:var(--fd);color:var(--b600);min-width:44px;text-align:right}
+.kmods{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));gap:10px}
+.kmod{display:flex;align-items:center;gap:11px;padding:13px 15px;border-radius:14px;border:1.5px solid var(--line);text-decoration:none;color:var(--ink);transition:.15s}
+.kmod:hover{border-color:var(--b300);background:var(--b50)}
+.kmod__i{width:34px;height:34px;flex:none;border-radius:10px;background:var(--b100);color:var(--b600);display:grid;place-items:center}
+.kmod__i svg{width:18px;height:18px}
+.kmod__t{flex:1;font-weight:600;font-size:.9rem;min-width:0;overflow-wrap:anywhere}
+.kmod__a{width:16px;height:16px;color:var(--gray);flex:none}
