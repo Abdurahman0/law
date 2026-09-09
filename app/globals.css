@@ -2742,3 +2742,28 @@ body:has(.schat) .fab{display:none}
   .pbody__in > .pgrid2:only-child > .ppanel{min-height:0;display:flex;flex-direction:column;overflow:hidden}
   .pbody__in > .pgrid2:only-child > .ppanel .alist{flex:1 1 auto;max-height:none;min-height:0;overflow-y:auto}
 }
+
+/* Advocate/lawyer profile modal (shown from the matches list) */
+.lprof{display:flex;flex-direction:column;gap:16px}
+.lprof__head{display:flex;gap:14px;align-items:center}
+.lprof__av{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--b100),var(--b200));color:var(--b700);display:grid;place-items:center;font-weight:800;font-size:1.15rem;flex:none}
+.lprof__id{min-width:0}
+.lprof__n{font-weight:800;font-size:1.1rem;color:var(--ink);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lprof__vf{font-size:.66rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ok);background:rgba(0,168,112,.12);padding:3px 8px;border-radius:999px}
+.lprof__tags{display:flex;align-items:center;gap:8px;margin-top:5px;flex-wrap:wrap}
+.lprof__pid{font-size:.78rem;color:var(--gray2);font-weight:600}
+.lprof__stats,.lprof__wins{display:grid;gap:8px}
+.lprof__stats{grid-template-columns:repeat(4,1fr)}
+.lprof__wins{grid-template-columns:repeat(3,1fr)}
+.lprof__stats>div,.lprof__wins>div{background:var(--b50);border-radius:14px;padding:11px 8px;text-align:center}
+.lprof__stats b,.lprof__wins b{display:block;font-size:1.15rem;font-weight:800;color:var(--ink)}
+.lprof__stats span,.lprof__wins span{display:block;font-size:.68rem;font-weight:600;color:var(--gray2);margin-top:2px}
+.lprof__row{display:flex;gap:12px;align-items:baseline;font-size:.9rem;color:var(--ink)}
+.lprof__lbl{flex:none;width:120px;font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--gray2)}
+.lprof__chips{display:flex;flex-wrap:wrap;gap:6px}
+.lprof__chip{font-size:.8rem;font-weight:600;color:var(--b700);background:var(--b100);padding:4px 10px;border-radius:999px}
+.lprof__bio{font-size:.9rem;line-height:1.55;color:var(--gray);margin:0}
+.lprof__ft{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1.5px solid var(--line);padding-top:14px;margin-top:2px}
+.lprof__price b{font-size:1.15rem;font-weight:800;color:var(--ink)}
+.lprof__price span{font-size:.75rem;color:var(--gray2);margin-left:5px}
+@media (max-width:480px){.lprof__stats{grid-template-columns:repeat(2,1fr)}.lprof__row{flex-direction:column;gap:4px}.lprof__lbl{width:auto}}

@@ -1,16 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { getMyMatches } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
 import { useRouter } from "@/i18n/navigation";
 import { Skeleton } from "@/components/portal/DataState";
+import LawyerProfileModal from "@/components/portal/LawyerProfileModal";
 import { IconSparkle, IconStar, IconMapPin, IconArrowRight } from "@/components/icons";
 
 export default function ClientMatches() {
   const t = useTranslations("portal.client.matches");
   const router = useRouter();
   const res = useResource(() => getMyMatches(), []);
+  const [viewId, setViewId] = useState<string | null>(null);
 
   return (
     <div className="mtch">
@@ -52,7 +55,11 @@ export default function ClientMatches() {
                   {m.area ? <span>{m.area}</span> : null}
                 </div>
                 {m.reason ? <p className="mtchcard__reason">{m.reason}</p> : null}
-                <button className="btn btn--pri btn--sm btn--full" type="button" onClick={() => router.push("/portal/client/lawyers")}>
+                <button
+                  className="btn btn--pri btn--sm btn--full"
+                  type="button"
+                  onClick={() => setViewId(m.lawyerUserId || m.id)}
+                >
                   {t("view")}
                 </button>
               </div>
@@ -60,6 +67,8 @@ export default function ClientMatches() {
           ))}
         </div>
       )}
+
+      <LawyerProfileModal userId={viewId} open={viewId !== null} onClose={() => setViewId(null)} />
     </div>
   );
 }

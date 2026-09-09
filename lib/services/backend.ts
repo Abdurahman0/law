@@ -182,6 +182,11 @@ export type BackendLawyer = {
   winsCount: number;
   partialWins: number;
   successRate: number;
+  publicId?: string;
+  education?: string;
+  licenseNumber?: string;
+  barAssociation?: string;
+  organizationName?: string;
 };
 
 function normLawyer(v: unknown): BackendLawyer {
@@ -208,7 +213,19 @@ function normLawyer(v: unknown): BackendLawyer {
     winsCount: asNum(d.wins_count),
     partialWins: asNum(d.partial_wins_count),
     successRate: asNum(d.success_rate),
+    publicId: asStr(d.public_id) || undefined,
+    education: asStr(d.education) || undefined,
+    licenseNumber: asStr(d.license_number) || undefined,
+    barAssociation: asStr(d.bar_association) || undefined,
+    organizationName: asStr(d.organization_name) || undefined,
   };
+}
+
+// No single-lawyer GET on the backend yet, so resolve one from the list.
+export async function getLawyerById(userId: string): Promise<BackendLawyer | null> {
+  if (!userId) return null;
+  const all = await listLawyers();
+  return all.find((l) => l.userId === userId || l.id === userId) ?? null;
 }
 
 export async function listLawyers(filters?: {
