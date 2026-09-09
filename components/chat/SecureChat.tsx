@@ -48,6 +48,28 @@ function dayKey(iso: string): string {
   return Number.isNaN(d.getTime()) ? "" : d.toDateString();
 }
 
+// Render a Zoom meeting link (posted by the backend when a call starts) as a
+// tidy "Join" button instead of a raw URL.
+const ZOOM_RE = /(https?:\/\/(?:[a-z0-9-]+\.)?zoom\.(?:us|com)\/[^\s]+)/i;
+function MsgBody({ text, label }: { text: string; label: string }) {
+  const m = text.match(ZOOM_RE);
+  if (!m) return <>{text}</>;
+  const url = m[1];
+  const i = m.index ?? 0;
+  const before = text.slice(0, i).trim();
+  const after = text.slice(i + url.length).trim();
+  return (
+    <>
+      {before ? `${before} ` : null}
+      <a className="sbub__join" href={url} target="_blank" rel="noreferrer">
+        <IconVideo />
+        {label}
+      </a>
+      {after ? ` ${after}` : null}
+    </>
+  );
+}
+
 export default function SecureChat({ roomId }: { roomId: string }) {
   const t = useTranslations("secureChat");
   const { session, ready } = useAuth();
@@ -522,7 +544,7 @@ export default function SecureChat({ roomId }: { roomId: string }) {
                 <div className={`sbub sbub--${mine ? "me" : "them"}`}>
                   {!mine ? <span className="sbub__av"><IconUser /></span> : null}
                   <div className="sbub__wrap">
-                    <div className={`sbub__c${m.failed ? " sbub__c--failed" : ""}`}>{maskContacts(m.filteredContent)}</div>
+                    <div className={`sbub__c${m.failed ? " sbub__c--failed" : ""}`}><MsgBody text={maskContacts(m.filteredContent)} label={t("joinZoom")} /></div>
                     {m.isBlocked ? (
                       <div className="sbub__blocked">
                         <IconAlert />

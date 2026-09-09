@@ -34,7 +34,8 @@ export function playRingback(): () => void {
   let timer: ReturnType<typeof setTimeout>;
   const loop = () => {
     if (stop) return;
-    tone(c, 425, 0, 1.0, 0.14);
+    // Standard PBX ringback: 425 Hz, ~1s on, repeated.
+    tone(c, 425, 0, 1.1, 0.28);
     timer = setTimeout(loop, 3500);
   };
   loop();
@@ -52,8 +53,8 @@ export function playRingtone(): () => void {
   let timer: ReturnType<typeof setTimeout>;
   const loop = () => {
     if (stop) return;
-    tone(c, 620, 0, 0.4, 0.16);
-    tone(c, 480, 0.45, 0.4, 0.16);
+    tone(c, 620, 0, 0.4, 0.3);
+    tone(c, 480, 0.45, 0.4, 0.3);
     timer = setTimeout(loop, 2500);
   };
   loop();
