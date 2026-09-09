@@ -9,14 +9,16 @@ import {
   listFiles,
   createFile,
   deleteFile,
+  analyzeDocument,
   type WorkspaceFile,
+  type DocAnalysis,
 } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "./DataState";
 import { Notice } from "@/components/admin/AdminBits";
 import Modal from "@/components/admin/Modal";
 import Select from "@/components/Select";
-import { IconFileText, IconPlus, IconClose, IconExternal, IconDocLines } from "@/components/icons";
+import { IconFileText, IconPlus, IconClose, IconExternal, IconDocLines, IconSparkle, IconAlert, IconCheck } from "@/components/icons";
 
 function fmtSize(n: number) {
   if (!n) return "";
@@ -32,14 +34,22 @@ export default function WorkspacePanel() {
   const folders = useResource(() => listFolders(), [key]);
   const files = useResource<WorkspaceFile>(() => listFiles(), [key]);
   const [sel, setSel] = useState<string>("");
+  const [type, setType] = useState<"all" | "docs" | "media">("all");
+  const [aiOpen, setAiOpen] = useState(false);
 
   const [folderName, setFolderName] = useState("");
   const [folderBusy, setFolderBusy] = useState(false);
   const [fileOpen, setFileOpen] = useState(false);
 
+  const isMedia = (m: string) => /^(audio|video)\//i.test(m || "");
   const shown = useMemo(
-    () => (sel ? files.data.filter((f) => f.folderId === sel) : files.data),
-    [files.data, sel],
+    () =>
+      files.data.filter(
+        (f) =>
+          (!sel || f.folderId === sel) &&
+          (type === "all" || (type === "media" ? isMedia(f.mimeType) : !isMedia(f.mimeType))),
+      ),
+    [files.data, sel, type],
   );
 
   async function addFolder(e: React.FormEvent) {
@@ -61,12 +71,20 @@ export default function WorkspacePanel() {
     <div className="ppanel">
       <div className="ppanel__h">
         <b>{t("title")}</b>
-        <button className="btn btn--pri btn--sm" type="button" onClick={() => setFileOpen(true)}>
-          <IconPlus />
-          {t("addFile")}
-        </button>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button className="btn btn--soft btn--sm" type="button" onClick={() => setAiOpen((v) => !v)}>
+            <IconSparkle />
+            {t("aiToggle")}
+          </button>
+          <button className="btn btn--pri btn--sm" type="button" onClick={() => setFileOpen(true)}>
+            <IconPlus />
+            {t("addFile")}
+          </button>
+        </div>
       </div>
       <p className="advmuted" style={{ marginBottom: 14 }}>{t("lead")}</p>
+
+      {aiOpen ? <Analyzer /> : null}
 
       <form className="wsp__folders" onSubmit={addFolder}>
         <button
@@ -101,6 +119,14 @@ export default function WorkspacePanel() {
           </button>
         </span>
       </form>
+
+      <div className="chiprow" style={{ margin: "0 0 12px" }}>
+        {(["all", "docs", "media"] as const).map((tp) => (
+          <button key={tp} type="button" className="fchip" aria-pressed={type === tp} onClick={() => setType(tp)}>
+            {t(tp === "all" ? "filterAll" : tp === "docs" ? "filterDocs" : "filterMedia")}
+          </button>
+        ))}
+      </div>
 
       {files.status === "loading" ? (
         <Skeleton rows={3} />
@@ -144,6 +170,68 @@ export default function WorkspacePanel() {
         defaultFolder={sel}
         onSaved={reload}
       />
+    </div>
+  );
+}
+
+// AI Document Analysis (module 10): paste a document's text → key points +
+// risks + recommendations, via /ai/document-analysis.
+function Analyzer() {
+  const t = useTranslations("portal.workspace");
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [res, setRes] = useState<DocAnalysis | null>(null);
+  const [err, setErr] = useState(false);
+
+  async function run() {
+    if (busy || text.trim().length < 20) return;
+    setBusy(true);
+    setErr(false);
+    setRes(null);
+    try {
+      setRes(await analyzeDocument(text.trim()));
+    } catch {
+      setErr(true);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="wsp__ai">
+      <b className="wsp__ai-t"><IconSparkle />{t("aiTitle")}</b>
+      <p className="advmuted" style={{ margin: "2px 0 10px" }}>{t("aiLead")}</p>
+      <textarea className="intake__ta" rows={4} value={text} onChange={(e) => setText(e.target.value)} placeholder={t("aiPh")} />
+      <button className="btn btn--pri btn--sm" type="button" style={{ marginTop: 8 }} disabled={busy || text.trim().length < 20} onClick={run}>
+        <IconSparkle />
+        {busy ? t("aiRunning") : t("aiRun")}
+      </button>
+      {err ? <Notice ok={false} msg={t("aiError")} /> : null}
+      {res ? (
+        <div className="wsp__ai-res">
+          {res.summary ? <p className="wsp__ai-sum"><b>{t("aiSummary")}:</b> {res.summary}</p> : null}
+          {res.risks.length ? (
+            <>
+              <b className="wsp__ai-h">{t("aiRisks")}</b>
+              <ul className="wsp__ai-risks">
+                {res.risks.map((r, i) => (
+                  <li key={i} className={`wsp__risk wsp__risk--${r.level}`}><IconAlert />{r.text}</li>
+                ))}
+              </ul>
+            </>
+          ) : null}
+          {res.recommendations.length ? (
+            <>
+              <b className="wsp__ai-h">{t("aiRecs")}</b>
+              <ul className="wsp__ai-recs">
+                {res.recommendations.map((r, i) => (
+                  <li key={i}><IconCheck />{r}</li>
+                ))}
+              </ul>
+            </>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 }

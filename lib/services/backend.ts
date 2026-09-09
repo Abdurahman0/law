@@ -1998,7 +1998,9 @@ export async function analyzeDocument(text: string): Promise<DocAnalysis> {
 
 // ── AI: operator / case assistant ─────────────────────────────────
 export async function askAiAssistant(prompt: string, context?: string): Promise<string> {
-  const d = asDict(await http("/ai/assistant", { method: "POST", body: JSON.stringify({ prompt, context }) }));
+  // Backend expects `context` as an object (422 on a bare string).
+  const body = JSON.stringify(context ? { prompt, context: { text: context } } : { prompt });
+  const d = asDict(await http("/ai/assistant", { method: "POST", body }));
   return asStr(d.answer ?? d.text ?? d.reply);
 }
 

@@ -1769,6 +1769,30 @@
       "thinking": "Thinking…",
       "answer": "Answer",
       "failed": "Couldn't answer right now.",
+      "caseLabel": "Case materials or question",
+      "casePh": "Paste the case facts or a document's text here…",
+      "run": "Ask",
+      "disclaimer": "AI doesn't replace an advocate — the final legal decision stays with the advocate.",
+      "tools": {
+        "summarize": "Summarize the case",
+        "chronology": "Event chronology",
+        "compare": "Compare documents",
+        "contradictions": "Find contradictions",
+        "missing": "Missing documents",
+        "deadlines": "Extract deadlines",
+        "questions": "Question list",
+        "draft": "Draft a reply"
+      },
+      "inst": {
+        "summarize": "Give a short, precise summary of the case: key facts, parties and current status.",
+        "chronology": "Build a date-ordered chronology of events from the case materials.",
+        "compare": "Compare the case documents and point out differences and inconsistencies.",
+        "contradictions": "Identify contradictions in the information and list them.",
+        "missing": "List documents that are missing or should be requested from the client.",
+        "deadlines": "Extract important deadlines and dates for the case (appeal, filing, etc.).",
+        "questions": "Prepare a list of clarifying questions for the client or witnesses.",
+        "draft": "Draft an official reply or application for the case."
+      },
       "tool": { "draft": "Draft a reply", "summarize": "Summarize the case", "precedents": "Find similar practice", "explain": "Explain the law" }
     },
     "sidebar": {
@@ -2592,7 +2616,20 @@
       "empty": "No files yet",
       "emptyText": "Add a file or create a folder to get started.",
       "remove": "Remove",
-      "open": "Open"
+      "open": "Open",
+      "filterAll": "All",
+      "filterDocs": "Documents",
+      "filterMedia": "Audio/Video",
+      "aiToggle": "AI document analysis",
+      "aiTitle": "AI document analysis",
+      "aiLead": "Paste the document text — AI extracts key points and risks.",
+      "aiPh": "Paste the document text here…",
+      "aiRun": "Analyze",
+      "aiRunning": "Analyzing…",
+      "aiSummary": "Summary",
+      "aiRisks": "Risks",
+      "aiRecs": "Recommendations",
+      "aiError": "Couldn't analyze. Please try again."
     }
   },
   "notFound": {

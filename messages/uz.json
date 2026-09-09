@@ -1775,6 +1775,30 @@
       "thinking": "O'ylayapti…",
       "answer": "Javob",
       "failed": "Hozircha javob berib bo'lmadi.",
+      "caseLabel": "Ish materiallari yoki savol",
+      "casePh": "Ish holatini, faktlarni yoki hujjat matnini shu yerga joylang…",
+      "run": "So'rash",
+      "disclaimer": "AI advokat o'rnini bosmaydi — yakuniy huquqiy qaror advokatda qoladi.",
+      "tools": {
+        "summarize": "Ishni qisqacha bayon qil",
+        "chronology": "Voqealar xronologiyasi",
+        "compare": "Hujjatlarni taqqosla",
+        "contradictions": "Ziddiyatlarni top",
+        "missing": "Yetishmayotgan hujjatlar",
+        "deadlines": "Muddatlarni ajrat",
+        "questions": "Savollar ro'yxati",
+        "draft": "Javob loyihasini tuz"
+      },
+      "inst": {
+        "summarize": "Quyidagi ish bo'yicha qisqa va aniq xulosa ber: asosiy faktlar, tomonlar va hozirgi holat.",
+        "chronology": "Ish materiallaridan voqealar xronologiyasini sana bo'yicha ketma-ket tuzib ber.",
+        "compare": "Ishdagi hujjatlarni taqqosla va tafovutlar hamda mos kelmaydigan joylarni ko'rsat.",
+        "contradictions": "Ma'lumotlardagi qarama-qarshilik va ziddiyatlarni aniqlab ro'yxat qil.",
+        "missing": "Ish uchun yetishmayotgan yoki mijozdan so'ralishi kerak bo'lgan hujjatlarni sanab ber.",
+        "deadlines": "Ish bo'yicha muhim muddat va sanalarni (apellyatsiya, topshirish va h.k.) ajratib ko'rsat.",
+        "questions": "Mijoz yoki guvohlarga beriladigan aniqlovchi savollar ro'yxatini tayyorla.",
+        "draft": "Ish bo'yicha rasmiy javob yoki ariza loyihasini tuzib ber."
+      },
       "tool": { "draft": "Javob loyihasini tuzish", "summarize": "Ishni qisqacha bayon qil", "precedents": "O'xshash amaliyotlarni top", "explain": "Qonunni tushuntir" }
     },
     "sidebar": {
@@ -2598,7 +2622,20 @@
       "empty": "Hozircha fayllar yo‘q",
       "emptyText": "Fayl qo‘shing yoki papka yarating.",
       "remove": "O‘chirish",
-      "open": "Ochish"
+      "open": "Ochish",
+      "filterAll": "Barchasi",
+      "filterDocs": "Hujjatlar",
+      "filterMedia": "Audio/Video",
+      "aiToggle": "AI hujjat tahlili",
+      "aiTitle": "AI hujjat tahlili",
+      "aiLead": "Hujjat matnini joylang — AI muhim nuqtalar va xavflarni ajratib beradi.",
+      "aiPh": "Hujjat matnini shu yerga joylang…",
+      "aiRun": "Tahlil qilish",
+      "aiRunning": "Tahlil qilinmoqda…",
+      "aiSummary": "Qisqacha",
+      "aiRisks": "Xavflar",
+      "aiRecs": "Tavsiyalar",
+      "aiError": "Tahlil qilib bo‘lmadi. Qayta urining."
     }
   },
   "notFound": {

@@ -2647,3 +2647,17 @@ body:has(.schat) .fab{display:none}
 .giftn__x:hover{background:#fff;color:var(--ink)}
 .giftn__x svg{width:14px;height:14px}
 @media (max-width:640px){.giftn{flex-wrap:wrap;padding-right:32px}.giftn__b{flex-basis:100%}.giftn__cta{width:100%;justify-content:center}}
+/* Workspace AI document analysis */
+.wsp__ai{border:1.5px solid var(--b200);background:var(--b50);border-radius:16px;padding:16px 18px;margin-bottom:16px}
+.wsp__ai-t{display:flex;align-items:center;gap:8px;font-family:var(--fd);font-size:1rem;color:var(--ink)}
+.wsp__ai-t svg{width:18px;height:18px;color:var(--b600)}
+.wsp__ai-res{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.wsp__ai-sum{margin:0;font-size:.9rem;color:var(--ink);line-height:1.5}
+.wsp__ai-h{font-size:.82rem;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:.03em;margin-top:4px}
+.wsp__ai-risks,.wsp__ai-recs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.wsp__ai-risks li,.wsp__ai-recs li{display:flex;gap:8px;align-items:flex-start;font-size:.88rem;line-height:1.45;color:var(--ink)}
+.wsp__ai-risks svg,.wsp__ai-recs svg{width:15px;height:15px;flex:none;margin-top:2px}
+.wsp__risk--high svg{color:#e11d48}
+.wsp__risk--medium svg{color:#f5a623}
+.wsp__risk--low svg{color:var(--gray2)}
+.wsp__ai-recs svg{color:var(--ok)}
