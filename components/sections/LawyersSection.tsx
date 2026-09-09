@@ -92,14 +92,19 @@ export default function LawyersSection({
   const [atEnd, setAtEnd] = useState(false);
 
   const list = useMemo(() => {
-    const nq = query.trim().toLowerCase();
-    const filtered = source.filter(
-      (l) =>
+    // Split the query into words and require every word to appear in the name,
+    // so word order and extra spaces don't hide a match ("yurist civil" still
+    // finds "Civil Yurist").
+    const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    const filtered = source.filter((l) => {
+      const name = l.name.toLowerCase();
+      return (
         (!area || l.areaKey === area) &&
         (!region || l.regionKey === region) &&
         (!kind || l.kind === kind) &&
-        (!nq || l.name.toLowerCase().includes(nq)),
-    );
+        (!terms.length || terms.every((w) => name.includes(w)))
+      );
+    });
     const sorted = [...filtered];
     sorted.sort((a, b) => {
       if (sort === "experience") return b.exp - a.exp;
@@ -146,7 +151,7 @@ export default function LawyersSection({
 
   function card(l: Lawyer) {
     return (
-      <article className="advcard" key={l.name}>
+      <article className="advcard" key={l.userId || l.name}>
         <div className="advcard__top">
           <div className="advcard__row">
             <div className="advcard__av">{initials(l.name)}</div>
