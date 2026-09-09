@@ -2726,14 +2726,19 @@ body:has(.schat) .fab{display:none}
 .cal__dt .mpick{flex:1;min-width:0}
 .cal__time{flex:none;width:118px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit;font-size:.9rem;color:var(--ink);background:#fff}
 .cal__time:focus{border-color:var(--b600);outline:none}
-/* Full-height 2-panel admin grids (services, call-center) — like leads */
+/* Full-height 2-panel admin list grids (services, call-center, roles, workflow)
+   — fill the viewport like leads; the list scrolls inside each panel. Applies
+   only while the grid is 2-col (agrid ≥1101, pgrid2 ≥961); stacks normally
+   below that. No :has(.alist) gate so it holds during loading/empty states. */
 @media (min-width:1101px){
-  .pbody__in:has(> .agrid:only-child:has(.alist)),
-  .pbody__in:has(> .pgrid2:only-child:has(.alist)){height:100%;min-height:0}
-  .pbody__in > .agrid:only-child:has(.alist),
-  .pbody__in > .pgrid2:only-child:has(.alist){height:100%;min-height:0;align-items:stretch}
-  .pbody__in > .agrid:only-child:has(.alist) > .ppanel,
-  .pbody__in > .pgrid2:only-child:has(.alist) > .ppanel{min-height:0;display:flex;flex-direction:column;overflow:hidden}
-  .pbody__in > .agrid:only-child:has(.alist) > .ppanel .alist,
-  .pbody__in > .pgrid2:only-child:has(.alist) > .ppanel .alist{flex:1 1 auto;max-height:none;min-height:0;overflow-y:auto}
+  .pbody__in:has(> .agrid:only-child){height:100%;min-height:0}
+  .pbody__in > .agrid:only-child{height:100%;min-height:0;align-items:stretch}
+  .pbody__in > .agrid:only-child > .ppanel{min-height:0;display:flex;flex-direction:column;overflow:hidden}
+  .pbody__in > .agrid:only-child > .ppanel .alist{flex:1 1 auto;max-height:none;min-height:0;overflow-y:auto}
+}
+@media (min-width:961px){
+  .pbody__in:has(> .pgrid2:only-child){height:100%;min-height:0}
+  .pbody__in > .pgrid2:only-child{height:100%;min-height:0;align-items:stretch}
+  .pbody__in > .pgrid2:only-child > .ppanel{min-height:0;display:flex;flex-direction:column;overflow:hidden}
+  .pbody__in > .pgrid2:only-child > .ppanel .alist{flex:1 1 auto;max-height:none;min-height:0;overflow-y:auto}
 }
