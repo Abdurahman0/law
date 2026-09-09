@@ -15,7 +15,7 @@
   "meta": {
     "siteName": "LexGo",
     "title": "LexGo — yuridik yordam, bir necha tegishda",
-    "description": "Advokat toping, hujjat tayyorlang va LexGo.AI dan bepul javob oling. O'zbekistonning yuridik xizmatlar ekotizimi.",
+    "description": "Advokat toping, hujjat tayyorlang va LexGo.SI dan bepul javob oling. O'zbekistonning yuridik xizmatlar ekotizimi.",
     "titleTemplate": "%s — LexGo"
   },
   "enums": {
@@ -78,7 +78,7 @@
     }
   },
   "nav": {
-    "ai": "LexGo.AI",
+    "ai": "LexGo.SI",
     "lawyers": "Advokatlar",
     "services": "Xizmatlar",
     "subscription": "Obuna",
@@ -142,7 +142,7 @@
     "hero": {
       "titleLead": "Yuridik yordam endi",
       "titleAccent": "bir necha tegishda",
-      "subtitle": "Advokat toping, hujjatni 5 daqiqada tayyorlang yoki LexGo.AI dan bepul javob oling. Hammasi bitta ilovada.",
+      "subtitle": "Advokat toping, hujjatni 5 daqiqada tayyorlang yoki LexGo.SI dan bepul javob oling. Hammasi bitta ilovada.",
       "tags": [
         "1 240+ advokat",
         "14 hudud",
@@ -212,7 +212,7 @@
       },
       {
         "city": "Toshkent",
-        "text": "LexGo.AI 12 ta hujjatni tahlil qildi"
+        "text": "LexGo.SI 12 ta hujjatni tahlil qildi"
       },
       {
         "city": "Buxoro",
@@ -265,7 +265,7 @@
       "items": [
         {
           "title": "Bir necha daqiqada javob",
-          "text": "LexGo.AI amaldagi aniq moddaga havola bilan javob beradi — dastlabki 5 ta so'rovingiz bepul."
+          "text": "LexGo.SI amaldagi aniq moddaga havola bilan javob beradi — dastlabki 5 ta so'rovingiz bepul."
         },
         {
           "title": "Tasdiqlangan advokatlar",
@@ -296,7 +296,7 @@
     "finalCta": {
       "kicker": "Hozir boshlang",
       "title": "Keyingi 5 daqiqada yuridik yordam oling",
-      "lead": "Muammoingizni oddiy so'zlar bilan yozing — LexGo.AI sizni kerakli xizmat va advokatga yo'naltiradi. Dastlabki 5 ta so'rov bepul.",
+      "lead": "Muammoingizni oddiy so'zlar bilan yozing — LexGo.SI sizni kerakli xizmat va advokatga yo'naltiradi. Dastlabki 5 ta so'rov bepul.",
       "primary": "Hozir yordam oling",
       "secondary": "Advokat topish"
     }
@@ -340,7 +340,7 @@
       "legalEntity": "Yuridik shaxs"
     },
     "preparedBy": {
-      "ai": "LexGo.AI — tezroq va arzon",
+      "ai": "LexGo.SI — tezroq va arzon",
       "lawyer": "Advokat — 60 daqiqada"
     },
     "quickLawyer": [
@@ -409,7 +409,7 @@
       "lawyerDisc": "Advokat buyurtmani 30 daqiqada tasdiqlaydi. Kontaktlar 10% oldindan to'lovdan keyin ochiladi.",
       "templateReadyTitle": "{doc} — namuna tayyor",
       "templateTime": "5 daqiqa",
-      "byAi": "LexGo.AI tayyorlaydi",
+      "byAi": "LexGo.SI tayyorlaydi",
       "byLawyer": "Advokat tayyorlaydi — 60 daqiqada",
       "kvDocument": "Hujjat",
       "kvForWhom": "Kim uchun",
@@ -420,7 +420,7 @@
         "To'lovdan keyin DOCX va PDF yuklab olasiz"
       ],
       "startFilling": "Namunani to'ldirishni boshlash",
-      "aiAnalysisTitle": "LexGo.AI dastlabki tahlili",
+      "aiAnalysisTitle": "LexGo.SI dastlabki tahlili",
       "analysisDone": "Tahlil yakunlandi",
       "kvDirection": "Yo'nalish",
       "kvStage": "Ish bosqichi",
@@ -698,8 +698,8 @@
     ]
   },
   "aiPage": {
-    "metaTitle": "LexGo.AI",
-    "kicker": "LexGo.AI",
+    "metaTitle": "LexGo.SI",
+    "kicker": "LexGo.SI",
     "title": "O'zbekiston qonunchiligiga o'qitilgan huquqiy Sun'iy intellekt",
     "lead": "Tizimga milliy qonunchilik, tergov va sud amaliyoti natijalari hamda professional yuristlar tayyorlagan hujjat namunalari yuklangan. Javob mavhum emas — amaldagi normaga tayanadi.",
     "features": [
@@ -708,7 +708,7 @@
       "Hujjat tahlili: xatolar, qonunga zid bandlar, xavflar va takliflar",
       "Kol-markaz yuristlari uchun ichki yordamchi assistent"
     ],
-    "capabilitiesTitle": "LexGo.AI nima qila oladi",
+    "capabilitiesTitle": "LexGo.SI nima qila oladi",
     "capabilities": [
       {
         "title": "Havolalar bilan javob",
@@ -759,9 +759,9 @@
     ],
     "info": "Dastlabki 5 ta so'rov bepul. Keyingilari oylik obuna asosida. Platformada ro'yxatdan o'tgan advokatlarga obunaga 50% chegirma.",
     "phone": {
-      "title": "LexGo.AI",
+      "title": "LexGo.SI",
       "status": "Onlayn · {left} ta bepul so'rov qoldi",
-      "greeting": "Salom! Men LexGo.AI. Muammoyingizni oddiy so'zlar bilan yozing — yo'nalishni, ish bosqichini va mos xizmatni aytib beraman.",
+      "greeting": "Salom! Men LexGo.SI. Muammoyingizni oddiy so'zlar bilan yozing — yo'nalishni, ish bosqichini va mos xizmatni aytib beraman.",
       "greetingNote": "Dastlabki 5 ta so'rov bepul",
       "quick": [
         "Tergovga chaqirishdi",
@@ -907,11 +907,11 @@
       ]
     },
     "compare": {
-      "title": "LexGo.AI yoki tirik advokat?",
+      "title": "LexGo.SI yoki tirik advokat?",
       "lead": "Har bir xizmat ikkala variantni taklif qiladi. Tezlik va narxni yoki chuqurlik va inson imzosini tanlang.",
       "headers": {
         "feature": "",
-        "ai": "LexGo.AI",
+        "ai": "LexGo.SI",
         "lawyer": "Advokat"
       },
       "rows": [
@@ -994,7 +994,7 @@
           "Shartnoma va muhim hujjatlarni advokat ko'rib chiqadi — 10 sahifagacha",
           "200+ tayyor yuridik hujjat shabloni",
           "Advokatlar tarmog'idagi qo'shimcha xizmatlarga 25% chegirma",
-          "LexGo mahsulotlariga, jumladan LexGo.AI ga 10% chegirma",
+          "LexGo mahsulotlariga, jumladan LexGo.SI ga 10% chegirma",
           "Tezkor vaziyatlarda (jinoiy-ma'muriy soha) eng yaqin tajribali advokatni 25% chegirmada zudlik bilan yuboramiz",
           "Turmush o'rtog'ingiz ham qamrab olinadi"
         ],
@@ -1009,7 +1009,7 @@
           "Biznesni huquqiy tekshirish: har 3 oyda 1 soatlik konsultatsiya (6 oydan keyin ochiladi)",
           "Biznes va shaxsiy masalalar uchun 200+ shablon bazasidan bepul foydalanish",
           "Har oy 1 ta mualliflik huquqini ro'yxatdan o'tkazish",
-          "LexGo.AI paketiga 10% chegirma",
+          "LexGo.SI paketiga 10% chegirma",
           "Obunadan tashqari qo'shimcha advokatlik xizmatlariga 25% chegirma",
           "Tezkor vaziyatlarda (istalgan soha) eng yaqin tajribali advokatni 25% chegirmada zudlik bilan yuboramiz",
           "Ota-ona, turmush o'rtoq va qaramog'dagi farzandlar qamrab olinadi"
@@ -1084,7 +1084,7 @@
           "premium": "25%"
         },
         {
-          "feature": "LexGo.AI chegirma",
+          "feature": "LexGo.SI chegirma",
           "standard": "10%",
           "premium": "10%"
         }
@@ -1389,7 +1389,7 @@
     "features": [
       {
         "title": "Bir zumda Sun'iy intellekt javoblari",
-        "text": "LexGo.AI ga istalgan vaqtda savol bering va soniyalarda asosli javob oling."
+        "text": "LexGo.SI ga istalgan vaqtda savol bering va soniyalarda asosli javob oling."
       },
       {
         "title": "Advokat topish va buyurtma",
@@ -1428,7 +1428,7 @@
     "title": "Ko'p beriladigan savollar",
     "items": [
       {
-        "q": "LexGo.AI advokat o'rnini bosadimi?",
+        "q": "LexGo.SI advokat o'rnini bosadimi?",
         "a": "Yo'q. Sun'iy intellekt ishni qisqartirib beradi, xronologiya tuzadi, hujjatlarni taqqoslaydi va xavflarni ko'rsatadi. Yakuniy huquqiy qaror har doim advokatda qoladi — shuning uchun har bir Sun'iy intellekt xizmatining yonida advokat varianti ham turadi."
       },
       {
@@ -1449,7 +1449,7 @@
       },
       {
         "q": "Qaysi xizmatni tanlashni bilmasam-chi?",
-        "a": "Muammoyingizni oddiy so'zlar bilan yozing. LexGo.AI matnni tahlil qilib, yo'nalishni va ish bosqichini aniqlaydi, mos xizmat turlari hamda paketlarni tanlab beradi va shu yo'nalishdagi advokatlarni filtrlaydi."
+        "a": "Muammoyingizni oddiy so'zlar bilan yozing. LexGo.SI matnni tahlil qilib, yo'nalishni va ish bosqichini aniqlaydi, mos xizmat turlari hamda paketlarni tanlab beradi va shu yo'nalishdagi advokatlarni filtrlaydi."
       },
       {
         "q": "Ma'lumotlarim maxfiy saqlanadimi?",
@@ -1539,9 +1539,9 @@
     ]
   },
   "chat": {
-    "title": "LexGo.AI",
+    "title": "LexGo.SI",
     "statusOnline": "Onlayn · {left} ta bepul so'rov",
-    "greeting": "Assalomu alaykum! Men LexGo.AI — O'zbekiston qonunchiligiga o'qitilganman. Muammoyingizni ikki-uch gapda yozing, men yo'nalishni, ish bosqichini va mos xizmatni aytaman.",
+    "greeting": "Assalomu alaykum! Men LexGo.SI — O'zbekiston qonunchiligiga o'qitilganman. Muammoyingizni ikki-uch gapda yozing, men yo'nalishni, ish bosqichini va mos xizmatni aytaman.",
     "greetingNote": "Dastlabki 5 ta so'rov bepul · yakuniy huquqiy qaror advokatda qoladi",
     "inputPlaceholder": "Savolingizni yozing…",
     "quick": [
@@ -1555,11 +1555,11 @@
     "seeLawyer": "Mos advokatni ko'rish",
     "paywall": {
       "title": "Bepul so'rovlar tugadi.",
-      "text": " Cheksiz savol, hujjat tahlili va tayyorlash uchun LexGo.AI obunasini rasmiylashtiring.",
+      "text": " Cheksiz savol, hujjat tahlili va tayyorlash uchun LexGo.SI obunasini rasmiylashtiring.",
       "cta": "Obuna narxlari",
       "inputDisabled": "Davom etish uchun obuna kerak"
     },
-    "openLabel": "LexGo.AI bilan suhbat",
+    "openLabel": "LexGo.SI bilan suhbat",
     "closeLabel": "Yopish",
     "online": "Onlayn",
     "openFull": "To'liq chatni ochish",
@@ -1575,7 +1575,7 @@
       },
       "subscription": {
         "text": "Ikki tarif bor.\n\nStandart — cheksiz 30 daqiqalik konsultatsiyalar, hujjat ko'rigi 10 sahifagacha, 200+ shablon, turmush o'rtog'ingiz ham qamrab olinadi.\n\nPremium — bularga qo'shimcha biznes-audit konsultatsiyasi, har oy 1 ta mualliflik huquqi, ota-ona va farzandlar qamrovi.\n\n12 oylik olinsa 10%, to'lov bir yo'la qilinsa yana 10% arzon bo'ladi.",
-        "meta": "Advokat va yuristlarga LexGo.AI obunasiga 50% chegirma"
+        "meta": "Advokat va yuristlarga LexGo.SI obunasiga 50% chegirma"
       },
       "price": {
         "text": "Narx xizmat turiga bog'liq:\n\n• Ekspress konsultatsiya — 90 000 so'mdan\n• Hujjat tayyorlash — 60 000 so'mdan\n• Hujjat tekshiruvi — 150 000 so'mdan\n• Advokat paketlari — 1 250 000 so'mdan\n\nAniq narxni ayta olishim uchun masalangizni yozing.",
@@ -1615,8 +1615,8 @@
     "limitLogin": "Davom etish uchun kirish"
   },
   "chatPage": {
-    "metaTitle": "LexGo.AI chat",
-    "title": "LexGo.AI",
+    "metaTitle": "LexGo.SI chat",
+    "title": "LexGo.SI",
     "subtitle": "O'zbekiston qonunchiligiga o'qitilgan",
     "newChat": "Yangi chat",
     "historyTitle": "Chatlar",
@@ -1624,7 +1624,7 @@
     "noChats": "Hozircha chatlar yo'q",
     "menu": "Menyu",
     "emptyTitle": "Qanday yordam bera olaman?",
-    "emptyText": "Huquqiy vaziyatingiz, hujjat yoki ish haqida so'rang — LexGo.AI qonunga havolalar bilan javob beradi.",
+    "emptyText": "Huquqiy vaziyatingiz, hujjat yoki ish haqida so'rang — LexGo.SI qonunga havolalar bilan javob beradi.",
     "hi": "Salom, {name}",
     "suggestions": [
       "Meni so'roqqa chaqirishdi — huquqlarim qanday?",
@@ -1632,15 +1632,15 @@
       "3 oydan beri ish haqim to'lanmayapti.",
       "MChJ ochib, savdo belgimni himoya qilmoqchiman."
     ],
-    "inputPlaceholder": "LexGo.AI ga xabar yozing…",
+    "inputPlaceholder": "LexGo.SI ga xabar yozing…",
     "send": "Yuborish",
     "you": "Siz",
-    "assistant": "LexGo.AI",
+    "assistant": "LexGo.SI",
     "offline": "Serverga ulanib bo'lmadi — bu oflayn javob.",
-    "disclaimer": "LexGo.AI xato qilishi mumkin. Yakuniy huquqiy qaror advokatda qoladi.",
+    "disclaimer": "LexGo.SI xato qilishi mumkin. Yakuniy huquqiy qaror advokatda qoladi.",
     "downloadPdf": "PDF yuklab olish",
     "open": "Ochish",
-    "limitReached": "Mehmonlar uchun bepul limit tugadi. LexGo.AI bilan davom etish uchun tizimga kiring.",
+    "limitReached": "Mehmonlar uchun bepul limit tugadi. LexGo.SI bilan davom etish uchun tizimga kiring.",
     "limitLogin": "Davom etish uchun kirish"
   },
   "portal": {
@@ -1853,7 +1853,7 @@
         "academy": "Akademiya",
         "warranty": "Kafolat",
         "complaints": "Shikoyatlar",
-        "ai": "LexGo.AI",
+        "ai": "LexGo.SI",
         "intake": "Muammo tahlili",
         "docAnalysis": "Hujjat tahlili",
         "profile": "Profil",
@@ -3445,7 +3445,7 @@
       "title": "Integratsiyalar",
       "lead": "Tashqi servislar ulanish holati.",
       "empty": "Integratsiya yo'q",
-      "keys": { "website_api": "Veb-sayt API", "mobile_api": "Mobil API", "lexgo_ai": "LexGo.AI", "telegram": "Telegram", "sms": "SMS", "email": "Email" },
+      "keys": { "website_api": "Veb-sayt API", "mobile_api": "Mobil API", "lexgo_ai": "LexGo.SI", "telegram": "Telegram", "sms": "SMS", "email": "Email" },
       "status": { "connected": "Ulangan", "planned": "Rejalashtirilgan", "error": "Xato", "disconnected": "Uzilgan" }
     },
     "workflow": {
