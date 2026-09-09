@@ -2548,6 +2548,10 @@
       "saved": "Profil saqlandi.",
       "saveError": "Saqlab bo'lmadi. Qayta urinib ko'ring.",
       "statsError": "Jami ishlar soni to'liq va qisman yutuqlar yig'indisidan kam bo'lmasligi kerak.",
+      "detailsTitle": "Yo'nalish va statistika",
+      "edit": "O'zgartirish",
+      "cancel": "Bekor qilish",
+      "emptyInfo": "Hali to'ldirilmagan — o'zgartirish uchun bosing.",
       "servicesTitle": "Mening xizmatlarim",
         "servicesEmpty": "Hozircha xizmatlar yo‘q",
         "servicesEmptyText": "Xizmatlarni ro‘yxatdan o‘tishda yoki profil sozlamalarida qo‘shing."

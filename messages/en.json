@@ -2542,6 +2542,10 @@
       "saved": "Profile saved.",
       "saveError": "Couldn't save. Please try again.",
       "statsError": "Total cases can't be fewer than the sum of full and partial wins.",
+      "detailsTitle": "Practice areas & stats",
+      "edit": "Edit",
+      "cancel": "Cancel",
+      "emptyInfo": "Not filled yet — tap Edit to add.",
       "servicesTitle": "My services",
         "servicesEmpty": "No services yet",
         "servicesEmptyText": "Add services from registration or profile setup."

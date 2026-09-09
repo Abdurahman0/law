@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useAuth } from "@/lib/auth";
+import { legalServiceLabel, type CatalogLocale } from "@/lib/legalServices";
 import {
   requestVerification,
   getLawyerServices,
@@ -23,7 +24,6 @@ import {
   IconUser,
   IconShieldCheck,
   IconBriefcase,
-  IconTarget,
 } from "@/components/icons";
 
 const ZERO_STATS: AdvocateStats = {
@@ -62,6 +62,16 @@ function ProfileEditor({ initial }: { initial: ProfessionalProfile }) {
   const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
   const [vbusy, setVbusy] = useState(false);
   const [vnote, setVnote] = useState<{ ok: boolean; msg: string } | null>(null);
+  const [edit, setEdit] = useState(false);
+  const locale = useLocale() as CatalogLocale;
+  const ts = useTranslations("register.advocate.stats");
+
+  function cancelEdit() {
+    setAreas(initial.practiceAreas ?? []);
+    setStats(initial.stats ?? ZERO_STATS);
+    setNote(null);
+    setEdit(false);
+  }
 
   // Merge the backend profile with anything already known from sign-up (email,
   // photo, specialization aren't returned by GET /lawyers/me) plus live edits,
@@ -89,6 +99,7 @@ function ProfileEditor({ initial }: { initial: ProfessionalProfile }) {
       await upsertMyLawyer(merged, "advokat");
       update({ completeness: livePct, profile: merged });
       setNote({ ok: true, msg: t("saved") });
+      setEdit(false);
     } catch {
       setNote({ ok: false, msg: t("saveError") });
     } finally {
@@ -137,35 +148,53 @@ function ProfileEditor({ initial }: { initial: ProfessionalProfile }) {
         {vnote ? <Notice ok={vnote.ok} msg={vnote.msg} /> : null}
       </div>
 
-      {/* Practice areas + case stats: moved out of registration, filled here. */}
+      {/* Practice areas + case stats: read-only by default, edit on demand. */}
       <div className="ppanel">
         <div className="ppanel__h">
           <b style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <IconBriefcase style={{ width: 18, height: 18 }} />
-            {t("directionsTitle")}
+            {t("detailsTitle")}
           </b>
-          <span className="advmuted">{areas.length}</span>
+          {edit ? (
+            <button className="btn btn--soft btn--sm" type="button" onClick={cancelEdit}>{t("cancel")}</button>
+          ) : (
+            <button className="btn btn--line btn--sm" type="button" onClick={() => setEdit(true)}>{t("edit")}</button>
+          )}
         </div>
-        <p className="advmuted" style={{ margin: "0 0 12px" }}>{t("directionsSub")}</p>
-        <LegalServicePicker value={areas} onChange={setAreas} isAdvocate />
-      </div>
 
-      <div className="ppanel">
-        <div className="ppanel__h">
-          <b style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <IconTarget style={{ width: 18, height: 18 }} />
-            {t("statsTitle")}
-          </b>
-        </div>
-        <p className="advmuted" style={{ margin: "0 0 12px" }}>{t("statsSub")}</p>
-        <StatsEditor value={stats} onChange={setStats} />
-        <div className="pverify" style={{ marginTop: 16 }}>
-          {note ? <Notice ok={note.ok} msg={note.msg} /> : <span />}
-          <button className="btn btn--grad btn--sm" type="button" onClick={save} disabled={busy}>
-            <IconShieldCheck />
-            {busy ? t("saving") : t("save")}
-          </button>
-        </div>
+        {edit ? (
+          <>
+            <label className="advmuted" style={{ display: "block", marginBottom: 8 }}>{t("directionsTitle")}</label>
+            <LegalServicePicker value={areas} onChange={setAreas} isAdvocate />
+            <label className="advmuted" style={{ display: "block", margin: "18px 0 8px" }}>{t("statsTitle")}</label>
+            <StatsEditor value={stats} onChange={setStats} />
+            <div className="pverify" style={{ marginTop: 16 }}>
+              {note ? <Notice ok={note.ok} msg={note.msg} /> : <span />}
+              <button className="btn btn--grad btn--sm" type="button" onClick={save} disabled={busy}>
+                <IconShieldCheck />
+                {busy ? t("saving") : t("save")}
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <label className="advmuted" style={{ display: "block", marginBottom: 6 }}>{t("directionsTitle")}</label>
+            {areas.length ? (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
+                {areas.map((a) => <span className="chip" key={a}>{legalServiceLabel(a, locale)}</span>)}
+              </div>
+            ) : (
+              <p className="advmuted" style={{ marginBottom: 16 }}>{t("emptyInfo")}</p>
+            )}
+            <label className="advmuted" style={{ display: "block", marginBottom: 6 }}>{t("statsTitle")}</label>
+            <div className="amet">
+              <div className="amet__c"><b>{stats.totalCases}</b><span className="amet__l">{ts("totalCases")}</span></div>
+              <div className="amet__c"><b>{stats.fullyWonCases}</b><span className="amet__l">{ts("fullyWonCases")}</span></div>
+              <div className="amet__c"><b>{stats.partiallyWonCases}</b><span className="amet__l">{ts("partiallyWonCases")}</span></div>
+              <div className="amet__c"><b>{stats.successRate}%</b><span className="amet__l">{ts("successRate")}</span></div>
+            </div>
+          </>
+        )}
       </div>
 
       <MyServices userId={session?.id ?? ""} />
