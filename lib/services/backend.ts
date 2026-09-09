@@ -798,9 +798,10 @@ export type ContractFile = {
 };
 export type DocumentRequest = {
   id: string;
+  templateId: string;
   title: string;
   documentType: string;
-  status: string; // draft | awaiting_payment | file_ready | ...
+  status: string; // questionnaire | awaiting_payment | payment_pending | file_ready
   price: number;
   currency: string;
   questionnaire: { name: string; label: string; required?: boolean }[];
@@ -813,6 +814,7 @@ function normDocRequest(v: unknown): DocumentRequest {
   const cf = d.contract_file ? asDict(d.contract_file) : null;
   return {
     id: asStr(d.id),
+    templateId: asStr(d.template_id ?? d.templateId),
     title: asStr(d.title),
     documentType: asStr(d.document_type ?? d.documentType),
     status: asStr(d.status),
@@ -834,6 +836,12 @@ function normDocRequest(v: unknown): DocumentRequest {
         }
       : undefined,
   };
+}
+
+// The signed-in user's document requests (newest first), for mapping status
+// back onto template cards so a paid document isn't paid for twice.
+export async function listDocumentRequests(): Promise<DocumentRequest[]> {
+  return listFrom(await http("/document-requests"), "items", "data", "requests").map(normDocRequest);
 }
 
 export async function createDocumentRequest(input: {

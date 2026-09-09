@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { useAuth } from "@/lib/auth";
 import {
   getDocumentTemplates,
+  listDocumentRequests,
   createDocumentRequest,
   updateDocumentAnswers,
   payDocumentRequest,
@@ -55,11 +55,8 @@ function openPdf(f: DocumentRequest["contractFile"], download = false) {
   }
 }
 
-type TplState = Record<string, { id: string; status: string }>;
-
 export default function DocumentFlow() {
   const t = useTranslations("portal.client.documents");
-  const { session } = useAuth();
   const tpls = useResource(getDocumentTemplates, []);
   const clientTpls = tpls.data.filter((x) => x.visibility === "client");
 
@@ -70,43 +67,19 @@ export default function DocumentFlow() {
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
 
-  // Backend has no "list my requests" endpoint, so remember each template's
-  // latest request (id + status) locally to show its state on the card and
-  // resume it instead of starting a new (re-payable) request.
-  const storeKey = `lexgo_docreqs_${session?.id || "anon"}`;
-  const [byTpl, setByTpl] = useState<TplState>({});
-  useEffect(() => {
-    try {
-      setByTpl(JSON.parse(localStorage.getItem(storeKey) || "{}"));
-    } catch {
-      /* ignore */
+  // Server-backed request history (GET /document-requests, newest first) →
+  // map each template to its latest request so the card shows its status and
+  // resumes instead of starting a new (re-payable) request.
+  const [reqKey, setReqKey] = useState(0);
+  const reqs = useResource(() => listDocumentRequests(), [reqKey]);
+  const bump = () => setReqKey((k) => k + 1);
+  const byTpl = useMemo(() => {
+    const m: Record<string, { id: string; status: string }> = {};
+    for (const r of reqs.data) {
+      if (r.templateId && !m[r.templateId]) m[r.templateId] = { id: r.id, status: r.status };
     }
-  }, [storeKey]);
-
-  function remember(tplId: string, r: DocumentRequest) {
-    if (!tplId) return;
-    setByTpl((prev) => {
-      const next = { ...prev, [tplId]: { id: r.id, status: r.status } };
-      try {
-        localStorage.setItem(storeKey, JSON.stringify(next));
-      } catch {
-        /* ignore */
-      }
-      return next;
-    });
-  }
-  function forget(tplId: string) {
-    setByTpl((prev) => {
-      const next = { ...prev };
-      delete next[tplId];
-      try {
-        localStorage.setItem(storeKey, JSON.stringify(next));
-      } catch {
-        /* ignore */
-      }
-      return next;
-    });
-  }
+    return m;
+  }, [reqs.data]);
 
   function close() {
     setReq(null);
@@ -131,10 +104,9 @@ export default function DocumentFlow() {
       setReq(r);
       setAnswers({});
       setStage(stageFor(r));
-      remember(tpl.id, r);
+      bump();
     } catch {
-      // Stale/deleted request → drop it and start fresh.
-      forget(tpl.id);
+      // Stale/deleted request → start fresh.
       await start(tpl);
     } finally {
       setBusy(false);
@@ -156,7 +128,7 @@ export default function DocumentFlow() {
       setReq(r);
       setAnswers({});
       setStage(stageFor(r));
-      remember(tpl.id, r);
+      bump();
     } catch {
       setNote({ ok: false, msg: t("error") });
     } finally {
@@ -172,7 +144,7 @@ export default function DocumentFlow() {
       setReq(r);
       // After answers the backend moves to awaiting_payment → pay step.
       setStage(stageFor(r) === "answers" ? "pay" : stageFor(r));
-      remember(activeTpl, r);
+      bump();
     } catch {
       setNote({ ok: false, msg: t("error") });
     } finally {
@@ -189,7 +161,7 @@ export default function DocumentFlow() {
       if (r.status !== "file_ready") r = await getDocumentRequest(req.id);
       setReq(r);
       setStage(r.status === "file_ready" ? "done" : "pending");
-      remember(activeTpl, r);
+      bump();
     } catch {
       setNote({ ok: false, msg: t("error") });
     } finally {
@@ -203,7 +175,7 @@ export default function DocumentFlow() {
     try {
       const r = await getDocumentRequest(req.id);
       setReq(r);
-      remember(activeTpl, r);
+      bump();
       if (r.status === "file_ready") {
         setStage("done");
         setNote(null);
@@ -221,10 +193,10 @@ export default function DocumentFlow() {
       const r = await getDocumentRequest(req.id).catch(() => null);
       if (!alive || !r) return;
       setReq(r);
-      remember(activeTpl, r);
       if (r.status === "file_ready") {
         setStage("done");
         setNote(null);
+        bump();
       }
     }, 4000);
     return () => {
