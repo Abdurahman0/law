@@ -419,20 +419,41 @@ export type BackendPlan = {
   yearlyPrice: number;
   prepaidYearlyPrice: number;
   audience: string;
+  billingType: string;
+  sortOrder: number;
+  allowedGiftDurations: number[];
   description: string;
   features: string[];
   isGiftable: boolean;
   isActive: boolean;
 };
 
-export async function getSubscriptionPlans(): Promise<BackendPlan[]> {
+// Backend ships localized `name`/`features` as { uz, ru, en } objects; pick the
+// current UI locale (fallback uz, then the legacy flat string/array).
+function pickLoc(v: unknown, locale: string, fallback: string): string {
+  if (v && typeof v === "object" && !Array.isArray(v)) {
+    const d = v as Dict;
+    return asStr(d[locale] ?? d.uz ?? fallback);
+  }
+  return asStr(v ?? fallback);
+}
+function pickLocArr(v: unknown, locale: string, fallback: unknown): string[] {
+  if (v && typeof v === "object" && !Array.isArray(v)) {
+    const arr = (v as Dict)[locale] ?? (v as Dict).uz;
+    if (Array.isArray(arr)) return arr.map((x) => asStr(x));
+  }
+  if (Array.isArray(v)) return v.map((x) => asStr(x));
+  return asArr(fallback).map((x) => asStr(x));
+}
+
+export async function getSubscriptionPlans(locale = "uz"): Promise<BackendPlan[]> {
   const data = await http("/subscription-plans");
   return listFrom(data, "plans", "items", "data").map((v) => {
     const d = asDict(v);
     const monthly = asNum(d.monthly_price ?? d.price);
     return {
       id: asStr(d.id),
-      name: asStr(d.title ?? d.name),
+      name: pickLoc(d.name, locale, asStr(d.title)),
       slug: asStr(d.slug),
       price: monthly,
       monthlyPrice: monthly,
@@ -440,8 +461,11 @@ export async function getSubscriptionPlans(): Promise<BackendPlan[]> {
       yearlyPrice: asNum(d.yearly_price),
       prepaidYearlyPrice: asNum(d.prepaid_yearly_price),
       audience: asStr(d.audience),
+      billingType: asStr(d.billing_type),
+      sortOrder: asNum(d.sort_order),
+      allowedGiftDurations: asArr(d.allowed_gift_durations).map((x) => asNum(x)),
       description: asStr(d.description),
-      features: asArr(d.benefits ?? d.features).map((f) => asStr(f)),
+      features: pickLocArr(d.features, locale, d.benefits),
       isGiftable: Boolean(d.is_giftable),
       isActive: d.is_active !== false,
     };
@@ -1429,37 +1453,73 @@ export type Gift = {
   termMonths: number;
   status: string;
   createdAt: string;
+  giftCode: string;
+  shareUrl: string;
+  qrUrl: string;
 };
 function normGift(v: unknown): Gift {
   const d = asDict(v);
+  const code = asStr(d.gift_code ?? d.code);
   return {
     id: asStr(d.id),
     direction: asStr(d.direction, "sent"),
     recipientPhone: asStr(d.recipient_phone),
     planName: asStr(d.plan_name ?? d.service_name),
-    termMonths: asNum(d.term_months),
+    termMonths: asNum(d.term_months ?? d.duration_months),
     status: asStr(d.status),
     createdAt: asStr(d.created_at),
+    giftCode: code,
+    shareUrl: asStr(d.share_url),
+    qrUrl: d.qr_url ? absUrl(asStr(d.qr_url)) : code ? absUrl(`/gifts/${code}/qr`) : "",
   };
 }
 export async function listGifts(): Promise<Gift[]> {
   return listFrom(await http("/gifts"), "items", "data").map(normGift);
 }
-// A gift is either a subscription plan or a single service.
+// A gift is either a subscription plan (module 6, by slug + duration) or a
+// single service. Returns the shareable link + QR the buyer sends on.
 export type GiftInput = {
-  plan_id?: string;
+  plan_slug?: string;
   service_id?: string;
-  recipient_phone: string;
-  term_months?: number;
-  message?: string;
+  recipient_hint?: string;
+  duration_months?: number;
 };
-export async function createGift(input: GiftInput): Promise<PurchaseResult> {
-  return normPurchase(
+export type GiftResult = {
+  paymentUrl?: string;
+  giftCode: string;
+  shareUrl: string;
+  qrUrl: string;
+  status: string;
+};
+export async function createGift(input: GiftInput): Promise<GiftResult> {
+  const raw = asDict(
     await http("/gifts", {
       method: "POST",
-      body: JSON.stringify({ provider: "demo_payme", term_months: 6, ...input }),
+      body: JSON.stringify({ provider: "demo_payme", duration_months: 6, ...input }),
     }),
   );
+  // `payment` may be a bare URL string or an object with payment_url.
+  const payUrl =
+    typeof raw.payment === "string"
+      ? raw.payment
+      : asStr(asDict(raw.payment).payment_url ?? raw.payment_url);
+  const code = asStr(raw.gift_code ?? raw.code);
+  return {
+    paymentUrl: payUrl || undefined,
+    giftCode: code,
+    shareUrl: asStr(raw.share_url),
+    qrUrl: raw.qr_url ? absUrl(asStr(raw.qr_url)) : code ? absUrl(`/gifts/${code}/qr`) : "",
+    status: asStr(raw.status),
+  };
+}
+
+// Recipient claims a gift by its code — starts their subscription term.
+export async function claimGift(code: string): Promise<Gift> {
+  return normGift(await http(`/gifts/${encodeURIComponent(code)}/claim`, { method: "POST" }));
+}
+// Best-effort public gift lookup for the claim landing page (may 404).
+export async function getGift(code: string): Promise<Gift> {
+  return normGift(await http(`/gifts/${encodeURIComponent(code)}`));
 }
 
 // ── Client profile, payment methods, family ───────────────────────

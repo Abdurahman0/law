@@ -2195,7 +2195,30 @@
         "send": "Sovg‘a yuborish",
         "sending": "Yuborilmoqda…",
         "success": "Sovg‘a yuborildi.",
-        "error": "Maydonlarni tekshiring."
+        "error": "Maydonlarni tekshiring.",
+        "shareTitle": "Sovg'angiz tayyor!",
+        "shareHint": "Havola yoki QR kodni qabul qiluvchiga yuboring — ular ro'yxatdan o'tganda muddat boshlanadi.",
+        "copyLink": "Havoladan nusxa olish",
+        "copied": "Nusxa olindi",
+        "qrAlt": "QR kod",
+        "openPayment": "To'lovni ochish",
+        "done": "Tayyor",
+        "recipientHintPh": "Ism yoki eslatma (ixtiyoriy)",
+        "unclaimed": "Faollashtirilmagan",
+        "claimed": "Faollashtirilgan",
+        "shareCta": "Havola va QR",
+        "claim": {
+          "title": "Sizga sovg'a!",
+          "sub": "LexGo shaxsiy advokat obunasi sizga sovg'a qilindi.",
+          "loginFirst": "Sovg'ani olish uchun tizimga kiring yoki ro'yxatdan o'ting.",
+          "loginCta": "Kirish / Ro'yxatdan o'tish",
+          "claimCta": "Sovg'ani olish",
+          "claiming": "Olinmoqda…",
+          "claimedTitle": "Tabriklaymiz!",
+          "claimedSub": "Obunangiz faollashtirildi.",
+          "error": "Sovg'ani olib bo'lmadi. Havola noto'g'ri yoki muddati o'tgan bo'lishi mumkin.",
+          "goPortal": "Kabinetga o'tish"
+        }
       },
       "identity": {
         "title": "Shaxsni tasdiqlash",

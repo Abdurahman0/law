@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import {
   getSubscriptionPlans,
@@ -15,15 +15,6 @@ import { IconCheck, IconCard, IconGift } from "@/components/icons";
 
 type Term = 1 | 6 | 12;
 type Variant = "personal" | "all";
-
-// Module 6 "Shaxsiy advokat" tariffs. When a client opens their subscription
-// we show only these two plans (+ gift) with the TZ feature copy; sellers keep
-// the full plan list (LexGo.AI, business, etc.).
-const PERSONAL_SLUGS = ["shaxsiy-advokat-standard", "shaxsiy-advokat-premium"] as const;
-const SLUG_KEY: Record<string, "standard" | "premium"> = {
-  "shaxsiy-advokat-standard": "standard",
-  "shaxsiy-advokat-premium": "premium",
-};
 
 function som(n: number): string {
   return n.toLocaleString("ru-RU").replace(/,/g, " ");
@@ -46,8 +37,9 @@ function pricing(plan: BackendPlan, term: Term, upfront: boolean) {
 export default function PlansPanel({ variant = "all" }: { variant?: Variant }) {
   const t = useTranslations("plans");
   const ts = useTranslations("subscription");
+  const locale = useLocale();
   const personal = variant === "personal";
-  const res = useResource<BackendPlan>(getSubscriptionPlans, []);
+  const res = useResource<BackendPlan>(() => getSubscriptionPlans(locale), [locale]);
   const payments = useResource(listPayments, []);
   // Module 6 subscriptions run 6 or 12 months only; sellers can still go monthly.
   const [term, setTerm] = useState<Term>(6);
@@ -57,23 +49,19 @@ export default function PlansPanel({ variant = "all" }: { variant?: Variant }) {
 
   const bills = payments.data.filter((p) => !p.kind || p.kind === "subscription");
 
-  // For the client view, keep only the personal-advocate tariffs, in order.
+  const active = res.data.filter((p) => p.isActive !== false);
+  // Client view: only personal-advocate tariffs (audience), gift shown as its
+  // own card. Seller view: all non-gift plans. Backend ships localized name +
+  // features, so no client-side copy needed.
   const plans = personal
-    ? (PERSONAL_SLUGS.map((s) => res.data.find((p) => p.slug === s)).filter(Boolean) as BackendPlan[])
-    : res.data;
+    ? active
+        .filter((p) => p.audience === "personal" && p.billingType !== "gift")
+        .sort((a, b) => a.sortOrder - b.sortOrder)
+    : active.filter((p) => p.billingType !== "gift");
+  const giftPlan = personal ? active.find((p) => p.billingType === "gift") : undefined;
 
-  function planName(plan: BackendPlan) {
-    const key = SLUG_KEY[plan.slug];
-    return plan.name || (personal && key ? ts(`plans.${key}.name`) : plan.name);
-  }
-  // For the module-6 personal tariffs the TZ feature copy is authoritative, so
-  // use it whenever we recognise the slug (backend only ships sparse/placeholder
-  // features). Other plans fall back to whatever the backend returns.
-  function planFeatures(plan: BackendPlan): string[] {
-    const key = SLUG_KEY[plan.slug];
-    if (personal && key) return ts.raw(`plans.${key}.features`) as string[];
-    return plan.features ?? [];
-  }
+  const planName = (plan: BackendPlan) => plan.name;
+  const planFeatures = (plan: BackendPlan): string[] => plan.features ?? [];
 
   async function choose(plan: BackendPlan) {
     if (busy) return;
@@ -168,22 +156,19 @@ export default function PlansPanel({ variant = "all" }: { variant?: Variant }) {
             );
           })}
 
-          {/* Gift tariff (module 6): pay 3/6/12 months up front, send a QR link. */}
+          {/* Gift tariff (module 6): pay 3/6/12 months up front, send a QR link.
+              Content comes from the backend gift plan, falling back to i18n. */}
           {personal ? (
             <div className="splan splan--gift">
               <div className="splan__h">
                 <b className="splan__name">
                   <IconGift style={{ width: 16, height: 16, marginRight: 6, verticalAlign: "-2px" }} />
-                  {ts("plans.gift.name")}
+                  {giftPlan?.name || ts("plans.gift.name")}
                 </b>
-              </div>
-              <div className="splan__price">
-                <b>{ts("plans.gift.price")}</b>
-                <span>{ts("plans.gift.priceUnit")}</span>
               </div>
               <p className="splan__total">{ts("plans.gift.payNote")}</p>
               <ul className="splan__feats">
-                {(ts.raw("plans.gift.features") as string[]).map((f, k) => (
+                {(giftPlan?.features?.length ? giftPlan.features : (ts.raw("plans.gift.features") as string[])).map((f, k) => (
                   <li key={k}>
                     <IconCheck />
                     {f}

@@ -2189,7 +2189,30 @@
         "send": "Send gift",
         "sending": "Sending…",
         "success": "Gift sent.",
-        "error": "Please check the fields."
+        "error": "Please check the fields.",
+        "shareTitle": "Your gift is ready!",
+        "shareHint": "Send the link or QR code to the recipient — the term starts when they register.",
+        "copyLink": "Copy link",
+        "copied": "Copied",
+        "qrAlt": "QR code",
+        "openPayment": "Open payment",
+        "done": "Done",
+        "recipientHintPh": "Name or note (optional)",
+        "unclaimed": "Unclaimed",
+        "claimed": "Claimed",
+        "shareCta": "Link & QR",
+        "claim": {
+          "title": "A gift for you!",
+          "sub": "You've been gifted a LexGo Personal Lawyer subscription.",
+          "loginFirst": "Log in or sign up to claim your gift.",
+          "loginCta": "Log in / Sign up",
+          "claimCta": "Claim gift",
+          "claiming": "Claiming…",
+          "claimedTitle": "Congratulations!",
+          "claimedSub": "Your subscription is now active.",
+          "error": "Couldn't claim the gift. The link may be invalid or expired.",
+          "goPortal": "Go to my account"
+        }
       },
       "identity": {
         "title": "Identity verification",
