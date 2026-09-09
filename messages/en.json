@@ -2416,7 +2416,9 @@
         "processing": "Payment is processing — check status in a moment.",
         "pendingTitle": "Payment is processing",
         "pendingSub": "Your payment is being confirmed. The document opens automatically once it's ready — you can close this window.",
-        "pendingStatus": "Pending"
+        "pendingStatus": "Pending",
+        "badgeReady": "Ready",
+        "badgeToPay": "Payment needed"
       }
     },
     "advocate": {

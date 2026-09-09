@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { useAuth } from "@/lib/auth";
 import {
   getDocumentTemplates,
   createDocumentRequest,
@@ -18,6 +19,21 @@ import Modal from "@/components/admin/Modal";
 import { IconDocLines, IconDownload, IconExternal, IconCheck, IconClock } from "@/components/icons";
 
 const som = (n?: number) => (n ? n.toLocaleString("ru-RU").replace(/,/g, " ") : "");
+
+type Stage = "answers" | "pay" | "pending" | "done";
+
+// Map a request's backend status to the modal stage. Anything already paid
+// (not draft / awaiting_payment) resolves to pending or done — never back to
+// the pay step, so a paid document can't be paid for twice.
+// Backend statuses: questionnaire -> awaiting_payment -> payment_pending ->
+// file_ready. Anything past awaiting_payment is already paid, so it resolves to
+// pending/done — never the pay step (no double payment).
+function stageFor(r: DocumentRequest): Stage {
+  if (r.status === "file_ready" && r.contractFile) return "done";
+  if (!r.status || r.status === "questionnaire" || r.status === "draft") return "answers";
+  if (r.status === "awaiting_payment") return "pay";
+  return "pending";
+}
 
 function openPdf(f: DocumentRequest["contractFile"], download = false) {
   if (!f) return;
@@ -39,25 +55,96 @@ function openPdf(f: DocumentRequest["contractFile"], download = false) {
   }
 }
 
+type TplState = Record<string, { id: string; status: string }>;
+
 export default function DocumentFlow() {
   const t = useTranslations("portal.client.documents");
+  const { session } = useAuth();
   const tpls = useResource(getDocumentTemplates, []);
   const clientTpls = tpls.data.filter((x) => x.visibility === "client");
 
   const [req, setReq] = useState<DocumentRequest | null>(null);
+  const [activeTpl, setActiveTpl] = useState("");
   const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [stage, setStage] = useState<"answers" | "pay" | "pending" | "done">("answers");
+  const [stage, setStage] = useState<Stage>("answers");
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
 
+  // Backend has no "list my requests" endpoint, so remember each template's
+  // latest request (id + status) locally to show its state on the card and
+  // resume it instead of starting a new (re-payable) request.
+  const storeKey = `lexgo_docreqs_${session?.id || "anon"}`;
+  const [byTpl, setByTpl] = useState<TplState>({});
+  useEffect(() => {
+    try {
+      setByTpl(JSON.parse(localStorage.getItem(storeKey) || "{}"));
+    } catch {
+      /* ignore */
+    }
+  }, [storeKey]);
+
+  function remember(tplId: string, r: DocumentRequest) {
+    if (!tplId) return;
+    setByTpl((prev) => {
+      const next = { ...prev, [tplId]: { id: r.id, status: r.status } };
+      try {
+        localStorage.setItem(storeKey, JSON.stringify(next));
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  }
+  function forget(tplId: string) {
+    setByTpl((prev) => {
+      const next = { ...prev };
+      delete next[tplId];
+      try {
+        localStorage.setItem(storeKey, JSON.stringify(next));
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  }
+
   function close() {
     setReq(null);
+    setActiveTpl("");
     setNote(null);
+  }
+
+  // Open a template: resume its existing request (so you don't pay twice) or
+  // create a fresh one when there's none.
+  async function open(tpl: BackendTemplate) {
+    if (busy) return;
+    setActiveTpl(tpl.id);
+    setNote(null);
+    const existing = byTpl[tpl.id];
+    if (!existing) {
+      await start(tpl);
+      return;
+    }
+    setBusy(true);
+    try {
+      const r = await getDocumentRequest(existing.id);
+      setReq(r);
+      setAnswers({});
+      setStage(stageFor(r));
+      remember(tpl.id, r);
+    } catch {
+      // Stale/deleted request → drop it and start fresh.
+      forget(tpl.id);
+      await start(tpl);
+    } finally {
+      setBusy(false);
+    }
   }
 
   async function start(tpl: BackendTemplate) {
     setBusy(true);
     setNote(null);
+    setActiveTpl(tpl.id);
     try {
       const r = await createDocumentRequest({
         template_id: tpl.id,
@@ -68,7 +155,8 @@ export default function DocumentFlow() {
       });
       setReq(r);
       setAnswers({});
-      setStage(r.status === "file_ready" ? "done" : "answers");
+      setStage(stageFor(r));
+      remember(tpl.id, r);
     } catch {
       setNote({ ok: false, msg: t("error") });
     } finally {
@@ -82,7 +170,9 @@ export default function DocumentFlow() {
     try {
       const r = await updateDocumentAnswers(req.id, answers);
       setReq(r);
-      setStage("pay");
+      // After answers the backend moves to awaiting_payment → pay step.
+      setStage(stageFor(r) === "answers" ? "pay" : stageFor(r));
+      remember(activeTpl, r);
     } catch {
       setNote({ ok: false, msg: t("error") });
     } finally {
@@ -98,8 +188,8 @@ export default function DocumentFlow() {
       let r = await payDocumentRequest(req.id, "payme", req.price);
       if (r.status !== "file_ready") r = await getDocumentRequest(req.id);
       setReq(r);
-      // Not ready yet → show a visible pending state (auto-polls below).
       setStage(r.status === "file_ready" ? "done" : "pending");
+      remember(activeTpl, r);
     } catch {
       setNote({ ok: false, msg: t("error") });
     } finally {
@@ -113,6 +203,7 @@ export default function DocumentFlow() {
     try {
       const r = await getDocumentRequest(req.id);
       setReq(r);
+      remember(activeTpl, r);
       if (r.status === "file_ready") {
         setStage("done");
         setNote(null);
@@ -122,8 +213,7 @@ export default function DocumentFlow() {
     }
   }
 
-  // While a payment is processing, poll the backend so the document opens
-  // automatically once it's generated — no manual refresh needed.
+  // While a payment is processing, poll so the document opens automatically.
   useEffect(() => {
     if (stage !== "pending" || !req) return;
     let alive = true;
@@ -131,6 +221,7 @@ export default function DocumentFlow() {
       const r = await getDocumentRequest(req.id).catch(() => null);
       if (!alive || !r) return;
       setReq(r);
+      remember(activeTpl, r);
       if (r.status === "file_ready") {
         setStage("done");
         setNote(null);
@@ -140,7 +231,15 @@ export default function DocumentFlow() {
       alive = false;
       clearInterval(timer);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stage, req]);
+
+  function badgeFor(status?: string): { txt: string; cls: string } | null {
+    if (!status || status === "questionnaire" || status === "draft") return null;
+    if (status === "file_ready") return { txt: t("badgeReady"), cls: "ready" };
+    if (status === "awaiting_payment") return { txt: t("badgeToPay"), cls: "topay" };
+    return { txt: t("pendingStatus"), cls: "pending" };
+  }
 
   return (
     <div className="ppanel">
@@ -156,15 +255,25 @@ export default function DocumentFlow() {
         <EmptyState icon={<IconDocLines />} title={t("empty")} text={t("emptyText")} />
       ) : (
         <div className="svsel__grid">
-          {clientTpls.map((tpl) => (
-            <button key={tpl.id} type="button" className="svcard" onClick={() => start(tpl)} disabled={busy}>
-              <span className="svcard__i"><IconDocLines /></span>
-              <span className="svcard__t">
-                <b>{tpl.name}</b>
-                <small>{[tpl.category, tpl.price ? `${som(tpl.price)} ${t("som")}` : t("free")].filter(Boolean).join(" · ")}</small>
-              </span>
-            </button>
-          ))}
+          {clientTpls.map((tpl) => {
+            const b = badgeFor(byTpl[tpl.id]?.status);
+            return (
+              <button
+                key={tpl.id}
+                type="button"
+                className={`svcard${b ? ` svcard--${b.cls}` : ""}`}
+                onClick={() => open(tpl)}
+                disabled={busy}
+              >
+                <span className="svcard__i"><IconDocLines /></span>
+                <span className="svcard__t">
+                  <b>{tpl.name}</b>
+                  <small>{[tpl.category, tpl.price ? `${som(tpl.price)} ${t("som")}` : t("free")].filter(Boolean).join(" · ")}</small>
+                </span>
+                {b ? <span className={`svcard__badge svcard__badge--${b.cls}`}>{b.txt}</span> : null}
+              </button>
+            );
+          })}
         </div>
       )}
 

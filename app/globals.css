@@ -2672,3 +2672,12 @@ body:has(.schat) .fab{display:none}
 .wsp__risk--medium svg{color:#f5a623}
 .wsp__risk--low svg{color:var(--gray2)}
 .wsp__ai-recs svg{color:var(--ok)}
+/* Document card status badge (paid / pending / to-pay) */
+.svcard__badge{position:absolute;top:10px;right:10px;display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:.68rem;font-weight:800;letter-spacing:.02em;line-height:1}
+.svcard__badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.svcard__badge--ready{background:#E1F6EE;color:#0a7d55}
+.svcard__badge--pending{background:#FFF3D6;color:#8a5a00}
+.svcard__badge--topay{background:var(--b100);color:var(--b700)}
+.svcard--ready{border-color:#9be3c4}
+.svcard--pending{border-color:#FBD98A}
+.svcard--topay{border-color:var(--b300)}

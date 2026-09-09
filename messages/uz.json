@@ -2422,7 +2422,9 @@
         "processing": "To'lov amalga oshirilmoqda — birozdan so'ng holatni tekshiring.",
         "pendingTitle": "To'lov amalga oshirilmoqda",
         "pendingSub": "To'lovingiz tasdiqlanmoqda. Hujjat tayyor bo'lishi bilan avtomatik ochiladi — bu oynani yopishingiz mumkin.",
-        "pendingStatus": "Kutilmoqda"
+        "pendingStatus": "Kutilmoqda",
+        "badgeReady": "Tayyor",
+        "badgeToPay": "To'lov kerak"
       }
     },
     "advocate": {
