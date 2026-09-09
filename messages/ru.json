@@ -2454,6 +2454,26 @@
       "rating": "Рейтинг",
       "responseRate": "Скорость ответа"
     },
+    "sellerDash": {
+      "today": "Сегодня",
+      "todaySub": "Самое важное в одном месте",
+      "finance": "Финансовое состояние",
+      "newCases": "Новые кейсы",
+      "newCasesSub": "{n} новых запросов",
+      "activeCases": "Активные дела",
+      "courtsToday": "Суды сегодня",
+      "deadlines": "Ближайшие сроки",
+      "newMessages": "Новые сообщения клиентов",
+      "docsToReview": "Документы на проверку",
+      "incomeToday": "Доход сегодня",
+      "incomeMonth": "Доход за месяц",
+      "expected": "Ожидаемые платежи",
+      "viaLexgo": "Доход через LexGo",
+      "payable": "К оплате",
+      "review": "Посмотреть",
+      "casesEmpty": "Нет новых запросов",
+      "casesEmptyText": "Новые запросы клиентов появятся здесь."
+    },
     "notifications": {
       "title": "Уведомления",
       "markAll": "Отметить все",

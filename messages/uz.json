@@ -2460,6 +2460,26 @@
       "rating": "Reyting",
       "responseRate": "Javob darajasi"
     },
+    "sellerDash": {
+      "today": "Bugun",
+      "todaySub": "Eng muhim narsalar bir joyda",
+      "finance": "Moliyaviy holat",
+      "newCases": "Yangi keyslar",
+      "newCasesSub": "{n} ta yangi so'rov",
+      "activeCases": "Faol ishlar",
+      "courtsToday": "Bugungi sudlar",
+      "deadlines": "Yaqin muddatlar",
+      "newMessages": "Yangi mijoz xabarlari",
+      "docsToReview": "Ko'riladigan hujjatlar",
+      "incomeToday": "Bugungi daromad",
+      "incomeMonth": "Shu oygi daromad",
+      "expected": "Kutilayotgan to'lovlar",
+      "viaLexgo": "LexGo orqali daromad",
+      "payable": "To'lanishi kerak",
+      "review": "Ko'rib chiqish",
+      "casesEmpty": "Yangi so'rov yo'q",
+      "casesEmptyText": "Yangi mijoz so'rovlari shu yerda ko'rinadi."
+    },
     "notifications": {
       "title": "Bildirishnomalar",
       "markAll": "Barchasini o‘qilgan",

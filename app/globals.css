@@ -2584,3 +2584,6 @@ body:has(.schat) .fab{display:none}
 .grow__x svg{width:15px;height:15px}
 @media(max-width:640px){.grow{flex-wrap:wrap;padding-right:34px}.grow__body{flex-basis:100%;order:3}.grow__cta{order:4;width:100%;justify-content:center}}
 .splan--gift{background:linear-gradient(160deg,#F5F9FF,#EAF7FF);border-color:var(--b200)}
+.pcase__q{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pcase__q.on{-webkit-line-clamp:unset;overflow:visible}
+.pcase__row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:2px}

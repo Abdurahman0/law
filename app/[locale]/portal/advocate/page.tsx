@@ -1,25 +1,16 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useAuth } from "@/lib/auth";
-import { listOpenOrders } from "@/lib/services/backend";
-import { useResource } from "@/lib/useResource";
-import { Skeleton, EmptyState } from "@/components/portal/DataState";
 import StatGrid from "@/components/portal/StatGrid";
-import {
-  IconBolt,
-  IconArrowRight,
-  IconClock,
-  IconMapPin,
-  IconBriefcase,
-} from "@/components/icons";
+import SellerDashboard from "@/components/portal/SellerDashboard";
+import { IconBolt, IconArrowRight } from "@/components/icons";
 
 export default function AdvocateDashboard() {
   const t = useTranslations("portal.advocate.dashboard");
-  const tc = useTranslations("portal.common");
   const { session } = useAuth();
-  const res = useResource(listOpenOrders, []);
   const completeness = session?.completeness ?? 0;
 
   return (
@@ -31,7 +22,7 @@ export default function AdvocateDashboard() {
           <p>{t("sub")}</p>
         </div>
         <div className="advhero__done">
-          <div className="ring" style={{ "--v": `${completeness}%` } as React.CSSProperties}>
+          <div className="ring" style={{ "--v": `${completeness}%` } as CSSProperties}>
             <b>{completeness}%</b>
           </div>
           <div>
@@ -44,6 +35,9 @@ export default function AdvocateDashboard() {
         </div>
       </div>
 
+      {/* Module 10 dashboard: «Bugun» / «Moliyaviy holat» / «Yangi keyslar». */}
+      <SellerDashboard role="advocate" />
+
       <div className="ppanel">
         <div className="ppanel__h">
           <b>{t("performance")}</b>
@@ -51,50 +45,19 @@ export default function AdvocateDashboard() {
         <StatGrid variant="performance" emptyTitle={t("performanceEmpty")} emptyText={t("performanceEmptyText")} />
       </div>
 
-      <div className="pgrid2">
-        <div className="ppanel">
-          <div className="ppanel__h">
-            <b>{t("opportunities")}</b>
-            <Link href="/portal/advocate/opportunities">{tc("viewAll")}</Link>
-          </div>
-          <p className="advmuted" style={{ marginBottom: 12 }}>{t("opportunitiesSub")}</p>
-          {res.status === "loading" ? (
-            <Skeleton rows={3} />
-          ) : !res.data.length ? (
-            <EmptyState icon={<IconBriefcase />} title={t("opportunitiesEmpty")} text={t("opportunitiesEmptyText")} />
-          ) : (
-            <div className="pcards">
-              {res.data.slice(0, 3).map((o) => (
-                <div className="oppc" key={o.id}>
-                  <div className="oppc__h">
-                    <span className="oppc__match">{o.status}</span>
-                    <span className="oppc__ago"><IconClock />{o.createdAt}</span>
-                  </div>
-                  <b>{o.title}</b>
-                  <small>
-                    <IconMapPin />
-                    {[o.region, o.budget].filter(Boolean).join(" · ")}
-                  </small>
-                </div>
-              ))}
-            </div>
-          )}
+      <div className="ppanel advboost">
+        <div className="ppanel__h">
+          <b>{t("boostTitle")}</b>
         </div>
-
-        <div className="ppanel advboost">
-          <div className="ppanel__h">
-            <b>{t("boostTitle")}</b>
-          </div>
-          <p className="advmuted">{t("boostSub")}</p>
-          <Link href="/portal/advocate/promotion" className="btn btn--grad btn--full" style={{ marginTop: 14 }}>
-            <IconBolt />
-            {t("boostCta")}
-          </Link>
-          <Link href="/portal/advocate/subscription" className="btn btn--line btn--full" style={{ marginTop: 10 }}>
-            {t("upgradeCta")}
-            <IconArrowRight />
-          </Link>
-        </div>
+        <p className="advmuted">{t("boostSub")}</p>
+        <Link href="/portal/advocate/promotion" className="btn btn--grad btn--full" style={{ marginTop: 14 }}>
+          <IconBolt />
+          {t("boostCta")}
+        </Link>
+        <Link href="/portal/advocate/subscription" className="btn btn--line btn--full" style={{ marginTop: 10 }}>
+          {t("upgradeCta")}
+          <IconArrowRight />
+        </Link>
       </div>
     </>
   );

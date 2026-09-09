@@ -2454,6 +2454,26 @@
       "rating": "Rating",
       "responseRate": "Response rate"
     },
+    "sellerDash": {
+      "today": "Today",
+      "todaySub": "What matters, in one place",
+      "finance": "Finances",
+      "newCases": "New cases",
+      "newCasesSub": "{n} new requests",
+      "activeCases": "Active cases",
+      "courtsToday": "Courts today",
+      "deadlines": "Upcoming deadlines",
+      "newMessages": "New client messages",
+      "docsToReview": "Docs to review",
+      "incomeToday": "Income today",
+      "incomeMonth": "Income this month",
+      "expected": "Expected payments",
+      "viaLexgo": "Income via LexGo",
+      "payable": "Payable",
+      "review": "Review",
+      "casesEmpty": "No new requests",
+      "casesEmptyText": "New client requests will appear here."
+    },
     "notifications": {
       "title": "Notifications",
       "markAll": "Mark all read",
