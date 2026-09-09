@@ -2989,6 +2989,8 @@
       "change": "Back",
       "incorrect": "Incorrect code. Please try again.",
       "startError": "Couldn't start registration. Try again.",
+      "phoneExists": "This phone number is already registered. Please log in.",
+      "goLogin": "Log in",
       "sending": "Sending code…",
       "getCode": "Get code"
     },

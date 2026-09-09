@@ -2767,3 +2767,7 @@ body:has(.schat) .fab{display:none}
 .lprof__price b{font-size:1.15rem;font-weight:800;color:var(--ink)}
 .lprof__price span{font-size:.75rem;color:var(--gray2);margin-left:5px}
 @media (max-width:480px){.lprof__stats{grid-template-columns:repeat(2,1fr)}.lprof__row{flex-direction:column;gap:4px}.lprof__lbl{width:auto}}
+
+/* Inline login link inside the register error banner */
+.rf__inlinelink{border:0;background:none;padding:0;margin-left:2px;font:inherit;font-weight:800;color:#dc2626;text-decoration:underline;cursor:pointer}
+.rf__inlinelink:hover{color:#b91c1c}

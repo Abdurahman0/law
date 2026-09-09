@@ -2995,6 +2995,8 @@
       "change": "Orqaga",
       "incorrect": "Kod noto‘g‘ri. Qayta urinib ko‘ring.",
       "startError": "Ro‘yxatdan o‘tishni boshlab bo‘lmadi. Qayta urining.",
+      "phoneExists": "Bu telefon raqami allaqachon ro'yxatdan o'tgan. Hisobingizga kiring.",
+      "goLogin": "Kirish",
       "sending": "Kod yuborilmoqda…",
       "getCode": "Kod olish"
     },

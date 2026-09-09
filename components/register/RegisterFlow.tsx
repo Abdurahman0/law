@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { useAuth } from "@/lib/auth";
+import { ApiError } from "@/lib/http";
 import {
   emptyDraft,
   type AccountType,
@@ -64,6 +65,9 @@ export default function RegisterFlow() {
   const [starting, setStarting] = useState(false);
   const [verifying, setVerifying] = useState(false);
   const [verifyErr, setVerifyErr] = useState<string | null>(null);
+  // Error from requesting the OTP (step 1). Shown in the footer on the profile
+  // step, since verifyErr is only rendered on the later verify step.
+  const [startErr, setStartErr] = useState<{ msg: string; login?: boolean } | null>(null);
   const [pendingMsg, setPendingMsg] = useState<string | null>(null);
 
   const steps = useMemo(
@@ -104,10 +108,12 @@ export default function RegisterFlow() {
 
   function next() {
     setMissing([]);
+    setStartErr(null);
     setIdx((i) => Math.min(i + 1, steps.length - 1));
   }
   function back() {
     setMissing([]);
+    setStartErr(null);
     setIdx((i) => Math.max(i - 1, 0));
   }
   // A gated primary button was tapped: continue if ready, else reveal what's missing.
@@ -138,6 +144,7 @@ export default function RegisterFlow() {
     if (!draft.accountType || starting) return;
     setStarting(true);
     setVerifyErr(null);
+    setStartErr(null);
     try {
       const { verificationId: vid, demoOtp: otp } = await startRegistration(draft);
       setVerificationId(vid);
@@ -145,9 +152,14 @@ export default function RegisterFlow() {
       setCode(otp || "");
       setStarting(false);
       next();
-    } catch {
+    } catch (e) {
       setStarting(false);
-      setVerifyErr(t("verify.startError"));
+      // 409 = this phone already has an account → point the user to login.
+      if (e instanceof ApiError && e.status === 409) {
+        setStartErr({ msg: t("verify.phoneExists"), login: true });
+      } else {
+        setStartErr({ msg: t("verify.startError") });
+      }
     }
   }
 
@@ -518,6 +530,16 @@ export default function RegisterFlow() {
               <div className="rf__missing" role="alert">
                 <b>{t("fillFirst")}</b>
                 <span>{missing.join(", ")}</span>
+              </div>
+            ) : null}
+            {startErr ? (
+              <div className="rf__missing" role="alert">
+                <b>{startErr.msg}</b>
+                {startErr.login ? (
+                  <button type="button" className="rf__inlinelink" onClick={() => router.push("/login")}>
+                    {t("verify.goLogin")}
+                  </button>
+                ) : null}
               </div>
             ) : null}
             <div className="rf__foot">
