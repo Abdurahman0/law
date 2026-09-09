@@ -2726,3 +2726,14 @@ body:has(.schat) .fab{display:none}
 .cal__dt .mpick{flex:1;min-width:0}
 .cal__time{flex:none;width:118px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit;font-size:.9rem;color:var(--ink);background:#fff}
 .cal__time:focus{border-color:var(--b600);outline:none}
+/* Full-height 2-panel admin grids (services, call-center) — like leads */
+@media (min-width:1101px){
+  .pbody__in:has(> .agrid:only-child:has(.alist)),
+  .pbody__in:has(> .pgrid2:only-child:has(.alist)){height:100%;min-height:0}
+  .pbody__in > .agrid:only-child:has(.alist),
+  .pbody__in > .pgrid2:only-child:has(.alist){height:100%;min-height:0;align-items:stretch}
+  .pbody__in > .agrid:only-child:has(.alist) > .ppanel,
+  .pbody__in > .pgrid2:only-child:has(.alist) > .ppanel{min-height:0;display:flex;flex-direction:column;overflow:hidden}
+  .pbody__in > .agrid:only-child:has(.alist) > .ppanel .alist,
+  .pbody__in > .pgrid2:only-child:has(.alist) > .ppanel .alist{flex:1 1 auto;max-height:none;min-height:0;overflow-y:auto}
+}
