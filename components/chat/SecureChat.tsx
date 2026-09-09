@@ -48,23 +48,24 @@ function dayKey(iso: string): string {
   return Number.isNaN(d.getTime()) ? "" : d.toDateString();
 }
 
-// Render a Zoom meeting link (posted by the backend when a call starts) as a
-// tidy "Join" button instead of a raw URL.
-const ZOOM_RE = /(https?:\/\/(?:[a-z0-9-]+\.)?zoom\.(?:us|com)\/[^\s]+)/i;
+// A call link posted by the backend when a call starts (a zoom.us URL or the
+// in-app /secure-chats/.../join path). The real call happens through the
+// incoming-call banner (LiveKit), and the posted zoom.us links are demo/invalid,
+// so show a plain "call" note instead of a broken external link.
+const CALL_LINK_RE = /(https?:\/\/(?:[a-z0-9-]+\.)?zoom\.(?:us|com)\/\S+|\/secure-chats\/\S+\/join)/i;
 function MsgBody({ text, label }: { text: string; label: string }) {
-  const m = text.match(ZOOM_RE);
+  const m = text.match(CALL_LINK_RE);
   if (!m) return <>{text}</>;
-  const url = m[1];
   const i = m.index ?? 0;
   const before = text.slice(0, i).trim();
-  const after = text.slice(i + url.length).trim();
+  const after = text.slice(i + m[0].length).trim();
   return (
     <>
       {before ? `${before} ` : null}
-      <a className="sbub__join" href={url} target="_blank" rel="noreferrer">
+      <span className="sbub__callnote">
         <IconVideo />
         {label}
-      </a>
+      </span>
       {after ? ` ${after}` : null}
     </>
   );

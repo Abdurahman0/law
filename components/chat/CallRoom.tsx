@@ -32,15 +32,24 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
 
   useEffect(() => {
     let alive = true;
-    const room = new Room({ adaptiveStream: true, dynacast: true });
+    // adaptiveStream pauses video when the element size can't be measured — that
+    // showed up as a "frozen" remote picture. Keep it off for these small rooms.
+    const room = new Room();
     roomRef.current = room;
 
     const attach = (track: RemoteTrack) => {
       const c = remoteRef.current;
       if (!c) return;
       const el = track.attach();
-      if (track.kind === Track.Kind.Video) el.classList.add("callroom__rvid");
-      else el.style.display = "none";
+      if (track.kind === Track.Kind.Video) {
+        el.classList.add("callroom__rvid");
+        (el as HTMLVideoElement).autoplay = true;
+        (el as HTMLVideoElement).playsInline = true;
+        el.setAttribute("playsinline", "");
+      } else {
+        el.style.display = "none";
+        (el as HTMLAudioElement).autoplay = true;
+      }
       c.appendChild(el);
       setRemoteOn(true);
       setStatus("live");

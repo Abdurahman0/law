@@ -2718,3 +2718,6 @@ body:has(.schat) .fab{display:none}
 .sbub__join{display:inline-flex;align-items:center;gap:6px;margin-top:5px;padding:7px 12px;border-radius:10px;background:var(--grad);color:#fff;font-weight:700;font-size:.82rem;text-decoration:none}
 .sbub__join svg{width:15px;height:15px}
 .sbub__join:hover{filter:brightness(1.08)}
+/* Call/zoom link shown as a non-clickable note (real call is in-app) */
+.sbub__callnote{display:inline-flex;align-items:center;gap:6px;margin-top:5px;padding:5px 11px;border-radius:999px;background:#EAF3FF;color:var(--b700);border:1px solid var(--b200);font-size:.8rem;font-weight:700}
+.sbub__callnote svg{width:14px;height:14px}
