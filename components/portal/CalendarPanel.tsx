@@ -13,6 +13,7 @@ import { Skeleton, EmptyState } from "./DataState";
 import { Notice } from "@/components/admin/AdminBits";
 import Modal from "@/components/admin/Modal";
 import Select from "@/components/Select";
+import DatePicker from "@/components/DatePicker";
 import { IconCalendar, IconPlus, IconClock, IconMapPin, IconClose } from "@/components/icons";
 
 const TYPES = ["hearing", "investigative", "meeting", "deadline"] as const;
@@ -34,26 +35,28 @@ export default function CalendarPanel({ ns }: { ns: string }) {
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<string>("hearing");
   const [title, setTitle] = useState("");
-  const [when, setWhen] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
   const [location, setLocation] = useState("");
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (busy || !title.trim() || !when) return;
+    if (busy || !title.trim() || !date) return;
     setBusy(true);
     setNote(null);
     try {
       await createCalendarEvent({
         type,
         title: title.trim(),
-        starts_at: new Date(when).toISOString(),
+        starts_at: new Date(`${date}T${time || "09:00"}`).toISOString(),
         location: location.trim() || undefined,
       });
       setNote({ ok: true, msg: t("created") });
       setTitle("");
-      setWhen("");
+      setDate("");
+      setTime("");
       setLocation("");
       reload();
       setTimeout(() => setOpen(false), 900);
@@ -128,7 +131,10 @@ export default function CalendarPanel({ ns }: { ns: string }) {
           </div>
           <div>
             <label>{t("dateLabel")}</label>
-            <input type="datetime-local" value={when} onChange={(e) => setWhen(e.target.value)} />
+            <div className="cal__dt">
+              <DatePicker value={date} onChange={setDate} placeholder={t("dateLabel")} ariaLabel={t("dateLabel")} />
+              <input type="time" className="cal__time" value={time} onChange={(e) => setTime(e.target.value)} aria-label={t("dateLabel")} />
+            </div>
           </div>
           <div>
             <label>{t("locationLabel")}</label>

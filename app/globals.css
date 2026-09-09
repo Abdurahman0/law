@@ -2721,3 +2721,8 @@ body:has(.schat) .fab{display:none}
 /* Call/zoom link shown as a non-clickable note (real call is in-app) */
 .sbub__callnote{display:inline-flex;align-items:center;gap:6px;margin-top:5px;padding:5px 11px;border-radius:999px;background:#EAF3FF;color:var(--b700);border:1px solid var(--b200);font-size:.8rem;font-weight:700}
 .sbub__callnote svg{width:14px;height:14px}
+/* Calendar event: handmade date picker + time */
+.cal__dt{display:flex;gap:8px;align-items:stretch}
+.cal__dt .mpick{flex:1;min-width:0}
+.cal__time{flex:none;width:118px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit;font-size:.9rem;color:var(--ink);background:#fff}
+.cal__time:focus{border-color:var(--b600);outline:none}
