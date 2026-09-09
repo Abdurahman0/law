@@ -2681,3 +2681,21 @@ body:has(.schat) .fab{display:none}
 .svcard--ready{border-color:#9be3c4}
 .svcard--pending{border-color:#FBD98A}
 .svcard--topay{border-color:var(--b300)}
+/* Workspace file detail (versions/comments) + upload + points */
+.wsp__filebtn{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;align-items:flex-start;text-align:left;background:none;border:0;cursor:pointer;font:inherit;padding:0}
+.wsp__filebtn b{font-size:.9rem;color:var(--ink);overflow-wrap:anywhere}
+.wsp__filebtn:hover b{color:var(--b600)}
+.wsp__filebtn span{font-size:.78rem;color:var(--gray)}
+.wsp__or{text-align:center;font-size:.78rem;color:var(--gray2);margin:2px 0}
+.wsp__sect{border-top:1px solid var(--line);padding-top:14px;margin-top:4px}
+.wsp__sect:first-child{border-top:0;padding-top:0;margin-top:0}
+.wsp__sect-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.wsp__vers,.wsp__cmts{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.wsp__vers li,.wsp__cmts li{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--ink)}
+.wsp__ver-n{flex:none;font-weight:800;font-size:.72rem;color:var(--b600);background:var(--b100);border-radius:6px;padding:2px 7px}
+.wsp__vers small,.wsp__cmts small{margin-left:auto;color:var(--gray2);font-size:.75rem;flex:none}
+.wsp__cmt-a{flex:none;font-weight:700;color:var(--b700)}
+.wsp__cmtbar{display:flex;gap:8px;margin-top:8px}
+.wsp__cmtbar input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-size:.88rem;outline:none}
+.wsp__cmtbar input:focus{border-color:var(--b600)}
+.wsp__ai-points{display:inline-block;font-size:.75rem;font-weight:800;color:var(--b700);background:var(--b100);border-radius:999px;padding:3px 10px;margin-bottom:4px}

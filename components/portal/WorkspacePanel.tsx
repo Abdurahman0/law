@@ -1,15 +1,23 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { useAuth } from "@/lib/auth";
 import {
   listFolders,
   createFolder,
   deleteFolder,
   listFiles,
   createFile,
+  uploadWorkspaceFile,
   deleteFile,
   analyzeDocument,
+  listFileVersions,
+  addFileVersion,
+  listFileComments,
+  addFileComment,
+  requestClientDocument,
+  getLawyerClients,
   type WorkspaceFile,
   type DocAnalysis,
 } from "@/lib/services/backend";
@@ -18,7 +26,10 @@ import { Skeleton, EmptyState } from "./DataState";
 import { Notice } from "@/components/admin/AdminBits";
 import Modal from "@/components/admin/Modal";
 import Select from "@/components/Select";
-import { IconFileText, IconPlus, IconClose, IconExternal, IconDocLines, IconSparkle, IconAlert, IconCheck } from "@/components/icons";
+import {
+  IconFileText, IconPlus, IconClose, IconExternal, IconDocLines,
+  IconSparkle, IconAlert, IconCheck, IconChat, IconUsers,
+} from "@/components/icons";
 
 function fmtSize(n: number) {
   if (!n) return "";
@@ -26,9 +37,16 @@ function fmtSize(n: number) {
   if (n < 1024 * 1024) return `${Math.round(n / 1024)} KB`;
   return `${(n / 1024 / 1024).toFixed(1)} MB`;
 }
+function fmtDate(s: string) {
+  if (!s) return "";
+  const d = new Date(s);
+  return Number.isNaN(d.getTime()) ? s : d.toLocaleDateString("ru-RU");
+}
 
 export default function WorkspacePanel() {
   const t = useTranslations("portal.workspace");
+  const { session } = useAuth();
+  const isSeller = session?.role === "advocate" || session?.role === "lawyer";
   const [key, setKey] = useState(0);
   const reload = () => setKey((k) => k + 1);
   const folders = useResource(() => listFolders(), [key]);
@@ -40,16 +58,14 @@ export default function WorkspacePanel() {
   const [folderName, setFolderName] = useState("");
   const [folderBusy, setFolderBusy] = useState(false);
   const [fileOpen, setFileOpen] = useState(false);
+  const [detail, setDetail] = useState<WorkspaceFile | null>(null);
+  const [reqOpen, setReqOpen] = useState(false);
 
   const isMedia = (m: string) => /^(audio|video)\//i.test(m || "");
-  const shown = useMemo(
-    () =>
-      files.data.filter(
-        (f) =>
-          (!sel || f.folderId === sel) &&
-          (type === "all" || (type === "media" ? isMedia(f.mimeType) : !isMedia(f.mimeType))),
-      ),
-    [files.data, sel, type],
+  const shown = files.data.filter(
+    (f) =>
+      (!sel || f.folderId === sel) &&
+      (type === "all" || (type === "media" ? isMedia(f.mimeType) : !isMedia(f.mimeType))),
   );
 
   async function addFolder(e: React.FormEvent) {
@@ -71,11 +87,17 @@ export default function WorkspacePanel() {
     <div className="ppanel">
       <div className="ppanel__h">
         <b>{t("title")}</b>
-        <div style={{ display: "flex", gap: 8 }}>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           <button className="btn btn--soft btn--sm" type="button" onClick={() => setAiOpen((v) => !v)}>
             <IconSparkle />
             {t("aiToggle")}
           </button>
+          {isSeller ? (
+            <button className="btn btn--soft btn--sm" type="button" onClick={() => setReqOpen(true)}>
+              <IconUsers />
+              {t("reqDoc")}
+            </button>
+          ) : null}
           <button className="btn btn--pri btn--sm" type="button" onClick={() => setFileOpen(true)}>
             <IconPlus />
             {t("addFile")}
@@ -87,12 +109,7 @@ export default function WorkspacePanel() {
       {aiOpen ? <Analyzer /> : null}
 
       <form className="wsp__folders" onSubmit={addFolder}>
-        <button
-          type="button"
-          className={`fchip${sel === "" ? " on" : ""}`}
-          aria-pressed={sel === ""}
-          onClick={() => setSel("")}
-        >
+        <button type="button" className={`fchip${sel === "" ? " on" : ""}`} aria-pressed={sel === ""} onClick={() => setSel("")}>
           {t("allFiles")}
         </button>
         {folders.data.map((f) => (
@@ -101,12 +118,7 @@ export default function WorkspacePanel() {
               <IconDocLines />
               {f.name}
             </button>
-            <button
-              type="button"
-              className="wsp__folder-x"
-              aria-label={t("remove")}
-              onClick={() => deleteFolder(f.id).then(reload).catch(() => {})}
-            >
+            <button type="button" className="wsp__folder-x" aria-label={t("remove")} onClick={() => deleteFolder(f.id).then(reload).catch(() => {})}>
               <IconClose />
             </button>
           </span>
@@ -139,22 +151,17 @@ export default function WorkspacePanel() {
               <span className="prow__i" style={{ background: "var(--grad)", color: "#fff" }}>
                 <IconFileText />
               </span>
-              <div className="prow__m">
+              <button type="button" className="prow__m wsp__filebtn" onClick={() => setDetail(f)}>
                 <b>{f.fileName}</b>
                 <span>{[f.mimeType, fmtSize(f.size)].filter(Boolean).join(" · ")}</span>
-              </div>
+              </button>
               <div style={{ display: "flex", gap: 8, flex: "none" }}>
                 {f.fileUrl ? (
                   <a className="btn btn--line btn--sm" href={f.fileUrl} target="_blank" rel="noopener noreferrer" aria-label={t("open")}>
                     <IconExternal style={{ width: 15, height: 15 }} />
                   </a>
                 ) : null}
-                <button
-                  className="btn btn--line btn--sm"
-                  type="button"
-                  aria-label={t("remove")}
-                  onClick={() => deleteFile(f.id).then(reload).catch(() => {})}
-                >
+                <button className="btn btn--line btn--sm" type="button" aria-label={t("remove")} onClick={() => deleteFile(f.id).then(reload).catch(() => {})}>
                   <IconClose style={{ width: 15, height: 15 }} />
                 </button>
               </div>
@@ -170,12 +177,13 @@ export default function WorkspacePanel() {
         defaultFolder={sel}
         onSaved={reload}
       />
+      {detail ? <FileDetail file={detail} onClose={() => setDetail(null)} /> : null}
+      {isSeller ? <RequestDocModal open={reqOpen} onClose={() => setReqOpen(false)} /> : null}
     </div>
   );
 }
 
-// AI Document Analysis (module 10): paste a document's text → key points +
-// risks + recommendations, via /ai/document-analysis.
+// AI Document Analysis (module 10): paste text → key points + risks + recs.
 function Analyzer() {
   const t = useTranslations("portal.workspace");
   const [text, setText] = useState("");
@@ -209,6 +217,7 @@ function Analyzer() {
       {err ? <Notice ok={false} msg={t("aiError")} /> : null}
       {res ? (
         <div className="wsp__ai-res">
+          {res.pointsCount ? <span className="wsp__ai-points">{t("aiPoints", { n: res.pointsCount })}</span> : null}
           {res.summary ? <p className="wsp__ai-sum"><b>{t("aiSummary")}:</b> {res.summary}</p> : null}
           {res.risks.length ? (
             <>
@@ -236,6 +245,155 @@ function Analyzer() {
   );
 }
 
+// File detail: version history + comments.
+function FileDetail({ file, onClose }: { file: WorkspaceFile; onClose: () => void }) {
+  const t = useTranslations("portal.workspace");
+  const [key, setKey] = useState(0);
+  const versions = useResource(() => listFileVersions(file.id), [file.id, key]);
+  const comments = useResource(() => listFileComments(file.id), [file.id, key]);
+  const [comment, setComment] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  async function send() {
+    if (busy || !comment.trim()) return;
+    setBusy(true);
+    try {
+      await addFileComment(file.id, comment.trim());
+      setComment("");
+      setKey((k) => k + 1);
+    } catch {
+      /* ignore */
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function newVersion() {
+    if (busy || !file.fileUrl) return;
+    setBusy(true);
+    try {
+      await addFileVersion(file.id, { file_url: file.fileUrl, note: `v${versions.data.length + 1}` });
+      setKey((k) => k + 1);
+    } catch {
+      /* ignore */
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <Modal open onClose={onClose} title={file.fileName}>
+      <div className="cform" style={{ maxWidth: "none" }}>
+        <div className="wsp__sect">
+          <div className="wsp__sect-h">
+            <b>{t("versions")}</b>
+            <button className="btn btn--line btn--sm" type="button" onClick={newVersion} disabled={busy}>
+              <IconPlus />{t("addVersion")}
+            </button>
+          </div>
+          {versions.status === "loading" ? (
+            <Skeleton rows={1} />
+          ) : !versions.data.length ? (
+            <p className="advmuted">{t("noVersions")}</p>
+          ) : (
+            <ul className="wsp__vers">
+              {versions.data.map((v) => (
+                <li key={v.id}>
+                  <span className="wsp__ver-n">v{v.version || 1}</span>
+                  <span>{v.note || v.fileName}</span>
+                  <small>{fmtDate(v.createdAt)}</small>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="wsp__sect">
+          <b>{t("comments")}</b>
+          {comments.status === "loading" ? (
+            <Skeleton rows={1} />
+          ) : !comments.data.length ? (
+            <p className="advmuted">{t("noComments")}</p>
+          ) : (
+            <ul className="wsp__cmts">
+              {comments.data.map((c) => (
+                <li key={c.id}>
+                  <span className="wsp__cmt-a">{c.authorName || "—"}</span>
+                  <span>{c.text}</span>
+                  <small>{fmtDate(c.createdAt)}</small>
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="wsp__cmtbar">
+            <input value={comment} onChange={(e) => setComment(e.target.value)} placeholder={t("commentPh")} />
+            <button className="btn btn--pri btn--sm" type="button" onClick={send} disabled={busy || !comment.trim()}>
+              <IconChat />{t("send")}
+            </button>
+          </div>
+        </div>
+      </div>
+    </Modal>
+  );
+}
+
+// Advocate/lawyer requests a document from one of their clients.
+function RequestDocModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const t = useTranslations("portal.workspace");
+  const clients = useResource(getLawyerClients, []);
+  const [clientId, setClientId] = useState("");
+  const [title, setTitle] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
+
+  const opts = clients.data.filter((c) => c.id).map((c) => ({ value: c.id, label: `${c.name || "—"}${c.phone ? ` · ${c.phone}` : ""}` }));
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    const cid = clientId || opts[0]?.value;
+    if (busy || !cid || !title.trim()) {
+      setNote({ ok: false, msg: t("error") });
+      return;
+    }
+    setBusy(true);
+    setNote(null);
+    try {
+      await requestClientDocument({ client_user_id: cid, title: title.trim() });
+      setNote({ ok: true, msg: t("reqSent") });
+      setTitle("");
+      setTimeout(onClose, 900);
+    } catch {
+      setNote({ ok: false, msg: t("error") });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <Modal open={open} onClose={onClose} title={t("reqDoc")}>
+      <form className="cform" style={{ maxWidth: "none" }} onSubmit={submit}>
+        <div>
+          <label>{t("reqClient")}</label>
+          {clients.status === "loading" ? (
+            <Skeleton rows={1} />
+          ) : !opts.length ? (
+            <p className="advmuted">{t("reqNoClients")}</p>
+          ) : (
+            <Select value={clientId || opts[0]?.value || ""} onChange={setClientId} options={opts} ariaLabel={t("reqClient")} />
+          )}
+        </div>
+        <div>
+          <label>{t("reqTitle")}</label>
+          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t("reqTitlePh")} />
+        </div>
+        {note ? <Notice ok={note.ok} msg={note.msg} /> : null}
+        <button className="btn btn--pri btn--full" type="submit" disabled={busy || !opts.length}>
+          {busy ? t("saving") : t("reqSend")}
+        </button>
+      </form>
+    </Modal>
+  );
+}
+
 function AddFileModal({
   open,
   onClose,
@@ -252,6 +410,7 @@ function AddFileModal({
   const t = useTranslations("portal.workspace");
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
+  const [file, setFile] = useState<File | null>(null);
   const [folder, setFolder] = useState(defaultFolder);
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
@@ -260,21 +419,23 @@ function AddFileModal({
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (busy || !name.trim()) {
+    if (busy) return;
+    if (!file && !name.trim()) {
       setNote({ ok: false, msg: t("error") });
       return;
     }
     setBusy(true);
     setNote(null);
     try {
-      await createFile({
-        file_name: name.trim(),
-        file_url: url.trim() || undefined,
-        folder_id: folder || undefined,
-      });
+      if (file) {
+        await uploadWorkspaceFile(file, { folderId: folder || undefined });
+      } else {
+        await createFile({ file_name: name.trim(), file_url: url.trim() || undefined, folder_id: folder || undefined });
+      }
       setNote({ ok: true, msg: t("saved") });
       setName("");
       setUrl("");
+      setFile(null);
       onSaved();
       setTimeout(onClose, 800);
     } catch {
@@ -288,12 +449,17 @@ function AddFileModal({
     <Modal open={open} onClose={onClose} title={t("addFile")}>
       <form className="cform" style={{ maxWidth: "none" }} onSubmit={submit}>
         <div>
+          <label>{t("uploadFile")}</label>
+          <input type="file" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
+        </div>
+        <div className="wsp__or">{t("orUrl")}</div>
+        <div>
           <label>{t("fileName")}</label>
-          <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("fileNamePh")} />
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("fileNamePh")} disabled={!!file} />
         </div>
         <div>
           <label>{t("fileUrl")}</label>
-          <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder={t("fileUrlPh")} />
+          <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder={t("fileUrlPh")} disabled={!!file} />
         </div>
         <div>
           <label>{t("folder")}</label>

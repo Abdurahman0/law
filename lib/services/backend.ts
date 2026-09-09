@@ -1986,13 +1986,15 @@ export async function classifyProblem(text: string): Promise<AiClassification> {
 }
 
 // ── AI: document analysis ─────────────────────────────────────────
-export type DocAnalysis = { summary: string; risks: { level: string; text: string }[]; recommendations: string[] };
+export type DocAnalysis = { summary: string; risks: { level: string; text: string }[]; recommendations: string[]; pointsCount: number };
 export async function analyzeDocument(text: string): Promise<DocAnalysis> {
   const d = asDict(await http("/ai/document-analysis", { method: "POST", body: JSON.stringify({ text }) }));
+  const risks = asArr(d.risks).map((x) => { const r = asDict(x); return { level: asStr(r.level, "low"), text: asStr(r.text ?? r.risk) }; });
   return {
     summary: asStr(d.summary),
-    risks: asArr(d.risks).map((x) => { const r = asDict(x); return { level: asStr(r.level, "low"), text: asStr(r.text ?? r.risk) }; }),
+    risks,
     recommendations: asArr(d.recommendations).map((x) => asStr(x)),
+    pointsCount: asNum(d.points_count) || risks.length + asArr(d.recommendations).length,
   };
 }
 
@@ -2446,6 +2448,65 @@ export async function createFile(input: {
 }
 export async function deleteFile(id: string): Promise<void> {
   await http(`/workspace/files/${id}`, { method: "DELETE" });
+}
+
+// Real multipart upload (field "file"). http() forces JSON, so send raw here.
+export async function uploadWorkspaceFile(file: File, opts?: { folderId?: string }): Promise<WorkspaceFile> {
+  const fd = new FormData();
+  fd.append("file", file);
+  if (opts?.folderId) fd.append("folder_id", opts.folderId);
+  const token = getToken();
+  const res = await fetch(`${API_BASE}/workspace/files`, {
+    method: "POST",
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    body: fd,
+  });
+  if (!res.ok) throw new ApiError(res.status, `upload_${res.status}`);
+  return normFile(await res.json());
+}
+
+// ── Workspace: file versions + comments + document requests ────────
+export type FileVersion = {
+  id: string; version: number; fileName: string; fileUrl: string; note: string; createdAt: string;
+};
+function normVersion(v: unknown): FileVersion {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    version: asNum(d.version),
+    fileName: asStr(d.file_name),
+    fileUrl: asStr(d.file_url),
+    note: asStr(d.note),
+    createdAt: asStr(d.created_at),
+  };
+}
+export async function listFileVersions(fileId: string): Promise<FileVersion[]> {
+  return listFrom(await http(`/workspace/files/${fileId}/versions`), "items", "data", "versions").map(normVersion);
+}
+export async function addFileVersion(fileId: string, input: { file_url?: string; note?: string }): Promise<FileVersion> {
+  return normVersion(await http(`/workspace/files/${fileId}/versions`, { method: "POST", body: JSON.stringify(input) }));
+}
+
+export type FileComment = { id: string; text: string; authorName: string; createdAt: string };
+function normComment(v: unknown): FileComment {
+  const d = asDict(v);
+  return {
+    id: asStr(d.id),
+    text: asStr(d.text),
+    authorName: asStr(d.author_name),
+    createdAt: asStr(d.created_at),
+  };
+}
+export async function listFileComments(fileId: string): Promise<FileComment[]> {
+  return listFrom(await http(`/workspace/files/${fileId}/comments`), "items", "data", "comments").map(normComment);
+}
+export async function addFileComment(fileId: string, text: string): Promise<FileComment> {
+  return normComment(await http(`/workspace/files/${fileId}/comments`, { method: "POST", body: JSON.stringify({ text }) }));
+}
+
+// Advocate/lawyer requests a document from a client (push-notifies them).
+export async function requestClientDocument(input: { client_user_id: string; title: string; message?: string }): Promise<void> {
+  await http("/workspace/document-requests", { method: "POST", body: JSON.stringify(input) });
 }
 
 // ── Admin: seed demo data ─────────────────────────────────────────

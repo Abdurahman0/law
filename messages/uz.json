@@ -2637,7 +2637,24 @@
       "aiSummary": "Qisqacha",
       "aiRisks": "Xavflar",
       "aiRecs": "Tavsiyalar",
-      "aiError": "Tahlil qilib bo‘lmadi. Qayta urining."
+      "aiError": "Tahlil qilib bo‘lmadi. Qayta urining.",
+      "aiPoints": "{n} ta muhim nuqta",
+      "uploadFile": "Fayldan yuklash",
+      "orUrl": "yoki havola qo‘shish",
+      "versions": "Versiyalar",
+      "addVersion": "Yangi versiya",
+      "noVersions": "Versiyalar yo‘q",
+      "comments": "Izohlar",
+      "commentPh": "Izoh yozing…",
+      "noComments": "Izoh yo‘q",
+      "send": "Yuborish",
+      "reqDoc": "Hujjat so‘rash",
+      "reqClient": "Mijoz",
+      "reqTitle": "Hujjat nomi",
+      "reqTitlePh": "Masalan: pasport nusxasi",
+      "reqSend": "So‘rov yuborish",
+      "reqSent": "So‘rov mijozga yuborildi.",
+      "reqNoClients": "Hozircha mijoz yo‘q"
     }
   },
   "notFound": {

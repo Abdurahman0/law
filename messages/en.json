@@ -2631,7 +2631,24 @@
       "aiSummary": "Summary",
       "aiRisks": "Risks",
       "aiRecs": "Recommendations",
-      "aiError": "Couldn't analyze. Please try again."
+      "aiError": "Couldn't analyze. Please try again.",
+      "aiPoints": "{n} key points",
+      "uploadFile": "Upload a file",
+      "orUrl": "or add a link",
+      "versions": "Versions",
+      "addVersion": "New version",
+      "noVersions": "No versions",
+      "comments": "Comments",
+      "commentPh": "Write a comment…",
+      "noComments": "No comments",
+      "send": "Send",
+      "reqDoc": "Request a document",
+      "reqClient": "Client",
+      "reqTitle": "Document title",
+      "reqTitlePh": "e.g. passport copy",
+      "reqSend": "Send request",
+      "reqSent": "Request sent to the client.",
+      "reqNoClients": "No clients yet"
     }
   },
   "notFound": {
