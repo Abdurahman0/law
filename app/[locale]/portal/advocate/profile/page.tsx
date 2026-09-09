@@ -15,6 +15,7 @@ import type { AdvocateStats, ProfessionalProfile } from "@/lib/types";
 import LegalServicePicker from "@/components/register/LegalServicePicker";
 import StatsEditor from "@/components/register/StatsEditor";
 import ProfilePreview from "@/components/register/ProfilePreview";
+import TwoFactorCard from "@/components/portal/TwoFactorCard";
 import { EmptyState, Skeleton } from "@/components/portal/DataState";
 import { Notice } from "@/components/admin/AdminBits";
 import {
@@ -168,6 +169,7 @@ function ProfileEditor({ initial }: { initial: ProfessionalProfile }) {
       </div>
 
       <MyServices userId={session?.id ?? ""} />
+      <TwoFactorCard />
       <ProfilePreview p={merged} />
     </div>
   );

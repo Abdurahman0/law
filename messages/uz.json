@@ -1745,6 +1745,24 @@
         "text": "Yuridik xizmatni emas — yuridik xotirjamlikni sovg'a qiling.",
         "cta": "Sovg'a qilish",
         "dismiss": "Yopish"
+      },
+      "twofa": {
+        "title": "Ikki bosqichli himoya (2FA)",
+        "desc": "Har kirishda telefoningizga tasdiq kodi yuboriladi — hisobingiz xavfsizroq bo'ladi.",
+        "enable": "Yoqish",
+        "enableSending": "Yuborilmoqda…",
+        "codeLabel": "Telefonga yuborilgan kod",
+        "codePh": "6 xonali kod",
+        "verify": "Tasdiqlash",
+        "verifying": "Tekshirilmoqda…",
+        "demoHint": "Demo kod: {code}",
+        "enabled": "2FA yoqildi.",
+        "enabledBadge": "Yoqilgan",
+        "disable": "O'chirish",
+        "disabling": "O'chirilmoqda…",
+        "disabledMsg": "2FA o'chirildi.",
+        "errStart": "Amalni bajarib bo'lmadi. Qayta urining.",
+        "errVerify": "Kod noto'g'ri. Qayta urining."
       }
     },
     "tasks": {

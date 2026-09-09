@@ -1739,6 +1739,24 @@
         "text": "Gift not a legal service, but legal peace of mind.",
         "cta": "Gift it",
         "dismiss": "Dismiss"
+      },
+      "twofa": {
+        "title": "Two-factor authentication (2FA)",
+        "desc": "A code is sent to your phone on each sign-in — your account stays safer.",
+        "enable": "Enable",
+        "enableSending": "Sending…",
+        "codeLabel": "Code sent to your phone",
+        "codePh": "6-digit code",
+        "verify": "Confirm",
+        "verifying": "Verifying…",
+        "demoHint": "Demo code: {code}",
+        "enabled": "2FA enabled.",
+        "enabledBadge": "Enabled",
+        "disable": "Disable",
+        "disabling": "Disabling…",
+        "disabledMsg": "2FA disabled.",
+        "errStart": "Couldn't complete. Please try again.",
+        "errVerify": "Wrong code. Please try again."
       }
     },
     "tasks": {

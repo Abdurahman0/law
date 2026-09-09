@@ -2281,6 +2281,18 @@ export async function listB2bTasks(): Promise<WorkTask[]> {
 export async function listSecurityEvents(): Promise<ActivityEntry[]> {
   return listFrom(await http("/auth/security-events"), "items", "data", "events").map(normActivity);
 }
+// SMS/OTP-based 2FA. start → OTP to phone; verify → enable. DELETE → disable.
+export type TwoFactorStart = { verificationId: string; demoOtp: string; phone: string };
+export async function start2fa(): Promise<TwoFactorStart> {
+  const d = asDict(await http("/auth/2fa/start", { method: "POST", body: "{}" }));
+  return { verificationId: asStr(d.verification_id), demoOtp: asStr(d.demo_otp), phone: asStr(d.phone) };
+}
+export async function verify2fa(verificationId: string, code: string): Promise<void> {
+  await http("/auth/2fa/verify", { method: "POST", body: JSON.stringify({ verification_id: verificationId, code }) });
+}
+export async function disable2fa(): Promise<void> {
+  await http("/auth/2fa", { method: "DELETE" });
+}
 
 // ── Payments history ──────────────────────────────────────────────
 export type PaymentHistory = {

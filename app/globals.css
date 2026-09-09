@@ -2710,3 +2710,6 @@ body:has(.schat) .fab{display:none}
 .dreq__m span{font-size:.78rem;color:var(--gray)}
 .dreq__up{flex:none;cursor:pointer}
 .dreq__badge--done{font-size:.75rem;font-weight:700;color:var(--ok)}
+/* 2FA card enabled badge */
+.tfa__on{display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:700;color:#0a7d55;background:#E1F6EE;padding:4px 10px;border-radius:999px}
+.tfa__on svg{width:14px;height:14px}

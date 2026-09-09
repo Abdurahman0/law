@@ -29,6 +29,7 @@ import Modal from "@/components/admin/Modal";
 import Select from "@/components/Select";
 import { IconEdit, IconPlus, IconClose, IconCard, IconCheck, IconClock } from "@/components/icons";
 import IdentityVerify from "@/components/portal/IdentityVerify";
+import TwoFactorCard from "@/components/portal/TwoFactorCard";
 
 function fmtDateTime(s: string) {
   if (!s) return "";
@@ -116,6 +117,8 @@ export default function ClientProfile() {
       </div>
 
       <IdentityVerify />
+
+      <TwoFactorCard />
 
       <div className="pgrid2">
         <div className="ppanel">
