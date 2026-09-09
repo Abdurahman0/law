@@ -630,7 +630,9 @@
       "sortRating": "Highest rating",
       "sortExperience": "Most experience",
       "sortPriceAsc": "Price: low to high",
-      "sortPriceDesc": "Price: high to low"
+      "sortPriceDesc": "Price: high to low",
+      "searchPh": "Search by name…",
+      "searchLabel": "Search advocates or lawyers by name"
     },
     "stats": [
       {

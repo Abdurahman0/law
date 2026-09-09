@@ -630,7 +630,9 @@
       "sortRating": "По рейтингу",
       "sortExperience": "По опыту",
       "sortPriceAsc": "Цена: по возрастанию",
-      "sortPriceDesc": "Цена: по убыванию"
+      "sortPriceDesc": "Цена: по убыванию",
+      "searchPh": "Поиск по фамилии и имени…",
+      "searchLabel": "Поиск адвоката или юриста по имени"
     },
     "stats": [
       {

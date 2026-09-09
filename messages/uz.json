@@ -636,7 +636,9 @@
       "sortRating": "Eng yuqori reyting",
       "sortExperience": "Eng ko'p tajriba",
       "sortPriceAsc": "Narx: arzondan qimmatga",
-      "sortPriceDesc": "Narx: qimmatdan arzonga"
+      "sortPriceDesc": "Narx: qimmatdan arzonga",
+      "searchPh": "Ism sharifi bo'yicha qidirish…",
+      "searchLabel": "Advokat yoki yuristni ismi bo'yicha qidirish"
     },
     "stats": [
       {

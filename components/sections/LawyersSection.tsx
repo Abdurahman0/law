@@ -14,7 +14,7 @@ import { useAuth } from "@/lib/auth";
 import { useRouter } from "@/i18n/navigation";
 import { Skeleton, EmptyState } from "../portal/DataState";
 import Select, { type Option } from "../Select";
-import { IconChevronLeft, IconChevronRight, IconInfo } from "../icons";
+import { IconChevronLeft, IconChevronRight, IconInfo, IconSearch } from "../icons";
 
 const priceNum = (p: string) => Number(p.replace(/\s/g, "")) || 0;
 
@@ -53,6 +53,7 @@ export default function LawyersSection({
   const t = useTranslations("lawyers");
   const te = useTranslations("enums");
   const [area, setArea] = useState(initialArea);
+  const [query, setQuery] = useState("");
   const [region, setRegion] = useState("");
   const [sort, setSort] = useState("rating");
   const [kind, setKind] = useState<"" | "advocate" | "lawyer">("");
@@ -91,11 +92,13 @@ export default function LawyersSection({
   const [atEnd, setAtEnd] = useState(false);
 
   const list = useMemo(() => {
+    const nq = query.trim().toLowerCase();
     const filtered = source.filter(
       (l) =>
         (!area || l.areaKey === area) &&
         (!region || l.regionKey === region) &&
-        (!kind || l.kind === kind),
+        (!kind || l.kind === kind) &&
+        (!nq || l.name.toLowerCase().includes(nq)),
     );
     const sorted = [...filtered];
     sorted.sort((a, b) => {
@@ -105,7 +108,7 @@ export default function LawyersSection({
       return b.rate - a.rate;
     });
     return sorted;
-  }, [area, region, sort, kind, source]);
+  }, [area, region, sort, kind, query, source]);
 
   const syncNav = useCallback(() => {
     const el = scroller.current;
@@ -118,7 +121,7 @@ export default function LawyersSection({
   useEffect(() => {
     if (scroller.current) scroller.current.scrollLeft = 0;
     syncNav();
-  }, [area, region, sort, syncNav]);
+  }, [area, region, sort, query, syncNav]);
 
   function scrollBy(dir: number) {
     const el = scroller.current;
@@ -241,6 +244,18 @@ export default function LawyersSection({
                 <span>{s.label}</span>
               </div>
             ))}
+          </div>
+        ) : null}
+
+        {standalone ? (
+          <div className="lsp__search" style={{ marginBottom: 14 }}>
+            <IconSearch />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={t("filters.searchPh")}
+              aria-label={t("filters.searchLabel")}
+            />
           </div>
         ) : null}
 
