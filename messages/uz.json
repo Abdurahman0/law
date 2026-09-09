@@ -2424,7 +2424,14 @@
         "pendingSub": "To'lovingiz tasdiqlanmoqda. Hujjat tayyor bo'lishi bilan avtomatik ochiladi — bu oynani yopishingiz mumkin.",
         "pendingStatus": "Kutilmoqda",
         "badgeReady": "Tayyor",
-        "badgeToPay": "To'lov kerak"
+        "badgeToPay": "To'lov kerak",
+        "reqInboxTitle": "Sizdan so'ralgan hujjatlar",
+        "reqFrom": "{name} so'radi",
+        "reqUpload": "Yuklash",
+        "reqUploading": "Yuklanmoqda…",
+        "reqRequested": "Kutilmoqda",
+        "reqFulfilled": "Yuborilgan",
+        "reqOpen": "Ochish"
       }
     },
     "advocate": {
@@ -3336,7 +3343,29 @@
       "revenueTrend": "Daromad dinamikasi",
       "funnel": "Voronka",
       "channels": "Kanallar (attribution)",
-      "noData": "Ma'lumot yo'q"
+      "noData": "Ma'lumot yo'q",
+      "kpi": {
+        "title": "KPI ko'rsatkichlari",
+        "mau": "MAU",
+        "dau": "DAU",
+        "gmv": "GMV (umumiy hajm)",
+        "arr": "ARR (yillik daromad)",
+        "arpu": "ARPU (obunachi daromadi)",
+        "takeRate": "Take rate (komissiya)",
+        "cac": "CAC (jalb narxi)",
+        "ltv": "LTV (umr qiymati)",
+        "ltvCac": "LTV : CAC",
+        "payback": "Payback {n} oy",
+        "npsClient": "NPS — mijoz",
+        "npsAdvocate": "NPS — advokat",
+        "newClients": "Yangi mijozlar",
+        "newSellers": "Yangi advokat/yurist",
+        "giftTitle": "Sovg'a dasturi KPI",
+        "giftPurchases": "Sovg'a xaridlari",
+        "giftActivation": "Faollashtirish",
+        "giftToPaid": "Sovg'a → to'lovli",
+        "avgGift": "O'rtacha sovg'a"
+      }
     },
     "quality": {
       "title": "Sifat nazorati",

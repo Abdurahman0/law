@@ -9,8 +9,11 @@ import {
   updateDocumentAnswers,
   payDocumentRequest,
   getDocumentRequest,
+  listWorkspaceDocRequests,
+  fulfillDocRequest,
   type BackendTemplate,
   type DocumentRequest,
+  type WorkspaceDocRequest,
 } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "./DataState";
@@ -214,6 +217,8 @@ export default function DocumentFlow() {
   }
 
   return (
+    <>
+    <IncomingRequests />
     <div className="ppanel">
       <div className="ppanel__h">
         <b>{t("title")}</b>
@@ -327,6 +332,63 @@ export default function DocumentFlow() {
           </div>
         ) : null}
       </Modal>
+    </div>
+    </>
+  );
+}
+
+// Documents an advocate/lawyer requested from this client — upload to fulfil.
+function IncomingRequests() {
+  const t = useTranslations("portal.client.documents");
+  const [key, setKey] = useState(0);
+  const reqs = useResource(() => listWorkspaceDocRequests(), [key]);
+  const [busyId, setBusyId] = useState("");
+
+  async function upload(r: WorkspaceDocRequest, file: File | null) {
+    if (!file || busyId) return;
+    setBusyId(r.id);
+    try {
+      await fulfillDocRequest(r.id, file);
+      setKey((k) => k + 1);
+    } catch {
+      /* ignore */
+    } finally {
+      setBusyId("");
+    }
+  }
+
+  if (reqs.status !== "ready" || !reqs.data.length) return null;
+
+  return (
+    <div className="ppanel">
+      <div className="ppanel__h">
+        <b>{t("reqInboxTitle")}</b>
+        <span className="advmuted">{reqs.data.length}</span>
+      </div>
+      <div className="alist">
+        {reqs.data.map((r) => {
+          const done = r.status === "fulfilled";
+          return (
+            <div className="dreq" key={r.id}>
+              <span className={`dreq__st dreq__st--${done ? "done" : "wait"}`} />
+              <div className="dreq__m">
+                <b>{r.title}</b>
+                <span>{[t("reqFrom", { name: r.requestedByName || "—" }), done ? t("reqFulfilled") : t("reqRequested")].join(" · ")}</span>
+              </div>
+              {done ? (
+                r.file?.fileUrl ? (
+                  <a className="btn btn--line btn--sm" href={r.file.fileUrl} target="_blank" rel="noreferrer">{t("reqOpen")}</a>
+                ) : <span className="dreq__badge dreq__badge--done">{t("reqFulfilled")}</span>
+              ) : (
+                <label className="btn btn--pri btn--sm dreq__up">
+                  {busyId === r.id ? t("reqUploading") : t("reqUpload")}
+                  <input type="file" hidden onChange={(e) => upload(r, e.target.files?.[0] ?? null)} disabled={!!busyId} />
+                </label>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

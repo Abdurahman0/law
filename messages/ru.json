@@ -2418,7 +2418,14 @@
         "pendingSub": "Ваш платёж подтверждается. Документ откроется автоматически, как только будет готов — это окно можно закрыть.",
         "pendingStatus": "Ожидание",
         "badgeReady": "Готово",
-        "badgeToPay": "Нужна оплата"
+        "badgeToPay": "Нужна оплата",
+        "reqInboxTitle": "Запрошенные у вас документы",
+        "reqFrom": "запросил(а) {name}",
+        "reqUpload": "Загрузить",
+        "reqUploading": "Загрузка…",
+        "reqRequested": "Ожидает",
+        "reqFulfilled": "Отправлено",
+        "reqOpen": "Открыть"
       }
     },
     "advocate": {
@@ -3330,7 +3337,29 @@
       "revenueTrend": "Динамика выручки",
       "funnel": "Воронка",
       "channels": "Каналы (атрибуция)",
-      "noData": "Нет данных"
+      "noData": "Нет данных",
+      "kpi": {
+        "title": "KPI-показатели",
+        "mau": "MAU",
+        "dau": "DAU",
+        "gmv": "GMV (объём)",
+        "arr": "ARR (годовая выручка)",
+        "arpu": "ARPU (на подписчика)",
+        "takeRate": "Take rate (комиссия)",
+        "cac": "CAC (стоимость привлечения)",
+        "ltv": "LTV (жизненная ценность)",
+        "ltvCac": "LTV : CAC",
+        "payback": "Payback {n} мес",
+        "npsClient": "NPS — клиент",
+        "npsAdvocate": "NPS — адвокат",
+        "newClients": "Новые клиенты",
+        "newSellers": "Новые адвокаты/юристы",
+        "giftTitle": "KPI подарочной программы",
+        "giftPurchases": "Покупки подарков",
+        "giftActivation": "Активация",
+        "giftToPaid": "Подарок → платный",
+        "avgGift": "Средний подарок"
+      }
     },
     "quality": {
       "title": "Контроль качества",

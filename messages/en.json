@@ -2418,7 +2418,14 @@
         "pendingSub": "Your payment is being confirmed. The document opens automatically once it's ready — you can close this window.",
         "pendingStatus": "Pending",
         "badgeReady": "Ready",
-        "badgeToPay": "Payment needed"
+        "badgeToPay": "Payment needed",
+        "reqInboxTitle": "Documents requested from you",
+        "reqFrom": "requested by {name}",
+        "reqUpload": "Upload",
+        "reqUploading": "Uploading…",
+        "reqRequested": "Pending",
+        "reqFulfilled": "Sent",
+        "reqOpen": "Open"
       }
     },
     "advocate": {
@@ -3330,7 +3337,29 @@
       "revenueTrend": "Revenue trend",
       "funnel": "Funnel",
       "channels": "Channels (attribution)",
-      "noData": "No data"
+      "noData": "No data",
+      "kpi": {
+        "title": "KPI metrics",
+        "mau": "MAU",
+        "dau": "DAU",
+        "gmv": "GMV (volume)",
+        "arr": "ARR (annual revenue)",
+        "arpu": "ARPU (per subscriber)",
+        "takeRate": "Take rate (commission)",
+        "cac": "CAC (acquisition cost)",
+        "ltv": "LTV (lifetime value)",
+        "ltvCac": "LTV : CAC",
+        "payback": "Payback {n} mo",
+        "npsClient": "NPS — client",
+        "npsAdvocate": "NPS — advocate",
+        "newClients": "New clients",
+        "newSellers": "New advocates/lawyers",
+        "giftTitle": "Gift program KPIs",
+        "giftPurchases": "Gift purchases",
+        "giftActivation": "Activation",
+        "giftToPaid": "Gift → paid",
+        "avgGift": "Avg gift"
+      }
     },
     "quality": {
       "title": "Quality control",

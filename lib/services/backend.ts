@@ -1920,23 +1920,58 @@ export async function getCallAnalytics(): Promise<CallAnalytics> {
 }
 
 // ── CEO dashboard / analytics / marketing attribution ─────────────
+export type GiftKpis = {
+  giftPurchases: number; giftActivationRate: number; recipientConversion: number;
+  giftToPaidConversion: number; averageGiftValue: number; referralRate: number;
+  giftCac: number; giftLtv: number;
+};
 export type CeoDashboard = {
   revenue: number; revenueDeltaPct: number; mrr: number;
   users: number; activeUsers: number; conversionPct: number;
   funnel: { label: string; value: number }[];
   channels: { name: string; leads: number; pct: number }[];
   revenueTrend: { label: string; value: number }[];
+  // Chapter V KPI system
+  mau: number; dau: number; gmv: number; arr: number; arpu: number; takeRate: number;
+  cac: number; ltv: number; ltvCac: number; paybackMonths: number;
+  npsClient: number; npsAdvocate: number;
+  newClients: number; newAdvocates: number; newLawyers: number;
+  giftKpis: GiftKpis;
 };
+function normGiftKpis(v: unknown): GiftKpis {
+  const g = asDict(v);
+  return {
+    giftPurchases: asNum(g.gift_purchases),
+    giftActivationRate: asNum(g.gift_activation_rate),
+    recipientConversion: asNum(g.recipient_conversion),
+    giftToPaidConversion: asNum(g.gift_to_paid_conversion),
+    averageGiftValue: asNum(g.average_gift_value),
+    referralRate: asNum(g.referral_rate),
+    giftCac: asNum(g.gift_cac),
+    giftLtv: asNum(g.gift_ltv),
+  };
+}
 export async function getCeoDashboard(): Promise<CeoDashboard> {
   const d = asDict(await http("/analytics/ceo"));
   const pair = (x: unknown) => { const r = asDict(x); return { label: asStr(r.label ?? r.name ?? r.date), value: asNum(r.value ?? r.count) }; };
+  // cac may be a number or an object { total, client, advocate }.
+  const cacRaw = d.cac;
+  const cac = typeof cacRaw === "object" && cacRaw ? asNum(asDict(cacRaw).total) : asNum(cacRaw);
   return {
     revenue: asNum(d.revenue), revenueDeltaPct: asNum(d.revenue_delta_pct), mrr: asNum(d.mrr),
     users: asNum(d.users ?? d.total_users), activeUsers: asNum(d.active_users), conversionPct: asNum(d.conversion_pct),
     funnel: asArr(d.funnel).map(pair),
     channels: asArr(d.channels ?? d.attribution).map((x) => { const r = asDict(x); return { name: asStr(r.name ?? r.channel), leads: asNum(r.leads ?? r.count), pct: asNum(r.pct ?? r.share) }; }),
     revenueTrend: asArr(d.revenue_trend ?? d.trend).map(pair),
+    mau: asNum(d.mau), dau: asNum(d.dau), gmv: asNum(d.gmv), arr: asNum(d.arr), arpu: asNum(d.arpu), takeRate: asNum(d.take_rate),
+    cac, ltv: asNum(d.ltv), ltvCac: asNum(d.ltv_cac), paybackMonths: asNum(d.payback_months),
+    npsClient: asNum(d.nps_client), npsAdvocate: asNum(d.nps_advocate),
+    newClients: asNum(d.new_clients), newAdvocates: asNum(d.new_advocates), newLawyers: asNum(d.new_lawyers),
+    giftKpis: normGiftKpis(d.gift_kpis),
   };
+}
+export async function getGiftKpis(): Promise<GiftKpis> {
+  return normGiftKpis(await http("/analytics/gifts"));
 }
 
 // ── Quality control ───────────────────────────────────────────────
@@ -2515,6 +2550,52 @@ export async function addFileComment(fileId: string, text: string): Promise<File
 // Advocate/lawyer requests a document from a client (push-notifies them).
 export async function requestClientDocument(input: { client_user_id: string; title: string; message?: string }): Promise<void> {
   await http("/workspace/document-requests", { method: "POST", body: JSON.stringify(input) });
+}
+
+export type WorkspaceDocRequest = {
+  id: string;
+  title: string;
+  status: string; // requested | fulfilled
+  message: string;
+  requestedByName: string;
+  createdAt: string;
+  file?: { fileUrl: string; fileName: string; mimeType: string; size: number } | null;
+};
+function normDocReq(v: unknown): WorkspaceDocRequest {
+  const d = asDict(v);
+  const f = d.file ? asDict(d.file) : null;
+  return {
+    id: asStr(d.id),
+    title: asStr(d.title),
+    status: asStr(d.status, "requested"),
+    message: asStr(d.message),
+    requestedByName: asStr(d.requested_by_name),
+    createdAt: asStr(d.created_at),
+    file: f && (f.file_url || f.file_name)
+      ? { fileUrl: asStr(f.file_url), fileName: asStr(f.file_name), mimeType: asStr(f.mime_type), size: asNum(f.size) }
+      : null,
+  };
+}
+// Incoming (client) or outgoing (role="requester") document requests.
+export async function listWorkspaceDocRequests(opts?: { role?: "requester"; status?: string }): Promise<WorkspaceDocRequest[]> {
+  const q: string[] = [];
+  if (opts?.role) q.push(`role=${opts.role}`);
+  if (opts?.status) q.push(`status=${opts.status}`);
+  const qs = q.length ? `?${q.join("&")}` : "";
+  return listFrom(await http(`/workspace/document-requests${qs}`), "items", "data", "requests").map(normDocReq);
+}
+// Client fulfils a request by uploading the file (multipart).
+export async function fulfillDocRequest(id: string, file: File): Promise<WorkspaceDocRequest> {
+  const fd = new FormData();
+  fd.append("file", file);
+  const token = getToken();
+  const res = await fetch(`${API_BASE}/workspace/document-requests/${id}/fulfill`, {
+    method: "POST",
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    body: fd,
+  });
+  if (!res.ok) throw new ApiError(res.status, `fulfill_${res.status}`);
+  return normDocReq(await res.json());
 }
 
 // ── Admin: seed demo data ─────────────────────────────────────────

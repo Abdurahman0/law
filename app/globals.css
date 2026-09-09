@@ -2699,3 +2699,14 @@ body:has(.schat) .fab{display:none}
 .wsp__cmtbar input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-size:.88rem;outline:none}
 .wsp__cmtbar input:focus{border-color:var(--b600)}
 .wsp__ai-points{display:inline-block;font-size:.75rem;font-weight:800;color:var(--b700);background:var(--b100);border-radius:999px;padding:3px 10px;margin-bottom:4px}
+/* Client incoming document-request inbox */
+.dreq{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fff}
+.dreq+.dreq{margin-top:8px}
+.dreq__st{flex:none;width:8px;height:8px;border-radius:50%}
+.dreq__st--wait{background:#f5a623}
+.dreq__st--done{background:var(--ok)}
+.dreq__m{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.dreq__m b{font-size:.9rem;color:var(--ink);overflow-wrap:anywhere}
+.dreq__m span{font-size:.78rem;color:var(--gray)}
+.dreq__up{flex:none;cursor:pointer}
+.dreq__badge--done{font-size:.75rem;font-weight:700;color:var(--ok)}
