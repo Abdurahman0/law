@@ -3330,6 +3330,13 @@
     },
     "pipeline": {
       "title": "Sales pipeline",
+      "addStatus": "Add status",
+      "renameStatus": "Rename status",
+      "statusName": "Status name",
+      "statusNamePh": "e.g. Pending",
+      "statusColor": "Color",
+      "statusFinal": "Final stage",
+      "editStatus": "Edit",
       "lead": "Move leads through the stages: new → contacted → qualified → won/lost.",
       "empty": "No leads",
       "emptyText": "New leads will appear here.",

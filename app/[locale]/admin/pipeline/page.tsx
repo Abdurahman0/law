@@ -2,14 +2,16 @@
 
 import { useMemo, useState, type CSSProperties } from "react";
 import { useTranslations } from "next-intl";
-import { getLeadKanban, moveLeadKanban, adminCreateLead, adminDeleteLead, type KanbanColumn, type Lead } from "@/lib/services/backend";
+import { getLeadKanban, moveLeadKanban, adminCreateLead, adminDeleteLead, saveLeadKanbanColumns, type KanbanColumn, type Lead } from "@/lib/services/backend";
 import { useResource } from "@/lib/useResource";
-import { AdminForm, useReload } from "@/components/admin/AdminBits";
+import { AdminForm, Notice, useReload } from "@/components/admin/AdminBits";
 import Modal from "@/components/admin/Modal";
 import Select from "@/components/Select";
 import LeadDrawer from "@/components/admin/LeadDrawer";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
-import { IconTrendingUp, IconChevronLeft, IconChevronRight, IconUsers, IconGrid, IconDocLines, IconPlus, IconSearch } from "@/components/icons";
+import { IconTrendingUp, IconChevronLeft, IconChevronRight, IconUsers, IconGrid, IconDocLines, IconPlus, IconSearch, IconEdit } from "@/components/icons";
+
+const STATUS_COLORS = ["#2563eb", "#7c3aed", "#0891b2", "#059669", "#d97706", "#dc2626", "#db2777", "#6b7280"];
 
 export default function AdminPipeline() {
   const t = useTranslations("admin.pipeline");
@@ -23,6 +25,13 @@ export default function AdminPipeline() {
   const [overCol, setOverCol] = useState<string | null>(null);
   const [selId, setSelId] = useState<string | null>(null);
   const [addOpen, setAddOpen] = useState(false);
+
+  // Add / rename a kanban status (column).
+  const [statusModal, setStatusModal] = useState<{ mode: "add" | "rename"; col?: KanbanColumn } | null>(null);
+  const [sName, setSName] = useState("");
+  const [sColor, setSColor] = useState("#2563eb");
+  const [sBusy, setSBusy] = useState(false);
+  const [sErr, setSErr] = useState(false);
 
   const total = useMemo(() => cols.reduce((n, c) => n + c.count, 0), [cols]);
   const allCards = useMemo(
@@ -71,6 +80,49 @@ export default function AdminPipeline() {
     const next = cols[i + dir];
     if (next) moveTo(leadId, next.key, next.cards.length);
   }
+  function openAddStatus() {
+    setSName("");
+    setSColor(STATUS_COLORS[0]);
+    setSErr(false);
+    setStatusModal({ mode: "add" });
+  }
+  function openRenameStatus(col: KanbanColumn) {
+    setSName(col.title);
+    setSColor(col.color || "#6b7280");
+    setSErr(false);
+    setStatusModal({ mode: "rename", col });
+  }
+  // Build a unique column key from the typed name (falls back for non-latin).
+  function statusKey(name: string): string {
+    const base = name.toLowerCase().trim().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+    const seed = base || `col_${Date.now().toString(36)}`;
+    const taken = new Set(cols.map((c) => c.key));
+    let k = seed;
+    let i = 2;
+    while (taken.has(k)) k = `${seed}_${i++}`;
+    return k;
+  }
+  async function submitStatus() {
+    const name = sName.trim();
+    if (!name || sBusy || !statusModal) return;
+    setSBusy(true);
+    setSErr(false);
+    try {
+      if (statusModal.mode === "add") {
+        const order = cols.reduce((m, c) => Math.max(m, c.order), 0) + 10;
+        await saveLeadKanbanColumns([{ key: statusKey(name), title: name, color: sColor, order }]);
+      } else if (statusModal.col) {
+        const c = statusModal.col;
+        await saveLeadKanbanColumns([{ key: c.key, title: name, color: sColor, order: c.order, isFinal: c.isFinal }]);
+      }
+      setStatusModal(null);
+      reload();
+    } catch {
+      setSErr(true);
+    } finally {
+      setSBusy(false);
+    }
+  }
   async function remove(leadId: string) {
     if (typeof window !== "undefined" && !window.confirm(t("d.deleteConfirm"))) return;
     setBusy(leadId);
@@ -95,6 +147,7 @@ export default function AdminPipeline() {
             <button type="button" className={view === "kanban" ? "on" : ""} onClick={() => setView("kanban")} aria-label={t("viewKanban")}><IconGrid />{t("viewKanban")}</button>
             <button type="button" className={view === "table" ? "on" : ""} onClick={() => setView("table")} aria-label={t("viewTable")}><IconDocLines />{t("viewTable")}</button>
           </span>
+          <button className="btn btn--line btn--sm" type="button" onClick={openAddStatus}><IconPlus />{t("addStatus")}</button>
           <button className="btn btn--pri btn--sm" type="button" onClick={() => setAddOpen(true)}><IconPlus />{ta("form.add")}</button>
         </span>
       </div>
@@ -138,6 +191,9 @@ export default function AdminPipeline() {
                 <span className="pipe__dot" style={col.color ? { background: col.color } : undefined} />
                 <b>{col.title}</b>
                 <span className="pipe__count">{query || fSource || fRegion ? col.cards.length : col.count}</span>
+                <button type="button" className="pipe__edit" aria-label={t("editStatus")} title={t("renameStatus")} onClick={() => openRenameStatus(col)}>
+                  <IconEdit />
+                </button>
               </div>
               <div className="pipe__cards">
                 <div className={`pipe__slot${overCol === col.key && dragId ? " on" : ""}`} aria-hidden />
@@ -218,6 +274,30 @@ export default function AdminPipeline() {
           errMsg={ta("form.error")}
           onDone={() => { reload(); setAddOpen(false); }}
         />
+      </Modal>
+
+      {/* Add / rename a status (kanban column) */}
+      <Modal open={statusModal !== null} onClose={() => setStatusModal(null)} title={statusModal?.mode === "rename" ? t("renameStatus") : t("addStatus")}>
+        <div className="cform" style={{ maxWidth: "none" }}>
+          <div>
+            <label>{t("statusName")}</label>
+            <input value={sName} onChange={(e) => setSName(e.target.value)} placeholder={t("statusNamePh")} autoFocus />
+          </div>
+          <div>
+            <label>{t("statusColor")}</label>
+            <div className="clrpick">
+              {STATUS_COLORS.map((c) => (
+                <button key={c} type="button" className={`clrpick__sw${sColor === c ? " on" : ""}`} style={{ background: c }} onClick={() => setSColor(c)} aria-label={c} />
+              ))}
+              <input type="color" className="clrpick__native" value={sColor} onChange={(e) => setSColor(e.target.value)} aria-label={t("statusColor")} />
+            </div>
+          </div>
+          {sErr ? <Notice ok={false} msg={ta("form.error")} /> : null}
+          <div style={{ display: "flex", gap: 10 }}>
+            <button className="btn btn--ghost" type="button" onClick={() => setStatusModal(null)}>{ta("form.cancel")}</button>
+            <button className="btn btn--pri" type="button" onClick={submitStatus} disabled={sBusy}>{sBusy ? ta("form.saving") : ta("form.save")}</button>
+          </div>
+        </div>
       </Modal>
     </div>
   );

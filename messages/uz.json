@@ -3336,6 +3336,13 @@
     },
     "pipeline": {
       "title": "Sotuv voronkasi",
+      "addStatus": "Status qo'shish",
+      "renameStatus": "Statusni qayta nomlash",
+      "statusName": "Status nomi",
+      "statusNamePh": "masalan, Kutilmoqda",
+      "statusColor": "Rang",
+      "statusFinal": "Yakuniy bosqich",
+      "editStatus": "Tahrirlash",
       "lead": "Lidlarni bosqichma-bosqich yuriting: yangi → aloqa → malakali → yutildi/yo‘qotildi.",
       "empty": "Lidlar yo‘q",
       "emptyText": "Yangi lidlar bu yerda paydo bo‘ladi.",

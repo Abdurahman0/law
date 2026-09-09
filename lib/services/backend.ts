@@ -1192,6 +1192,25 @@ export async function adminDeleteLead(leadId: string): Promise<void> {
   await http(`/admin/leads/${leadId}`, { method: "DELETE" });
 }
 
+// Upsert kanban columns (PUT /admin/leads/kanban/columns takes a bare list and
+// merges by key — columns not in the list are left untouched, so a single
+// changed/added column can be sent on its own). No delete endpoint exists yet.
+export type KanbanColumnInput = { key: string; title: string; color?: string; order?: number; isFinal?: boolean };
+export async function saveLeadKanbanColumns(columns: KanbanColumnInput[]): Promise<void> {
+  await http("/admin/leads/kanban/columns", {
+    method: "PUT",
+    body: JSON.stringify(
+      columns.map((c) => ({
+        key: c.key,
+        title: c.title,
+        color: c.color || "#6b7280",
+        order: c.order ?? 0,
+        is_final: Boolean(c.isFinal),
+      })),
+    ),
+  });
+}
+
 // ── Admin dashboard ───────────────────────────────────────────────
 export type DashboardStat = { label: string; value: number };
 export type DashboardChart = { key: string; points: { label: string; value: number }[] };
