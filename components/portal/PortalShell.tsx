@@ -75,6 +75,8 @@ const ADVOCATE_NAV: NavItem[] = [
   { href: "/portal/advocate", key: "dashboard", Icon: IconGrid },
   { href: "/portal/advocate/opportunities", key: "opportunities", Icon: IconBriefcase },
   { href: "/portal/advocate/cases", key: "cases", Icon: IconFileText },
+  { href: "/portal/advocate/calendar", key: "calendar", Icon: IconCalendar },
+  { href: "/portal/advocate/clients", key: "clients", Icon: IconUsers },
   { href: "/portal/advocate/tasks", key: "tasks", Icon: IconClipboardCheck },
   { href: "/portal/advocate/messages", key: "messages", Icon: IconChat },
   { href: "/portal/advocate/notifications", key: "notifications", Icon: IconBell },
