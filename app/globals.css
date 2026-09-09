@@ -2771,3 +2771,12 @@ body:has(.schat) .fab{display:none}
 /* Inline login link inside the register error banner */
 .rf__inlinelink{border:0;background:none;padding:0;margin-left:2px;font:inherit;font-weight:800;color:#dc2626;text-decoration:underline;cursor:pointer}
 .rf__inlinelink:hover{color:#b91c1c}
+
+/* Admin list row actions (edit/delete) + danger button */
+.aitem__acts{flex:none;display:flex;align-items:center;gap:6px}
+.aitem__act{width:32px;height:32px;flex:none;display:grid;place-items:center;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--gray);cursor:pointer;transition:.15s}
+.aitem__act svg{width:16px;height:16px}
+.aitem__act:hover{border-color:var(--b300);color:var(--b600);background:var(--b50)}
+.aitem__act--danger:hover{border-color:#fecaca;color:#dc2626;background:#fef2f2}
+.btn--danger{background:#dc2626;color:#fff;border:0}
+.btn--danger:hover{background:#b91c1c}

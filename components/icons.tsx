@@ -207,6 +207,13 @@ export const IconEdit = (p: P) => (
   </svg>
 );
 
+export const IconTrash = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2m2 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6" />
+    <path d="M10 11v6M14 11v6" />
+  </svg>
+);
+
 export const IconGraduation = (p: P) => (
   <svg {...base} {...p}>
     <path d="M22 10L12 5 2 10l10 5 10-5z" />

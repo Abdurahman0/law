@@ -115,6 +115,29 @@ export async function createDocumentTemplate(input: {
   });
 }
 
+export async function updateDocumentTemplate(
+  id: string,
+  input: Partial<{
+    slug: string;
+    title: string;
+    category: string;
+    language: string;
+    description: string;
+    template_text: string;
+    price: number;
+    is_active: boolean;
+  }>,
+): Promise<unknown> {
+  return http(`/admin/document-templates/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(input),
+  });
+}
+
+export async function deleteDocumentTemplate(id: string): Promise<unknown> {
+  return http(`/admin/document-templates/${id}`, { method: "DELETE" });
+}
+
 // ── Notifications ──
 export async function createNotification(input: {
   user_id: string;

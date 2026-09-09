@@ -21,12 +21,14 @@ export function AdminItem({
   meta,
   tags,
   right,
+  actions,
 }: {
   index?: number;
   title: string;
   meta?: string;
   tags?: { label: string; tone?: "ok" | "muted" }[];
   right?: ReactNode;
+  actions?: ReactNode;
 }) {
   return (
     <div className="aitem">
@@ -43,6 +45,7 @@ export function AdminItem({
         ) : null}
       </div>
       {right != null ? <div className="aitem__r">{right}</div> : null}
+      {actions != null ? <div className="aitem__acts">{actions}</div> : null}
     </div>
   );
 }
@@ -85,9 +88,12 @@ export type Field = {
 
 type Vals = Record<string, string | boolean>;
 
-function initial(fields: Field[]): Vals {
+function initial(fields: Field[], seed?: Vals): Vals {
   return Object.fromEntries(
-    fields.map((f) => [f.name, f.type === "checkbox" ? true : ""]),
+    fields.map((f) => [
+      f.name,
+      seed && f.name in seed ? seed[f.name] : f.type === "checkbox" ? true : "",
+    ]),
   );
 }
 
@@ -99,6 +105,8 @@ export function AdminForm({
   okMsg,
   errMsg,
   onDone,
+  initialValues,
+  resetOnDone = true,
 }: {
   fields: Field[];
   onSubmit: (values: Vals) => Promise<void>;
@@ -107,8 +115,10 @@ export function AdminForm({
   okMsg: string;
   errMsg: string;
   onDone?: () => void;
+  initialValues?: Vals;
+  resetOnDone?: boolean;
 }) {
-  const [vals, setVals] = useState<Vals>(() => initial(fields));
+  const [vals, setVals] = useState<Vals>(() => initial(fields, initialValues));
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
 
@@ -130,7 +140,7 @@ export function AdminForm({
     try {
       await onSubmit(vals);
       setNote({ ok: true, msg: okMsg });
-      setVals(initial(fields));
+      if (resetOnDone) setVals(initial(fields, initialValues));
       onDone?.();
     } catch (e) {
       const detail =
