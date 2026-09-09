@@ -2347,7 +2347,21 @@
         "buy": "Sotib olish va boshlash",
         "buying": "Amalga oshirilmoqda…",
         "orderError": "Xarid amalga oshmadi. Qayta urining.",
-        "orderNote": "Xariddan so'ng mutaxassis bilan maxfiy, himoyalangan chat ochiladi."
+        "orderNote": "Xariddan so'ng mutaxassis bilan maxfiy, himoyalangan chat ochiladi.",
+      "aiHelp": "Muammongizni yozing",
+      "aiHelpSub": "AI eng mos xizmat va advokatni tanlab beradi",
+      "urgent": "Shoshilinch advokat",
+      "urgentSub": "Zudlik bilan yuridik yordam",
+      "chooseFamily": "Yo'nalishni tanlang",
+      "servicesN": "{n} ta xizmat",
+      "back": "Orqaga",
+      "chooseAdvocate": "Advokatni tanlang",
+      "sortRating": "Reyting",
+      "sortExp": "Tajriba",
+      "sortPrice": "Narx",
+      "expYears": "{n} yil",
+      "successRate": "{n}% yutuq",
+      "verified": "Tasdiqlangan"
       },
       "documents": {
         "title": "Hujjat namunalari",

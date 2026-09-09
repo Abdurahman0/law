@@ -2341,7 +2341,21 @@
         "buy": "Buy & start",
         "buying": "Processing…",
         "orderError": "Purchase failed. Try again.",
-        "orderNote": "A private, protected chat with your specialist opens after purchase."
+        "orderNote": "A private, protected chat with your specialist opens after purchase.",
+      "aiHelp": "Describe your problem",
+      "aiHelpSub": "AI picks the right service and advocate",
+      "urgent": "Urgent advocate",
+      "urgentSub": "Legal help right now",
+      "chooseFamily": "Choose a category",
+      "servicesN": "{n} services",
+      "back": "Back",
+      "chooseAdvocate": "Choose an advocate",
+      "sortRating": "Rating",
+      "sortExp": "Experience",
+      "sortPrice": "Price",
+      "expYears": "{n} yrs",
+      "successRate": "{n}% won",
+      "verified": "Verified"
       },
       "documents": {
         "title": "Document templates",

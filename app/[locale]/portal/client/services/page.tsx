@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ComponentType } from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { useRouter } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import {
   getServiceCategories,
   getServices,
@@ -15,13 +15,36 @@ import {
 } from "@/lib/services/backend";
 import OrderPayment from "@/components/portal/OrderPayment";
 import { useResource } from "@/lib/useResource";
+import { initials } from "@/lib/lawyers";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
 import Modal from "@/components/admin/Modal";
-import Select from "@/components/Select";
 import { Notice } from "@/components/admin/AdminBits";
-import { IconBriefcase, IconSearch, IconArrowRight } from "@/components/icons";
+import {
+  IconBriefcase,
+  IconSearch,
+  IconArrowRight,
+  IconChevronLeft,
+  IconSparkle,
+  IconAlert,
+  IconStar,
+  IconShieldCheck,
+  IconMapPin,
+  IconScale,
+  IconFileText,
+  IconShield,
+  IconUsers,
+  IconGavel,
+  IconCheck,
+} from "@/components/icons";
 
 const som = (n?: number) => (n ? n.toLocaleString("ru-RU").replace(/,/g, " ") : "");
+
+// Cycle a small set of legal icons across the service families.
+const FAM_ICONS: ComponentType<{ className?: string }>[] = [
+  IconScale, IconGavel, IconShield, IconFileText, IconUsers, IconBriefcase,
+];
+
+type Sort = "rating" | "exp" | "price";
 
 export default function ClientServices() {
   const t = useTranslations("portal.client.services");
@@ -30,7 +53,7 @@ export default function ClientServices() {
   const cats = useResource(getServiceCategories, []);
   const services = useResource<BackendService>(() => getServices({ catalog_only: true }, locale), [locale]);
 
-  const [cat, setCat] = useState("");
+  const [cat, setCat] = useState(""); // "" = families overview
   const [q, setQ] = useState("");
 
   // order modal
@@ -38,20 +61,27 @@ export default function ClientServices() {
   const [sellers, setSellers] = useState<BackendLawyer[]>([]);
   const [sellersLoading, setSellersLoading] = useState(false);
   const [sellerId, setSellerId] = useState("");
+  const [sort, setSort] = useState<Sort>("rating");
   const [buying, setBuying] = useState(false);
   const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
   const [quote, setQuote] = useState<PriceQuote | null>(null);
   const [quoteLoading, setQuoteLoading] = useState(false);
   const [payOrderId, setPayOrderId] = useState<string | null>(null);
 
+  const query = q.trim().toLowerCase();
+  const countFor = (id: string) => services.data.filter((s) => s.categoryId === id).length;
+
+  // Search mode → flat results across everything; else drill by family.
   const list = useMemo(() => {
-    const query = q.trim().toLowerCase();
-    return services.data.filter(
-      (s) =>
-        (!cat || s.categoryId === cat) &&
-        (!query || s.name.toLowerCase().includes(query) || (s.catalogCode || "").toLowerCase().includes(query)),
-    );
-  }, [services.data, cat, q]);
+    if (query) {
+      return services.data.filter(
+        (s) => s.name.toLowerCase().includes(query) || (s.catalogCode || "").toLowerCase().includes(query),
+      );
+    }
+    return cat ? services.data.filter((s) => s.categoryId === cat) : [];
+  }, [services.data, cat, query]);
+
+  const catName = cats.data.find((c) => c.id === cat)?.name || "";
 
   useEffect(() => {
     if (!order) return;
@@ -66,8 +96,17 @@ export default function ClientServices() {
       .finally(() => setSellersLoading(false));
   }, [order]);
 
-  // Final price depends on the chosen seller (experience, super-advokat,
-  // region) + any referral discount — ask the backend for the live quote.
+  const sortedSellers = useMemo(() => {
+    const rows = [...sellers];
+    rows.sort((a, b) => {
+      if (sort === "price") return (a.basePrice || Infinity) - (b.basePrice || Infinity);
+      if (sort === "exp") return b.experienceYears - a.experienceYears;
+      return b.rating - a.rating;
+    });
+    return rows;
+  }, [sellers, sort]);
+
+  // Final price depends on the chosen seller + any referral discount.
   useEffect(() => {
     if (!order || !sellerId) {
       setQuote(null);
@@ -84,8 +123,6 @@ export default function ClientServices() {
     };
   }, [order, sellerId]);
 
-  // Create the order first, then move to the staged payment step (10% advance
-  // unlocks the private chat) instead of paying in one shot.
   async function buy() {
     if (!order || !sellerId || buying) return;
     setBuying(true);
@@ -107,108 +144,177 @@ export default function ClientServices() {
     else router.push("/portal/client/cases");
   }
 
+  const showFamilies = !query && !cat;
+
   return (
-    <div className="ppanel">
-      <div className="ppanel__h">
-        <b>{t("title")}</b>
-        <span className="advmuted">{list.length}</span>
-      </div>
-      <p className="advmuted" style={{ marginBottom: 14 }}>{t("lead")}</p>
-
-      <div className="svsel__bar" style={{ marginBottom: 14 }}>
-        <span className="svsel__search">
-          <IconSearch />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("search")} aria-label={t("search")} />
-        </span>
-      </div>
-
-      <div className="chiprow" style={{ marginBottom: 16 }}>
-        <button className="fchip" aria-pressed={cat === ""} onClick={() => setCat("")}>{t("all")}</button>
-        {cats.data.map((c) => (
-          <button key={c.id} className="fchip" aria-pressed={cat === c.id} onClick={() => setCat(c.id)}>
-            {c.name}
-          </button>
-        ))}
+    <div className="mkt">
+      {/* Module 10 client entry points: AI intake + urgent advocate. */}
+      <div className="mkt__actions">
+        <Link href="/portal/client/intake" className="mkt__act mkt__act--ai">
+          <span className="mkt__act-i"><IconSparkle /></span>
+          <span className="mkt__act-t">
+            <b>{t("aiHelp")}</b>
+            <span>{t("aiHelpSub")}</span>
+          </span>
+          <IconArrowRight />
+        </Link>
+        <Link href="/portal/client/sos" className="mkt__act mkt__act--sos">
+          <span className="mkt__act-i"><IconAlert /></span>
+          <span className="mkt__act-t">
+            <b>{t("urgent")}</b>
+            <span>{t("urgentSub")}</span>
+          </span>
+          <IconArrowRight />
+        </Link>
       </div>
 
-      {services.status === "loading" ? (
-        <Skeleton rows={4} />
-      ) : !list.length ? (
-        <EmptyState icon={<IconBriefcase />} title={t("empty")} text={t("emptyText")} />
-      ) : (
-        <div className="svsel__grid">
-          {list.map((s) => (
-            <button key={s.id} type="button" className="svcard" onClick={() => setOrder(s)}>
-              <span className="svcard__i"><IconBriefcase /></span>
-              <span className="svcard__t">
-                <b>{s.name}</b>
-                <small>
-                  {[s.catalogCode, s.price ? `${som(s.price)} ${t("som")}` : t("byRequest")].filter(Boolean).join(" · ")}
-                </small>
-              </span>
-              <span className="svcard__c"><IconArrowRight /></span>
-            </button>
-          ))}
+      <div className="ppanel">
+        <div className="ppanel__h">
+          <b>{showFamilies ? t("chooseFamily") : query ? t("title") : catName}</b>
+          <span className="advmuted">{showFamilies ? cats.data.length : list.length}</span>
         </div>
-      )}
+
+        <div className="svsel__bar" style={{ marginBottom: 14 }}>
+          <span className="svsel__search">
+            <IconSearch />
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("search")} aria-label={t("search")} />
+          </span>
+        </div>
+
+        {!showFamilies && !query ? (
+          <button type="button" className="mkt__back" onClick={() => setCat("")}>
+            <IconChevronLeft />
+            {t("back")}
+          </button>
+        ) : null}
+
+        {services.status === "loading" || cats.status === "loading" ? (
+          <Skeleton rows={4} />
+        ) : showFamilies ? (
+          <div className="svsel__grid">
+            {cats.data.map((c, i) => {
+              const Icon = FAM_ICONS[i % FAM_ICONS.length];
+              return (
+                <button key={c.id} type="button" className="svcard" onClick={() => setCat(c.id)}>
+                  <span className="svcard__i"><Icon /></span>
+                  <span className="svcard__t">
+                    <b>{c.name}</b>
+                    <small>{t("servicesN", { n: countFor(c.id) })}</small>
+                  </span>
+                  <span className="svcard__c"><IconArrowRight /></span>
+                </button>
+              );
+            })}
+          </div>
+        ) : !list.length ? (
+          <EmptyState icon={<IconBriefcase />} title={t("empty")} text={t("emptyText")} />
+        ) : (
+          <div className="svsel__grid">
+            {list.map((s) => (
+              <button key={s.id} type="button" className="svcard" onClick={() => setOrder(s)}>
+                <span className="svcard__i"><IconBriefcase /></span>
+                <span className="svcard__t">
+                  <b>{s.name}</b>
+                  <small>
+                    {[s.catalogCode, s.price ? `${som(s.price)} ${t("som")}` : t("byRequest")].filter(Boolean).join(" · ")}
+                  </small>
+                </span>
+                <span className="svcard__c"><IconArrowRight /></span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
 
       <Modal open={!!order} onClose={() => { setOrder(null); setPayOrderId(null); }} title={order?.name || t("orderTitle")}>
         {payOrderId ? (
           <OrderPayment orderId={payOrderId} onChat={afterPay} />
         ) : (
-        <div className="cform" style={{ maxWidth: "none" }}>
-          {quote ? (
-            <div className="oquote">
-              {quote.baseAmount && quote.baseAmount !== quote.totalAmount ? (
-                <div className="oquote__row"><span>{t("priceBase")}</span><span>{som(quote.baseAmount)} {t("som")}</span></div>
-              ) : null}
-              {quote.modifiers.map((m, i) => (
-                <div className="oquote__row oquote__row--mod" key={i}>
-                  <span>{m.label || m.key}</span>
-                  <span>{m.percent ? `${m.percent > 0 ? "+" : ""}${m.percent}%` : m.amount ? `${som(m.amount)} ${t("som")}` : ""}</span>
+          <div className="cform" style={{ maxWidth: "none" }}>
+            {quote ? (
+              <div className="oquote">
+                {quote.baseAmount && quote.baseAmount !== quote.totalAmount ? (
+                  <div className="oquote__row"><span>{t("priceBase")}</span><span>{som(quote.baseAmount)} {t("som")}</span></div>
+                ) : null}
+                {quote.modifiers.map((m, i) => (
+                  <div className="oquote__row oquote__row--mod" key={i}>
+                    <span>{m.label || m.key}</span>
+                    <span>{m.percent ? `${m.percent > 0 ? "+" : ""}${m.percent}%` : m.amount ? `${som(m.amount)} ${t("som")}` : ""}</span>
+                  </div>
+                ))}
+                {quote.referralDiscountPercent ? (
+                  <div className="oquote__row oquote__row--disc">
+                    <span>{t("referralDiscount")}</span><span>−{quote.referralDiscountPercent}%</span>
+                  </div>
+                ) : null}
+                <div className="oquote__row oquote__row--total">
+                  <span>{t("priceTotal")}</span>
+                  <b>{som(quote.totalAmount)} {t("som")}</b>
                 </div>
-              ))}
-              {quote.referralDiscountPercent ? (
-                <div className="oquote__row oquote__row--disc">
-                  <span>{t("referralDiscount")}</span><span>−{quote.referralDiscountPercent}%</span>
-                </div>
-              ) : null}
-              <div className="oquote__row oquote__row--total">
-                <span>{t("priceTotal")}</span>
-                <b>{som(quote.totalAmount)} {t("som")}</b>
               </div>
-            </div>
-          ) : (
-            <div className="oprice">
-              <span>{t("price")}</span>
-              <b>{quoteLoading ? t("priceCalc") : order?.price ? `${som(order.price)} ${t("som")}` : t("byRequest")}</b>
-            </div>
-          )}
-          <div>
-            <label>{t("seller")}</label>
-            {sellersLoading ? (
-              <Skeleton rows={1} />
-            ) : sellers.length ? (
-              <Select
-                value={sellerId}
-                onChange={setSellerId}
-                options={sellers.filter((l) => l.userId).map((l) => ({
-                  value: l.userId,
-                  label: `${l.name || "—"}${l.phone ? ` · ${l.phone}` : ""}`,
-                }))}
-                ariaLabel={t("seller")}
-                placeholder={t("selectSeller")}
-              />
             ) : (
-              <p className="advmuted">{t("noSellers")}</p>
+              <div className="oprice">
+                <span>{t("price")}</span>
+                <b>{quoteLoading ? t("priceCalc") : order?.price ? `${som(order.price)} ${t("som")}` : t("byRequest")}</b>
+              </div>
             )}
+
+            <div>
+              <label>{t("chooseAdvocate")}</label>
+              {sellersLoading ? (
+                <Skeleton rows={2} />
+              ) : !sortedSellers.length ? (
+                <p className="advmuted">{t("noSellers")}</p>
+              ) : (
+                <>
+                  <div className="chiprow" style={{ margin: "6px 0 10px" }}>
+                    {(["rating", "exp", "price"] as Sort[]).map((s) => (
+                      <button key={s} type="button" className="fchip" aria-pressed={sort === s} onClick={() => setSort(s)}>
+                        {t(s === "rating" ? "sortRating" : s === "exp" ? "sortExp" : "sortPrice")}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="advpick">
+                    {sortedSellers.filter((l) => l.userId).map((l) => {
+                      const on = sellerId === l.userId;
+                      return (
+                        <button
+                          key={l.userId}
+                          type="button"
+                          className={`advpick__c${on ? " on" : ""}`}
+                          onClick={() => setSellerId(l.userId)}
+                        >
+                          <span className="advpick__av">{initials(l.name || "A")}</span>
+                          <span className="advpick__m">
+                            <b>
+                              {l.name || "—"}
+                              {l.verified ? <IconShieldCheck className="advpick__vf" /> : null}
+                            </b>
+                            <span className="advpick__stats">
+                              <i><IconStar />{l.rating ? l.rating.toFixed(1) : "—"}</i>
+                              {l.experienceYears ? <i>{t("expYears", { n: l.experienceYears })}</i> : null}
+                              {l.successRate ? <i>{t("successRate", { n: l.successRate })}</i> : null}
+                              {l.region ? <i><IconMapPin />{l.region}</i> : null}
+                            </span>
+                          </span>
+                          <span className="advpick__price">
+                            {l.basePrice ? `${som(l.basePrice)} ${t("som")}` : t("byRequest")}
+                            {on ? <IconCheck className="advpick__ck" /> : null}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+            </div>
+
+            {note ? <Notice ok={note.ok} msg={note.msg} /> : null}
+            <button className="btn btn--grad btn--full btn--lg" type="button" disabled={!sellerId || buying} onClick={buy}>
+              {buying ? t("buying") : t("buy")}
+            </button>
+            <p className="rf__hint">{t("orderNote")}</p>
           </div>
-          {note ? <Notice ok={note.ok} msg={note.msg} /> : null}
-          <button className="btn btn--grad btn--full btn--lg" type="button" disabled={!sellerId || buying} onClick={buy}>
-            {buying ? t("buying") : t("buy")}
-          </button>
-          <p className="rf__hint">{t("orderNote")}</p>
-        </div>
         )}
       </Modal>
     </div>
