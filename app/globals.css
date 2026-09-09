@@ -2635,3 +2635,15 @@ body:has(.schat) .fab{display:none}
 .advpick__stats i:first-child{color:#f5a623;font-weight:700}
 .advpick__price{flex:none;display:flex;align-items:center;gap:6px;font-family:var(--fd);font-weight:700;font-size:.9rem;color:var(--b600);white-space:nowrap}
 .advpick__ck{width:16px;height:16px;color:var(--b600)}
+/* Client gift-recommend nudge (module 10) */
+.giftn{position:relative;display:flex;align-items:center;gap:14px;margin-bottom:18px;padding:14px 18px;border-radius:16px;background:linear-gradient(135deg,#FFF7ED,#FFF1F2);box-shadow:inset 0 0 0 1.5px #FDE7C7;overflow:hidden}
+.giftn__ic{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#fb923c,#f43f5e);color:#fff}
+.giftn__ic svg{width:20px;height:20px}
+.giftn__b{flex:1;min-width:0}
+.giftn__b b{display:block;font-size:.95rem;color:var(--ink);margin-bottom:1px}
+.giftn__b p{margin:0;font-size:.83rem;color:var(--gray);line-height:1.4}
+.giftn__cta{flex:none;white-space:nowrap}
+.giftn__x{position:absolute;top:8px;right:10px;width:24px;height:24px;border:0;background:none;color:var(--gray2);cursor:pointer;display:grid;place-items:center;border-radius:8px}
+.giftn__x:hover{background:#fff;color:var(--ink)}
+.giftn__x svg{width:14px;height:14px}
+@media (max-width:640px){.giftn{flex-wrap:wrap;padding-right:32px}.giftn__b{flex-basis:100%}.giftn__cta{width:100%;justify-content:center}}

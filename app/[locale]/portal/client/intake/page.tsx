@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
-import { classifyProblem, type AiClassification } from "@/lib/services/backend";
-import { IconSparkle, IconArrowRight, IconAlert } from "@/components/icons";
+import { classifyProblem, getMyMatches, type AiClassification, type LawyerMatch } from "@/lib/services/backend";
+import { initials } from "@/lib/lawyers";
+import { IconSparkle, IconArrowRight, IconAlert, IconStar, IconMapPin } from "@/components/icons";
 
 export default function ClientIntake() {
   const t = useTranslations("portal.client.intake");
@@ -12,6 +13,7 @@ export default function ClientIntake() {
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<AiClassification | null>(null);
+  const [matches, setMatches] = useState<LawyerMatch[]>([]);
   const [failed, setFailed] = useState(false);
 
   async function analyze() {
@@ -19,8 +21,14 @@ export default function ClientIntake() {
     setBusy(true);
     setFailed(false);
     setResult(null);
+    setMatches([]);
     try {
-      setResult(await classifyProblem(text.trim()));
+      const cls = await classifyProblem(text.trim());
+      setResult(cls);
+      // The classification created a lead; the backend matches advocates to it.
+      getMyMatches()
+        .then((m) => setMatches(m.slice(0, 4)))
+        .catch(() => setMatches([]));
     } catch {
       setFailed(true);
     } finally {
@@ -57,13 +65,47 @@ export default function ClientIntake() {
           <div className="intake__kv"><label>{t("category")}</label><b>{result.category || "—"}</b></div>
           {result.summary ? <p className="intake__summary">{result.summary}</p> : null}
           {result.recommendedService ? (
-            <div className="intake__kv"><label>{t("recommended")}</label><b>{result.recommendedService}</b></div>
+            <>
+              <div className="intake__kv"><label>{t("recommended")}</label><b>{result.recommendedService}</b></div>
+              <button
+                className="btn btn--grad btn--full"
+                type="button"
+                onClick={() => router.push(`/portal/client/services?q=${encodeURIComponent(result.recommendedService)}`)}
+              >
+                {t("orderRecommended")}
+                <IconArrowRight />
+              </button>
+            </>
           ) : null}
+
+          {matches.length ? (
+            <div className="intake__matches">
+              <div className="intake__resh" style={{ marginTop: 10 }}>
+                <b>{t("matchesTitle")}</b>
+                <button className="rf__link" type="button" onClick={() => router.push("/portal/client/matches")}>
+                  {t("viewAllMatches")}
+                </button>
+              </div>
+              <div className="advpick">
+                {matches.map((m) => (
+                  <button key={m.id} type="button" className="advpick__c" onClick={() => router.push("/portal/client/matches")}>
+                    <span className="advpick__av">{initials(m.name || "A")}</span>
+                    <span className="advpick__m">
+                      <b>{m.name || "—"}</b>
+                      <span className="advpick__stats">
+                        <i><IconStar />{m.rating ? m.rating.toFixed(1) : "—"}</i>
+                        {m.region ? <i><IconMapPin />{m.region}</i> : null}
+                        {m.area ? <i>{m.area}</i> : null}
+                      </span>
+                    </span>
+                    <span className="advpick__price">{t("matchPct", { n: Math.min(m.matchPct, 100) })}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
           <div className="intake__acts">
-            <button className="btn btn--pri" type="button" onClick={() => router.push("/portal/client/matches")}>
-              {t("toMatches")}
-              <IconArrowRight />
-            </button>
             <button className="btn btn--soft" type="button" onClick={() => router.push("/portal/client/sos")}>{t("orSos")}</button>
           </div>
         </div>

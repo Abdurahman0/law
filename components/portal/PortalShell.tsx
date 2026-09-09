@@ -9,6 +9,7 @@ import LanguageSwitcher from "../LanguageSwitcher";
 import NotificationBell from "./NotificationBell";
 import IncomingCallWatcher from "./IncomingCallWatcher";
 import GrowthBanner from "./GrowthBanner";
+import GiftNudge from "./GiftNudge";
 import {
   IconLogo,
   IconGrid,
@@ -251,7 +252,9 @@ export default function PortalShell({
               </div>
             ) : role !== "client" ? (
               <GrowthBanner role={role} completeness={session.completeness} />
-            ) : null}
+            ) : (
+              <GiftNudge />
+            )}
             {children}
           </div>
         </div>

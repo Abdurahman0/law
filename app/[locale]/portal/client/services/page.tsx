@@ -68,6 +68,12 @@ export default function ClientServices() {
   const [quoteLoading, setQuoteLoading] = useState(false);
   const [payOrderId, setPayOrderId] = useState<string | null>(null);
 
+  // Deep link from the AI intake ("order this service") pre-fills the search.
+  useEffect(() => {
+    const iq = new URLSearchParams(window.location.search).get("q");
+    if (iq) setQ(iq);
+  }, []);
+
   const query = q.trim().toLowerCase();
   const countFor = (id: string) => services.data.filter((s) => s.categoryId === id).length;
 

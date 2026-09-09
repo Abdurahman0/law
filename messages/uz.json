@@ -1739,6 +1739,12 @@
         "perk3": "Ishonch nishoni",
         "cta": "Profilni to'ldirish",
         "dismiss": "Yopish"
+      },
+      "giftNudge": {
+        "title": "Yaqinlaringizga g'amxo'rlik qiling",
+        "text": "Yuridik xizmatni emas — yuridik xotirjamlikni sovg'a qiling.",
+        "cta": "Sovg'a qilish",
+        "dismiss": "Yopish"
       }
     },
     "tasks": {
@@ -2016,6 +2022,10 @@
         "category": "Yo'nalish",
         "recommended": "Tavsiya etilgan xizmat",
         "toMatches": "Mos advokatlarni ko'rish",
+        "matchesTitle": "Sizga mos advokatlar",
+        "matchPct": "{n}% mos",
+        "orderRecommended": "Bu xizmatni buyurtma qilish",
+        "viewAllMatches": "Barchasini ko'rish",
         "orSos": "Shoshilinch bo'lsa — SOS",
         "urgency": { "low": "Past", "normal": "O'rtacha", "high": "Yuqori", "critical": "Juda shoshilinch" },
         "failedTitle": "Tahlil qilinmadi",

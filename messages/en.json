@@ -1733,6 +1733,12 @@
         "perk3": "Trust badge",
         "cta": "Complete profile",
         "dismiss": "Dismiss"
+      },
+      "giftNudge": {
+        "title": "Care for your loved ones",
+        "text": "Gift not a legal service, but legal peace of mind.",
+        "cta": "Gift it",
+        "dismiss": "Dismiss"
       }
     },
     "tasks": {
@@ -2010,6 +2016,10 @@
         "category": "Direction",
         "recommended": "Recommended service",
         "toMatches": "See matched lawyers",
+        "matchesTitle": "Advocates matched to you",
+        "matchPct": "{n}% match",
+        "orderRecommended": "Order this service",
+        "viewAllMatches": "See all",
         "orSos": "Urgent — SOS",
         "urgency": { "low": "Low", "normal": "Normal", "high": "High", "critical": "Critical" },
         "failedTitle": "Couldn't analyze",
