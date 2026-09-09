@@ -55,9 +55,20 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
       setStatus("live");
     };
 
+    const attachLocalCam = () => {
+      const pub = room.localParticipant.getTrackPublication(Track.Source.Camera);
+      const vt = pub?.videoTrack;
+      if (vt && localRef.current) vt.attach(localRef.current);
+    };
+
     room
       .on(RoomEvent.TrackSubscribed, (track) => attach(track))
       .on(RoomEvent.TrackUnsubscribed, (track) => track.detach().forEach((e) => e.remove()))
+      .on(RoomEvent.LocalTrackPublished, (pub) => {
+        if (pub.source === Track.Source.Camera && pub.videoTrack && localRef.current) {
+          pub.videoTrack.attach(localRef.current);
+        }
+      })
       .on(RoomEvent.Disconnected, () => { if (alive) { setStatus("ended"); onEnd(); } });
 
     (async () => {
@@ -66,11 +77,18 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
         if (!creds.url || !creds.token) { if (alive) setStatus("error"); return; }
         await room.connect(creds.url, creds.token);
         if (!alive) { room.disconnect(); return; }
-        await room.localParticipant.setMicrophoneEnabled(true);
+        // Mic and camera are enabled independently so a denied camera (or no
+        // webcam) still leaves a working audio call instead of erroring out.
+        try { await room.localParticipant.setMicrophoneEnabled(true); } catch { /* mic denied */ }
         if (callType === "video") {
-          await room.localParticipant.setCameraEnabled(true);
-          const pub = room.localParticipant.getTrackPublication(Track.Source.Camera);
-          if (pub?.videoTrack && localRef.current) pub.videoTrack.attach(localRef.current);
+          try {
+            const camPub = await room.localParticipant.setCameraEnabled(true);
+            const vt = camPub?.videoTrack;
+            if (vt && localRef.current) vt.attach(localRef.current);
+            else setTimeout(() => { if (alive) attachLocalCam(); }, 400);
+          } catch {
+            if (alive) setCamOn(false);
+          }
         }
         setStatus(room.remoteParticipants.size ? "live" : "ringing");
       } catch {
@@ -103,10 +121,16 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
     const r = roomRef.current;
     if (!r) return;
     const on = !camOn;
-    await r.localParticipant.setCameraEnabled(on);
-    setCamOn(on);
-    const pub = r.localParticipant.getTrackPublication(Track.Source.Camera);
-    if (on && pub?.videoTrack && localRef.current) pub.videoTrack.attach(localRef.current);
+    try {
+      const pub = await r.localParticipant.setCameraEnabled(on);
+      setCamOn(on);
+      if (on) {
+        const vt = pub?.videoTrack ?? r.localParticipant.getTrackPublication(Track.Source.Camera)?.videoTrack;
+        if (vt && localRef.current) vt.attach(localRef.current);
+      }
+    } catch {
+      /* camera unavailable/denied */
+    }
   }
   async function hangUp() {
     playEndTone();
