@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/lib/auth";
 import { start2fa, verify2fa, disable2fa, setupTotp, enableTotp, type TotpSetup } from "@/lib/services/backend";
+import { isRateLimited } from "@/lib/http";
 import { Notice } from "@/components/admin/AdminBits";
 import { IconShield, IconShieldCheck, IconChevronLeft } from "@/components/icons";
 
@@ -12,6 +13,7 @@ import { IconShield, IconShieldCheck, IconChevronLeft } from "@/components/icons
 // local flag as an offline fallback.
 export default function TwoFactorCard() {
   const t = useTranslations("portal.common.twofa");
+  const tc = useTranslations("common");
   const { session, update } = useAuth();
   const storeKey = `lexgo_2fa_${session?.id || "anon"}`;
   const [on, setOn] = useState(false);
@@ -47,8 +49,8 @@ export default function TwoFactorCard() {
       setDemo(r.demoOtp);
       setCode(r.demoOtp || "");
       setStage("sms");
-    } catch {
-      setNote({ ok: false, msg: t("errStart") });
+    } catch (e) {
+      setNote({ ok: false, msg: isRateLimited(e) ? tc("rateLimited") : t("errStart") });
     } finally {
       setBusy(false);
     }
@@ -61,8 +63,8 @@ export default function TwoFactorCard() {
       setTotp(await setupTotp());
       setCode("");
       setStage("totp");
-    } catch {
-      setNote({ ok: false, msg: t("errStart") });
+    } catch (e) {
+      setNote({ ok: false, msg: isRateLimited(e) ? tc("rateLimited") : t("errStart") });
     } finally {
       setBusy(false);
     }
@@ -81,8 +83,8 @@ export default function TwoFactorCard() {
     try {
       await verify2fa(vid, code.trim());
       await finishEnable("sms");
-    } catch {
-      setNote({ ok: false, msg: t("errVerify") });
+    } catch (e) {
+      setNote({ ok: false, msg: isRateLimited(e) ? tc("rateLimited") : t("errVerify") });
     } finally {
       setBusy(false);
     }
@@ -94,8 +96,8 @@ export default function TwoFactorCard() {
     try {
       await enableTotp(totp.setupId, code.trim());
       await finishEnable("totp");
-    } catch {
-      setNote({ ok: false, msg: t("errVerify") });
+    } catch (e) {
+      setNote({ ok: false, msg: isRateLimited(e) ? tc("rateLimited") : t("errVerify") });
     } finally {
       setBusy(false);
     }
@@ -111,8 +113,8 @@ export default function TwoFactorCard() {
       setOn(false);
       reset();
       setNote({ ok: true, msg: t("disabledMsg") });
-    } catch {
-      setNote({ ok: false, msg: t("errStart") });
+    } catch (e) {
+      setNote({ ok: false, msg: isRateLimited(e) ? tc("rateLimited") : t("errStart") });
     } finally {
       setBusy(false);
     }

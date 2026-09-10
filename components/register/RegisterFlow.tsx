@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { useAuth } from "@/lib/auth";
-import { ApiError } from "@/lib/http";
+import { ApiError, isRateLimited } from "@/lib/http";
 import {
   emptyDraft,
   type AccountType,
@@ -45,6 +45,7 @@ const ADV_STEPS = STEPS_BY_TYPE.advocate;
 export default function RegisterFlow() {
   const t = useTranslations("register");
   const te = useTranslations("enums");
+  const tc = useTranslations("common");
   const router = useRouter();
   const { startRegistration, register, session, ready } = useAuth();
 
@@ -155,7 +156,9 @@ export default function RegisterFlow() {
     } catch (e) {
       setStarting(false);
       // 409 = this phone already has an account → point the user to login.
-      if (e instanceof ApiError && e.status === 409) {
+      if (isRateLimited(e)) {
+        setStartErr({ msg: tc("rateLimited") });
+      } else if (e instanceof ApiError && e.status === 409) {
         setStartErr({ msg: t("verify.phoneExists"), login: true });
       } else {
         setStartErr({ msg: t("verify.startError") });
@@ -182,10 +185,10 @@ export default function RegisterFlow() {
         return;
       }
       router.replace(`/portal/${s.role}`);
-    } catch {
+    } catch (e) {
       setVerifying(false);
       setCreating(false);
-      setVerifyErr(t("verify.incorrect"));
+      setVerifyErr(isRateLimited(e) ? tc("rateLimited") : t("verify.incorrect"));
     }
   }
 

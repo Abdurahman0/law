@@ -3,6 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/lib/auth";
+import { isRateLimited } from "@/lib/http";
 import type { TwoFactorChallenge } from "@/lib/services/backend";
 import { Link, useRouter } from "@/i18n/navigation";
 import { formatUzSubscriber, uzSubscriber } from "@/lib/phone";
@@ -11,6 +12,7 @@ import PasswordInput from "../PasswordInput";
 
 export default function LoginForm() {
   const t = useTranslations("portal.login");
+  const tc = useTranslations("common");
   const { login, completeLogin2fa, session, ready } = useAuth();
   const router = useRouter();
 
@@ -49,8 +51,8 @@ export default function LoginForm() {
         return;
       }
       router.replace(`/portal/${s.role}`);
-    } catch {
-      setErr(t("failed"));
+    } catch (e) {
+      setErr(isRateLimited(e) ? tc("rateLimited") : t("failed"));
       setBusy(false);
     }
   }
@@ -67,8 +69,8 @@ export default function LoginForm() {
     try {
       const s = await completeLogin2fa(twoFa.verificationId, code.trim(), phone);
       router.replace(`/portal/${s.role}`);
-    } catch {
-      setErr(t("failed"));
+    } catch (e) {
+      setErr(isRateLimited(e) ? tc("rateLimited") : t("failed"));
       setBusy(false);
     }
   }

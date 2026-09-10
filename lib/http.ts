@@ -24,6 +24,12 @@ export function isLimitError(e: unknown): boolean {
   return e.status === 401 || e.status === 402 || e.status === 429;
 }
 
+// True when an auth endpoint hit its IP rate limit (HTTP 429). Auth flows show
+// a "too many attempts, try again shortly" message.
+export function isRateLimited(e: unknown): boolean {
+  return e instanceof ApiError && e.status === 429;
+}
+
 // True when a demo-only endpoint is missing because DEMO_MODE is off in
 // production (those routes aren't registered → 404). Callers use it to show a
 // "not available yet / real payment coming" message instead of a raw error.

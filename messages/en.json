@@ -1,6 +1,7 @@
 {
   "common": {
-    "demoOff": "This action isn't available yet. Real payment/verification is coming soon."
+    "demoOff": "This action isn't available yet. Real payment/verification is coming soon.",
+    "rateLimited": "Too many attempts. Please try again shortly."
   },
   "a11y": {
     "showPassword": "Show password",

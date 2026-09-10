@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import { forgotPassword, resetPassword } from "@/lib/services/backend";
+import { isRateLimited } from "@/lib/http";
 import { Link, useRouter } from "@/i18n/navigation";
 import { formatUzSubscriber, uzSubscriber, normUzPhone } from "@/lib/phone";
 import { IconLogo, IconCheck } from "../icons";
@@ -12,6 +13,7 @@ type Stage = "phone" | "code" | "done";
 
 export default function ResetPasswordForm() {
   const t = useTranslations("portal.login");
+  const tc = useTranslations("common");
   const router = useRouter();
 
   const [stage, setStage] = useState<Stage>("phone");
@@ -38,8 +40,8 @@ export default function ResetPasswordForm() {
       setDemoOtp(r.demoOtp);
       setCode(r.demoOtp || "");
       setStage("code");
-    } catch {
-      setErr(t("resetError"));
+    } catch (e) {
+      setErr(isRateLimited(e) ? tc("rateLimited") : t("resetError"));
     } finally {
       setBusy(false);
     }
@@ -61,8 +63,8 @@ export default function ResetPasswordForm() {
     try {
       await resetPassword(verificationId, code.trim(), password);
       setStage("done");
-    } catch {
-      setErr(t("resetError"));
+    } catch (e) {
+      setErr(isRateLimited(e) ? tc("rateLimited") : t("resetError"));
     } finally {
       setBusy(false);
     }

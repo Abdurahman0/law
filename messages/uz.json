@@ -1,6 +1,7 @@
 {
   "common": {
-    "demoOff": "Bu amal hozircha mavjud emas. Tez orada real to'lov/tasdiqlash ulanadi."
+    "demoOff": "Bu amal hozircha mavjud emas. Tez orada real to'lov/tasdiqlash ulanadi.",
+    "rateLimited": "Juda ko'p urinish. Bir ozdan so'ng qayta urining."
   },
   "a11y": {
     "showPassword": "Parolni ko'rsatish",
