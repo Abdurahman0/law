@@ -62,6 +62,11 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
   const prevMicRef = useRef<boolean | null>(null); // last roster mic value (detect host action)
   const leftRef = useRef(false); // guard against double-leave
 
+  // Remember the active meeting so a page reload can rejoin it instead of
+  // dropping the user out.
+  const clearActive = () => { try { sessionStorage.removeItem("lexgo_active_call"); } catch { /* ignore */ } };
+  const finish = () => { clearActive(); onEnd(); };
+
   useEffect(() => {
     let alive = true;
     // adaptiveStream (subscriber only pulls the resolution its tile needs) +
@@ -119,7 +124,7 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
           pub.videoTrack.attach(localRef.current);
         }
       })
-      .on(RoomEvent.Disconnected, () => { if (alive) { setStatus("ended"); onEnd(); } });
+      .on(RoomEvent.Disconnected, () => { if (alive) { setStatus("ended"); finish(); } });
 
     (async () => {
       try {
@@ -152,6 +157,7 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
         // Kick off audio playback; if the browser blocks it, show a prompt.
         try { await room.startAudio(); } catch { /* needs a user gesture */ }
         if (alive) setAudioBlocked(!room.canPlaybackAudio);
+        try { sessionStorage.setItem("lexgo_active_call", JSON.stringify({ roomId, callId, callType })); } catch { /* ignore */ }
         syncCount();
         setStatus(room.remoteParticipants.size ? "live" : "ringing");
       } catch {
@@ -213,7 +219,7 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
       leftRef.current = true;
       playEndTone();
       roomRef.current?.disconnect();
-      onEnd();
+      finish();
       return;
     }
     // Host muted/unmuted me → mirror it to my real mic (only on change, so a
@@ -237,7 +243,7 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
         if (!alive) return;
         let type = "";
         try { type = String((JSON.parse(ev.data) as { type?: string; event?: string }).type ?? (JSON.parse(ev.data) as { event?: string }).event ?? ""); } catch { type = ""; }
-        if (type.includes("auto_ended") || type === "call.end") { onEnd(); return; }
+        if (type.includes("auto_ended") || type === "call.end") { finish(); return; }
         if (/^(participant|media)\./.test(type) || type === "call.join" || type === "call.leave") {
           setMetaTick((n) => n + 1);
         }
@@ -328,7 +334,7 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
       /* ignore */
     }
     roomRef.current?.disconnect();
-    onEnd();
+    finish();
   }
 
   const mmss = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;

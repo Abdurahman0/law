@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/lib/auth";
-import { searchUsers, createSecureChat, startCall } from "@/lib/services/backend";
+import { searchUsers, createSecureChat, startCall, listInvitedCalls } from "@/lib/services/backend";
 import SearchSelect from "@/components/SearchSelect";
 import CallRoom from "@/components/chat/CallRoom";
 import { Notice } from "@/components/admin/AdminBits";
@@ -19,6 +19,29 @@ export default function AdminMeetings() {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [active, setActive] = useState<Active | null>(null);
+
+  // Resume an active meeting after a reload (the call is only in memory).
+  useEffect(() => {
+    let raw: string | null = null;
+    try { raw = sessionStorage.getItem("lexgo_active_call"); } catch { raw = null; }
+    if (!raw) return;
+    let stored: { roomId?: string; callId?: string } | null = null;
+    try { stored = JSON.parse(raw); } catch { stored = null; }
+    if (!stored?.roomId || !stored?.callId) return;
+    let alive = true;
+    listInvitedCalls()
+      .then((list) => {
+        if (!alive) return;
+        const c = list.find((x) => x.callId === stored!.callId);
+        if (c && c.callStatus === "active" && c.status !== "removed" && c.status !== "left") {
+          setActive({ roomId: stored!.roomId!, callId: stored!.callId!, lk: null });
+        } else {
+          try { sessionStorage.removeItem("lexgo_active_call"); } catch { /* ignore */ }
+        }
+      })
+      .catch(() => {});
+    return () => { alive = false; };
+  }, []);
 
   // Search ANY platform user to invite (name / phone / LexGo ID).
   async function searchOptions(q: string) {

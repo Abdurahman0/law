@@ -35,6 +35,11 @@ export default function SearchSelect({
   const wrapRef = useRef<HTMLDivElement>(null);
   const labelCache = useRef<Map<string, string>>(new Map());
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Keep the latest onSearch without making it an effect dependency — parents
+  // often pass a fresh inline function each render, which would otherwise
+  // re-trigger the search loop on every parent re-render (e.g. a roster poll).
+  const searchRef = useRef(onSearch);
+  searchRef.current = onSearch;
 
   useEffect(() => {
     if (!open) return;
@@ -45,15 +50,17 @@ export default function SearchSelect({
     return () => document.removeEventListener("mousedown", onDoc);
   }, [open]);
 
-  // Debounced server search when onSearch is provided.
+  // Debounced server search when onSearch is provided. Depends only on the
+  // query + whether search mode is on, never on the callback identity.
+  const hasSearch = !!onSearch;
   useEffect(() => {
-    if (!onSearch) return;
+    if (!hasSearch) return;
     if (timer.current) clearTimeout(timer.current);
     if (!q.trim()) { setRemote([]); setLoading(false); return; }
     setLoading(true);
     timer.current = setTimeout(async () => {
       try {
-        const res = await onSearch(q);
+        const res = (await searchRef.current?.(q)) ?? [];
         res.forEach((o) => labelCache.current.set(o.value, o.label));
         setRemote(res);
       } catch {
@@ -63,7 +70,7 @@ export default function SearchSelect({
       }
     }, 250);
     return () => { if (timer.current) clearTimeout(timer.current); };
-  }, [q, onSearch]);
+  }, [q, hasSearch]);
 
   // Cache labels from static options too.
   useEffect(() => {

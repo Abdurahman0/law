@@ -98,6 +98,30 @@ export default function IncomingCallWatcher() {
     return stop;
   }, [inc]);
 
+  // Resume an active meeting after a page reload (the call is in memory only).
+  useEffect(() => {
+    if (!session || meet) return;
+    let raw: string | null = null;
+    try { raw = sessionStorage.getItem("lexgo_active_call"); } catch { raw = null; }
+    if (!raw) return;
+    let stored: { roomId?: string; callId?: string; callType?: string } | null = null;
+    try { stored = JSON.parse(raw); } catch { stored = null; }
+    if (!stored?.roomId || !stored?.callId) return;
+    let alive = true;
+    listInvitedCalls()
+      .then((list) => {
+        if (!alive) return;
+        const c = list.find((x) => x.callId === stored!.callId);
+        if (c && c.callStatus === "active" && c.status !== "removed" && c.status !== "left" && c.status !== "declined") {
+          setMeet({ kind: "meet", roomId: stored!.roomId!, callId: stored!.callId!, callType: stored!.callType === "audio" ? "audio" : "video", callerName: c.callerName || "" });
+        } else {
+          try { sessionStorage.removeItem("lexgo_active_call"); } catch { /* ignore */ }
+        }
+      })
+      .catch(() => {});
+    return () => { alive = false; };
+  }, [session, meet]);
+
   // An accepted meeting is rendered inline (invitee isn't a chat-room member).
   if (meet) {
     return (
