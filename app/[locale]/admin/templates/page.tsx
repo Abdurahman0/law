@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { getDocumentTemplates, type BackendTemplate } from "@/lib/services/backend";
+import { getDocumentTemplates, getDocumentTemplate, type BackendTemplate } from "@/lib/services/backend";
 import {
   createDocumentTemplate,
   updateDocumentTemplate,
@@ -23,28 +23,52 @@ export default function AdminTemplates() {
   const tpls = useResource(getDocumentTemplates, [key]);
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState<BackendTemplate | null>(null);
+  const [editFull, setEditFull] = useState<BackendTemplate | null>(null);
+  const [editLoading, setEditLoading] = useState(false);
   const [del, setDel] = useState<BackendTemplate | null>(null);
   const [q, setQ] = useState("");
   const [delBusy, setDelBusy] = useState(false);
   const [delNote, setDelNote] = useState<{ ok: boolean; msg: string } | null>(null);
 
-  // Metadata fields shared by create and edit. The template body (template_text)
-  // is only part of create: the list endpoint doesn't return it and there is no
-  // single-template GET, so editing metadata must not blank the stored body.
-  const metaFields: Field[] = [
+  // Full field set (with the template body). Used by both create and edit; the
+  // edit form is prefilled from the single-template GET so the body can be
+  // edited too without blanking it.
+  const fields: Field[] = [
     { name: "title", label: t("form.title"), required: true },
     { name: "slug", label: t("form.slug"), required: true, placeholder: "lease-agreement" },
     { name: "category", label: t("form.category"), placeholder: "contract" },
     { name: "language", label: t("templates.language"), placeholder: "uz" },
     { name: "description", label: t("form.description"), type: "textarea" },
+    { name: "template_text", label: t("templates.templateText"), type: "textarea", required: true },
     { name: "price", label: t("form.price"), type: "number", placeholder: "0" },
     { name: "is_active", label: t("form.active"), type: "checkbox" },
   ];
-  const createFields: Field[] = [
-    ...metaFields.slice(0, 5),
-    { name: "template_text", label: t("templates.templateText"), type: "textarea", required: true },
-    ...metaFields.slice(5),
-  ];
+
+  // On opening edit, fetch the full template (incl. body) to prefill the form.
+  useEffect(() => {
+    if (!edit) {
+      setEditFull(null);
+      setEditLoading(false);
+      return;
+    }
+    let alive = true;
+    setEditLoading(true);
+    setEditFull(null);
+    getDocumentTemplate(edit.id)
+      .then((full) => {
+        if (alive) setEditFull(full);
+      })
+      .catch(() => {
+        // Fall back to list data (body unknown) so edit still opens.
+        if (alive) setEditFull(edit);
+      })
+      .finally(() => {
+        if (alive) setEditLoading(false);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [edit]);
 
   const list = useMemo(() => {
     const terms = q.trim().toLowerCase().split(/\s+/).filter(Boolean);
@@ -123,7 +147,7 @@ export default function AdminTemplates() {
       {/* Create */}
       <Modal open={open} onClose={() => setOpen(false)} title={t("templates.create")}>
         <AdminForm
-          fields={createFields}
+          fields={fields}
           onSubmit={async (v) =>
             void (await createDocumentTemplate({
               slug: String(v.slug),
@@ -147,29 +171,33 @@ export default function AdminTemplates() {
         />
       </Modal>
 
-      {/* Edit (metadata only) */}
+      {/* Edit (full, incl. body) */}
       <Modal open={edit !== null} onClose={() => setEdit(null)} title={t("templates.editTitle")}>
-        {edit ? (
+        {editLoading || !editFull ? (
+          <Skeleton rows={4} />
+        ) : (
           <AdminForm
-            key={edit.id}
-            fields={metaFields}
+            key={editFull.id}
+            fields={fields}
             initialValues={{
-              title: edit.name,
-              slug: edit.slug,
-              category: edit.category,
-              language: edit.language,
-              description: edit.description,
-              price: edit.price ? String(edit.price) : "",
-              is_active: edit.isActive,
+              title: editFull.name,
+              slug: editFull.slug,
+              category: editFull.category,
+              language: editFull.language,
+              description: editFull.description,
+              template_text: editFull.templateText,
+              price: editFull.price ? String(editFull.price) : "",
+              is_active: editFull.isActive,
             }}
             resetOnDone={false}
             onSubmit={async (v) =>
-              void (await updateDocumentTemplate(edit.id, {
+              void (await updateDocumentTemplate(editFull.id, {
                 slug: String(v.slug),
                 title: String(v.title),
                 category: String(v.category),
                 language: String(v.language),
                 description: String(v.description),
+                template_text: String(v.template_text),
                 price: num(v.price),
                 is_active: v.is_active as boolean,
               }))
@@ -183,7 +211,7 @@ export default function AdminTemplates() {
               setEdit(null);
             }}
           />
-        ) : null}
+        )}
       </Modal>
 
       {/* Delete confirm */}

@@ -778,6 +778,7 @@ export type BackendTemplate = {
   price: number;
   visibility: string;
   isActive: boolean;
+  templateText: string;
   questionnaire: { name: string; label: string; required?: boolean }[];
 };
 
@@ -793,6 +794,7 @@ function normTemplate(v: unknown): BackendTemplate {
     price: asNum(d.price),
     visibility: asStr(d.visibility, "client"),
     isActive: d.is_active !== false,
+    templateText: asStr(d.template_text ?? d.body ?? d.content),
     questionnaire: asArr(d.fields ?? d.questionnaire).map((q) => {
       const x = asDict(q);
       return { name: asStr(x.name), label: asStr(x.label ?? x.name), required: Boolean(x.required) };
@@ -802,6 +804,12 @@ function normTemplate(v: unknown): BackendTemplate {
 
 export async function getDocumentTemplates(): Promise<BackendTemplate[]> {
   return listFrom(await http("/document-templates"), "templates", "items", "data").map(normTemplate);
+}
+
+// Single template incl. body (GET /document-templates/{id}). Used to prefill
+// the admin edit form so the template_text can be edited too.
+export async function getDocumentTemplate(id: string): Promise<BackendTemplate> {
+  return normTemplate(await http(`/document-templates/${id}`));
 }
 
 // ── Document requests (contract/application flow) ─────────────────
