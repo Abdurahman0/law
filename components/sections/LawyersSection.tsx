@@ -162,7 +162,7 @@ export default function LawyersSection({
             <div style={{ minWidth: 0 }}>
               <div className="advcard__n">{l.name}</div>
               <div className="advcard__sp">
-                {te(`areas.${l.areaKey}`)} · {te(`regions.${l.regionKey}`)}
+                {te.has(`areas.${l.areaKey}`) ? te(`areas.${l.areaKey}`) : l.areaKey} · {te.has(`regions.${l.regionKey}`) ? te(`regions.${l.regionKey}`) : l.regionKey}
               </div>
               <div className="advcard__tags">
                 <span className={`advcard__kind advcard__kind--${l.kind ?? "lawyer"}`}>

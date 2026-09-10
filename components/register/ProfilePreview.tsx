@@ -48,7 +48,7 @@ export default function ProfilePreview({ p }: { p: ProfessionalProfile }) {
             {p.region ? (
               <span>
                 <IconMapPin />
-                {te(`regions.${p.region}`)}
+                {te.has(`regions.${p.region}`) ? te(`regions.${p.region}`) : p.region}
               </span>
             ) : null}
             <span>

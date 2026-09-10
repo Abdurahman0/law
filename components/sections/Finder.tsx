@@ -285,7 +285,7 @@ export default function Finder() {
           <div className="sheetres on" aria-live="polite">
             <div className="sheetres__t">
               <b>{tf("result.lawyersFound", { count: list.length })}</b>
-              <span className="pill pill--ok">{te(`areas.${res.area}`)}</span>
+              <span className="pill pill--ok">{te.has(`areas.${res.area}`) ? te(`areas.${res.area}`) : res.area}</span>
             </div>
             <div>
               {loading ? (
