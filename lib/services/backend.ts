@@ -2619,6 +2619,52 @@ export async function endMeeting(roomId: string, callId: string): Promise<void> 
   await http(`/secure-chats/${roomId}/calls/${callId}/end`, { method: "POST", body: "{}" });
 }
 
+// Meetings the current user was invited to — lets the invitee discover a call
+// without being a room member (GET /calls/invited).
+export type InvitedCall = {
+  roomId: string;
+  callId: string;
+  callType: "audio" | "video";
+  title: string;
+  callerName: string;
+  status: string; // participant status: invited | joined | …
+  callStatus: string; // call state: active | ended | …
+  autoEndAt: string;
+};
+export async function listInvitedCalls(): Promise<InvitedCall[]> {
+  return listFrom(await http("/calls/invited"), "items", "data", "calls").map((v) => {
+    const d = asDict(v);
+    return {
+      roomId: asStr(d.room_id),
+      callId: asStr(d.call_id ?? d.id),
+      callType: asStr(d.call_type) === "audio" ? "audio" : "video",
+      title: asStr(d.title),
+      callerName: asStr(d.caller_name),
+      status: asStr(d.status),
+      callStatus: asStr(d.call_status ?? d.status),
+      autoEndAt: asStr(d.auto_end_at),
+    };
+  });
+}
+
+// Search any platform user (staff/callcenter) to invite to a meeting.
+export type UserSearchResult = { id: string; name: string; phone: string; role: string; lexgoId: string };
+export async function searchUsers(q: string): Promise<UserSearchResult[]> {
+  const query = q.trim();
+  if (!query) return [];
+  return listFrom(await http(`/users/search?q=${encodeURIComponent(query)}`), "items", "data", "users").map((v) => {
+    const d = asDict(v);
+    const u = asDict(d.user);
+    return {
+      id: asStr(d.id ?? d.user_id ?? u.id),
+      name: asStr(d.name ?? d.full_name ?? u.name),
+      phone: asStr(d.phone ?? u.phone),
+      role: asStr(d.role ?? d.seller_type),
+      lexgoId: asStr(d.lexgo_id ?? d.lexgoId),
+    };
+  });
+}
+
 // ── Seller workspace (folders + file metadata) ────────────────────
 export type WorkspaceFolder = { id: string; name: string; parentId?: string; caseId?: string; status: string; createdAt: string };
 function normFolder(v: unknown): WorkspaceFolder {

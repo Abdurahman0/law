@@ -3739,6 +3739,7 @@
     "end": "End call",
     "someone": "Someone",
     "incomingVideo": "Incoming video call",
+      "incomingMeet": "Video meeting invite",
     "incomingAudio": "Incoming call",
     "accept": "Accept",
     "decline": "Decline",

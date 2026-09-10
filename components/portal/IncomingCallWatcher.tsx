@@ -4,29 +4,32 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter, usePathname } from "@/i18n/navigation";
 import { useAuth } from "@/lib/auth";
-import { listSecureChats, listCalls, listLawyers } from "@/lib/services/backend";
+import { listSecureChats, listCalls, listInvitedCalls, listLawyers } from "@/lib/services/backend";
 import { playRingtone } from "@/lib/callSounds";
+import CallRoom from "@/components/chat/CallRoom";
 import { IconPhone, IconVideo, IconClose } from "@/components/icons";
 
-type Incoming = { roomId: string; callId: string; callType: "audio" | "video"; callerName: string };
+type Incoming = { kind: "chat" | "meet"; roomId: string; callId: string; callType: "audio" | "video"; callerName: string };
 
 let nameCache: Map<string, string> | null = null;
 
-// Watches every secure-chat room the user is in for a fresh call another
-// participant started, and rings anywhere in the portal — so a call reaches
-// the user even when they aren't inside that chat.
+// Watches for incoming calls anywhere in the portal and rings:
+//  • 1:1 calls in the user's secure-chat rooms (accept → open the chat), and
+//  • meeting invites from /calls/invited, where the user isn't a room member
+//    (accept → join the LiveKit room directly, no chat access needed).
 export default function IncomingCallWatcher() {
   const t = useTranslations("call");
   const { session } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const [inc, setInc] = useState<Incoming | null>(null);
+  const [meet, setMeet] = useState<Incoming | null>(null); // an accepted meeting rendered inline
   const dismissed = useRef<Set<string>>(new Set());
   const onChatPage = pathname.includes("/portal/chat/");
 
   useEffect(() => {
-    if (!session || onChatPage) {
-      setInc(null);
+    if (!session || meet) {
+      if (!session) setInc(null);
       return;
     }
     let alive = true;
@@ -43,6 +46,17 @@ export default function IncomingCallWatcher() {
     }
     async function poll() {
       try {
+        // 1) Meeting invites (cross-room) — highest priority.
+        const invited = await listInvitedCalls().catch(() => []);
+        const meetInv = invited.find(
+          (c) => c.callStatus === "active" && c.status !== "joined" && c.status !== "left" && !dismissed.current.has(c.callId),
+        );
+        if (meetInv) {
+          if (alive) setInc({ kind: "meet", roomId: meetInv.roomId, callId: meetInv.callId, callType: meetInv.callType, callerName: meetInv.callerName || t("someone") });
+          return;
+        }
+        // 2) 1:1 calls in the user's rooms — only when not already inside a chat.
+        if (onChatPage) { if (alive) setInc(null); return; }
         const rooms = (await listSecureChats()).slice(0, 15);
         const nm = await names();
         for (const r of rooms) {
@@ -58,7 +72,7 @@ export default function IncomingCallWatcher() {
           );
           if (fresh) {
             const name = nm.get(fresh.callerUserId) || t("someone");
-            if (alive) setInc({ roomId: r.id, callId: fresh.id, callType: fresh.callType === "video" ? "video" : "audio", callerName: name });
+            if (alive) setInc({ kind: "chat", roomId: r.id, callId: fresh.id, callType: fresh.callType === "video" ? "video" : "audio", callerName: name });
             return;
           }
         }
@@ -73,7 +87,7 @@ export default function IncomingCallWatcher() {
       alive = false;
       clearInterval(iv);
     };
-  }, [session, onChatPage, t]);
+  }, [session, onChatPage, meet, t]);
 
   // Ring while an incoming call is pending.
   useEffect(() => {
@@ -82,6 +96,22 @@ export default function IncomingCallWatcher() {
     return stop;
   }, [inc]);
 
+  // An accepted meeting is rendered inline (invitee isn't a chat-room member).
+  if (meet) {
+    return (
+      <CallRoom
+        roomId={meet.roomId}
+        callId={meet.callId}
+        callType={meet.callType}
+        isCaller={false}
+        onEnd={() => {
+          dismissed.current.add(meet.callId);
+          setMeet(null);
+        }}
+      />
+    );
+  }
+
   if (!inc) return null;
 
   function accept() {
@@ -89,7 +119,11 @@ export default function IncomingCallWatcher() {
     dismissed.current.add(inc.callId);
     const target = inc;
     setInc(null);
-    router.push(`/portal/chat/${target.roomId}?join=${target.callId}`);
+    if (target.kind === "meet") {
+      setMeet(target); // render CallRoom inline
+    } else {
+      router.push(`/portal/chat/${target.roomId}?join=${target.callId}`);
+    }
   }
   function decline() {
     if (!inc) return;
@@ -105,7 +139,7 @@ export default function IncomingCallWatcher() {
         </span>
         <div className="incall__m">
           <b>{inc.callerName}</b>
-          <span>{inc.callType === "video" ? t("incomingVideo") : t("incomingAudio")}</span>
+          <span>{inc.kind === "meet" ? t("incomingMeet") : inc.callType === "video" ? t("incomingVideo") : t("incomingAudio")}</span>
         </div>
         <div className="incall__act">
           <button className="incall__btn incall__btn--decline" type="button" onClick={decline} aria-label={t("decline")}>

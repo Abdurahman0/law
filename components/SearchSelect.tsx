@@ -5,12 +5,15 @@ import { IconSearch, IconClose, IconCheck } from "./icons";
 
 export type SearchOption = { value: string; label: string; sub?: string };
 
-// Multi-select dropdown with a built-in search bar. Used to pick meeting
-// participants; word-AND filter over label + sub.
+// Multi-select dropdown with a built-in search bar. Filters a static `options`
+// list client-side, or — when `onSearch` is given — queries the server
+// (debounced) so any user can be found. Selected chips keep their labels via a
+// small cache even when they drop out of the current results.
 export default function SearchSelect({
   value,
   onChange,
-  options,
+  options = [],
+  onSearch,
   placeholder,
   searchPlaceholder,
   emptyText,
@@ -18,7 +21,8 @@ export default function SearchSelect({
 }: {
   value: string[];
   onChange: (v: string[]) => void;
-  options: SearchOption[];
+  options?: SearchOption[];
+  onSearch?: (q: string) => Promise<SearchOption[]>;
   placeholder: string;
   searchPlaceholder: string;
   emptyText: string;
@@ -26,7 +30,11 @@ export default function SearchSelect({
 }) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
+  const [remote, setRemote] = useState<SearchOption[]>([]);
+  const [loading, setLoading] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const labelCache = useRef<Map<string, string>>(new Map());
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -37,16 +45,42 @@ export default function SearchSelect({
     return () => document.removeEventListener("mousedown", onDoc);
   }, [open]);
 
-  const byValue = useMemo(() => new Map(options.map((o) => [o.value, o])), [options]);
-  const filtered = useMemo(() => {
+  // Debounced server search when onSearch is provided.
+  useEffect(() => {
+    if (!onSearch) return;
+    if (timer.current) clearTimeout(timer.current);
+    if (!q.trim()) { setRemote([]); setLoading(false); return; }
+    setLoading(true);
+    timer.current = setTimeout(async () => {
+      try {
+        const res = await onSearch(q);
+        res.forEach((o) => labelCache.current.set(o.value, o.label));
+        setRemote(res);
+      } catch {
+        setRemote([]);
+      } finally {
+        setLoading(false);
+      }
+    }, 250);
+    return () => { if (timer.current) clearTimeout(timer.current); };
+  }, [q, onSearch]);
+
+  // Cache labels from static options too.
+  useEffect(() => {
+    options.forEach((o) => labelCache.current.set(o.value, o.label));
+  }, [options]);
+
+  const shown = useMemo(() => {
+    if (onSearch) return remote;
     const terms = q.trim().toLowerCase().split(/\s+/).filter(Boolean);
     if (!terms.length) return options;
     return options.filter((o) => {
       const hay = `${o.label} ${o.sub ?? ""}`.toLowerCase();
       return terms.every((w) => hay.includes(w));
     });
-  }, [q, options]);
+  }, [onSearch, remote, q, options]);
 
+  const labelOf = (v: string) => labelCache.current.get(v) ?? v;
   const toggle = (v: string) =>
     onChange(value.includes(v) ? value.filter((x) => x !== v) : [...value, v]);
 
@@ -57,7 +91,7 @@ export default function SearchSelect({
           <span className="ssel__chips">
             {value.map((v) => (
               <span className="ssel__chip" key={v}>
-                {byValue.get(v)?.label ?? v}
+                {labelOf(v)}
                 <span
                   role="button"
                   tabIndex={0}
@@ -83,10 +117,12 @@ export default function SearchSelect({
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={searchPlaceholder} autoFocus />
           </div>
           <div className="ssel__list">
-            {filtered.length === 0 ? (
+            {loading ? (
+              <p className="ssel__empty">…</p>
+            ) : shown.length === 0 ? (
               <p className="ssel__empty">{emptyText}</p>
             ) : (
-              filtered.map((o) => {
+              shown.map((o) => {
                 const on = value.includes(o.value);
                 return (
                   <button type="button" key={o.value} className={`ssel__opt${on ? " on" : ""}`} role="option" aria-selected={on} onClick={() => toggle(o.value)}>

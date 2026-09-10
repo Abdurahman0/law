@@ -1,12 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { listLawyers, createSecureChat, startCall } from "@/lib/services/backend";
-import { useResource } from "@/lib/useResource";
-import SearchSelect, { type SearchOption } from "@/components/SearchSelect";
+import { searchUsers, createSecureChat, startCall } from "@/lib/services/backend";
+import SearchSelect from "@/components/SearchSelect";
 import CallRoom from "@/components/chat/CallRoom";
-import { Skeleton } from "@/components/portal/DataState";
 import { Notice } from "@/components/admin/AdminBits";
 import { IconVideo } from "@/components/icons";
 
@@ -14,20 +12,19 @@ type Active = { roomId: string; callId: string; lk: { url: string; room: string;
 
 export default function AdminMeetings() {
   const t = useTranslations("admin.meetings");
-  const people = useResource(listLawyers, []);
   const [title, setTitle] = useState("");
   const [picks, setPicks] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [active, setActive] = useState<Active | null>(null);
 
-  const options: SearchOption[] = useMemo(
-    () =>
-      people.data
-        .filter((l) => l.userId)
-        .map((l) => ({ value: l.userId, label: l.name || "—", sub: l.phone || undefined })),
-    [people.data],
-  );
+  // Search ANY platform user to invite (name / phone / LexGo ID).
+  async function searchOptions(q: string) {
+    const users = await searchUsers(q);
+    return users
+      .filter((u) => u.id)
+      .map((u) => ({ value: u.id, label: u.name || u.phone || "—", sub: [u.phone, u.lexgoId].filter(Boolean).join(" · ") || undefined }));
+  }
 
   async function start() {
     if (busy) return;
@@ -81,34 +78,30 @@ export default function AdminMeetings() {
       </div>
       <p className="advmuted" style={{ marginBottom: 16 }}>{t("subtitle")}</p>
 
-      {people.status === "loading" ? (
-        <Skeleton rows={3} />
-      ) : (
-        <div className="cform" style={{ maxWidth: 560 }}>
-          <div>
-            <label>{t("titleLabel")}</label>
-            <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t("titlePh")} />
-          </div>
-          <div>
-            <label>{t("participants")}</label>
-            <SearchSelect
-              value={picks}
-              onChange={setPicks}
-              options={options}
-              placeholder={t("participantsPh")}
-              searchPlaceholder={t("participantsSearch")}
-              emptyText={t("participantsEmpty")}
-              ariaLabel={t("participants")}
-            />
-          </div>
-          <p className="advmuted" style={{ fontSize: ".82rem", margin: 0 }}>{t("hint")}</p>
-          {err ? <Notice ok={false} msg={err} /> : null}
-          <button className="btn btn--pri" type="button" onClick={start} disabled={busy}>
-            <IconVideo />
-            {busy ? t("starting") : t("start")}
-          </button>
+      <div className="cform" style={{ maxWidth: 560 }}>
+        <div>
+          <label>{t("titleLabel")}</label>
+          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t("titlePh")} />
         </div>
-      )}
+        <div>
+          <label>{t("participants")}</label>
+          <SearchSelect
+            value={picks}
+            onChange={setPicks}
+            onSearch={searchOptions}
+            placeholder={t("participantsPh")}
+            searchPlaceholder={t("participantsSearch")}
+            emptyText={t("participantsEmpty")}
+            ariaLabel={t("participants")}
+          />
+        </div>
+        <p className="advmuted" style={{ fontSize: ".82rem", margin: 0 }}>{t("hint")}</p>
+        {err ? <Notice ok={false} msg={err} /> : null}
+        <button className="btn btn--pri" type="button" onClick={start} disabled={busy}>
+          <IconVideo />
+          {busy ? t("starting") : t("start")}
+        </button>
+      </div>
     </div>
   );
 }
