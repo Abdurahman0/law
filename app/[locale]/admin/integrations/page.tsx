@@ -20,13 +20,16 @@ export default function AdminIntegrations() {
         <EmptyState icon={<IconBolt />} title={t("empty")} text={t("empty")} />
       ) : (
         <div className="intg">
-          {res.data.map((i) => (
-            <div className={`intg__c${i.healthy ? " ok" : ""}`} key={i.key}>
-              <span className="intg__dot" />
-              <b>{t.has(`keys.${i.key}`) ? t(`keys.${i.key}`) : i.key}</b>
-              <span className="intg__st">{t.has(`status.${i.status}`) ? t(`status.${i.status}`) : i.status}</span>
-            </div>
-          ))}
+          {res.data.map((i) => {
+            const tone = i.status === "connected" || i.healthy ? "ok" : i.status === "degraded" ? "warn" : "off";
+            return (
+              <div className={`intg__c intg__c--${tone}`} key={i.key}>
+                <span className="intg__dot" />
+                <b>{t.has(`keys.${i.key}`) ? t(`keys.${i.key}`) : i.key}</b>
+                <span className="intg__st">{t.has(`status.${i.status}`) ? t(`status.${i.status}`) : i.status}</span>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

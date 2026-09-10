@@ -2247,7 +2247,9 @@ body:has(.schat) .fab{display:none}
 .intg__c{display:flex;align-items:center;gap:10px;padding:14px 16px;border:1px solid var(--line);border-radius:13px;background:#fff}
 .intg__c b{flex:1;font-size:.92rem}
 .intg__dot{width:10px;height:10px;border-radius:50%;background:#ef4444;flex:none}
-.intg__c.ok .intg__dot{background:#10b981}
+.intg__c--ok .intg__dot{background:#10b981}
+.intg__c--warn .intg__dot{background:#f59e0b}
+.intg__c--off .intg__dot{background:#9ca3af}
 .intg__st{font-size:.74rem;color:var(--gray);text-transform:capitalize}
 
 /* Secure chat inline error banner */

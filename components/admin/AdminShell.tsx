@@ -93,6 +93,7 @@ const NAV_GROUPS: { group: string; items: NavItem[] }[] = [
     items: [
       { href: "/admin/workflow", key: "workflow", Icon: IconRocket },
       { href: "/admin/integrations", key: "integrations", Icon: IconBolt },
+      { href: "/admin/test-otps", key: "testOtps", Icon: IconShieldCheck },
       { href: "/admin/roles", key: "roles", Icon: IconShield, perm: "roles.manage" },
       { href: "/admin/audit-trail", key: "audit", Icon: IconShieldCheck },
       { href: "/admin/bootstrap", key: "bootstrap", Icon: IconBolt },

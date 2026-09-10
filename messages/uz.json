@@ -3185,6 +3185,7 @@
       "payouts": "To'lovlar (payout)",
       "callCenter": "Call-markaz",
       "meetings": "Uchrashuvlar",
+      "testOtps": "Test OTP",
       "workflow": "Avtomatlashtirish",
       "integrations": "Integratsiyalar",
       "approvals": "Tasdiqlashlar",
@@ -3381,6 +3382,11 @@
       "error": "Uchrashuvni ochib bo'lmadi. Qayta urining.",
       "hint": "Siz tashkilotchi (host) bo'lasiz. Tanlangan foydalanuvchilar taklif qilinadi."
     },
+    "testOtps": {
+      "title": "Test OTP kodlari",
+      "lead": "Faqat staging/demo uchun. OTP kodlar endi javoblarda qaytmaydi — bu yerda ko'rinadi.",
+      "empty": "Hozircha test OTP yo'q"
+    },
     "pipeline": {
       "title": "Sotuv voronkasi",
       "addStatus": "Status qo'shish",
@@ -3543,7 +3549,9 @@
       "lead": "Tashqi servislar ulanish holati.",
       "empty": "Integratsiya yo'q",
       "keys": { "website_api": "Veb-sayt API", "mobile_api": "Mobil API", "lexgo_ai": "LexGo.SI", "telegram": "Telegram", "sms": "SMS", "email": "Email" },
-      "status": { "connected": "Ulangan", "planned": "Rejalashtirilgan", "error": "Xato", "disconnected": "Uzilgan" }
+      "status": { "connected": "Ulangan", "planned": "Rejalashtirilgan", "error": "Xato", "disconnected": "Uzilgan",
+        "degraded": "Qisman ishlayapti",
+        "not_configured": "Sozlanmagan" }
     },
     "workflow": {
       "rules": "Avtomatlashtirish qoidalari",

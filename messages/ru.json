@@ -3179,6 +3179,7 @@
       "payouts": "Выплаты",
       "callCenter": "Call-центр",
       "meetings": "Встречи",
+      "testOtps": "Тест OTP",
       "workflow": "Автоматизация",
       "integrations": "Интеграции",
       "approvals": "Одобрения",
@@ -3375,6 +3376,11 @@
       "error": "Не удалось создать встречу. Попробуйте снова.",
       "hint": "Вы будете организатором (host). Выбранные пользователи будут приглашены."
     },
+    "testOtps": {
+      "title": "Тестовые OTP-коды",
+      "lead": "Только для staging/demo. OTP-коды больше не возвращаются в ответах — смотрите здесь.",
+      "empty": "Пока нет тестовых OTP"
+    },
     "pipeline": {
       "title": "Воронка продаж",
       "addStatus": "Добавить статус",
@@ -3537,7 +3543,9 @@
       "lead": "Статус подключения внешних сервисов.",
       "empty": "Нет интеграций",
       "keys": { "website_api": "Веб-сайт API", "mobile_api": "Мобильный API", "lexgo_ai": "LexGo.AI", "telegram": "Telegram", "sms": "SMS", "email": "Email" },
-      "status": { "connected": "Подключено", "planned": "Запланировано", "error": "Ошибка", "disconnected": "Отключено" }
+      "status": { "connected": "Подключено", "planned": "Запланировано", "error": "Ошибка", "disconnected": "Отключено",
+        "degraded": "Частично работает",
+        "not_configured": "Не настроено" }
     },
     "workflow": {
       "rules": "Правила автоматизации",

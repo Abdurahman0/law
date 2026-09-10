@@ -3179,6 +3179,7 @@
       "payouts": "Payouts",
       "callCenter": "Call center",
       "meetings": "Meetings",
+      "testOtps": "Test OTP",
       "workflow": "Automation",
       "integrations": "Integrations",
       "approvals": "Approvals",
@@ -3375,6 +3376,11 @@
       "error": "Couldn't start the meeting. Try again.",
       "hint": "You'll be the host. The selected users will be invited."
     },
+    "testOtps": {
+      "title": "Test OTP codes",
+      "lead": "Staging/demo only. OTP codes are no longer returned in responses — view them here.",
+      "empty": "No test OTPs yet"
+    },
     "pipeline": {
       "title": "Sales pipeline",
       "addStatus": "Add status",
@@ -3537,7 +3543,9 @@
       "lead": "Connection status of external services.",
       "empty": "No integrations",
       "keys": { "website_api": "Website API", "mobile_api": "Mobile API", "lexgo_ai": "LexGo.AI", "telegram": "Telegram", "sms": "SMS", "email": "Email" },
-      "status": { "connected": "Connected", "planned": "Planned", "error": "Error", "disconnected": "Disconnected" }
+      "status": { "connected": "Connected", "planned": "Planned", "error": "Error", "disconnected": "Disconnected",
+        "degraded": "Degraded",
+        "not_configured": "Not configured" }
     },
     "workflow": {
       "rules": "Automation rules",

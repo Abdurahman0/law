@@ -2296,11 +2296,29 @@ export async function getEntitlements(): Promise<Entitlements> {
 }
 
 // ── Integrations status ───────────────────────────────────────────
-export type Integration = { key: string; status: string; healthy: boolean };
+export type Integration = { key: string; status: string; healthy: boolean; configured: boolean };
 export async function getIntegrationsStatus(): Promise<Integration[]> {
   return listFrom(await http("/integrations/status"), "items", "data", "integrations").map((x) => {
     const d = asDict(x);
-    return { key: asStr(d.key ?? d.name), status: asStr(d.status), healthy: Boolean(d.healthy) };
+    return { key: asStr(d.key ?? d.name), status: asStr(d.status), healthy: Boolean(d.healthy), configured: Boolean(d.configured) };
+  });
+}
+
+// ── Test OTPs (staging only; DEMO_MODE=true & APP_ENV!=production) ──
+// OTP codes are no longer returned in auth responses; admins read staging
+// codes here. 404 in production (route not registered).
+export type TestOtp = { id: string; phone: string; purpose: string; code: string; createdAt: string };
+export async function getTestOtps(): Promise<TestOtp[]> {
+  return listFrom(await http("/admin/test-otps"), "items", "data").map((x) => {
+    const d = asDict(x);
+    const p = asDict(d.payload);
+    return {
+      id: asStr(d.id),
+      phone: asStr(p.phone ?? d.title),
+      purpose: asStr(p.purpose ?? d.record_type),
+      code: asStr(p.code),
+      createdAt: asStr(d.created_at),
+    };
   });
 }
 
