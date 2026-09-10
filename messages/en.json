@@ -1789,7 +1789,13 @@
         "disabling": "Disabling…",
         "disabledMsg": "2FA disabled.",
         "errStart": "Couldn't complete. Please try again.",
-        "errVerify": "Wrong code. Please try again."
+        "errVerify": "Wrong code. Please try again.",
+          "chooseSms": "Via SMS",
+          "chooseTotp": "Authenticator app",
+          "totpSetupTitle": "Connect authenticator",
+          "scanHint": "Scan the QR in Google Authenticator, Authy, etc., then enter the 6-digit code.",
+          "secretLabel": "Or enter the key manually",
+          "back": "Back"
       }
     },
     "tasks": {

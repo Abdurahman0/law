@@ -1795,7 +1795,13 @@
         "disabling": "O'chirilmoqda…",
         "disabledMsg": "2FA o'chirildi.",
         "errStart": "Amalni bajarib bo'lmadi. Qayta urining.",
-        "errVerify": "Kod noto'g'ri. Qayta urining."
+        "errVerify": "Kod noto'g'ri. Qayta urining.",
+          "chooseSms": "SMS orqali",
+          "chooseTotp": "Authenticator ilova",
+          "totpSetupTitle": "Authenticator ilovasini ulash",
+          "scanHint": "QR kodni Google Authenticator, Authy yoki shunga o'xshash ilovada skanerlang, so'ng 6 xonali kodni kiriting.",
+          "secretLabel": "Yoki kalitni qo'lda kiriting",
+          "back": "Orqaga"
       }
     },
     "tasks": {

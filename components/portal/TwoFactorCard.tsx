@@ -3,29 +3,41 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/lib/auth";
-import { start2fa, verify2fa, disable2fa } from "@/lib/services/backend";
+import { start2fa, verify2fa, disable2fa, setupTotp, enableTotp, type TotpSetup } from "@/lib/services/backend";
 import { Notice } from "@/components/admin/AdminBits";
-import { IconShield, IconShieldCheck } from "@/components/icons";
+import { IconShield, IconShieldCheck, IconChevronLeft } from "@/components/icons";
 
-// SMS/OTP two-factor management. Backend has no status endpoint, so the
-// enabled flag is remembered locally after enable/disable actions.
+// Two-factor management: SMS OTP or an authenticator app (TOTP). Status comes
+// from the session's two_factor_enabled/method (backend now returns it), with a
+// local flag as an offline fallback.
 export default function TwoFactorCard() {
   const t = useTranslations("portal.common.twofa");
-  const { session } = useAuth();
+  const { session, update } = useAuth();
   const storeKey = `lexgo_2fa_${session?.id || "anon"}`;
   const [on, setOn] = useState(false);
-  const [stage, setStage] = useState<"idle" | "code">("idle");
+  const [stage, setStage] = useState<"idle" | "sms" | "totp">("idle");
   const [vid, setVid] = useState("");
   const [demo, setDemo] = useState("");
+  const [totp, setTotp] = useState<TotpSetup | null>(null);
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
 
   useEffect(() => {
-    setOn(localStorage.getItem(storeKey) === "1");
-  }, [storeKey]);
+    // Prefer the real backend flag; fall back to the local one offline.
+    if (session?.twoFactorEnabled !== undefined) setOn(!!session.twoFactorEnabled);
+    else setOn(localStorage.getItem(storeKey) === "1");
+  }, [session?.twoFactorEnabled, storeKey]);
 
-  async function enable() {
+  function reset() {
+    setStage("idle");
+    setCode("");
+    setDemo("");
+    setTotp(null);
+    setNote(null);
+  }
+
+  async function enableSms() {
     if (busy) return;
     setBusy(true);
     setNote(null);
@@ -34,23 +46,54 @@ export default function TwoFactorCard() {
       setVid(r.verificationId);
       setDemo(r.demoOtp);
       setCode(r.demoOtp || "");
-      setStage("code");
+      setStage("sms");
     } catch {
       setNote({ ok: false, msg: t("errStart") });
     } finally {
       setBusy(false);
     }
   }
-  async function verify() {
+  async function startTotp() {
+    if (busy) return;
+    setBusy(true);
+    setNote(null);
+    try {
+      setTotp(await setupTotp());
+      setCode("");
+      setStage("totp");
+    } catch {
+      setNote({ ok: false, msg: t("errStart") });
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function finishEnable(method: "sms" | "totp") {
+    localStorage.setItem(storeKey, "1");
+    update({ twoFactorEnabled: true, twoFactorMethod: method });
+    setOn(true);
+    reset();
+    setNote({ ok: true, msg: t("enabled") });
+  }
+  async function verifySms() {
     if (busy || code.trim().length < 4) return;
     setBusy(true);
     setNote(null);
     try {
       await verify2fa(vid, code.trim());
-      localStorage.setItem(storeKey, "1");
-      setOn(true);
-      setStage("idle");
-      setNote({ ok: true, msg: t("enabled") });
+      await finishEnable("sms");
+    } catch {
+      setNote({ ok: false, msg: t("errVerify") });
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function verifyTotp() {
+    if (busy || !totp || code.trim().length < 6) return;
+    setBusy(true);
+    setNote(null);
+    try {
+      await enableTotp(totp.setupId, code.trim());
+      await finishEnable("totp");
     } catch {
       setNote({ ok: false, msg: t("errVerify") });
     } finally {
@@ -64,8 +107,9 @@ export default function TwoFactorCard() {
     try {
       await disable2fa();
       localStorage.removeItem(storeKey);
+      update({ twoFactorEnabled: false, twoFactorMethod: "" });
       setOn(false);
-      setStage("idle");
+      reset();
       setNote({ ok: true, msg: t("disabledMsg") });
     } catch {
       setNote({ ok: false, msg: t("errStart") });
@@ -82,17 +126,42 @@ export default function TwoFactorCard() {
       </div>
       <p className="advmuted" style={{ marginBottom: 12 }}>{t("desc")}</p>
 
-      {stage === "code" ? (
+      {stage === "sms" ? (
         <div className="cform" style={{ maxWidth: "none" }}>
           <div>
             <label>{t("codeLabel")}</label>
-            <input value={code} onChange={(e) => setCode(e.target.value)} inputMode="numeric" placeholder={t("codePh")} />
+            <input value={code} onChange={(e) => setCode(e.target.value)} inputMode="numeric" placeholder={t("codePh")} autoFocus />
           </div>
           {demo ? <p className="rf__demo">{t("demoHint", { code: demo })}</p> : null}
           {note ? <Notice ok={note.ok} msg={note.msg} /> : null}
-          <button className="btn btn--grad btn--full" type="button" onClick={verify} disabled={busy || code.trim().length < 4}>
-            {busy ? t("verifying") : t("verify")}
-          </button>
+          <div style={{ display: "flex", gap: 10 }}>
+            <button className="btn btn--line btn--sm" type="button" onClick={reset}><IconChevronLeft />{t("back")}</button>
+            <button className="btn btn--grad" type="button" onClick={verifySms} disabled={busy || code.trim().length < 4}>
+              {busy ? t("verifying") : t("verify")}
+            </button>
+          </div>
+        </div>
+      ) : stage === "totp" && totp ? (
+        <div className="cform" style={{ maxWidth: "none" }}>
+          <b>{t("totpSetupTitle")}</b>
+          <p className="advmuted" style={{ margin: 0 }}>{t("scanHint")}</p>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={totp.qrCode} alt="2FA QR" className="tfa__qr" />
+          <div>
+            <label>{t("secretLabel")}</label>
+            <input value={totp.secret} readOnly onFocus={(e) => e.currentTarget.select()} className="tfa__secret" />
+          </div>
+          <div>
+            <label>{t("codeLabel")}</label>
+            <input value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))} inputMode="numeric" placeholder={t("codePh")} autoFocus />
+          </div>
+          {note ? <Notice ok={note.ok} msg={note.msg} /> : null}
+          <div style={{ display: "flex", gap: 10 }}>
+            <button className="btn btn--line btn--sm" type="button" onClick={reset}><IconChevronLeft />{t("back")}</button>
+            <button className="btn btn--grad" type="button" onClick={verifyTotp} disabled={busy || code.trim().length < 6}>
+              {busy ? t("verifying") : t("verify")}
+            </button>
+          </div>
         </div>
       ) : (
         <>
@@ -102,10 +171,15 @@ export default function TwoFactorCard() {
               {busy ? t("disabling") : t("disable")}
             </button>
           ) : (
-            <button className="btn btn--pri btn--sm" type="button" onClick={enable} disabled={busy}>
-              <IconShield />
-              {busy ? t("enableSending") : t("enable")}
-            </button>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              <button className="btn btn--pri btn--sm" type="button" onClick={startTotp} disabled={busy}>
+                <IconShield />
+                {t("chooseTotp")}
+              </button>
+              <button className="btn btn--line btn--sm" type="button" onClick={enableSms} disabled={busy}>
+                {busy ? t("enableSending") : t("chooseSms")}
+              </button>
+            </div>
           )}
         </>
       )}

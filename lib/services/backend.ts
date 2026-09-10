@@ -25,6 +25,8 @@ export type AuthUser = {
   phone: string;
   roles: string[];
   permissions: string[];
+  twoFactorEnabled: boolean;
+  twoFactorMethod: string; // "" | "sms" | "totp"
 };
 export type AuthResult = { token: string; refreshToken: string; user: AuthUser };
 
@@ -43,6 +45,8 @@ function normUser(v: unknown): AuthUser {
     phone: asStr(d.phone),
     roles: asArr(d.roles).map((r) => asStr(r)),
     permissions: asArr(d.permissions).map((p) => asStr(p)),
+    twoFactorEnabled: Boolean(d.two_factor_enabled),
+    twoFactorMethod: asStr(d.two_factor_method),
   };
 }
 
@@ -149,7 +153,7 @@ export async function registerVerify(verificationId: string, code: string): Prom
 
 // A 2FA-enabled account returns HTTP 428 with the challenge in `detail` instead
 // of tokens. http() would drop the (object) detail, so hit the endpoint raw.
-export type TwoFactorChallenge = { twoFactorRequired: true; verificationId: string; phone: string; demoOtp: string; message: string };
+export type TwoFactorChallenge = { twoFactorRequired: true; method: string; verificationId: string; phone: string; demoOtp: string; message: string };
 export type LoginResult = AuthResult | TwoFactorChallenge;
 
 export async function apiLogin(phone: string, password: string): Promise<LoginResult> {
@@ -168,6 +172,7 @@ export async function apiLogin(phone: string, password: string): Promise<LoginRe
     const d = asDict(j.detail);
     return {
       twoFactorRequired: true,
+      method: asStr(d.method),
       verificationId: asStr(d.verification_id),
       phone: asStr(d.phone),
       demoOtp: asStr(d.demo_otp),
@@ -2411,6 +2416,22 @@ export async function verify2fa(verificationId: string, code: string): Promise<v
 }
 export async function disable2fa(): Promise<void> {
   await http("/auth/2fa", { method: "DELETE" });
+}
+// Authenticator-app (TOTP) 2FA: setup returns a QR to scan, then enable
+// confirms with the app's current 6-digit code.
+export type TotpSetup = { setupId: string; secret: string; otpauthUrl: string; qrCode: string; expiresAt: string };
+export async function setupTotp(): Promise<TotpSetup> {
+  const d = asDict(await http("/auth/2fa/totp/setup", { method: "POST", body: "{}" }));
+  return {
+    setupId: asStr(d.setup_id),
+    secret: asStr(d.secret),
+    otpauthUrl: asStr(d.otpauth_url),
+    qrCode: asStr(d.qr_code),
+    expiresAt: asStr(d.expires_at),
+  };
+}
+export async function enableTotp(setupId: string, code: string): Promise<void> {
+  await http("/auth/2fa/totp/enable", { method: "POST", body: JSON.stringify({ setup_id: setupId, code }) });
 }
 
 // ── Payments history ──────────────────────────────────────────────

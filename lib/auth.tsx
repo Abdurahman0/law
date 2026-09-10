@@ -41,6 +41,8 @@ export type Session = {
   refreshToken?: string;
   roles?: string[];
   permissions?: string[];
+  twoFactorEnabled?: boolean;
+  twoFactorMethod?: string;
 };
 
 const KEY = "lexgo_session";
@@ -112,6 +114,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             accountStatus: u.accountStatus || stored!.accountStatus,
             roles: u.roles,
             permissions: u.permissions,
+            twoFactorEnabled: u.twoFactorEnabled,
+            twoFactorMethod: u.twoFactorMethod,
           });
         apiMe()
           .then(applyMe)
@@ -154,6 +158,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         refreshToken,
         roles: user.roles,
         permissions: user.permissions,
+        twoFactorEnabled: user.twoFactorEnabled,
+        twoFactorMethod: user.twoFactorMethod,
       };
       persist(s);
       return s;

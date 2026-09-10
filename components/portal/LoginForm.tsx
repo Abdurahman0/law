@@ -82,7 +82,7 @@ export default function LoginForm() {
             LexGo
           </span>
           <h1 style={{ marginTop: 18 }}>{t("twoFaTitle")}</h1>
-          <p className="sub">{t("twoFaSubtitle", { phone: twoFa.phone || phone })}</p>
+          <p className="sub">{twoFa.message || t("twoFaSubtitle", { phone: twoFa.phone || phone })}</p>
           <div className="cform" style={{ maxWidth: "none", marginTop: 20 }}>
             <div>
               <label htmlFor="l-2fa">{t("twoFaCode")}</label>

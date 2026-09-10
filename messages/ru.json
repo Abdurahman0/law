@@ -1789,7 +1789,13 @@
         "disabling": "Отключение…",
         "disabledMsg": "2FA отключена.",
         "errStart": "Не удалось выполнить. Попробуйте снова.",
-        "errVerify": "Неверный код. Попробуйте снова."
+        "errVerify": "Неверный код. Попробуйте снова.",
+          "chooseSms": "Через SMS",
+          "chooseTotp": "Приложение Authenticator",
+          "totpSetupTitle": "Подключить Authenticator",
+          "scanHint": "Отсканируйте QR-код в Google Authenticator, Authy и т.п., затем введите 6-значный код.",
+          "secretLabel": "Или введите ключ вручную",
+          "back": "Назад"
       }
     },
     "tasks": {
