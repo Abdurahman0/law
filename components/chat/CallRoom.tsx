@@ -187,7 +187,9 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
         })
         .catch(() => {});
     load();
-    const iv = setInterval(load, 6000);
+    // Poll fairly often so a kicked/muted participant reacts quickly even
+    // without a realtime event.
+    const iv = setInterval(load, 3000);
     return () => { alive = false; clearInterval(iv); };
   }, [roomId, callId, metaTick]);
   useEffect(() => {
@@ -287,6 +289,9 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
     } catch { /* ignore */ }
   }
   async function kickParticipant(userId: string) {
+    // Optimistic: drop them from the roster immediately so the host doesn't
+    // wait for the next poll.
+    setRoster((rs) => rs.filter((p) => p.userId !== userId));
     try {
       await updateCallParticipant(roomId, callId, userId, { status: "removed" });
       setMetaTick((n) => n + 1);
@@ -400,7 +405,7 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
             </div>
           ) : null}
           <div className="callroom__rlist">
-            {roster.map((p) => {
+            {roster.filter((p) => p.status !== "removed" && p.status !== "left" && p.status !== "declined").map((p) => {
               const self = p.userId === session?.id;
               const canHostAct = !self && p.role !== "host";
               return (
