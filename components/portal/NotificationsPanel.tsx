@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   listNotifications,
@@ -8,9 +8,15 @@ import {
   markAllNotificationsRead,
   type Notification,
 } from "@/lib/services/backend";
-import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "./DataState";
 import { IconChat, IconCheckDouble } from "@/components/icons";
+
+// Fired whenever notifications are read so the header bell can refresh its
+// unread count without a full reload.
+export const NOTIF_READ_EVENT = "lexgo:notif-read";
+function announceRead() {
+  if (typeof window !== "undefined") window.dispatchEvent(new Event(NOTIF_READ_EVENT));
+}
 
 function fmt(s: string) {
   if (!s) return "";
@@ -20,26 +26,40 @@ function fmt(s: string) {
 
 export default function NotificationsPanel() {
   const t = useTranslations("portal.notifications");
-  const [reloadKey, setReloadKey] = useState(0);
-  const res = useResource<Notification>(listNotifications, [reloadKey]);
-  const reload = () => setReloadKey((k) => k + 1);
-  const hasUnread = res.data.some((n) => !n.read);
+  const [items, setItems] = useState<Notification[]>([]);
+  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
 
+  useEffect(() => {
+    let alive = true;
+    setStatus("loading");
+    listNotifications()
+      .then((d) => alive && (setItems(d), setStatus("ready")))
+      .catch(() => alive && setStatus("error"));
+    return () => { alive = false; };
+  }, []);
+
+  const hasUnread = items.some((n) => !n.read);
+
+  // Read actions update the list in place — no refetch, so the page doesn't
+  // flash/scroll — and notify the bell to refresh its badge.
   async function readOne(n: Notification) {
     if (n.read) return;
+    setItems((list) => list.map((x) => (x.id === n.id ? { ...x, read: true } : x)));
+    announceRead();
     try {
       await markNotificationRead(n.id);
-      reload();
     } catch {
-      /* ignore */
+      /* ignore — optimistic */
     }
   }
   async function readAll() {
+    if (!hasUnread) return;
+    setItems((list) => list.map((x) => ({ ...x, read: true })));
+    announceRead();
     try {
       await markAllNotificationsRead();
-      reload();
     } catch {
-      /* ignore */
+      /* ignore — optimistic */
     }
   }
 
@@ -55,13 +75,13 @@ export default function NotificationsPanel() {
         ) : null}
       </div>
 
-      {res.status === "loading" ? (
+      {status === "loading" ? (
         <Skeleton rows={4} />
-      ) : !res.data.length ? (
+      ) : !items.length ? (
         <EmptyState icon={<IconChat />} title={t("empty")} text={t("emptyText")} />
       ) : (
         <div className="ntlist">
-          {res.data.map((n) => (
+          {items.map((n) => (
             <button
               key={n.id}
               type="button"

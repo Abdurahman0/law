@@ -3,17 +3,29 @@
 import { useEffect, useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { getUnreadCount } from "@/lib/services/backend";
+import { NOTIF_READ_EVENT } from "./NotificationsPanel";
 import { IconBell } from "../icons";
 
 export default function NotificationBell({ role }: { role: string }) {
   const [count, setCount] = useState(0);
   useEffect(() => {
     let alive = true;
-    getUnreadCount()
-      .then((c) => alive && setCount(c))
-      .catch(() => {});
+    const refresh = () => {
+      getUnreadCount()
+        .then((c) => alive && setCount(c))
+        .catch(() => {});
+    };
+    refresh();
+    // Refresh the badge when notifications are read, on tab focus, and every 60s.
+    const onFocus = () => { if (document.visibilityState === "visible") refresh(); };
+    window.addEventListener(NOTIF_READ_EVENT, refresh);
+    document.addEventListener("visibilitychange", onFocus);
+    const iv = setInterval(refresh, 60000);
     return () => {
       alive = false;
+      window.removeEventListener(NOTIF_READ_EVENT, refresh);
+      document.removeEventListener("visibilitychange", onFocus);
+      clearInterval(iv);
     };
   }, []);
 
