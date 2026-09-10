@@ -2831,3 +2831,7 @@ body:has(.schat) .fab{display:none}
 .ssel__ol b{font-size:.9rem;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ssel__ol span{font-size:.78rem;color:var(--gray2)}
 .ssel__empty{padding:14px;text-align:center;color:var(--gray2);font-size:.86rem;margin:0}
+
+/* CallRoom: tap-to-enable-sound prompt (autoplay blocked) */
+.callroom__sound{position:absolute;top:54px;left:50%;transform:translateX(-50%);z-index:8;border:0;cursor:pointer;font-size:.85rem;font-weight:700;color:#0B1B3A;background:#fff;padding:8px 16px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.callroom__sound:hover{background:#eef4ff}

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Room, RoomEvent, Track, type RemoteTrack } from "livekit-client";
+import { Room, RoomEvent, Track, VideoPresets, type RemoteTrack } from "livekit-client";
 import {
   getCallJoinToken,
   getCall,
@@ -38,12 +38,23 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
   const [remoteOn, setRemoteOn] = useState(false);
   const [count, setCount] = useState(1); // participants incl. self
   const [remaining, setRemaining] = useState<number | null>(null);
+  const [audioBlocked, setAudioBlocked] = useState(false);
 
   useEffect(() => {
     let alive = true;
-    // adaptiveStream pauses video when the element size can't be measured — that
-    // showed up as a "frozen" remote picture. Keep it off for these small rooms.
-    const room = new Room();
+    // adaptiveStream (subscriber only pulls the resolution its tile needs) +
+    // dynacast + simulcast keep bandwidth down so audio doesn't lag on weak
+    // connections. The video tiles are sized by the grid, so adaptiveStream can
+    // measure them and won't pause ("freeze") the picture.
+    const room = new Room({
+      adaptiveStream: true,
+      dynacast: true,
+      publishDefaults: {
+        simulcast: true,
+        videoSimulcastLayers: [VideoPresets.h180, VideoPresets.h360],
+      },
+      videoCaptureDefaults: { resolution: VideoPresets.h540.resolution },
+    });
     roomRef.current = room;
 
     const attach = (track: RemoteTrack) => {
@@ -76,6 +87,8 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
       .on(RoomEvent.TrackUnsubscribed, (track) => track.detach().forEach((e) => e.remove()))
       .on(RoomEvent.ParticipantConnected, syncCount)
       .on(RoomEvent.ParticipantDisconnected, syncCount)
+      // Browser autoplay policy can block remote audio until a user gesture.
+      .on(RoomEvent.AudioPlaybackStatusChanged, () => { if (alive) setAudioBlocked(!room.canPlaybackAudio); })
       .on(RoomEvent.LocalTrackPublished, (pub) => {
         if (pub.source === Track.Source.Camera && pub.videoTrack && localRef.current) {
           pub.videoTrack.attach(localRef.current);
@@ -102,6 +115,9 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
             if (alive) setCamOn(false);
           }
         }
+        // Kick off audio playback; if the browser blocks it, show a prompt.
+        try { await room.startAudio(); } catch { /* needs a user gesture */ }
+        if (alive) setAudioBlocked(!room.canPlaybackAudio);
         syncCount();
         setStatus(room.remoteParticipants.size ? "live" : "ringing");
       } catch {
@@ -138,9 +154,17 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [remaining == null]);
 
+  // Unblock remote audio (needs a user gesture on most browsers).
+  async function enableSound() {
+    const r = roomRef.current;
+    if (!r) return;
+    try { await r.startAudio(); } catch { /* ignore */ }
+    setAudioBlocked(!r.canPlaybackAudio);
+  }
   async function toggleMic() {
     const r = roomRef.current;
     if (!r) return;
+    void enableSound();
     const on = !micOn;
     await r.localParticipant.setMicrophoneEnabled(on);
     setMicOn(on);
@@ -148,6 +172,7 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
   async function toggleCam() {
     const r = roomRef.current;
     if (!r) return;
+    void enableSound();
     const on = !camOn;
     try {
       const pub = await r.localParticipant.setCameraEnabled(on);
@@ -184,6 +209,11 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
         <span className="callroom__pcount"><IconUser />{t("participants", { count })}</span>
         {remaining != null ? <span className="callroom__timer">{t("remaining")}: {mmss(remaining)}</span> : null}
       </div>
+      {audioBlocked ? (
+        <button type="button" className="callroom__sound" onClick={enableSound}>
+          {t("enableSound")}
+        </button>
+      ) : null}
       <div className="callroom__stage">
         {callType === "video" ? (
           <div ref={remoteRef} className="callroom__remote" />
