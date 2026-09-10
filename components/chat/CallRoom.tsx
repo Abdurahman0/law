@@ -111,6 +111,9 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
       .on(RoomEvent.ParticipantDisconnected, syncCount)
       // Browser autoplay policy can block remote audio until a user gesture.
       .on(RoomEvent.AudioPlaybackStatusChanged, () => { if (alive) setAudioBlocked(!room.canPlaybackAudio); })
+      // Reflect a host/server mute of my own mic instantly in the UI.
+      .on(RoomEvent.TrackMuted, (pub, p) => { if (alive && p.isLocal && pub.source === Track.Source.Microphone) setMicOn(false); })
+      .on(RoomEvent.TrackUnmuted, (pub, p) => { if (alive && p.isLocal && pub.source === Track.Source.Microphone) setMicOn(true); })
       .on(RoomEvent.LocalTrackPublished, (pub) => {
         if (pub.source === Track.Source.Camera && pub.videoTrack && localRef.current) {
           pub.videoTrack.attach(localRef.current);

@@ -48,8 +48,10 @@ export default function IncomingCallWatcher() {
       try {
         // 1) Meeting invites (cross-room) — highest priority.
         const invited = await listInvitedCalls().catch(() => []);
+        // Only ring for a still-pending invite — never for someone who already
+        // joined, left, declined, or was removed/kicked from the meeting.
         const meetInv = invited.find(
-          (c) => c.callStatus === "active" && c.status !== "joined" && c.status !== "left" && !dismissed.current.has(c.callId),
+          (c) => c.callStatus === "active" && c.status === "invited" && !dismissed.current.has(c.callId),
         );
         if (meetInv) {
           if (alive) setInc({ kind: "meet", roomId: meetInv.roomId, callId: meetInv.callId, callType: meetInv.callType, callerName: meetInv.callerName || t("someone") });
