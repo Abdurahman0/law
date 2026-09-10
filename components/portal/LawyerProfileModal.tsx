@@ -11,7 +11,7 @@ import {
 import { isDemoUnavailable } from "@/lib/http";
 import { useRouter } from "@/i18n/navigation";
 import { useAuth } from "@/lib/auth";
-import { initials } from "@/lib/lawyers";
+import { initials, humanizeSlug } from "@/lib/lawyers";
 import Modal from "@/components/admin/Modal";
 import { Skeleton } from "./DataState";
 
@@ -83,7 +83,7 @@ export default function LawyerProfileModal({
   }
 
   const kind = data && data.sellerType.toLowerCase().includes("advokat") ? "advocate" : "lawyer";
-  const areaLabel = (s: string) => (te.has(`areas.${s}`) ? te(`areas.${s}`) : s);
+  const areaLabel = (s: string) => (te.has(`areas.${s}`) ? te(`areas.${s}`) : humanizeSlug(s));
 
   return (
     <Modal open={open} onClose={onClose} title={t("title")}>

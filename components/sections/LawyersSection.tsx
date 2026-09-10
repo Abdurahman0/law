@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   initials,
+  humanizeSlug,
   AREA_KEYS,
   REGION_KEYS,
   type Lawyer,
@@ -162,7 +163,7 @@ export default function LawyersSection({
             <div style={{ minWidth: 0 }}>
               <div className="advcard__n">{l.name}</div>
               <div className="advcard__sp">
-                {te.has(`areas.${l.areaKey}`) ? te(`areas.${l.areaKey}`) : l.areaKey} · {te.has(`regions.${l.regionKey}`) ? te(`regions.${l.regionKey}`) : l.regionKey}
+                {te.has(`areas.${l.areaKey}`) ? te(`areas.${l.areaKey}`) : humanizeSlug(l.areaKey)} · {te.has(`regions.${l.regionKey}`) ? te(`regions.${l.regionKey}`) : humanizeSlug(l.regionKey)}
               </div>
               <div className="advcard__tags">
                 <span className={`advcard__kind advcard__kind--${l.kind ?? "lawyer"}`}>

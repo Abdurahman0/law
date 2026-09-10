@@ -48,3 +48,14 @@ export function initials(name: string): string {
     .slice(0, 2)
     .toUpperCase();
 }
+
+// Turn a backend slug that has no i18n label (e.g. "fixture-nikoh-shartnomasi",
+// "family-divorce") into a readable fallback ("Nikoh shartnomasi", "Family
+// divorce") instead of showing the raw key.
+export function humanizeSlug(s: string): string {
+  const cleaned = (s || "")
+    .replace(/^(fixture|service|area|category)[-_]/i, "")
+    .replace(/[-_]+/g, " ")
+    .trim();
+  return cleaned ? cleaned.charAt(0).toUpperCase() + cleaned.slice(1) : s;
+}

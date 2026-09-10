@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations, useLocale } from "next-intl";
-import { initials } from "@/lib/lawyers";
+import { initials, humanizeSlug } from "@/lib/lawyers";
 import { legalServiceLabel, type CatalogLocale } from "@/lib/legalServices";
 import type { ProfessionalProfile } from "@/lib/types";
 import {
@@ -48,7 +48,7 @@ export default function ProfilePreview({ p }: { p: ProfessionalProfile }) {
             {p.region ? (
               <span>
                 <IconMapPin />
-                {te.has(`regions.${p.region}`) ? te(`regions.${p.region}`) : p.region}
+                {te.has(`regions.${p.region}`) ? te(`regions.${p.region}`) : humanizeSlug(p.region)}
               </span>
             ) : null}
             <span>

@@ -45,6 +45,9 @@ export default function IncomingCallWatcher() {
       return nameCache;
     }
     async function poll() {
+      // Don't poll while the tab is in the background — no point ringing there,
+      // and it avoids a needless request storm (listSecureChats + per-room calls).
+      if (typeof document !== "undefined" && document.visibilityState === "hidden") return;
       try {
         // 1) Meeting invites (cross-room) — highest priority.
         const invited = await listInvitedCalls().catch(() => []);
@@ -59,7 +62,7 @@ export default function IncomingCallWatcher() {
         }
         // 2) 1:1 calls in the user's rooms — only when not already inside a chat.
         if (onChatPage) { if (alive) setInc(null); return; }
-        const rooms = (await listSecureChats()).slice(0, 15);
+        const rooms = (await listSecureChats()).slice(0, 12);
         const nm = await names();
         for (const r of rooms) {
           const calls = await listCalls(r.id).catch(() => []);
@@ -85,9 +88,13 @@ export default function IncomingCallWatcher() {
     }
     poll();
     const iv = setInterval(poll, 6000);
+    // Poll immediately when the tab comes back to the foreground.
+    const onVis = () => { if (document.visibilityState === "visible") poll(); };
+    document.addEventListener("visibilitychange", onVis);
     return () => {
       alive = false;
       clearInterval(iv);
+      document.removeEventListener("visibilitychange", onVis);
     };
   }, [session, onChatPage, meet, t]);
 

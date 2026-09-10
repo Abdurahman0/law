@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { useAuth } from "@/lib/auth";
-import { initials, AREA_KEYS, REGION_KEYS } from "@/lib/lawyers";
+import { initials, humanizeSlug, AREA_KEYS, REGION_KEYS } from "@/lib/lawyers";
 import { listLawyers, type BackendLawyer } from "@/lib/services/backend";
 import Select, { type Option } from "@/components/Select";
 import {
@@ -285,7 +285,7 @@ export default function Finder() {
           <div className="sheetres on" aria-live="polite">
             <div className="sheetres__t">
               <b>{tf("result.lawyersFound", { count: list.length })}</b>
-              <span className="pill pill--ok">{te.has(`areas.${res.area}`) ? te(`areas.${res.area}`) : res.area}</span>
+              <span className="pill pill--ok">{te.has(`areas.${res.area}`) ? te(`areas.${res.area}`) : humanizeSlug(res.area)}</span>
             </div>
             <div>
               {loading ? (
