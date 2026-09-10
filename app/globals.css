@@ -746,7 +746,7 @@ body:has(.aichat--full) .fab{display:none}
 .aichat--embed{box-shadow:inset 0 0 0 1.5px var(--line);border-radius:var(--rl)}
 /* embedded chat fills the whole portal content area */
 .pbody:has(.aichat--embed){overflow:hidden}
-.pbody:has(.aichat--embed) .pbody__in{height:100%;display:flex}
+.pbody:has(.aichat--embed) .pbody__in{height:100%;display:flex;flex-direction:column}
 .pbody:has(.aichat--embed) .aichat--embed{flex:1;min-height:0;min-width:0}
 
 .aichat__side{border-right:1px solid var(--line);background:var(--b50);display:flex;flex-direction:column;min-height:0}
