@@ -3769,6 +3769,8 @@
       "you": "you",
       "hostLabel": "Host",
       "mute": "Mute",
+      "unmute": "Unmute",
+      "mutedByHost": "The host muted you",
       "removeParticipant": "Remove",
       "pstatus": {
         "invited": "Invited",

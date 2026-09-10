@@ -53,6 +53,7 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
   const [count, setCount] = useState(1); // participants incl. self
   const [remaining, setRemaining] = useState<number | null>(null);
   const [audioBlocked, setAudioBlocked] = useState(false);
+  const [hostMuted, setHostMuted] = useState(false); // muted by host → can't self-unmute
   const [roster, setRoster] = useState<CallParticipant[]>([]);
   const [perms, setPerms] = useState<CallPermissions | null>(null);
   const [rosterOpen, setRosterOpen] = useState(false);
@@ -227,6 +228,8 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
     if (prevMicRef.current !== null && me.micEnabled !== prevMicRef.current && me.micEnabled !== micOn) {
       roomRef.current?.localParticipant.setMicrophoneEnabled(me.micEnabled).catch(() => {});
       setMicOn(me.micEnabled);
+      // Host silenced me → lock self-unmute until the host unmutes.
+      setHostMuted(!me.micEnabled);
     }
     prevMicRef.current = me.micEnabled;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -267,6 +270,8 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
   async function toggleMic() {
     const r = roomRef.current;
     if (!r) return;
+    // Host-muted participants can't turn their own mic back on.
+    if (hostMuted && !micOn) return;
     void enableSound();
     const on = !micOn;
     await r.localParticipant.setMicrophoneEnabled(on);
@@ -374,7 +379,14 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
       </div>
 
       <div className="callroom__bar">
-        <button className={`callroom__btn${micOn ? "" : " off"}`} type="button" onClick={toggleMic} aria-label={t("mic")}>
+        <button
+          className={`callroom__btn${micOn ? "" : " off"}`}
+          type="button"
+          onClick={toggleMic}
+          aria-label={t("mic")}
+          disabled={hostMuted && !micOn}
+          title={hostMuted && !micOn ? t("mutedByHost") : t("mic")}
+        >
           {micOn ? <IconMic /> : <IconMicOff />}
         </button>
         {callType === "video" ? (
@@ -424,8 +436,12 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
                     <b>{p.name || "—"}{self ? ` (${t("you")})` : ""}</b>
                     <span>{p.role === "host" ? t("hostLabel") : t.has(`pstatus.${p.status}`) ? t(`pstatus.${p.status}`) : p.status}</span>
                   </div>
-                  {canHostAct && perms?.canMute && p.micEnabled ? (
-                    <button type="button" className="callroom__ract" onClick={() => muteParticipant(p.userId, true)}>{t("mute")}</button>
+                  {canHostAct && perms?.canMute ? (
+                    p.micEnabled ? (
+                      <button type="button" className="callroom__ract" onClick={() => muteParticipant(p.userId, true)}>{t("mute")}</button>
+                    ) : (
+                      <button type="button" className="callroom__ract" onClick={() => muteParticipant(p.userId, false)}>{t("unmute")}</button>
+                    )
                   ) : null}
                   {canHostAct && perms?.canKick ? (
                     <button type="button" className="callroom__ract callroom__ract--danger" onClick={() => kickParticipant(p.userId)}>{t("removeParticipant")}</button>

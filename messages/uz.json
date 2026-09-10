@@ -3775,6 +3775,8 @@
       "you": "siz",
       "hostLabel": "Tashkilotchi",
       "mute": "Ovozini o'chirish",
+      "unmute": "Ovozini yoqish",
+      "mutedByHost": "Sizni tashkilotchi ovozsiz qildi",
       "removeParticipant": "Chiqarish",
       "pstatus": {
         "invited": "Taklif qilingan",

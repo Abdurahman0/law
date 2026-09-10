@@ -3769,6 +3769,8 @@
       "you": "вы",
       "hostLabel": "Организатор",
       "mute": "Заглушить",
+      "unmute": "Включить звук",
+      "mutedByHost": "Организатор отключил ваш микрофон",
       "removeParticipant": "Удалить",
       "pstatus": {
         "invited": "Приглашён",
