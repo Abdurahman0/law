@@ -2892,6 +2892,8 @@
       "firstName": "Ism",
       "firstNamePh": "Ismingiz",
       "lastName": "Familiya",
+      "middleName": "Otasining ismi",
+      "middleNamePh": "Otasining ismi",
       "lastNamePh": "Familiyangiz",
       "email": "Email",
       "emailPh": "siz@email.com",

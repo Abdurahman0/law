@@ -212,6 +212,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         name: draft.profile.name,
         firstName: draft.profile.firstName,
         lastName: draft.profile.lastName,
+        middleName: draft.profile.middleName,
         phone: normUzPhone(draft.phone),
         password: draft.password,
       });

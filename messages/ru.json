@@ -2886,6 +2886,8 @@
       "firstName": "Имя",
       "firstNamePh": "Ваше имя",
       "lastName": "Фамилия",
+      "middleName": "Отчество",
+      "middleNamePh": "Отчество",
       "lastNamePh": "Ваша фамилия",
       "email": "Эл. почта",
       "emailPh": "you@email.com",

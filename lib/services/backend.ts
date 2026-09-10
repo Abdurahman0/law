@@ -22,6 +22,7 @@ export type AuthUser = {
   accountStatus: string;
   role: BackendRole;
   name: string;
+  middleName: string;
   phone: string;
   roles: string[];
   permissions: string[];
@@ -42,6 +43,7 @@ function normUser(v: unknown): AuthUser {
     accountStatus: asStr(d.account_status ?? d.status, "active"),
     role: ROLE_SET.includes(rawRole) ? rawRole : "client",
     name: asStr(d.name),
+    middleName: asStr(d.middle_name),
     phone: asStr(d.phone),
     roles: asArr(d.roles).map((r) => asStr(r)),
     permissions: asArr(d.permissions).map((p) => asStr(p)),
@@ -101,14 +103,16 @@ export async function registerStart(input: {
   name: string;
   firstName?: string;
   lastName?: string;
+  middleName?: string;
   phone: string;
   password: string;
 }): Promise<RegisterStartResult> {
-  const { firstName, lastName, ...rest } = input;
+  const { firstName, lastName, middleName, ...rest } = input;
   const body = {
     ...rest,
     ...(firstName ? { first_name: firstName } : {}),
     ...(lastName ? { last_name: lastName } : {}),
+    ...(middleName ? { middle_name: middleName } : {}),
   };
   const d = asDict(await http("/auth/register/start", { method: "POST", body: JSON.stringify(body) }));
   return {

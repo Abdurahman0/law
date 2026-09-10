@@ -84,14 +84,16 @@ export default function RegisterFlow() {
   function setProfile(patch: Partial<ProfessionalProfile>) {
     setDraft((d) => ({ ...d, profile: { ...d.profile, ...patch } }));
   }
-  // First/last name are two inputs; keep `name` in sync for backend + display.
-  function setName(patch: { firstName?: string; lastName?: string }) {
+  // First/last/middle name are separate inputs; keep `name` in sync for backend
+  // + display ("First Last Middle").
+  function setName(patch: { firstName?: string; lastName?: string; middleName?: string }) {
     setDraft((d) => {
       const firstName = (patch.firstName ?? d.profile.firstName ?? "").trimStart();
       const lastName = (patch.lastName ?? d.profile.lastName ?? "").trimStart();
+      const middleName = (patch.middleName ?? d.profile.middleName ?? "").trimStart();
       return {
         ...d,
-        profile: { ...d.profile, firstName, lastName, name: `${firstName} ${lastName}`.trim() },
+        profile: { ...d.profile, firstName, lastName, middleName, name: `${firstName} ${lastName} ${middleName}`.replace(/\s+/g, " ").trim() },
       };
     });
   }
@@ -389,6 +391,10 @@ export default function RegisterFlow() {
                     <label>{t("fields.lastName")}</label>
                     <input value={p.lastName ?? ""} onChange={(e) => setName({ lastName: e.target.value })} placeholder={t("fields.lastNamePh")} />
                   </div>
+                  <div>
+                    <label>{t("fields.middleName")} <span className="rf__opt">{t("optional")}</span></label>
+                    <input value={p.middleName ?? ""} onChange={(e) => setName({ middleName: e.target.value })} placeholder={t("fields.middleNamePh")} />
+                  </div>
                 </div>
                 <div>
                   <label>
@@ -415,6 +421,10 @@ export default function RegisterFlow() {
                   <div>
                     <label>{t("fields.lastName")}</label>
                     <input value={p.lastName ?? ""} onChange={(e) => setName({ lastName: e.target.value })} placeholder={t("fields.lastNamePh")} />
+                  </div>
+                  <div>
+                    <label>{t("fields.middleName")} <span className="rf__opt">{t("optional")}</span></label>
+                    <input value={p.middleName ?? ""} onChange={(e) => setName({ middleName: e.target.value })} placeholder={t("fields.middleNamePh")} />
                   </div>
                 </div>
                 <div className="cform__row2">
@@ -450,6 +460,10 @@ export default function RegisterFlow() {
                   <div>
                     <label>{t("fields.lastName")}</label>
                     <input value={p.lastName ?? ""} onChange={(e) => setName({ lastName: e.target.value })} placeholder={t("fields.lastNamePh")} />
+                  </div>
+                  <div>
+                    <label>{t("fields.middleName")} <span className="rf__opt">{t("optional")}</span></label>
+                    <input value={p.middleName ?? ""} onChange={(e) => setName({ middleName: e.target.value })} placeholder={t("fields.middleNamePh")} />
                   </div>
                 </div>
                 <div className="cform__row2">

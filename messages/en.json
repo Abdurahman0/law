@@ -2886,6 +2886,8 @@
       "firstName": "First name",
       "firstNamePh": "Your first name",
       "lastName": "Last name",
+      "middleName": "Middle name",
+      "middleNamePh": "Middle name",
       "lastNamePh": "Your last name",
       "email": "Email",
       "emailPh": "you@email.com",
