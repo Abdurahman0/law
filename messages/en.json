@@ -624,9 +624,9 @@
     }
   },
   "lawyers": {
-    "metaTitle": "Lawyers",
-    "kicker": "Lawyers",
-    "title": "Lawyers whose experience and wins are open to view",
+    "metaTitle": "Advocates & lawyers",
+    "kicker": "Advocates & lawyers",
+    "title": "Advocates and lawyers whose experience and wins are open to view",
     "lead": "Every lawyer shows how many full and partial wins they achieved at the investigation and court stages, and uploads documents to prove it.",
     "filters": {
       "region": "Region",
@@ -2130,7 +2130,7 @@
         "title": "Best matches for you",
         "subtitle": "AI picked the specialists that fit your request.",
         "empty": "No recommendations yet",
-        "emptyText": "Describe your problem — we'll find matching lawyers.",
+        "emptyText": "Describe your problem — we'll find matching advocates and lawyers.",
         "describe": "Describe the problem",
         "view": "View",
         "kind": { "advocate": "Advocate", "lawyer": "Lawyer" }
@@ -2911,7 +2911,7 @@
       "basicTitle": "Your professional profile",
       "basicSubtitle": "Just a few basics — you can fill in the rest later in your profile.",
       "expLabel": "Experience as a lawyer (years)",
-      "expBenefit": "Experience makes finding clients easier — experienced lawyers rank higher in search and recommendations and earn client trust faster. It also sets your service price (3–5 yrs +10%, 6–10 yrs +15%, 10+ yrs +20%), improves profile completeness and brings more matched orders.",
+      "expBenefit": "Experience helps you win clients — experienced lawyers rank higher in search and recommendations and earn trust faster. More experience means a fuller profile and more matching orders.",
       "servicesTitle": "Which services do you provide?",
       "servicesSubtitle": "Select all that apply. You can change these later.",
       "matchNote": "Select the services you provide. In the future, LexGo will match and send relevant client requests to you based on your selected services."
@@ -2956,7 +2956,7 @@
       "advExp": "Experience as advocate (years)",
       "lawExp": "Experience as lawyer (years)",
       "expBenefitTitle": "Why experience matters",
-      "expBenefit": "Experience is your biggest advantage. Clients find you more easily — experienced advocates rank higher in search and recommendations. It also sets your service price (3–5 yrs +10%, 6–10 yrs +15%, 10+ yrs +20%), and field experience before the bar (5+ yrs) allows up to +30% for that area. More experience means a trusted profile, a higher rating, \"Super lawyer\" status, premium placement and more income.",
+      "expBenefit": "Experience is your key advantage. Clients find you more easily: experienced advocates rank higher in search and recommendations. More experience means a trusted profile, higher rating, \"Super advocate\" status, and more income.",
       "structure": "Advocate structure",
       "structurePlaceholder": "Select a structure",
       "structureOptions": {

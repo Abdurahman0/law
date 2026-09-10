@@ -630,9 +630,9 @@
     }
   },
   "lawyers": {
-    "metaTitle": "Advokatlar",
-    "kicker": "Advokatlar",
-    "title": "Tajribasi va g'alabalari ochiq ko'rinadigan advokatlar",
+    "metaTitle": "Advokat va yuristlar",
+    "kicker": "Advokat va yuristlar",
+    "title": "Tajribasi va g'alabalari ochiq ko'rinadigan advokat va yuristlar",
     "lead": "Har bir advokat tergov va sud bosqichlarida nechta to'liq va nechta qisman g'alaba qozonganini ko'rsatadi hamda buni tasdiqlovchi hujjatlarni yuklaydi.",
     "filters": {
       "region": "Hudud",
@@ -2133,10 +2133,10 @@
         "failedText": "Iltimos, keyinroq urining."
       },
       "matches": {
-        "title": "Siz uchun mos advokatlar",
+        "title": "Siz uchun mos advokat va yuristlar",
         "subtitle": "Sun'iy intellekt so'rovingizga mos mutaxassislarni tanladi.",
         "empty": "Hali tavsiya yo'q",
-        "emptyText": "Muammoingizni tasvirlang — biz mos advokatlarni topamiz.",
+        "emptyText": "Muammoingizni tasvirlang — biz mos advokat va yuristlarni topamiz.",
         "describe": "Muammoni tasvirlash",
         "view": "Ko'rish",
         "kind": { "advocate": "Advokat", "lawyer": "Yurist" }
@@ -2917,7 +2917,7 @@
       "basicTitle": "Professional profilingiz",
       "basicSubtitle": "Bir necha asosiy ma'lumot yetarli — qolganini keyin profilingizda to'ldirasiz.",
       "expLabel": "Yurist sifatida tajriba (yil)",
-      "expBenefit": "Tajribangiz mijoz topishni osonlashtiradi — tajribali yuristlar qidiruv va tavsiyalarda yuqorida chiqadi va mijoz ishonchini tezroq qozonadi. Shuningdek tajriba xizmat narxini belgilaydi (3–5 yil +10%, 6–10 yil +15%, 10 yildan ortiq +20%), profil to'liqligini oshiradi va ko'proq mos buyurtma olib keladi.",
+      "expBenefit": "Tajribangiz mijoz topishni osonlashtiradi — tajribali yuristlar qidiruv va tavsiyalarda yuqorida chiqadi va mijoz ishonchini tezroq qozonadi. Ko'proq tajriba — to'liqroq profil va ko'proq mos buyurtma.",
       "servicesTitle": "Qaysi xizmatlarni ko'rsatasiz?",
       "servicesSubtitle": "Moslarining barchasini tanlang. Keyinchalik o'zgartirishingiz mumkin.",
       "matchNote": "Ko'rsatadigan xizmatlaringizni tanlang. Kelajakda LexGo tanlangan xizmatlaringiz asosida mos mijoz so'rovlarini sizga yo'naltiradi."
@@ -2962,7 +2962,7 @@
       "advExp": "Advokat sifatida tajriba (yil)",
       "lawExp": "Yurist sifatida tajriba (yil)",
       "expBenefitTitle": "Tajriba nima uchun muhim?",
-      "expBenefit": "Tajribangiz — asosiy afzalligingiz. Mijozlar sizni osonroq topadi: tajribali advokatlar qidiruv natijalari va tavsiyalarda yuqorida chiqadi. Shuningdek tajriba xizmat narxini belgilaydi (3–5 yil +10%, 6–10 yil +15%, 10 yildan ortiq +20%), advokatlikdan oldingi soha tajribangiz (5+ yil) shu yo'nalishda 30% gacha qo'shimcha imkon beradi. Ko'proq tajriba — ishonarli profil, yuqori reyting, \"Super advokat\" maqomi, premium joylashuv va ko'proq daromad.",
+      "expBenefit": "Tajribangiz — asosiy afzalligingiz. Mijozlar sizni osonroq topadi: tajribali advokatlar qidiruv natijalari va tavsiyalarda yuqorida chiqadi. Ko'proq tajriba — ishonarli profil, yuqori reyting, \"Super advokat\" maqomi va ko'proq daromad.",
       "structure": "Advokatlik tuzilmasi",
       "structurePlaceholder": "Tuzilmani tanlang",
       "structureOptions": {
