@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { getPaymentPolicy, demoPayOrder, type PaymentPolicy } from "@/lib/services/backend";
+import { isDemoUnavailable } from "@/lib/http";
 import { Skeleton } from "./DataState";
 import { Notice } from "@/components/admin/AdminBits";
 import { IconLock, IconCheck } from "@/components/icons";
@@ -21,6 +22,7 @@ export default function OrderPayment({
   onChat: (roomId?: string) => void;
 }) {
   const t = useTranslations("portal.payment");
+  const tcommon = useTranslations("common");
   const [pol, setPol] = useState<PaymentPolicy | null>(null);
   const [loading, setLoading] = useState(true);
   const [paying, setPaying] = useState(false);
@@ -47,8 +49,8 @@ export default function OrderPayment({
       const next = await getPaymentPolicy(orderId).catch(() => null);
       if (next) setPol(next);
       if (r.chatRoomId || next?.contactUnlocked) onChat(r.chatRoomId);
-    } catch {
-      setErr(t("error"));
+    } catch (e) {
+      setErr(isDemoUnavailable(e) ? tcommon("demoOff") : t("error"));
     } finally {
       setPaying(false);
     }

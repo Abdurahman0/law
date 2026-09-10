@@ -1,4 +1,7 @@
 {
+  "common": {
+    "demoOff": "This action isn't available yet. Real payment/verification is coming soon."
+  },
   "a11y": {
     "showPassword": "Show password",
     "hidePassword": "Hide password"

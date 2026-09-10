@@ -9,6 +9,7 @@ import {
   type Lawyer,
 } from "@/lib/lawyers";
 import { listLawyers, demoPrivateChat, getLawyerPrivateChat, type BackendLawyer } from "@/lib/services/backend";
+import { isDemoUnavailable } from "@/lib/http";
 import { useResource } from "@/lib/useResource";
 import { useAuth } from "@/lib/auth";
 import { useRouter } from "@/i18n/navigation";
@@ -60,8 +61,10 @@ export default function LawyersSection({
   const res = useResource<BackendLawyer>(() => listLawyers(), []);
   const source = useMemo(() => res.data.map(toLawyer), [res.data]);
   const { session } = useAuth();
+  const tcommon = useTranslations("common");
   const router = useRouter();
   const [chatBusy, setChatBusy] = useState<string | null>(null);
+  const [chatErr, setChatErr] = useState<string | null>(null);
 
   // "Choose" → start a paid private chat with this seller (demo purchase).
   async function choose(l: Lawyer) {
@@ -71,6 +74,7 @@ export default function LawyersSection({
     }
     if (!l.userId || chatBusy) return;
     setChatBusy(l.userId);
+    setChatErr(null);
     try {
       // Reuse an existing private-chat room if one already exists; else pay for one.
       const existing = await getLawyerPrivateChat(l.userId);
@@ -81,8 +85,8 @@ export default function LawyersSection({
       const r = await demoPrivateChat({ lawyer_user_id: l.userId });
       if (r.chatRoomId) router.push(`/portal/chat/${r.chatRoomId}`);
       else if (r.paymentUrl) window.open(r.paymentUrl, "_blank");
-    } catch {
-      /* ignore */
+    } catch (e) {
+      setChatErr(isDemoUnavailable(e) ? tcommon("demoOff") : null);
     } finally {
       setChatBusy(null);
     }
@@ -337,6 +341,12 @@ export default function LawyersSection({
           </div>
         )}
 
+        {chatErr ? (
+          <div className="info" style={{ color: "#dc2626", borderColor: "#fecaca", background: "#fef2f2" }}>
+            <IconInfo />
+            <span>{chatErr}</span>
+          </div>
+        ) : null}
         <div className="info">
           <IconInfo />
           <span>{t("priceInfo")}</span>

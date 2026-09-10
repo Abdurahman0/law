@@ -11,6 +11,7 @@ import {
   getQualityOverview,
   seedDemoData,
 } from "@/lib/services/backend";
+import { isDemoUnavailable } from "@/lib/http";
 import { useResourceOne } from "@/lib/useResource";
 import { Skeleton } from "@/components/portal/DataState";
 import LineChart from "@/components/admin/LineChart";
@@ -58,6 +59,7 @@ export default function AdminOverview() {
   const t = useTranslations("admin.overview");
   const tc = useTranslations("admin.overview.crm");
   const tn = useTranslations("admin");
+  const tcm = useTranslations("common");
   const locale = useLocale();
   const { session } = useAuth();
   const ceo = useResourceOne(getCeoDashboard, []);
@@ -73,8 +75,8 @@ export default function AdminOverview() {
     try {
       const r = await seedDemoData();
       setSeedMsg(r.message || t("seedDone", { templates: r.templates, ads: r.adsProducts }));
-    } catch {
-      setSeedMsg(t("seedError"));
+    } catch (e) {
+      setSeedMsg(isDemoUnavailable(e) ? tcm("demoOff") : t("seedError"));
     } finally {
       setSeedBusy(false);
     }

@@ -9,6 +9,7 @@ import {
   type IdentityProvider,
   type IdentityStatus,
 } from "@/lib/services/backend";
+import { isDemoUnavailable } from "@/lib/http";
 import { useResourceOne } from "@/lib/useResource";
 import { Skeleton } from "./DataState";
 import { Notice } from "@/components/admin/AdminBits";
@@ -18,6 +19,7 @@ import { IconShieldCheck } from "@/components/icons";
 // → verify. Real credentials can be wired later without changing this flow.
 export default function IdentityVerify() {
   const t = useTranslations("portal.client.identity");
+  const tcommon = useTranslations("common");
   const res = useResourceOne(getIdentity, []);
   const [id, setId] = useState<IdentityStatus | null>(null);
   const cur = id ?? res.data;
@@ -56,8 +58,8 @@ export default function IdentityVerify() {
       } else {
         setNote({ ok: false, msg: t("failed") });
       }
-    } catch {
-      setNote({ ok: false, msg: t("error") });
+    } catch (e) {
+      setNote({ ok: false, msg: isDemoUnavailable(e) ? tcommon("demoOff") : t("error") });
     } finally {
       setBusy(false);
     }

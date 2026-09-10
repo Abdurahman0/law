@@ -24,6 +24,13 @@ export function isLimitError(e: unknown): boolean {
   return e.status === 401 || e.status === 402 || e.status === 429;
 }
 
+// True when a demo-only endpoint is missing because DEMO_MODE is off in
+// production (those routes aren't registered → 404). Callers use it to show a
+// "not available yet / real payment coming" message instead of a raw error.
+export function isDemoUnavailable(e: unknown): boolean {
+  return e instanceof ApiError && e.status === 404;
+}
+
 // True when the backend itself is unreachable (dev/preview against a LAN IP).
 // Callers use this to fall back to local mock data gracefully.
 export function isOffline(e: unknown): boolean {

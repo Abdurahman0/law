@@ -2862,3 +2862,4 @@ body:has(.schat) .fab{display:none}
 .callroom__invbtn:hover{background:var(--b700)}
 .callroom__invbtn:disabled{opacity:.5;cursor:default}
 .callroom__invbtn svg{width:15px;height:15px}
+.lprof__err{margin:8px 0 0;font-size:.85rem;font-weight:600;color:#dc2626}

@@ -8,6 +8,7 @@ import {
   demoPrivateChat,
   type BackendLawyer,
 } from "@/lib/services/backend";
+import { isDemoUnavailable } from "@/lib/http";
 import { useRouter } from "@/i18n/navigation";
 import { useAuth } from "@/lib/auth";
 import { initials } from "@/lib/lawyers";
@@ -30,11 +31,13 @@ export default function LawyerProfileModal({
 }) {
   const t = useTranslations("portal.client.lawyerProfile");
   const te = useTranslations("enums");
+  const tcommon = useTranslations("common");
   const router = useRouter();
   const { session } = useAuth();
   const [data, setData] = useState<BackendLawyer | null>(null);
   const [status, setStatus] = useState<"loading" | "error" | "done">("loading");
   const [busy, setBusy] = useState(false);
+  const [chooseErr, setChooseErr] = useState<string | null>(null);
 
   useEffect(() => {
     if (!open || !userId) return;
@@ -62,6 +65,7 @@ export default function LawyerProfileModal({
       return;
     }
     setBusy(true);
+    setChooseErr(null);
     try {
       const existing = await getLawyerPrivateChat(data.userId);
       if (existing) {
@@ -71,8 +75,8 @@ export default function LawyerProfileModal({
       const r = await demoPrivateChat({ lawyer_user_id: data.userId });
       if (r.chatRoomId) router.push(`/portal/chat/${r.chatRoomId}`);
       else if (r.paymentUrl) window.open(r.paymentUrl, "_blank");
-    } catch {
-      /* ignore */
+    } catch (e) {
+      setChooseErr(isDemoUnavailable(e) ? tcommon("demoOff") : t("notFound"));
     } finally {
       setBusy(false);
     }
@@ -204,6 +208,7 @@ export default function LawyerProfileModal({
               {busy ? t("opening") : t("choose")}
             </button>
           </div>
+          {chooseErr ? <p className="lprof__err">{chooseErr}</p> : null}
         </div>
       )}
     </Modal>

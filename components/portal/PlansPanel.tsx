@@ -9,6 +9,7 @@ import {
   listPayments,
   type BackendPlan,
 } from "@/lib/services/backend";
+import { isDemoUnavailable } from "@/lib/http";
 import { useResource } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "./DataState";
 import { IconCheck, IconCard, IconGift } from "@/components/icons";
@@ -37,6 +38,7 @@ function pricing(plan: BackendPlan, term: Term, upfront: boolean) {
 export default function PlansPanel({ variant = "all" }: { variant?: Variant }) {
   const t = useTranslations("plans");
   const ts = useTranslations("subscription");
+  const tcommon = useTranslations("common");
   const locale = useLocale();
   const personal = variant === "personal";
   const res = useResource<BackendPlan>(() => getSubscriptionPlans(locale), [locale]);
@@ -76,8 +78,8 @@ export default function PlansPanel({ variant = "all" }: { variant?: Variant }) {
       } else {
         setMsg({ ok: true, text: t("activated", { plan: planName(plan) }) });
       }
-    } catch {
-      setMsg({ ok: false, text: t("purchaseError") });
+    } catch (e) {
+      setMsg({ ok: false, text: isDemoUnavailable(e) ? tcommon("demoOff") : t("purchaseError") });
     } finally {
       setBusy(null);
     }

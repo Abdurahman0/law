@@ -1,4 +1,7 @@
 {
+  "common": {
+    "demoOff": "Bu amal hozircha mavjud emas. Tez orada real to'lov/tasdiqlash ulanadi."
+  },
   "a11y": {
     "showPassword": "Parolni ko'rsatish",
     "hidePassword": "Parolni yashirish"
