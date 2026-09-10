@@ -9,10 +9,16 @@ import {
   endCall,
   endMeeting,
   leaveCall,
+  updateCallParticipant,
+  callSocketUrl,
   type LiveKitJoin,
+  type CallParticipant,
+  type CallPermissions,
 } from "@/lib/services/backend";
+import { getToken } from "@/lib/client";
+import { useAuth } from "@/lib/auth";
 import { playRingback, playEndTone } from "@/lib/callSounds";
-import { IconClose, IconMic, IconMicOff, IconVideo, IconUser } from "../icons";
+import { IconClose, IconMic, IconMicOff, IconVideo, IconUser, IconUsers } from "../icons";
 
 type Props = {
   roomId: string;
@@ -29,6 +35,7 @@ type Props = {
 // No external Zoom/Meet — everything stays inside LexGo.
 export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd }: Props) {
   const t = useTranslations("call");
+  const { session } = useAuth();
   const localRef = useRef<HTMLVideoElement>(null);
   const remoteRef = useRef<HTMLDivElement>(null);
   const roomRef = useRef<Room | null>(null);
@@ -43,6 +50,10 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
   const [count, setCount] = useState(1); // participants incl. self
   const [remaining, setRemaining] = useState<number | null>(null);
   const [audioBlocked, setAudioBlocked] = useState(false);
+  const [roster, setRoster] = useState<CallParticipant[]>([]);
+  const [perms, setPerms] = useState<CallPermissions | null>(null);
+  const [rosterOpen, setRosterOpen] = useState(false);
+  const [metaTick, setMetaTick] = useState(0); // bump to force a roster refresh
 
   useEffect(() => {
     let alive = true;
@@ -154,20 +165,51 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
     return playRingback();
   }, [isCaller, status, remoteOn]);
 
-  // Meeting duration: fetch remaining seconds once, then tick down.
+  // Meeting meta: participants roster, host permissions, remaining time.
+  // Polls every 6s and refreshes immediately when a realtime event bumps
+  // metaTick.
   useEffect(() => {
     let alive = true;
-    getCall(roomId, callId)
-      .then((c) => { if (alive && c.remainingSeconds > 0) setRemaining(c.remainingSeconds); })
-      .catch(() => {});
-    return () => { alive = false; };
-  }, [roomId, callId]);
+    const load = () =>
+      getCall(roomId, callId)
+        .then((c) => {
+          if (!alive) return;
+          setRoster(c.participants);
+          setPerms(c.permissions);
+          if (c.remainingSeconds > 0) setRemaining(c.remainingSeconds);
+        })
+        .catch(() => {});
+    load();
+    const iv = setInterval(load, 6000);
+    return () => { alive = false; clearInterval(iv); };
+  }, [roomId, callId, metaTick]);
   useEffect(() => {
     if (remaining == null) return;
     const iv = setInterval(() => setRemaining((s) => (s != null && s > 0 ? s - 1 : s)), 1000);
     return () => clearInterval(iv);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [remaining == null]);
+
+  // Realtime call signaling: refresh the roster on participant/media events and
+  // close the room when the backend auto-ends the meeting.
+  useEffect(() => {
+    let alive = true;
+    let ws: WebSocket | null = null;
+    try {
+      ws = new WebSocket(callSocketUrl(roomId, callId, getToken()));
+      ws.onmessage = (ev) => {
+        if (!alive) return;
+        let type = "";
+        try { type = String((JSON.parse(ev.data) as { type?: string; event?: string }).type ?? (JSON.parse(ev.data) as { event?: string }).event ?? ""); } catch { type = ""; }
+        if (type.includes("auto_ended") || type === "call.end") { onEnd(); return; }
+        if (/^(participant|media)\./.test(type) || type === "call.join" || type === "call.leave") {
+          setMetaTick((n) => n + 1);
+        }
+      };
+    } catch { /* WS unavailable → polling still refreshes */ }
+    return () => { alive = false; ws?.close(); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomId, callId]);
 
   // Unblock remote audio (needs a user gesture on most browsers).
   async function enableSound() {
@@ -199,6 +241,19 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
     } catch {
       /* camera unavailable/denied */
     }
+  }
+  // Host controls (gated by backend permissions).
+  async function muteParticipant(userId: string, mute: boolean) {
+    try {
+      await updateCallParticipant(roomId, callId, userId, { mic_enabled: !mute });
+      setMetaTick((n) => n + 1);
+    } catch { /* ignore */ }
+  }
+  async function kickParticipant(userId: string) {
+    try {
+      await updateCallParticipant(roomId, callId, userId, { status: "removed" });
+      setMetaTick((n) => n + 1);
+    } catch { /* ignore */ }
   }
   async function hangUp() {
     playEndTone();
@@ -258,10 +313,43 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
             <IconVideo />
           </button>
         ) : null}
+        <button className={`callroom__btn${rosterOpen ? " on" : ""}`} type="button" onClick={() => setRosterOpen((o) => !o)} aria-label={t("rosterTitle")}>
+          <IconUsers />
+        </button>
         <button className="callroom__btn callroom__btn--end" type="button" onClick={hangUp} aria-label={t("end")}>
           <IconClose />
         </button>
       </div>
+
+      {rosterOpen ? (
+        <div className="callroom__roster">
+          <div className="callroom__rhead">
+            <b>{t("rosterTitle")}</b>
+            <button type="button" className="callroom__ix" onClick={() => setRosterOpen(false)} aria-label={t("close")}><IconClose /></button>
+          </div>
+          <div className="callroom__rlist">
+            {roster.map((p) => {
+              const self = p.userId === session?.id;
+              const canHostAct = !self && p.role !== "host";
+              return (
+                <div className="callroom__row" key={p.userId}>
+                  <span className="callroom__ravatar">{p.micEnabled ? <IconMic /> : <IconMicOff />}</span>
+                  <div className="callroom__rm">
+                    <b>{p.name || "—"}{self ? ` (${t("you")})` : ""}</b>
+                    <span>{p.role === "host" ? t("hostLabel") : t.has(`pstatus.${p.status}`) ? t(`pstatus.${p.status}`) : p.status}</span>
+                  </div>
+                  {canHostAct && perms?.canMute && p.micEnabled ? (
+                    <button type="button" className="callroom__ract" onClick={() => muteParticipant(p.userId, true)}>{t("mute")}</button>
+                  ) : null}
+                  {canHostAct && perms?.canKick ? (
+                    <button type="button" className="callroom__ract callroom__ract--danger" onClick={() => kickParticipant(p.userId)}>{t("removeParticipant")}</button>
+                  ) : null}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

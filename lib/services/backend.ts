@@ -2503,7 +2503,9 @@ export type CallSession = {
   maxDurationMinutes: number;
   autoEndAt: string;
   remainingSeconds: number;
+  permissions: CallPermissions;
 };
+export type CallPermissions = { canInvite: boolean; canMute: boolean; canKick: boolean; canEnd: boolean };
 export type CallParticipant = {
   userId: string;
   name: string;
@@ -2547,6 +2549,10 @@ function normCall(v: unknown): CallSession {
     maxDurationMinutes: asNum(d.max_duration_minutes),
     autoEndAt: asStr(d.auto_end_at),
     remainingSeconds: asNum(d.remaining_seconds),
+    permissions: (() => {
+      const p = asDict(d.permissions);
+      return { canInvite: Boolean(p.can_invite), canMute: Boolean(p.can_mute), canKick: Boolean(p.can_kick), canEnd: Boolean(p.can_end) };
+    })(),
   };
 }
 // Client/seller fetch their own LiveKit token to join an existing call.
