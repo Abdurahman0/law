@@ -3026,6 +3026,7 @@
     },
     "verify": {
       "title": "Telefonni tasdiqlang",
+      "telegramBtn": "Telegramda kod olish",
       "subtitle": "{phone} raqamiga yuborilgan 6 xonali kodni kiriting",
       "demoHint": "Demo kod: {code}",
       "verifying": "Tekshirilmoqda…",

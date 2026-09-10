@@ -65,7 +65,7 @@ type AuthCtx = {
   ) => Promise<Session | { twoFactor: TwoFactorChallenge }>;
   // Complete a 2FA login challenge (returned by login) with the SMS code.
   completeLogin2fa: (verificationId: string, code: string, phone: string) => Promise<Session>;
-  startRegistration: (draft: RegistrationDraft) => Promise<{ verificationId: string; demoOtp: string }>;
+  startRegistration: (draft: RegistrationDraft) => Promise<{ verificationId: string; demoOtp: string; telegramBotLink: string; message: string }>;
   register: (
     draft: RegistrationDraft,
     verificationId: string,
@@ -215,11 +215,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         phone: normUzPhone(draft.phone),
         password: draft.password,
       });
-      return { verificationId: r.verificationId, demoOtp: r.demoOtp };
+      return { verificationId: r.verificationId, demoOtp: r.demoOtp, telegramBotLink: r.telegramBotLink, message: r.message };
     } catch (e) {
       if (e instanceof ApiError && !isOffline(e)) throw e;
       // Backend unreachable → offline demo OTP.
-      return { verificationId: "", demoOtp: "123456" };
+      return { verificationId: "", demoOtp: "123456", telegramBotLink: "", message: "" };
     }
   }, []);
 

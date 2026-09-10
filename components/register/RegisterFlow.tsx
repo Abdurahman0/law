@@ -62,6 +62,8 @@ export default function RegisterFlow() {
   // OTP verification state
   const [verificationId, setVerificationId] = useState("");
   const [demoOtp, setDemoOtp] = useState("");
+  const [telegramLink, setTelegramLink] = useState("");
+  const [otpMessage, setOtpMessage] = useState("");
   const [code, setCode] = useState("");
   const [starting, setStarting] = useState(false);
   const [verifying, setVerifying] = useState(false);
@@ -147,10 +149,12 @@ export default function RegisterFlow() {
     setVerifyErr(null);
     setStartErr(null);
     try {
-      const { verificationId: vid, demoOtp: otp } = await startRegistration(draft);
+      const { verificationId: vid, demoOtp: otp, telegramBotLink, message } = await startRegistration(draft);
       setVerificationId(vid);
       setDemoOtp(otp);
       setCode(otp || "");
+      setTelegramLink(telegramBotLink || "");
+      setOtpMessage(message || "");
       setStarting(false);
       next();
     } catch (e) {
@@ -318,7 +322,12 @@ export default function RegisterFlow() {
                 <span className="rf__otpnum">6</span>
               </span>
               <h1 className="rf__title">{t("verify.title")}</h1>
-              <p className="rf__sub">{t("verify.subtitle", { phone: draft.phone })}</p>
+              <p className="rf__sub">{otpMessage || t("verify.subtitle", { phone: draft.phone })}</p>
+              {telegramLink ? (
+                <a className="btn btn--line btn--full rf__tg" href={telegramLink} target="_blank" rel="noopener noreferrer">
+                  {t("verify.telegramBtn")}
+                </a>
+              ) : null}
               <div className="otp">
                 {Array.from({ length: 6 }).map((_, i) => (
                   <input

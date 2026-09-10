@@ -3020,6 +3020,7 @@
     },
     "verify": {
       "title": "Verify your phone",
+      "telegramBtn": "Get code in Telegram",
       "subtitle": "Enter the 6-digit code sent to {phone}",
       "demoHint": "Demo code: {code}",
       "verifying": "Verifying…",

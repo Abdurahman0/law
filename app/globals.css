@@ -2881,3 +2881,4 @@ body:has(.schat) .fab{display:none}
 .pmx__c svg{width:15px;height:15px;color:var(--ok)}
 .pmx__no{color:var(--line)}
 .pmx__rule{margin:10px 0 0;font-size:.82rem}
+.rf__tg{margin:14px 0 4px;display:inline-flex;align-items:center;justify-content:center;gap:8px}

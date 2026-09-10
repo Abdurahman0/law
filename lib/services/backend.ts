@@ -94,6 +94,7 @@ export type RegisterStartResult = {
   demoOtp: string;
   expiresAt: string;
   message: string;
+  telegramBotLink: string;
 };
 export async function registerStart(input: {
   role: BackendRole;
@@ -116,6 +117,7 @@ export async function registerStart(input: {
     demoOtp: asStr(d.demo_otp),
     expiresAt: asStr(d.expires_at),
     message: asStr(d.message),
+    telegramBotLink: asStr(d.telegram_bot_link),
   };
 }
 // Seller verify now creates the account immediately and returns auth tokens;
