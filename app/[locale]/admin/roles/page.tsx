@@ -3,19 +3,22 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { getRoles, getPermissions, createRole, assignRole } from "@/lib/services/admin";
-import { useResource } from "@/lib/useResource";
+import { getPermissionMatrix } from "@/lib/services/backend";
+import { useResource, useResourceOne } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
 import { Notice, useReload, AdminItem, UserSelect } from "@/components/admin/AdminBits";
 import Modal from "@/components/admin/Modal";
 import ChipMulti from "@/components/register/ChipMulti";
 import Select from "@/components/Select";
-import { IconShield, IconPlus } from "@/components/icons";
+import { IconShield, IconPlus, IconCheck } from "@/components/icons";
 
 export default function AdminRoles() {
   const t = useTranslations("admin");
   const [key, reload] = useReload();
   const roles = useResource(getRoles, [key]);
   const perms = useResource(getPermissions, []);
+  const matrix = useResourceOne(getPermissionMatrix, []);
+  const permLabel = (code: string) => perms.data.find((p) => p.code === code)?.title || code;
   const [open, setOpen] = useState(false);
 
   // create-role form
@@ -134,6 +137,48 @@ export default function AdminRoles() {
             {aBusy ? t("form.saving") : t("roles.assign")}
           </button>
         </form>
+      </div>
+
+      {/* Permission matrix (read-only): roles × permissions */}
+      <div className="ppanel" style={{ gridColumn: "1 / -1" }}>
+        <div className="ppanel__h"><b>{t("roles.matrixTitle")}</b></div>
+        {matrix.status === "loading" ? (
+          <Skeleton rows={4} />
+        ) : !matrix.data || !matrix.data.roles.length ? (
+          <EmptyState icon={<IconShield />} title={t("roles.empty")} />
+        ) : (
+          <>
+            <div className="pmx__wrap">
+              <table className="pmx">
+                <thead>
+                  <tr>
+                    <th>{t("roles.matrixPermission")}</th>
+                    {matrix.data.roles.map((r) => (
+                      <th key={r.name} title={r.name}>{r.title || r.name}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {matrix.data.permissions.map((code) => (
+                    <tr key={code}>
+                      <td>{permLabel(code)}</td>
+                      {matrix.data!.roles.map((r) => (
+                        <td key={r.name} className="pmx__c">
+                          {r.permissions.includes(code) ? <IconCheck /> : <span className="pmx__no">·</span>}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {matrix.data.sellerRules.map((sr) => (
+              <p className="advmuted pmx__rule" key={sr.sellerType}>
+                <b>{sr.sellerType}:</b> {sr.rule}
+              </p>
+            ))}
+          </>
+        )}
       </div>
 
       <Modal open={open} onClose={() => setOpen(false)} title={t("roles.create")}>

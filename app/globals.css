@@ -2869,3 +2869,15 @@ body:has(.schat) .fab{display:none}
 /* Authenticator (TOTP) 2FA setup */
 .tfa__qr{width:180px;height:180px;align-self:center;border-radius:12px;border:1px solid var(--line);background:#fff;padding:6px}
 .tfa__secret{font-family:var(--fd);letter-spacing:1px;font-size:.9rem;background:var(--b50)}
+
+/* Permission matrix table + service-selector note */
+.svsel__note{margin:8px 0 0;font-size:.8rem;color:var(--gray2)}
+.pmx__wrap{overflow-x:auto;margin-top:6px}
+.pmx{border-collapse:collapse;width:100%;font-size:.82rem}
+.pmx th,.pmx td{border:1px solid var(--line);padding:7px 9px;text-align:center;white-space:nowrap}
+.pmx thead th{background:var(--b50);font-weight:700;color:var(--ink)}
+.pmx td:first-child,.pmx th:first-child{text-align:left;position:sticky;left:0;background:#fff;font-weight:600;color:var(--ink);max-width:240px;overflow:hidden;text-overflow:ellipsis}
+.pmx thead th:first-child{background:var(--b50);z-index:1}
+.pmx__c svg{width:15px;height:15px;color:var(--ok)}
+.pmx__no{color:var(--line)}
+.pmx__rule{margin:10px 0 0;font-size:.82rem}

@@ -42,7 +42,7 @@ export default function LawyerServices() {
         <span className="advmuted">{sel.length}</span>
       </div>
       <p className="ppanel__note">{t("lead")}</p>
-      <ServiceSelector value={sel} onChange={setSel} />
+      <ServiceSelector value={sel} onChange={setSel} excludeAdvokatRequired />
       {note ? <Notice ok={note.ok} msg={note.msg} /> : null}
       <button className="btn btn--pri btn--full" type="button" onClick={save} disabled={busy || !loaded} style={{ marginTop: 14 }}>
         {busy ? t("saving") : t("save")}

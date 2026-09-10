@@ -3312,6 +3312,8 @@
       "listTitle": "Rollar",
       "create": "Yangi rol",
       "empty": "Rollar yo'q",
+        "matrixTitle": "Ruxsatlar matritsasi",
+        "matrixPermission": "Ruxsat",
       "name": "Nomi (kod)",
       "permissions": "Ruxsatlar",
       "permCount": "{n} ta ruxsat",

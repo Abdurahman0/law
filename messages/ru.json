@@ -3306,6 +3306,8 @@
       "listTitle": "Роли",
       "create": "Новая роль",
       "empty": "Ролей пока нет",
+        "matrixTitle": "Матрица прав",
+        "matrixPermission": "Право",
       "name": "Имя (код)",
       "permissions": "Разрешения",
       "permCount": "{n} разрешений",

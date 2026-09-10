@@ -2309,6 +2309,24 @@ export async function getIntegrationsStatus(): Promise<Integration[]> {
   });
 }
 
+// ── Roles & permissions matrix (admin) ────────────────────────────
+export type PermMatrixRole = { id: string; name: string; title: string; permissions: string[] };
+export type PermSellerRule = { sellerType: string; blockedPrefixes: string[]; rule: string };
+export type PermissionMatrix = { roles: PermMatrixRole[]; permissions: string[]; sellerRules: PermSellerRule[] };
+export async function getPermissionMatrix(): Promise<PermissionMatrix> {
+  const d = asDict(await http("/admin/permission-matrix"));
+  const roles = asArr(d.roles).map((x) => {
+    const r = asDict(x);
+    return { id: asStr(r.id), name: asStr(r.name), title: asStr(r.title ?? r.name), permissions: asArr(r.permissions).map((p) => asStr(p)) };
+  });
+  const sr = asDict(d.seller_rules);
+  const sellerRules = Object.keys(sr).map((k) => {
+    const v = asDict(sr[k]);
+    return { sellerType: asStr(v.seller_type ?? k), blockedPrefixes: asArr(v.blocked_service_prefixes).map((p) => asStr(p)), rule: asStr(v.rule) };
+  });
+  return { roles, permissions: asArr(d.permissions).map((p) => asStr(p)), sellerRules };
+}
+
 // ── Test OTPs (staging only; DEMO_MODE=true & APP_ENV!=production) ──
 // OTP codes are no longer returned in auth responses; admins read staging
 // codes here. 404 in production (route not registered).

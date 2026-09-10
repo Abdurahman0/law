@@ -3306,6 +3306,8 @@
       "listTitle": "Roles",
       "create": "New role",
       "empty": "No roles yet",
+        "matrixTitle": "Permission matrix",
+        "matrixPermission": "Permission",
       "name": "Name (code)",
       "permissions": "Permissions",
       "permCount": "{n} permissions",

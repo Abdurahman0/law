@@ -10,19 +10,27 @@ import { IconSearch, IconCheck, IconGrid } from "../icons";
 export default function ServiceSelector({
   value,
   onChange,
+  excludeAdvokatRequired = false,
 }: {
   value: string[];
   onChange: (next: string[]) => void;
+  // Yurists can't offer advocate-only services (seller rule) — hide them.
+  excludeAdvokatRequired?: boolean;
 }) {
   const t = useTranslations("register.services");
   const res = useResource(getServices, []);
   const [q, setQ] = useState("");
 
+  const allowed = useMemo(
+    () => (excludeAdvokatRequired ? res.data.filter((s) => !s.advokatRequired) : res.data),
+    [res.data, excludeAdvokatRequired],
+  );
+  const hiddenCount = res.data.length - allowed.length;
   const list = useMemo(() => {
     const query = q.trim().toLowerCase();
-    if (!query) return res.data;
-    return res.data.filter((s) => s.name.toLowerCase().includes(query));
-  }, [q, res.data]);
+    if (!query) return allowed;
+    return allowed.filter((s) => s.name.toLowerCase().includes(query));
+  }, [q, allowed]);
 
   function toggle(id: string) {
     onChange(value.includes(id) ? value.filter((x) => x !== id) : [...value, id]);
@@ -46,6 +54,7 @@ export default function ServiceSelector({
         </span>
         <span className="svsel__count">{t("selected", { n: value.length })}</span>
       </div>
+      {hiddenCount > 0 ? <p className="svsel__note">{t("advocateOnly")}</p> : null}
       <div className="svsel__grid">
         {list.map((s) => {
           const on = value.includes(s.id);
