@@ -26,6 +26,7 @@ import {
   IconBuilding,
   IconCard,
   IconPhone,
+  IconVideo,
   IconLogout,
   IconMenu,
   IconClose,
@@ -49,6 +50,7 @@ const NAV_GROUPS: { group: string; items: NavItem[] }[] = [
     items: [
       { href: "/admin/pipeline", key: "pipeline", Icon: IconTrendingUp, perm: "leads.manage" },
       { href: "/admin/call-center", key: "callCenter", Icon: IconPhone, perm: "leads.manage" },
+      { href: "/admin/meetings", key: "meetings", Icon: IconVideo, perm: "leads.manage" },
       { href: "/admin/call-analytics", key: "callAnalytics", Icon: IconChat, perm: "leads.manage" },
       { href: "/admin/retention", key: "retention", Icon: IconUsers, perm: "leads.manage" },
       { href: "/admin/b2b", key: "b2b", Icon: IconBuilding, perm: "leads.manage" },

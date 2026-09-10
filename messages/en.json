@@ -3175,6 +3175,7 @@
       "reviews": "Review moderation",
       "payouts": "Payouts",
       "callCenter": "Call center",
+      "meetings": "Meetings",
       "workflow": "Automation",
       "integrations": "Integrations",
       "approvals": "Approvals",
@@ -3355,6 +3356,21 @@
         "lost": "Lost",
         "rejected": "Rejected"
       }
+    },
+    "meetings": {
+      "title": "Meetings",
+      "subtitle": "Start a multi-participant video meeting and invite people.",
+      "titleLabel": "Meeting title",
+      "titlePh": "e.g. Case consultation",
+      "participants": "Participants",
+      "participantsPh": "Select participants",
+      "participantsSearch": "Search by name or phone…",
+      "participantsEmpty": "No one found",
+      "start": "Start meeting",
+      "starting": "Opening…",
+      "needParticipants": "Select at least 2 participants.",
+      "error": "Couldn't start the meeting. Try again.",
+      "hint": "You'll be the host. The selected users will be invited."
     },
     "pipeline": {
       "title": "Sales pipeline",

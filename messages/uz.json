@@ -3181,6 +3181,7 @@
       "reviews": "Sharh moderatsiyasi",
       "payouts": "To'lovlar (payout)",
       "callCenter": "Call-markaz",
+      "meetings": "Uchrashuvlar",
       "workflow": "Avtomatlashtirish",
       "integrations": "Integratsiyalar",
       "approvals": "Tasdiqlashlar",
@@ -3361,6 +3362,21 @@
         "lost": "Yo‘qotildi",
         "rejected": "Rad etilgan"
       }
+    },
+    "meetings": {
+      "title": "Uchrashuvlar",
+      "subtitle": "Ko'p ishtirokchili video uchrashuv oching va odamlarni taklif qiling.",
+      "titleLabel": "Uchrashuv nomi",
+      "titlePh": "masalan, Ish bo'yicha maslahat",
+      "participants": "Ishtirokchilar",
+      "participantsPh": "Ishtirokchilarni tanlang",
+      "participantsSearch": "Ism yoki telefon bo'yicha qidirish…",
+      "participantsEmpty": "Hech kim topilmadi",
+      "start": "Uchrashuvni boshlash",
+      "starting": "Ochilmoqda…",
+      "needParticipants": "Kamida 2 ta ishtirokchi tanlang.",
+      "error": "Uchrashuvni ochib bo'lmadi. Qayta urining.",
+      "hint": "Siz tashkilotchi (host) bo'lasiz. Tanlangan foydalanuvchilar taklif qilinadi."
     },
     "pipeline": {
       "title": "Sotuv voronkasi",

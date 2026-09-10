@@ -9,14 +9,10 @@ import {
   endCall,
   endMeeting,
   leaveCall,
-  inviteCallParticipant,
-  listLawyers,
   type LiveKitJoin,
-  type BackendLawyer,
 } from "@/lib/services/backend";
-import Select from "@/components/Select";
 import { playRingback, playEndTone } from "@/lib/callSounds";
-import { IconClose, IconMic, IconMicOff, IconVideo, IconUser, IconUserPlus } from "../icons";
+import { IconClose, IconMic, IconMicOff, IconVideo, IconUser } from "../icons";
 
 type Props = {
   roomId: string;
@@ -42,13 +38,6 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
   const [remoteOn, setRemoteOn] = useState(false);
   const [count, setCount] = useState(1); // participants incl. self
   const [remaining, setRemaining] = useState<number | null>(null);
-
-  // Invite (host only): pull another user into the meeting.
-  const [inviteOpen, setInviteOpen] = useState(false);
-  const [people, setPeople] = useState<BackendLawyer[]>([]);
-  const [pick, setPick] = useState("");
-  const [inviteBusy, setInviteBusy] = useState(false);
-  const [inviteMsg, setInviteMsg] = useState<string | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -171,32 +160,6 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
       /* camera unavailable/denied */
     }
   }
-  async function openInvite() {
-    setInviteOpen(true);
-    setInviteMsg(null);
-    if (!people.length) {
-      try {
-        setPeople(await listLawyers());
-      } catch {
-        /* ignore */
-      }
-    }
-  }
-  async function sendInvite() {
-    if (!pick || inviteBusy) return;
-    setInviteBusy(true);
-    setInviteMsg(null);
-    try {
-      await inviteCallParticipant(roomId, callId, pick);
-      setInviteMsg(t("invited"));
-      setPick("");
-      setTimeout(() => setInviteOpen(false), 900);
-    } catch {
-      setInviteMsg(t("inviteError"));
-    } finally {
-      setInviteBusy(false);
-    }
-  }
   async function hangUp() {
     playEndTone();
     try {
@@ -250,37 +213,10 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
             <IconVideo />
           </button>
         ) : null}
-        {isCaller ? (
-          <button className="callroom__btn" type="button" onClick={openInvite} aria-label={t("invite")}>
-            <IconUserPlus />
-          </button>
-        ) : null}
         <button className="callroom__btn callroom__btn--end" type="button" onClick={hangUp} aria-label={t("end")}>
           <IconClose />
         </button>
       </div>
-
-      {inviteOpen ? (
-        <div className="callroom__invite" onClick={() => setInviteOpen(false)}>
-          <div className="callroom__invitec" onClick={(e) => e.stopPropagation()}>
-            <div className="callroom__invhead">
-              <b>{t("inviteTitle")}</b>
-              <button type="button" className="callroom__ix" onClick={() => setInviteOpen(false)} aria-label={t("cancel")}><IconClose /></button>
-            </div>
-            <Select
-              value={pick}
-              onChange={setPick}
-              ariaLabel={t("invitePick")}
-              placeholder={t("invitePick")}
-              options={people.filter((p) => p.userId).map((p) => ({ value: p.userId, label: `${p.name || "—"}${p.phone ? ` · ${p.phone}` : ""}` }))}
-            />
-            {inviteMsg ? <p className="callroom__invmsg">{inviteMsg}</p> : null}
-            <button className="btn btn--pri btn--full" type="button" onClick={sendInvite} disabled={inviteBusy || !pick}>
-              {inviteBusy ? t("inviteSending") : t("inviteSend")}
-            </button>
-          </div>
-        </div>
-      ) : null}
     </div>
   );
 }
