@@ -10,6 +10,8 @@ import {
   endMeeting,
   leaveCall,
   updateCallParticipant,
+  inviteCallParticipant,
+  searchUsers,
   callSocketUrl,
   type LiveKitJoin,
   type CallParticipant,
@@ -17,8 +19,9 @@ import {
 } from "@/lib/services/backend";
 import { getToken } from "@/lib/client";
 import { useAuth } from "@/lib/auth";
+import SearchSelect from "@/components/SearchSelect";
 import { playRingback, playEndTone } from "@/lib/callSounds";
-import { IconClose, IconMic, IconMicOff, IconVideo, IconUser, IconUsers } from "../icons";
+import { IconClose, IconMic, IconMicOff, IconVideo, IconUser, IconUsers, IconUserPlus } from "../icons";
 
 type Props = {
   roomId: string;
@@ -54,6 +57,10 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
   const [perms, setPerms] = useState<CallPermissions | null>(null);
   const [rosterOpen, setRosterOpen] = useState(false);
   const [metaTick, setMetaTick] = useState(0); // bump to force a roster refresh
+  const [invitePicks, setInvitePicks] = useState<string[]>([]);
+  const [inviteBusy, setInviteBusy] = useState(false);
+  const prevMicRef = useRef<boolean | null>(null); // last roster mic value (detect host action)
+  const leftRef = useRef(false); // guard against double-leave
 
   useEffect(() => {
     let alive = true;
@@ -190,6 +197,30 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [remaining == null]);
 
+  // Self-enforce host actions: the backend only records status/mic on the
+  // participant, it doesn't evict/mute at the LiveKit layer — so each client
+  // watches its own roster entry and acts on it.
+  useEffect(() => {
+    const me = roster.find((p) => p.userId === session?.id);
+    if (!me) return;
+    // Kicked → leave the meeting.
+    if ((me.status === "removed" || me.status === "left") && !leftRef.current) {
+      leftRef.current = true;
+      playEndTone();
+      roomRef.current?.disconnect();
+      onEnd();
+      return;
+    }
+    // Host muted/unmuted me → mirror it to my real mic (only on change, so a
+    // self-toggle isn't overridden by a stale poll).
+    if (prevMicRef.current !== null && me.micEnabled !== prevMicRef.current && me.micEnabled !== micOn) {
+      roomRef.current?.localParticipant.setMicrophoneEnabled(me.micEnabled).catch(() => {});
+      setMicOn(me.micEnabled);
+    }
+    prevMicRef.current = me.micEnabled;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roster, session?.id]);
+
   // Realtime call signaling: refresh the roster on participant/media events and
   // close the room when the backend auto-ends the meeting.
   useEffect(() => {
@@ -218,6 +249,10 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
     try { await r.startAudio(); } catch { /* ignore */ }
     setAudioBlocked(!r.canPlaybackAudio);
   }
+  // Keep the backend roster in sync with my real mic/cam so others see it.
+  function syncSelf(patch: { mic_enabled?: boolean; camera_enabled?: boolean }) {
+    if (session?.id) { prevMicRef.current = patch.mic_enabled ?? prevMicRef.current; updateCallParticipant(roomId, callId, session.id, patch).catch(() => {}); }
+  }
   async function toggleMic() {
     const r = roomRef.current;
     if (!r) return;
@@ -225,6 +260,7 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
     const on = !micOn;
     await r.localParticipant.setMicrophoneEnabled(on);
     setMicOn(on);
+    syncSelf({ mic_enabled: on });
   }
   async function toggleCam() {
     const r = roomRef.current;
@@ -238,6 +274,7 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
         const vt = pub?.videoTrack ?? r.localParticipant.getTrackPublication(Track.Source.Camera)?.videoTrack;
         if (vt && localRef.current) vt.attach(localRef.current);
       }
+      syncSelf({ camera_enabled: on });
     } catch {
       /* camera unavailable/denied */
     }
@@ -254,6 +291,24 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
       await updateCallParticipant(roomId, callId, userId, { status: "removed" });
       setMetaTick((n) => n + 1);
     } catch { /* ignore */ }
+  }
+  async function sendInvites() {
+    if (inviteBusy || !invitePicks.length) return;
+    setInviteBusy(true);
+    try {
+      for (const uid of invitePicks) await inviteCallParticipant(roomId, callId, uid).catch(() => {});
+      setInvitePicks([]);
+      setMetaTick((n) => n + 1);
+    } finally {
+      setInviteBusy(false);
+    }
+  }
+  async function inviteSearch(q: string) {
+    const users = await searchUsers(q);
+    const inCall = new Set(roster.map((p) => p.userId));
+    return users
+      .filter((u) => u.id && !inCall.has(u.id))
+      .map((u) => ({ value: u.id, label: u.name || u.phone || "—", sub: [u.phone, u.lexgoId].filter(Boolean).join(" · ") || undefined }));
   }
   async function hangUp() {
     playEndTone();
@@ -327,6 +382,23 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
             <b>{t("rosterTitle")}</b>
             <button type="button" className="callroom__ix" onClick={() => setRosterOpen(false)} aria-label={t("close")}><IconClose /></button>
           </div>
+          {perms?.canInvite ? (
+            <div className="callroom__invrow">
+              <SearchSelect
+                value={invitePicks}
+                onChange={setInvitePicks}
+                onSearch={inviteSearch}
+                placeholder={t("invitePick")}
+                searchPlaceholder={t("invitePick")}
+                emptyText={t("inviteEmpty")}
+                ariaLabel={t("invite")}
+              />
+              <button type="button" className="callroom__invbtn" onClick={sendInvites} disabled={inviteBusy || !invitePicks.length}>
+                <IconUserPlus />
+                {inviteBusy ? t("inviteSending") : t("inviteSend")}
+              </button>
+            </div>
+          ) : null}
           <div className="callroom__rlist">
             {roster.map((p) => {
               const self = p.userId === session?.id;

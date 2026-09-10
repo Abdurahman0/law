@@ -3760,6 +3760,7 @@
       "invite": "Invite",
       "inviteTitle": "Invite participant",
       "invitePick": "Select a user",
+      "inviteEmpty": "No one found",
       "inviteSend": "Send invite",
       "inviteSending": "Sending…",
       "invited": "Invite sent",

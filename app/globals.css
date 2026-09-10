@@ -2855,3 +2855,10 @@ body:has(.schat) .fab{display:none}
 .callroom__ract--danger{background:rgba(220,38,38,.25);color:#fecaca}
 .callroom__ract--danger:hover{background:rgba(220,38,38,.4)}
 .callroom__btn.on{background:var(--b600)}
+
+/* In-meeting invite row (host) inside the roster panel */
+.callroom__invrow{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.12);display:flex;flex-direction:column;gap:8px}
+.callroom__invbtn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;cursor:pointer;font-size:.82rem;font-weight:700;padding:9px;border-radius:9px;background:var(--b600);color:#fff}
+.callroom__invbtn:hover{background:var(--b700)}
+.callroom__invbtn:disabled{opacity:.5;cursor:default}
+.callroom__invbtn svg{width:15px;height:15px}

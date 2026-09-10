@@ -3766,6 +3766,7 @@
       "invite": "Taklif qilish",
       "inviteTitle": "Ishtirokchi taklif qilish",
       "invitePick": "Foydalanuvchini tanlang",
+      "inviteEmpty": "Hech kim topilmadi",
       "inviteSend": "Taklif yuborish",
       "inviteSending": "Yuborilmoqda…",
       "invited": "Taklif yuborildi",
