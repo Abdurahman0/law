@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { useAuth } from "@/lib/auth";
 import { searchUsers, createSecureChat, startCall } from "@/lib/services/backend";
 import SearchSelect from "@/components/SearchSelect";
 import CallRoom from "@/components/chat/CallRoom";
@@ -12,6 +13,7 @@ type Active = { roomId: string; callId: string; lk: { url: string; room: string;
 
 export default function AdminMeetings() {
   const t = useTranslations("admin.meetings");
+  const { session } = useAuth();
   const [title, setTitle] = useState("");
   const [picks, setPicks] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
@@ -28,7 +30,9 @@ export default function AdminMeetings() {
 
   async function start() {
     if (busy) return;
-    if (picks.length < 2) {
+    // Backend allows a meeting with any count (even host-only); require at least
+    // one invitee so the room has a counterpart.
+    if (picks.length < 1) {
       setErr(t("needParticipants"));
       return;
     }
@@ -36,8 +40,12 @@ export default function AdminMeetings() {
     setBusy(true);
     try {
       // A meeting lives under a secure-chat room; call-center/admin can open one
-      // without payment. Use two picks as the room pair, invite everyone.
-      const room = await createSecureChat({ client_user_id: picks[0], seller_user_id: picks[1] });
+      // without payment. The host is one side, the first invitee the other; all
+      // picks are invited into the call.
+      const room = await createSecureChat({
+        client_user_id: session?.id || picks[0],
+        seller_user_id: picks[0],
+      });
       const call = await startCall(room.id, "video", title.trim() || t("title"), {
         participantUserIds: picks,
         maxDurationMinutes: 60,

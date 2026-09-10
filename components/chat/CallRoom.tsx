@@ -32,6 +32,10 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
   const localRef = useRef<HTMLVideoElement>(null);
   const remoteRef = useRef<HTMLDivElement>(null);
   const roomRef = useRef<Room | null>(null);
+  // Connect/publish guards — the backend flags repeated connect/publish/
+  // unpublish as a negotiation loop, so each must happen exactly once.
+  const connectedRef = useRef(false);
+  const publishedRef = useRef(false);
   const [status, setStatus] = useState<"connecting" | "ringing" | "live" | "ended" | "error">("connecting");
   const [micOn, setMicOn] = useState(true);
   const [camOn, setCamOn] = useState(callType === "video");
@@ -100,19 +104,28 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
       try {
         const creds = lk && lk.token ? lk : await getCallJoinToken(roomId, callId);
         if (!creds.url || !creds.token) { if (alive) setStatus("error"); return; }
-        await room.connect(creds.url, creds.token);
+        // Connect exactly once. Pass the backend livekit_url verbatim — no
+        // manual /rtc suffix or query params.
+        if (!connectedRef.current) {
+          await room.connect(creds.url, creds.token, { autoSubscribe: true });
+          connectedRef.current = true;
+        }
         if (!alive) { room.disconnect(); return; }
-        // Mic and camera are enabled independently so a denied camera (or no
-        // webcam) still leaves a working audio call instead of erroring out.
-        try { await room.localParticipant.setMicrophoneEnabled(true); } catch { /* mic denied */ }
-        if (callType === "video") {
-          try {
-            const camPub = await room.localParticipant.setCameraEnabled(true);
-            const vt = camPub?.videoTrack;
-            if (vt && localRef.current) vt.attach(localRef.current);
-            else setTimeout(() => { if (alive) attachLocalCam(); }, 400);
-          } catch {
-            if (alive) setCamOn(false);
+        // Publish local tracks exactly once, after Connected. Mic and camera are
+        // enabled independently so a denied camera (or no webcam) still leaves a
+        // working audio call instead of erroring out.
+        if (!publishedRef.current) {
+          publishedRef.current = true;
+          try { await room.localParticipant.setMicrophoneEnabled(true); } catch { /* mic denied */ }
+          if (callType === "video") {
+            try {
+              const camPub = await room.localParticipant.setCameraEnabled(true);
+              const vt = camPub?.videoTrack;
+              if (vt && localRef.current) vt.attach(localRef.current);
+              else setTimeout(() => { if (alive) attachLocalCam(); }, 400);
+            } catch {
+              if (alive) setCamOn(false);
+            }
           }
         }
         // Kick off audio playback; if the browser blocks it, show a prompt.
@@ -127,6 +140,8 @@ export default function CallRoom({ roomId, callId, callType, isCaller, lk, onEnd
 
     return () => {
       alive = false;
+      publishedRef.current = false;
+      connectedRef.current = false;
       room.disconnect();
       roomRef.current = null;
     };

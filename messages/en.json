@@ -3368,7 +3368,7 @@
       "participantsEmpty": "No one found",
       "start": "Start meeting",
       "starting": "Opening…",
-      "needParticipants": "Select at least 2 participants.",
+      "needParticipants": "Select at least 1 participant.",
       "error": "Couldn't start the meeting. Try again.",
       "hint": "You'll be the host. The selected users will be invited."
     },
