@@ -1219,6 +1219,13 @@ export async function saveLeadKanbanColumns(columns: KanbanColumnInput[]): Promi
   });
 }
 
+// Delete a custom kanban column. If it holds leads, pass reassignTo to move
+// them first (backend 409s without it). Final/system columns can't be deleted.
+export async function deleteLeadKanbanColumn(key: string, reassignTo?: string): Promise<void> {
+  const qs = reassignTo ? `?reassign_to=${encodeURIComponent(reassignTo)}` : "";
+  await http(`/admin/leads/kanban/columns/${encodeURIComponent(key)}${qs}`, { method: "DELETE" });
+}
+
 // ── Admin dashboard ───────────────────────────────────────────────
 export type DashboardStat = { label: string; value: number };
 export type DashboardChart = { key: string; points: { label: string; value: number }[] };

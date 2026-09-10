@@ -2,14 +2,15 @@
 
 import { useMemo, useState, type CSSProperties } from "react";
 import { useTranslations } from "next-intl";
-import { getLeadKanban, moveLeadKanban, adminCreateLead, adminDeleteLead, saveLeadKanbanColumns, type KanbanColumn, type Lead } from "@/lib/services/backend";
+import { getLeadKanban, moveLeadKanban, adminCreateLead, adminDeleteLead, saveLeadKanbanColumns, deleteLeadKanbanColumn, type KanbanColumn, type Lead } from "@/lib/services/backend";
+import { ApiError } from "@/lib/http";
 import { useResource } from "@/lib/useResource";
 import { AdminForm, Notice, useReload } from "@/components/admin/AdminBits";
 import Modal from "@/components/admin/Modal";
 import Select from "@/components/Select";
 import LeadDrawer from "@/components/admin/LeadDrawer";
 import { Skeleton, EmptyState } from "@/components/portal/DataState";
-import { IconTrendingUp, IconChevronLeft, IconChevronRight, IconUsers, IconGrid, IconDocLines, IconPlus, IconSearch, IconEdit } from "@/components/icons";
+import { IconTrendingUp, IconChevronLeft, IconChevronRight, IconUsers, IconGrid, IconDocLines, IconPlus, IconSearch, IconEdit, IconTrash } from "@/components/icons";
 
 const STATUS_COLORS = ["#2563eb", "#7c3aed", "#0891b2", "#059669", "#d97706", "#dc2626", "#db2777", "#6b7280"];
 
@@ -32,6 +33,12 @@ export default function AdminPipeline() {
   const [sColor, setSColor] = useState("#2563eb");
   const [sBusy, setSBusy] = useState(false);
   const [sErr, setSErr] = useState(false);
+
+  // Delete a status (column), reassigning its leads if any.
+  const [delCol, setDelCol] = useState<KanbanColumn | null>(null);
+  const [delReassign, setDelReassign] = useState("");
+  const [delColBusy, setDelColBusy] = useState(false);
+  const [delColErr, setDelColErr] = useState<string | null>(null);
 
   const total = useMemo(() => cols.reduce((n, c) => n + c.count, 0), [cols]);
   const allCards = useMemo(
@@ -123,6 +130,27 @@ export default function AdminPipeline() {
       setSBusy(false);
     }
   }
+  function openDeleteStatus(col: KanbanColumn) {
+    setDelCol(col);
+    setDelColErr(null);
+    // Default reassignment target: the first other column.
+    setDelReassign(cols.find((c) => c.key !== col.key)?.key ?? "");
+  }
+  async function confirmDeleteStatus() {
+    if (!delCol || delColBusy) return;
+    setDelColBusy(true);
+    setDelColErr(null);
+    try {
+      await deleteLeadKanbanColumn(delCol.key, delCol.count > 0 ? delReassign || undefined : undefined);
+      setDelCol(null);
+      reload();
+    } catch (e) {
+      const detail = e instanceof ApiError ? e.detail : "";
+      setDelColErr(detail || ta("form.deleteError"));
+    } finally {
+      setDelColBusy(false);
+    }
+  }
   async function remove(leadId: string) {
     if (typeof window !== "undefined" && !window.confirm(t("d.deleteConfirm"))) return;
     setBusy(leadId);
@@ -194,6 +222,11 @@ export default function AdminPipeline() {
                 <button type="button" className="pipe__edit" aria-label={t("editStatus")} title={t("renameStatus")} onClick={() => openRenameStatus(col)}>
                   <IconEdit />
                 </button>
+                {!col.isFinal ? (
+                  <button type="button" className="pipe__edit pipe__edit--danger" aria-label={t("deleteStatus")} title={t("deleteStatus")} onClick={() => openDeleteStatus(col)}>
+                    <IconTrash />
+                  </button>
+                ) : null}
               </div>
               <div className="pipe__cards">
                 <div className={`pipe__slot${overCol === col.key && dragId ? " on" : ""}`} aria-hidden />
@@ -298,6 +331,35 @@ export default function AdminPipeline() {
             <button className="btn btn--pri" type="button" onClick={submitStatus} disabled={sBusy}>{sBusy ? ta("form.saving") : ta("form.save")}</button>
           </div>
         </div>
+      </Modal>
+
+      {/* Delete a status (column) */}
+      <Modal open={delCol !== null} onClose={() => setDelCol(null)} title={t("deleteStatus")}>
+        {delCol ? (
+          <div className="cform" style={{ maxWidth: "none" }}>
+            <p style={{ margin: 0 }}><b>{delCol.title}</b></p>
+            {delCol.count > 0 ? (
+              <div>
+                <label>{t("reassignLeads", { count: delCol.count })}</label>
+                <Select
+                  value={delReassign}
+                  onChange={setDelReassign}
+                  ariaLabel={t("reassignLeads", { count: delCol.count })}
+                  options={cols.filter((c) => c.key !== delCol.key).map((c) => ({ value: c.key, label: c.title }))}
+                />
+              </div>
+            ) : (
+              <p className="advmuted" style={{ margin: 0 }}>{t("deleteStatusText")}</p>
+            )}
+            {delColErr ? <Notice ok={false} msg={delColErr} /> : null}
+            <div style={{ display: "flex", gap: 10 }}>
+              <button className="btn btn--ghost" type="button" onClick={() => setDelCol(null)}>{ta("form.cancel")}</button>
+              <button className="btn btn--danger" type="button" onClick={confirmDeleteStatus} disabled={delColBusy || (delCol.count > 0 && !delReassign)}>
+                {delColBusy ? ta("form.saving") : delCol.count > 0 ? t("moveAndDelete") : ta("form.delete")}
+              </button>
+            </div>
+          </div>
+        ) : null}
       </Modal>
     </div>
   );
