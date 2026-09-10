@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { getCallAnalytics } from "@/lib/services/backend";
 import { useResourceOne } from "@/lib/useResource";
 import { Skeleton } from "@/components/portal/DataState";
+import LineChart from "@/components/admin/LineChart";
 import { IconPhone, IconCheck, IconClose, IconClock } from "@/components/icons";
 
 const EMPTY = { total: 0, answered: 0, missed: 0, avgDurationSec: 0, byDay: [], topAgents: [] };
@@ -17,7 +18,6 @@ export default function AdminCallAnalytics() {
   const t = useTranslations("admin.callAnalytics");
   const res = useResourceOne(getCallAnalytics, []);
   const a = res.data ?? EMPTY;
-  const max = Math.max(1, ...a.byDay.map((d) => d.value));
   const answerRate = a.total ? Math.round((a.answered / a.total) * 100) : 0;
 
   return (
@@ -37,14 +37,7 @@ export default function AdminCallAnalytics() {
           <div className="cachart">
             <h3>{t("byDay")}</h3>
             {a.byDay.length ? (
-              <div className="cachart__bars">
-                {a.byDay.map((d, i) => (
-                  <div className="cachart__bar" key={i}>
-                    <span style={{ height: `${(d.value / max) * 100}%` }} />
-                    <small>{d.label}</small>
-                  </div>
-                ))}
-              </div>
+              <LineChart points={a.byDay} />
             ) : (
               <p className="advmuted">{t("noData")}</p>
             )}
