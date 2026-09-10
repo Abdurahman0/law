@@ -3725,6 +3725,16 @@
     "incomingVideo": "Incoming video call",
     "incomingAudio": "Incoming call",
     "accept": "Accept",
-    "decline": "Decline"
+    "decline": "Decline",
+      "invite": "Invite",
+      "inviteTitle": "Invite participant",
+      "invitePick": "Select a user",
+      "inviteSend": "Send invite",
+      "inviteSending": "Sending…",
+      "invited": "Invite sent",
+      "inviteError": "Couldn't invite",
+      "cancel": "Cancel",
+      "participants": "{count} participants",
+      "remaining": "Time left"
   }
 }

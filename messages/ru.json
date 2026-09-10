@@ -3725,6 +3725,16 @@
     "incomingVideo": "Входящий видеозвонок",
     "incomingAudio": "Входящий звонок",
     "accept": "Принять",
-    "decline": "Отклонить"
+    "decline": "Отклонить",
+      "invite": "Пригласить",
+      "inviteTitle": "Пригласить участника",
+      "invitePick": "Выберите пользователя",
+      "inviteSend": "Отправить приглашение",
+      "inviteSending": "Отправка…",
+      "invited": "Приглашение отправлено",
+      "inviteError": "Не удалось пригласить",
+      "cancel": "Отмена",
+      "participants": "{count} участник(ов)",
+      "remaining": "Осталось"
   }
 }

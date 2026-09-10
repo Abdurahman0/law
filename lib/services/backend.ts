@@ -2498,7 +2498,34 @@ export type CallSession = {
   livekitRoom: string;
   livekitToken: string;
   turnDomain: string;
+  // Multi-participant meeting fields (LexGo Meet).
+  participants: CallParticipant[];
+  maxDurationMinutes: number;
+  autoEndAt: string;
+  remainingSeconds: number;
 };
+export type CallParticipant = {
+  userId: string;
+  name: string;
+  role: string;
+  status: string;
+  micEnabled: boolean;
+  cameraEnabled: boolean;
+  screenEnabled: boolean;
+};
+function normParticipant(v: unknown): CallParticipant {
+  const d = asDict(v);
+  const user = asDict(d.user);
+  return {
+    userId: asStr(d.user_id ?? user.id ?? d.id),
+    name: asStr(d.name ?? user.name ?? d.full_name),
+    role: asStr(d.role),
+    status: asStr(d.status),
+    micEnabled: d.mic_enabled !== false,
+    cameraEnabled: Boolean(d.camera_enabled),
+    screenEnabled: Boolean(d.screen_enabled),
+  };
+}
 function normCall(v: unknown): CallSession {
   const d = asDict(v);
   return {
@@ -2516,6 +2543,10 @@ function normCall(v: unknown): CallSession {
     livekitRoom: asStr(d.livekit_room),
     livekitToken: asStr(d.livekit_token),
     turnDomain: asStr(d.turn_domain),
+    participants: asArr(d.participants).map(normParticipant),
+    maxDurationMinutes: asNum(d.max_duration_minutes),
+    autoEndAt: asStr(d.auto_end_at),
+    remainingSeconds: asNum(d.remaining_seconds),
   };
 }
 // Client/seller fetch their own LiveKit token to join an existing call.
@@ -2528,19 +2559,64 @@ export async function getCallJoinToken(roomId: string, callId: string): Promise<
     token: asStr(d.livekit_token ?? d.token),
   };
 }
-export async function startCall(roomId: string, callType: "audio" | "video", title: string): Promise<CallSession> {
+export async function startCall(
+  roomId: string,
+  callType: "audio" | "video",
+  title: string,
+  opts?: { participantUserIds?: string[]; maxDurationMinutes?: number },
+): Promise<CallSession> {
   return normCall(
     await http(`/secure-chats/${roomId}/calls`, {
       method: "POST",
-      body: JSON.stringify({ call_type: callType, title }),
+      body: JSON.stringify({
+        call_type: callType,
+        title,
+        ...(opts?.participantUserIds?.length ? { participant_user_ids: opts.participantUserIds } : {}),
+        ...(opts?.maxDurationMinutes ? { max_duration_minutes: opts.maxDurationMinutes } : {}),
+      }),
     }),
   );
 }
 export async function listCalls(roomId: string): Promise<CallSession[]> {
   return listFrom(await http(`/secure-chats/${roomId}/calls`), "calls", "items", "data").map(normCall);
 }
+// Meeting details incl. participants + remaining time.
+export async function getCall(roomId: string, callId: string): Promise<CallSession> {
+  return normCall(await http(`/secure-chats/${roomId}/calls/${callId}`));
+}
+// Host/staff invites another user into the meeting.
+export async function inviteCallParticipant(roomId: string, callId: string, userId: string, role = "participant"): Promise<void> {
+  await http(`/secure-chats/${roomId}/calls/${callId}/participants`, {
+    method: "POST",
+    body: JSON.stringify({ user_id: userId, role }),
+  });
+}
+// Join an existing meeting (POST) — returns LiveKit creds like /join-token.
+export async function joinCall(roomId: string, callId: string): Promise<LiveKitJoin> {
+  const d = asDict(await http(`/secure-chats/${roomId}/calls/${callId}/join`, { method: "POST", body: "{}" }));
+  return {
+    url: asStr(d.livekit_url ?? d.url),
+    room: asStr(d.livekit_room ?? d.room),
+    token: asStr(d.livekit_token ?? d.token),
+  };
+}
+export async function updateCallParticipant(
+  roomId: string,
+  callId: string,
+  userId: string,
+  patch: Partial<{ status: string; role: string; mic_enabled: boolean; camera_enabled: boolean; screen_enabled: boolean }>,
+): Promise<void> {
+  await http(`/secure-chats/${roomId}/calls/${callId}/participants/${userId}`, { method: "PATCH", body: JSON.stringify(patch) });
+}
+export async function leaveCall(roomId: string, callId: string): Promise<void> {
+  await http(`/secure-chats/${roomId}/calls/${callId}/leave`, { method: "POST", body: "{}" });
+}
 export async function endCall(callId: string): Promise<CallSession> {
   return normCall(await http(`/calls/${callId}`, { method: "PATCH", body: JSON.stringify({ status: "ended" }) }));
+}
+// Room-scoped end (host ends the whole meeting) — preferred for multi-party.
+export async function endMeeting(roomId: string, callId: string): Promise<void> {
+  await http(`/secure-chats/${roomId}/calls/${callId}/end`, { method: "POST", body: "{}" });
 }
 
 // ── Seller workspace (folders + file metadata) ────────────────────
