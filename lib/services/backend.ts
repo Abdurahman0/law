@@ -147,13 +147,63 @@ export async function registerVerify(verificationId: string, code: string): Prom
   };
 }
 
-export async function apiLogin(phone: string, password: string): Promise<AuthResult> {
-  return normAuth(
-    await http("/auth/login", {
+// A 2FA-enabled account returns HTTP 428 with the challenge in `detail` instead
+// of tokens. http() would drop the (object) detail, so hit the endpoint raw.
+export type TwoFactorChallenge = { twoFactorRequired: true; verificationId: string; phone: string; demoOtp: string; message: string };
+export type LoginResult = AuthResult | TwoFactorChallenge;
+
+export async function apiLogin(phone: string, password: string): Promise<LoginResult> {
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE}/auth/login`, {
       method: "POST",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
       body: JSON.stringify({ phone, password }),
-    }),
+    });
+  } catch {
+    throw new ApiError(0, "network_error");
+  }
+  if (res.status === 428) {
+    const j = asDict(await res.json().catch(() => ({})));
+    const d = asDict(j.detail);
+    return {
+      twoFactorRequired: true,
+      verificationId: asStr(d.verification_id),
+      phone: asStr(d.phone),
+      demoOtp: asStr(d.demo_otp),
+      message: asStr(d.message),
+    };
+  }
+  if (!res.ok) {
+    let detail: string | undefined;
+    try {
+      const t = await res.text();
+      if (t) {
+        const parsed = JSON.parse(t);
+        if (typeof parsed?.detail === "string") detail = parsed.detail;
+      }
+    } catch {
+      /* non-JSON error body */
+    }
+    throw new ApiError(res.status, detail);
+  }
+  return normAuth(await res.json());
+}
+
+// Second step of a 2FA login: exchange the challenge code for tokens.
+export async function loginVerify2fa(verificationId: string, code: string): Promise<AuthResult> {
+  return normAuth(
+    await http("/auth/login/2fa", { method: "POST", body: JSON.stringify({ verification_id: verificationId, code }) }),
   );
+}
+
+// Password reset: forgot → verification (+ demo_otp in demo mode); reset → set new password.
+export async function forgotPassword(phone: string): Promise<{ verificationId: string; phone: string; demoOtp: string; message: string }> {
+  const d = asDict(await http("/auth/password/forgot", { method: "POST", body: JSON.stringify({ phone }) }));
+  return { verificationId: asStr(d.verification_id), phone: asStr(d.phone), demoOtp: asStr(d.demo_otp), message: asStr(d.message) };
+}
+export async function resetPassword(verificationId: string, code: string, password: string): Promise<void> {
+  await http("/auth/password/reset", { method: "POST", body: JSON.stringify({ verification_id: verificationId, code, password }) });
 }
 
 export async function apiMe(): Promise<AuthUser> {

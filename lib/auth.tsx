@@ -15,12 +15,15 @@ import type { PlanTier, ProfessionalProfile, RegistrationDraft } from "./types";
 import { scoreCompleteness, registerAccount } from "./services/registration";
 import {
   apiLogin,
+  loginVerify2fa,
   apiMe,
   apiLogout,
   apiRefresh,
   registerStart,
   registerVerify,
   type BackendRole,
+  type AuthResult,
+  type TwoFactorChallenge,
 } from "./services/backend";
 
 export type Role = "client" | "lawyer" | "advocate";
@@ -57,7 +60,9 @@ type AuthCtx = {
     phone: string,
     password: string,
     fallback?: { role: Role; name: string },
-  ) => Promise<Session>;
+  ) => Promise<Session | { twoFactor: TwoFactorChallenge }>;
+  // Complete a 2FA login challenge (returned by login) with the SMS code.
+  completeLogin2fa: (verificationId: string, code: string, phone: string) => Promise<Session>;
   startRegistration: (draft: RegistrationDraft) => Promise<{ verificationId: string; demoOtp: string }>;
   register: (
     draft: RegistrationDraft,
@@ -131,28 +136,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setReady(true);
   }, [persist]);
 
+  // Build + persist a session from a successful auth result.
+  const sessionFromAuth = useCallback(
+    (auth: AuthResult, phone: string, fallbackName?: string): Session => {
+      const { token, refreshToken, user } = auth;
+      setToken(token);
+      const s: Session = {
+        role: fromBackendRole(user.role),
+        name: user.name || fallbackName || "",
+        phone: user.phone || phone,
+        id: user.id,
+        lexgoId: user.lexgoId,
+        accountStatus: user.accountStatus,
+        plan: "free",
+        completeness: user.role === "advokat" ? 60 : 100,
+        token,
+        refreshToken,
+        roles: user.roles,
+        permissions: user.permissions,
+      };
+      persist(s);
+      return s;
+    },
+    [persist],
+  );
+
+  const completeLogin2fa = useCallback(
+    async (verificationId: string, code: string, rawPhone: string) => {
+      const phone = normUzPhone(rawPhone);
+      return sessionFromAuth(await loginVerify2fa(verificationId, code), phone);
+    },
+    [sessionFromAuth],
+  );
+
   const login = useCallback(
     async (rawPhone: string, password: string, fallback?: { role: Role; name: string }) => {
       const phone = normUzPhone(rawPhone);
       try {
-        const { token, refreshToken, user } = await apiLogin(phone, password);
-        setToken(token);
-        const s: Session = {
-          role: fromBackendRole(user.role),
-          name: user.name || fallback?.name || "",
-          phone: user.phone || phone,
-          id: user.id,
-          lexgoId: user.lexgoId,
-          accountStatus: user.accountStatus,
-          plan: "free",
-          completeness: user.role === "advokat" ? 60 : 100,
-          token,
-          refreshToken,
-          roles: user.roles,
-          permissions: user.permissions,
-        };
-        persist(s);
-        return s;
+        const res = await apiLogin(phone, password);
+        // 2FA-enabled account → hand the challenge back to the caller.
+        if ("twoFactorRequired" in res) return { twoFactor: res };
+        return sessionFromAuth(res, phone, fallback?.name);
       } catch (e) {
         // Real rejection (bad credentials) → surface it. Backend unreachable →
         // fall back to a local demo session so the app stays usable.
@@ -256,7 +280,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [persist]);
 
   return (
-    <Ctx.Provider value={{ session, ready, login, startRegistration, register, update, logout }}>
+    <Ctx.Provider value={{ session, ready, login, completeLogin2fa, startRegistration, register, update, logout }}>
       {children}
     </Ctx.Provider>
   );
