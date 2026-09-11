@@ -39,10 +39,12 @@ export default function MonthPicker({
   );
   const root = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  // Jump the year view to a new value (during render, not in an effect).
+  const [prevValue, setPrevValue] = useState(value);
+  if (value !== prevValue) {
+    setPrevValue(value);
     if (parsed) setViewYear(parsed.y);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  }
 
   useEffect(() => {
     if (!open) return;

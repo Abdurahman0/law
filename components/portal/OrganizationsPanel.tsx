@@ -29,12 +29,21 @@ export default function OrganizationsPanel() {
   const [mBusy, setMBusy] = useState(false);
   const [mNote, setMNote] = useState<{ ok: boolean; msg: string } | null>(null);
 
+  // Reset the members form when another organization is opened (during render,
+  // not in the effect).
+  const [prevOrg, setPrevOrg] = useState(membersOrg);
+  if (membersOrg !== prevOrg) {
+    setPrevOrg(membersOrg);
+    if (membersOrg) {
+      setMLoading(true);
+      setMNote(null);
+      setUid("");
+      setTitle("");
+    }
+  }
+
   useEffect(() => {
     if (!membersOrg) return;
-    setMLoading(true);
-    setMNote(null);
-    setUid("");
-    setTitle("");
     listOrgMembers(membersOrg.id)
       .then(setMembers)
       .catch(() => setMembers([]))

@@ -28,9 +28,15 @@ export default function OrderPayment({
   const [paying, setPaying] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
+  // Back to loading when the order changes (during render, not in the effect).
+  const [prevOrderId, setPrevOrderId] = useState(orderId);
+  if (orderId !== prevOrderId) {
+    setPrevOrderId(orderId);
+    setLoading(true);
+  }
+
   useEffect(() => {
     let alive = true;
-    setLoading(true);
     getPaymentPolicy(orderId)
       .then((p) => alive && setPol(p))
       .catch(() => alive && setPol(null))

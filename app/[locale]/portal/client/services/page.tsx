@@ -54,7 +54,11 @@ export default function ClientServices() {
   const services = useResource<BackendService>(() => getServices({ catalog_only: true }, locale), [locale]);
 
   const [cat, setCat] = useState(""); // "" = families overview
-  const [q, setQ] = useState("");
+  // Deep link from the AI intake ("order this service") pre-fills the search.
+  // Rendered only client-side (inside the portal shell, after auth is ready).
+  const [q, setQ] = useState(() =>
+    typeof window === "undefined" ? "" : new URLSearchParams(window.location.search).get("q") ?? "",
+  );
 
   // order modal
   const [order, setOrder] = useState<BackendService | null>(null);
@@ -67,12 +71,6 @@ export default function ClientServices() {
   const [quote, setQuote] = useState<PriceQuote | null>(null);
   const [quoteLoading, setQuoteLoading] = useState(false);
   const [payOrderId, setPayOrderId] = useState<string | null>(null);
-
-  // Deep link from the AI intake ("order this service") pre-fills the search.
-  useEffect(() => {
-    const iq = new URLSearchParams(window.location.search).get("q");
-    if (iq) setQ(iq);
-  }, []);
 
   const query = q.trim().toLowerCase();
   const countFor = (id: string) => services.data.filter((s) => s.categoryId === id).length;
@@ -89,13 +87,21 @@ export default function ClientServices() {
 
   const catName = cats.data.find((c) => c.id === cat)?.name || "";
 
+  // Reset the order modal when a service is opened (during render, not in the effect).
+  const [prevOrder, setPrevOrder] = useState(order);
+  if (order !== prevOrder) {
+    setPrevOrder(order);
+    if (order) {
+      setSellersLoading(true);
+      setSellerId("");
+      setNote(null);
+      setQuote(null);
+      setPayOrderId(null);
+    }
+  }
+
   useEffect(() => {
     if (!order) return;
-    setSellersLoading(true);
-    setSellerId("");
-    setNote(null);
-    setQuote(null);
-    setPayOrderId(null);
     listLawyers({ service_id: order.id })
       .then((rows) => setSellers(rows))
       .catch(() => setSellers([]))
@@ -112,14 +118,19 @@ export default function ClientServices() {
     return rows;
   }, [sellers, sort]);
 
-  // Final price depends on the chosen seller + any referral discount.
+  // Final price depends on the chosen seller + any referral discount. Loading /
+  // clearing happens during render when the seller or service changes.
+  const quoteKey = order && sellerId ? `${order.id}:${sellerId}` : "";
+  const [prevQuoteKey, setPrevQuoteKey] = useState(quoteKey);
+  if (quoteKey !== prevQuoteKey) {
+    setPrevQuoteKey(quoteKey);
+    if (quoteKey) setQuoteLoading(true);
+    else setQuote(null);
+  }
+
   useEffect(() => {
-    if (!order || !sellerId) {
-      setQuote(null);
-      return;
-    }
+    if (!order || !sellerId) return;
     let alive = true;
-    setQuoteLoading(true);
     getPricingQuote({ service_id: order.id, lawyer_user_id: sellerId })
       .then((qr) => alive && setQuote(qr))
       .catch(() => alive && setQuote(null))

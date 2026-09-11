@@ -31,7 +31,9 @@ export default function Navbar() {
   const t = useTranslations("nav");
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
-  const [sheet, setSheet] = useState(false);
+  // The sheet is open only on the path it was opened on, so navigating closes it.
+  const [sheetPath, setSheetPath] = useState<string | null>(null);
+  const sheet = sheetPath === pathname;
 
   useEffect(() => {
     const on = () => setScrolled(window.scrollY > 40);
@@ -46,10 +48,6 @@ export default function Navbar() {
       document.body.style.overflow = "";
     };
   }, [sheet]);
-
-  useEffect(() => {
-    setSheet(false);
-  }, [pathname]);
 
   const solid = scrolled || !OVER_HERO.has(pathname);
 
@@ -88,7 +86,7 @@ export default function Navbar() {
                 aria-expanded={sheet}
                 aria-controls="sheet"
                 aria-label={t("menu")}
-                onClick={() => setSheet((v) => !v)}
+                onClick={() => setSheetPath(sheet ? null : pathname)}
               >
                 <i />
               </button>
@@ -101,12 +99,12 @@ export default function Navbar() {
         className={`sheet${sheet ? " on" : ""}`}
         id="sheet"
         onClick={(e) => {
-          if (e.target === e.currentTarget) setSheet(false);
+          if (e.target === e.currentTarget) setSheetPath(null);
         }}
       >
         <div className="sheet__c">
           {SHEET.map((l) => (
-            <Link key={l.href} href={l.href} onClick={() => setSheet(false)}>
+            <Link key={l.href} href={l.href} onClick={() => setSheetPath(null)}>
               {t(l.key)}
             </Link>
           ))}

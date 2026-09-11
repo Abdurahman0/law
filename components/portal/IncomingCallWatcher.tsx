@@ -22,16 +22,14 @@ export default function IncomingCallWatcher() {
   const { session } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
-  const [inc, setInc] = useState<Incoming | null>(null);
+  const [pendingInc, setInc] = useState<Incoming | null>(null);
+  const inc = session ? pendingInc : null; // never ring without a session
   const [meet, setMeet] = useState<Incoming | null>(null); // an accepted meeting rendered inline
   const dismissed = useRef<Set<string>>(new Set());
   const onChatPage = pathname.includes("/portal/chat/");
 
   useEffect(() => {
-    if (!session || meet) {
-      if (!session) setInc(null);
-      return;
-    }
+    if (!session || meet) return;
     let alive = true;
     async function names() {
       if (!nameCache) {

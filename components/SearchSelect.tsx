@@ -32,14 +32,17 @@ export default function SearchSelect({
   const [q, setQ] = useState("");
   const [remote, setRemote] = useState<SearchOption[]>([]);
   const [loading, setLoading] = useState(false);
+  // Labels of server results, so selected chips keep them after the results change.
+  const [remoteLabels, setRemoteLabels] = useState<Map<string, string>>(new Map());
   const wrapRef = useRef<HTMLDivElement>(null);
-  const labelCache = useRef<Map<string, string>>(new Map());
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   // Keep the latest onSearch without making it an effect dependency — parents
   // often pass a fresh inline function each render, which would otherwise
   // re-trigger the search loop on every parent re-render (e.g. a roster poll).
   const searchRef = useRef(onSearch);
-  searchRef.current = onSearch;
+  useEffect(() => {
+    searchRef.current = onSearch;
+  });
 
   useEffect(() => {
     if (!open) return;
@@ -53,15 +56,24 @@ export default function SearchSelect({
   // Debounced server search when onSearch is provided. Depends only on the
   // query + whether search mode is on, never on the callback identity.
   const hasSearch = !!onSearch;
+  function changeQuery(next: string) {
+    setQ(next);
+    if (!hasSearch) return;
+    if (!next.trim()) { setRemote([]); setLoading(false); }
+    else setLoading(true);
+  }
   useEffect(() => {
     if (!hasSearch) return;
     if (timer.current) clearTimeout(timer.current);
-    if (!q.trim()) { setRemote([]); setLoading(false); return; }
-    setLoading(true);
+    if (!q.trim()) return;
     timer.current = setTimeout(async () => {
       try {
         const res = (await searchRef.current?.(q)) ?? [];
-        res.forEach((o) => labelCache.current.set(o.value, o.label));
+        setRemoteLabels((prev) => {
+          const next = new Map(prev);
+          res.forEach((o) => next.set(o.value, o.label));
+          return next;
+        });
         setRemote(res);
       } catch {
         setRemote([]);
@@ -71,11 +83,6 @@ export default function SearchSelect({
     }, 250);
     return () => { if (timer.current) clearTimeout(timer.current); };
   }, [q, hasSearch]);
-
-  // Cache labels from static options too.
-  useEffect(() => {
-    options.forEach((o) => labelCache.current.set(o.value, o.label));
-  }, [options]);
 
   const shown = useMemo(() => {
     if (onSearch) return remote;
@@ -87,7 +94,7 @@ export default function SearchSelect({
     });
   }, [onSearch, remote, q, options]);
 
-  const labelOf = (v: string) => labelCache.current.get(v) ?? v;
+  const labelOf = (v: string) => options.find((o) => o.value === v)?.label ?? remoteLabels.get(v) ?? v;
   const toggle = (v: string) =>
     onChange(value.includes(v) ? value.filter((x) => x !== v) : [...value, v]);
 
@@ -121,7 +128,7 @@ export default function SearchSelect({
         <div className="ssel__menu" role="listbox" aria-label={ariaLabel}>
           <div className="ssel__search">
             <IconSearch />
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={searchPlaceholder} autoFocus />
+            <input value={q} onChange={(e) => changeQuery(e.target.value)} placeholder={searchPlaceholder} autoFocus />
           </div>
           <div className="ssel__list">
             {loading ? (

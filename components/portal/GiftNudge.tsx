@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { IconGift, IconArrowRight, IconClose } from "../icons";
@@ -9,10 +9,10 @@ import { IconGift, IconArrowRight, IconClose } from "../icons";
 // Dismissible for the tab session.
 export default function GiftNudge() {
   const t = useTranslations("portal.common.giftNudge");
-  const [hidden, setHidden] = useState(true);
-  useEffect(() => {
-    setHidden(sessionStorage.getItem("lexgo_giftnudge_dismissed") === "1");
-  }, []);
+  // Rendered only client-side (inside the portal shell, after auth is ready).
+  const [hidden, setHidden] = useState(
+    () => typeof window === "undefined" || sessionStorage.getItem("lexgo_giftnudge_dismissed") === "1",
+  );
   if (hidden) return null;
   return (
     <div className="giftn" role="note">

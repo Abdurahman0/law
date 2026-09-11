@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { updateCase, type BackendCase } from "@/lib/services/backend";
 import { Notice } from "@/components/admin/AdminBits";
@@ -21,20 +21,23 @@ export default function CaseManageModal({
 }) {
   const t = useTranslations("portal.caseManage");
   const tc = useTranslations("portal.common");
-  const [status, setStatus] = useState("active");
-  const [stage, setStage] = useState("");
-  const [nextAction, setNextAction] = useState("");
+  const [status, setStatus] = useState(target?.status || "active");
+  const [stage, setStage] = useState(target?.stage || "");
+  const [nextAction, setNextAction] = useState(target?.nextAction || "");
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
 
-  useEffect(() => {
+  // Reset the form when a different case is opened (during render, not in an effect).
+  const [prevTarget, setPrevTarget] = useState(target);
+  if (target !== prevTarget) {
+    setPrevTarget(target);
     if (target) {
       setStatus(target.status || "active");
       setStage(target.stage || "");
       setNextAction(target.nextAction || "");
       setNote(null);
     }
-  }, [target]);
+  }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();

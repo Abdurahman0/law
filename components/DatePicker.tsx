@@ -47,10 +47,12 @@ export default function DatePicker({
   const [vm, setVm] = useState(parsed ? parsed.m : today.getMonth());
   const root = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  // Jump the calendar view to a new value (during render, not in an effect).
+  const [prevValue, setPrevValue] = useState(value);
+  if (value !== prevValue) {
+    setPrevValue(value);
     if (parsed) { setVy(parsed.y); setVm(parsed.m); }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  }
 
   useEffect(() => {
     if (!open) return;

@@ -535,7 +535,9 @@ export default function SecureChat({ roomId }: { roomId: string }) {
             if (dk && dk !== lastDay) {
               lastDay = dk;
               const today = new Date().toDateString();
-              const yd = new Date(Date.now() - 86400000).toDateString();
+              const yday = new Date();
+              yday.setDate(yday.getDate() - 1);
+              const yd = yday.toDateString();
               const label = dk === today ? t("today") : dk === yd ? t("yesterday") : new Date(m.createdAt).toLocaleDateString("ru-RU");
               sep = <div className="schat__day" key={`d-${dk}`}><span>{label}</span></div>;
             }

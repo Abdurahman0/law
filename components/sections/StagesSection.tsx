@@ -20,10 +20,8 @@ export default function StagesSection() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (!("IntersectionObserver" in window)) {
-      setGo(true);
-      return;
-    }
+    // IntersectionObserver exists in every browser Next 16 supports
+    // (Chrome/Edge/Firefox 111+, Safari 16.4+), so no fallback is needed.
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {

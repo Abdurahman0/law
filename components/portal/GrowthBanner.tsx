@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { Role } from "@/lib/auth";
@@ -30,11 +30,11 @@ export default function GrowthBanner({
   const t = useTranslations("portal.common.growth");
   const pct = Math.max(0, Math.min(100, Math.round(completeness)));
   const href = CTA_HREF[role];
-  // Dismiss for this tab session only — a fresh visit nudges again.
-  const [hidden, setHidden] = useState(true);
-  useEffect(() => {
-    setHidden(sessionStorage.getItem("lexgo_growth_dismissed") === "1");
-  }, []);
+  // Dismiss for this tab session only — a fresh visit nudges again. Rendered
+  // only client-side (inside the portal shell, after auth is ready).
+  const [hidden, setHidden] = useState(
+    () => typeof window === "undefined" || sessionStorage.getItem("lexgo_growth_dismissed") === "1",
+  );
 
   if (!href || pct >= 100 || hidden) return null;
 

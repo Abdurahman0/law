@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/lib/auth";
 import { start2fa, verify2fa, disable2fa, setupTotp, enableTotp, type TotpSetup } from "@/lib/services/backend";
@@ -16,7 +16,11 @@ export default function TwoFactorCard() {
   const tc = useTranslations("common");
   const { session, update } = useAuth();
   const storeKey = `lexgo_2fa_${session?.id || "anon"}`;
-  const [on, setOn] = useState(false);
+  // Prefer the real backend flag; fall back to the local one offline.
+  const on =
+    session?.twoFactorEnabled !== undefined
+      ? !!session.twoFactorEnabled
+      : typeof window !== "undefined" && localStorage.getItem(storeKey) === "1";
   const [stage, setStage] = useState<"idle" | "sms" | "totp">("idle");
   const [vid, setVid] = useState("");
   const [demo, setDemo] = useState("");
@@ -24,12 +28,6 @@ export default function TwoFactorCard() {
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
-
-  useEffect(() => {
-    // Prefer the real backend flag; fall back to the local one offline.
-    if (session?.twoFactorEnabled !== undefined) setOn(!!session.twoFactorEnabled);
-    else setOn(localStorage.getItem(storeKey) === "1");
-  }, [session?.twoFactorEnabled, storeKey]);
 
   function reset() {
     setStage("idle");
@@ -72,7 +70,6 @@ export default function TwoFactorCard() {
   async function finishEnable(method: "sms" | "totp") {
     localStorage.setItem(storeKey, "1");
     update({ twoFactorEnabled: true, twoFactorMethod: method });
-    setOn(true);
     reset();
     setNote({ ok: true, msg: t("enabled") });
   }
@@ -110,7 +107,6 @@ export default function TwoFactorCard() {
       await disable2fa();
       localStorage.removeItem(storeKey);
       update({ twoFactorEnabled: false, twoFactorMethod: "" });
-      setOn(false);
       reset();
       setNote({ ok: true, msg: t("disabledMsg") });
     } catch (e) {

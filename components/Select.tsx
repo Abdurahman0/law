@@ -18,7 +18,6 @@ export default function Select({
   placeholder?: string;
 }) {
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState(0);
   const root = useRef<HTMLDivElement>(null);
   const btn = useRef<HTMLButtonElement>(null);
   const optRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -34,16 +33,16 @@ export default function Select({
     return () => document.removeEventListener("click", onDoc);
   }, []);
 
+  const selectedIdx = Math.max(
+    0,
+    options.findIndex((o) => o.value === value),
+  );
+
   useEffect(() => {
     if (open) {
-      const idx = Math.max(
-        0,
-        options.findIndex((o) => o.value === value),
-      );
-      setActive(idx);
-      requestAnimationFrame(() => optRefs.current[idx]?.focus());
+      requestAnimationFrame(() => optRefs.current[selectedIdx]?.focus());
     }
-  }, [open, options, value]);
+  }, [open, options, value, selectedIdx]);
 
   function pick(v: string) {
     onChange(v);
@@ -62,15 +61,12 @@ export default function Select({
     if (e.key === "Escape") {
       setOpen(false);
       btn.current?.focus();
-    } else if (e.key === "ArrowDown") {
+    } else if (e.key === "ArrowUp" || e.key === "ArrowDown") {
       e.preventDefault();
-      const n = Math.min(active + 1, options.length - 1);
-      setActive(n);
-      optRefs.current[n]?.focus();
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      const n = Math.max(active - 1, 0);
-      setActive(n);
+      // Move from the focused option (the menu focuses the selected one on open).
+      const focused = optRefs.current.findIndex((el) => el === document.activeElement);
+      const cur = focused < 0 ? selectedIdx : focused;
+      const n = e.key === "ArrowDown" ? Math.min(cur + 1, options.length - 1) : Math.max(cur - 1, 0);
       optRefs.current[n]?.focus();
     }
   }

@@ -43,7 +43,8 @@ export default function SubscriptionSection() {
   const bySlug = new Map(plansRes.data.map((p) => [p.slug, p]));
   const buyHref = session ? `/portal/${session.role}/subscription` : "/register";
 
-  function Plan({ id, hot }: { id: "standard" | "premium"; hot?: boolean }) {
+  // Render helper (not a component), so the cards aren't remounted on every render.
+  function renderPlan(id: "standard" | "premium", hot?: boolean) {
     const plan = bySlug.get(SLUG[id]);
     const pr = pricing(plan, FALLBACK[id], term, upfront);
     const features = t.raw(`plans.${id}.features`) as string[];
@@ -97,8 +98,8 @@ export default function SubscriptionSection() {
         ) : null}
 
         <div className="plans">
-          <Plan id="standard" />
-          <Plan id="premium" hot />
+          {renderPlan("standard")}
+          {renderPlan("premium", true)}
 
           <article className="plan plan--card">
             <div className="mcard">

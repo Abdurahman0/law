@@ -19,12 +19,11 @@ export default function DonutChart({
   const fmtV = format ?? ((n: number) => String(n));
   const total = data.reduce((s, d) => s + d.value, 0) || 1;
   const R = 80, r = 50, C = 100;
-  let acc = 0;
   const arcs = data.map((d, i) => {
     const frac = d.value / total;
-    const a0 = acc * 2 * Math.PI - Math.PI / 2;
-    acc += frac;
-    const a1 = acc * 2 * Math.PI - Math.PI / 2;
+    const start = data.slice(0, i).reduce((s, x) => s + x.value, 0) / total;
+    const a0 = start * 2 * Math.PI - Math.PI / 2;
+    const a1 = (start + frac) * 2 * Math.PI - Math.PI / 2;
     const large = frac > 0.5 ? 1 : 0;
     const pt = (ang: number, rad: number) => [C + rad * Math.cos(ang), C + rad * Math.sin(ang)];
     const [x0, y0] = pt(a0, R), [x1, y1] = pt(a1, R), [x2, y2] = pt(a1, r), [x3, y3] = pt(a0, r);

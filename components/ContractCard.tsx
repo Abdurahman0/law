@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import type { MouseEvent } from "react";
 import { useTranslations } from "next-intl";
 import {
   contractInlineUrl,
@@ -14,11 +14,17 @@ import { IconFileText, IconDownload, IconExternal } from "./icons";
 // backend inline/download URLs.
 export default function ContractCard({ c }: { c: Contract }) {
   const t = useTranslations("chatPage");
-  const [blobUrl, setBlobUrl] = useState<string | null>(null);
 
-  useEffect(() => {
+  const name =
+    c.fileName || (c.contractType ? `${c.contractType}.pdf` : "contract.pdf");
+  const openUrl = contractInlineUrl(c);
+  const dlUrl = contractDownloadUrl(c);
+
+  // With a base64 payload, build a short-lived blob URL on click instead of
+  // following the backend link.
+  function openBlob(e: MouseEvent<HTMLAnchorElement>, download: boolean) {
     if (!c.fileBase64) return;
-    let url: string | null = null;
+    let url: string;
     try {
       const bin = atob(c.fileBase64);
       const bytes = new Uint8Array(bin.length);
@@ -26,19 +32,20 @@ export default function ContractCard({ c }: { c: Contract }) {
       url = URL.createObjectURL(
         new Blob([bytes], { type: c.mimeType || "application/pdf" }),
       );
-      setBlobUrl(url);
     } catch {
-      /* ignore malformed base64 */
+      return; // malformed base64 → let the backend link handle it
     }
-    return () => {
-      if (url) URL.revokeObjectURL(url);
-    };
-  }, [c.fileBase64, c.mimeType]);
-
-  const name =
-    c.fileName || (c.contractType ? `${c.contractType}.pdf` : "contract.pdf");
-  const openUrl = blobUrl || contractInlineUrl(c);
-  const dlUrl = blobUrl || contractDownloadUrl(c);
+    e.preventDefault();
+    if (download) {
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = name;
+      a.click();
+    } else {
+      window.open(url, "_blank");
+    }
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+  }
 
   return (
     <div className="aifile">
@@ -50,23 +57,25 @@ export default function ContractCard({ c }: { c: Contract }) {
         <span>PDF{c.status ? ` · ${c.status}` : ""}</span>
       </div>
       <div className="aifile__act">
-        {openUrl ? (
+        {c.fileBase64 || openUrl ? (
           <a
             className="aifile__btn"
-            href={openUrl}
+            href={openUrl || "#"}
             target="_blank"
             rel="noreferrer"
+            onClick={(e) => openBlob(e, false)}
             aria-label={t("open")}
             title={t("open")}
           >
             <IconExternal />
           </a>
         ) : null}
-        {dlUrl ? (
+        {c.fileBase64 || dlUrl ? (
           <a
             className="aifile__btn"
-            href={dlUrl}
+            href={dlUrl || "#"}
             download={name}
+            onClick={(e) => openBlob(e, true)}
             aria-label={t("downloadPdf")}
             title={t("downloadPdf")}
           >

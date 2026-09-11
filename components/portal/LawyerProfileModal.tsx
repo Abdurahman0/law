@@ -39,11 +39,20 @@ export default function LawyerProfileModal({
   const [busy, setBusy] = useState(false);
   const [chooseErr, setChooseErr] = useState<string | null>(null);
 
+  // Back to loading whenever a profile is (re)opened (during render, not in the effect).
+  const reqKey = open && userId ? userId : null;
+  const [prevReqKey, setPrevReqKey] = useState(reqKey);
+  if (reqKey !== prevReqKey) {
+    setPrevReqKey(reqKey);
+    if (reqKey) {
+      setStatus("loading");
+      setData(null);
+    }
+  }
+
   useEffect(() => {
     if (!open || !userId) return;
     let alive = true;
-    setStatus("loading");
-    setData(null);
     getLawyerById(userId)
       .then((l) => {
         if (!alive) return;

@@ -24,7 +24,6 @@ export default function AdminTemplates() {
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState<BackendTemplate | null>(null);
   const [editFull, setEditFull] = useState<BackendTemplate | null>(null);
-  const [editLoading, setEditLoading] = useState(false);
   const [del, setDel] = useState<BackendTemplate | null>(null);
   const [q, setQ] = useState("");
   const [delBusy, setDelBusy] = useState(false);
@@ -45,15 +44,14 @@ export default function AdminTemplates() {
   ];
 
   // On opening edit, fetch the full template (incl. body) to prefill the form.
-  useEffect(() => {
-    if (!edit) {
-      setEditFull(null);
-      setEditLoading(false);
-      return;
-    }
-    let alive = true;
-    setEditLoading(true);
+  // editFull is cleared when edit is opened, so it stays null while loading.
+  function openEdit(d: BackendTemplate) {
     setEditFull(null);
+    setEdit(d);
+  }
+  useEffect(() => {
+    if (!edit) return;
+    let alive = true;
     getDocumentTemplate(edit.id)
       .then((full) => {
         if (alive) setEditFull(full);
@@ -61,9 +59,6 @@ export default function AdminTemplates() {
       .catch(() => {
         // Fall back to list data (body unknown) so edit still opens.
         if (alive) setEditFull(edit);
-      })
-      .finally(() => {
-        if (alive) setEditLoading(false);
       });
     return () => {
       alive = false;
@@ -131,7 +126,7 @@ export default function AdminTemplates() {
               tags={[{ label: d.isActive ? t("form.active") : t("form.inactive"), tone: d.isActive ? "ok" : "muted" }]}
               actions={
                 <>
-                  <button className="aitem__act" type="button" aria-label={t("form.edit")} title={t("form.edit")} onClick={() => setEdit(d)}>
+                  <button className="aitem__act" type="button" aria-label={t("form.edit")} title={t("form.edit")} onClick={() => openEdit(d)}>
                     <IconEdit />
                   </button>
                   <button className="aitem__act aitem__act--danger" type="button" aria-label={t("form.delete")} title={t("form.delete")} onClick={() => { setDelNote(null); setDel(d); }}>
@@ -173,7 +168,7 @@ export default function AdminTemplates() {
 
       {/* Edit (full, incl. body) */}
       <Modal open={edit !== null} onClose={() => setEdit(null)} title={t("templates.editTitle")}>
-        {editLoading || !editFull ? (
+        {!editFull ? (
           <Skeleton rows={4} />
         ) : (
           <AdminForm

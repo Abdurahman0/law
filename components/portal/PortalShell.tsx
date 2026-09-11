@@ -123,7 +123,9 @@ export default function PortalShell({
   const { session, ready, logout } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+  // The mobile sidebar is open only on the path it was opened on, so navigating closes it.
+  const [openPath, setOpenPath] = useState<string | null>(null);
+  const open = openPath === pathname;
 
   // Guard: require a session; keep role and route in sync. Pending sellers are
   // bounced off gated (operational) routes back to their dashboard.
@@ -149,8 +151,6 @@ export default function PortalShell({
     }
   }, [ready, session, role, router, pathname]);
 
-  useEffect(() => setOpen(false), [pathname]);
-
   if (!ready || !session || session.role !== role) return null;
 
   const pending = role !== "client" && session.accountStatus === "pending";
@@ -168,7 +168,7 @@ export default function PortalShell({
       <IncomingCallWatcher />
       <div
         className={`psb__scrim${open ? " on" : ""}`}
-        onClick={() => setOpen(false)}
+        onClick={() => setOpenPath(null)}
       />
       <aside className={`psb${open ? " on" : ""}`}>
         <div className="psb__logo">
@@ -228,7 +228,7 @@ export default function PortalShell({
             className="ptop__burger"
             type="button"
             aria-label="Menu"
-            onClick={() => setOpen((v) => !v)}
+            onClick={() => setOpenPath(open ? null : pathname)}
           >
             {open ? <IconClose /> : <IconMenu />}
           </button>

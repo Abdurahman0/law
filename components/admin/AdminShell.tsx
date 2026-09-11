@@ -107,7 +107,9 @@ export default function AdminShell({ children }: { children: ReactNode }) {
   const { session, ready, logout } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+  // The mobile sidebar is open only on the path it was opened on, so navigating closes it.
+  const [openPath, setOpenPath] = useState<string | null>(null);
+  const open = openPath === pathname;
 
   const isBootstrap = pathname === "/admin/bootstrap";
   const allowed = hasAdminAccess(session) || isBootstrap;
@@ -143,8 +145,6 @@ export default function AdminShell({ children }: { children: ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, session, router, isBootstrap, pathname]);
 
-  useEffect(() => setOpen(false), [pathname]);
-
   if (!ready) return null;
   if (!allowed) return null;
 
@@ -155,7 +155,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="portal">
-      <div className={`psb__scrim${open ? " on" : ""}`} onClick={() => setOpen(false)} />
+      <div className={`psb__scrim${open ? " on" : ""}`} onClick={() => setOpenPath(null)} />
       <aside className={`psb${open ? " on" : ""}`}>
         <div className="psb__logo">
           <span className="logo__m">
@@ -198,7 +198,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
 
       <div className="pmain">
         <header className="ptop">
-          <button className="ptop__burger" type="button" aria-label={t("menu")} onClick={() => setOpen((v) => !v)}>
+          <button className="ptop__burger" type="button" aria-label={t("menu")} onClick={() => setOpenPath(open ? null : pathname)}>
             {open ? <IconClose /> : <IconMenu />}
           </button>
           <h1>{title}</h1>

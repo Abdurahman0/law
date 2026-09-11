@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useState,
+  useSyncExternalStore,
   type ReactNode,
 } from "react";
 import { getClientId, setToken } from "./client";
@@ -77,9 +78,25 @@ type AuthCtx = {
 
 const Ctx = createContext<AuthCtx | null>(null);
 
+// Stored session from localStorage (client only; null on the server).
+function readStoredSession(): Session | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(KEY);
+    return raw ? (JSON.parse(raw) as Session) : null;
+  } catch {
+    return null;
+  }
+}
+
+const noSubscribe = () => () => {};
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [session, setSession] = useState<Session | null>(null);
-  const [ready, setReady] = useState(false);
+  const [storedSession, setSession] = useState<Session | null>(readStoredSession);
+  // false on the server and during hydration, true once hydrated — the stored
+  // session stays hidden until then so server and client markup match.
+  const ready = useSyncExternalStore(noSubscribe, () => true, () => false);
+  const session = ready ? storedSession : null;
 
   const persist = useCallback((s: Session | null) => {
     if (s) {
@@ -93,16 +110,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    let stored: Session | null = null;
-    try {
-      const raw = localStorage.getItem(KEY);
-      if (raw) stored = JSON.parse(raw) as Session;
-    } catch {
-      /* ignore */
-    }
+    const stored = readStoredSession();
     if (stored) {
       setToken(stored.token ?? null);
-      setSession(stored);
       // Refresh roles/permissions in the background for real (tokened) sessions.
       if (stored.token) {
         const applyMe = (u: Awaited<ReturnType<typeof apiMe>>) =>
@@ -137,7 +147,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           });
       }
     }
-    setReady(true);
   }, [persist]);
 
   // Build + persist a session from a successful auth result.

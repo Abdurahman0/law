@@ -31,7 +31,6 @@ export default function NotificationsPanel() {
 
   useEffect(() => {
     let alive = true;
-    setStatus("loading");
     listNotifications()
       .then((d) => alive && (setItems(d), setStatus("ready")))
       .catch(() => alive && setStatus("error"));
