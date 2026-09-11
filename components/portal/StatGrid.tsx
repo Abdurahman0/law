@@ -2,9 +2,8 @@
 
 import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
-import { getLawyerStats, type SellerStats } from "@/lib/services/backend";
-import { useResourceOne } from "@/lib/useResource";
 import { Skeleton, EmptyState } from "./DataState";
+import { useSellerCabinet } from "./SellerCabinet";
 import {
   IconBriefcase,
   IconFileText,
@@ -54,14 +53,15 @@ export default function StatGrid({
   emptyText: string;
 }) {
   const t = useTranslations("portal.stats");
-  const res = useResourceOne<SellerStats>(getLawyerStats, []);
+  // Stats come from the cabinet bootstrap loaded by the portal shell.
+  const cabinet = useSellerCabinet();
   const metrics = variant === "workload" ? WORKLOAD : PERFORMANCE;
 
-  if (res.status === "loading") return <Skeleton rows={2} />;
-  if (res.status === "error" || !res.data) {
+  if (cabinet.status === "loading") return <Skeleton rows={2} />;
+  if (cabinet.status === "error" || !cabinet.data) {
     return <EmptyState icon={<IconTrendingUp />} title={emptyTitle} text={emptyText} />;
   }
-  const s = res.data;
+  const s = cabinet.data.stats;
 
   function value(m: Metric): string {
     const n = num(s[m.from], m.key);

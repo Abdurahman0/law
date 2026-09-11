@@ -1649,6 +1649,28 @@
   },
   "portal": {
     "metaTitle": "Portal",
+    "cabinet": {
+      "title": "Hisob holati",
+      "name": "F.I.Sh.",
+      "type": "Turi",
+      "region": "Hudud",
+      "license": "Litsenziya",
+      "status": {
+        "pending": "Tekshiruvda",
+        "approved": "Tasdiqlangan",
+        "verified": "Tasdiqlangan",
+        "rejected": "Rad etilgan",
+        "active": "Faol"
+      },
+      "blockedLead": "Admin tasdiqlagunga qadar quyidagilar yopiq:",
+      "actions": {
+        "acceptOrders": "Buyurtmalarni qabul qilish",
+        "secureChat": "Maxfiy chat",
+        "calls": "Qo'ng'iroqlar"
+      },
+      "completeProfile": "Profilni to'ldirish",
+      "chooseServices": "Xizmatlarni tanlash"
+    },
     "pending": {
       "title": "Akkaunt admin tasdig'ini kutmoqda",
       "text": "Profilingizni to'ldirishingiz va sozlashingiz mumkin. Bozor amallari (ishlar, mijozlar, e'lonlar) admin tasdig'idan keyin ochiladi.",
@@ -1779,6 +1801,13 @@
         "text": "Yuridik xizmatni emas — yuridik xotirjamlikni sovg'a qiling.",
         "cta": "Sovg'a qilish",
         "dismiss": "Yopish"
+      },
+      "reminder": {
+        "label": "Eslatma",
+        "none": "Eslatmasiz",
+        "minutes": "{n} daqiqa oldin",
+        "hours": "{n} soat oldin",
+        "days": "{n} kun oldin"
       },
       "twofa": {
         "title": "Ikki bosqichli himoya (2FA)",
@@ -1979,6 +2008,8 @@
         "title": "Mijozlar",
         "conflict": "Ziddiyat",
         "casesCount": "{n} ta ish",
+        "ordersCount": "{n} ta buyurtma",
+        "activeCases": "{n} ta faol ish",
         "conflictAlert": "Manfaatlar to'qnashuvi ehtimoli — qabul qilishdan oldin tekshiring",
         "empty": "Hozircha mijoz yo'q",
         "emptyText": "Ish olganingizdan so'ng mijozlar shu yerda ko'rinadi."
@@ -2586,6 +2617,8 @@
         "title": "Mijozlar",
         "conflict": "Ziddiyat",
         "casesCount": "{n} ta ish",
+        "ordersCount": "{n} ta buyurtma",
+        "activeCases": "{n} ta faol ish",
         "conflictAlert": "Manfaatlar to'qnashuvi ehtimoli — qabul qilishdan oldin tekshiring",
         "empty": "Hozircha mijoz yo'q",
         "emptyText": "Ish olganingizdan so'ng mijozlar shu yerda ko'rinadi."
@@ -3560,6 +3593,7 @@
       "title": "Integratsiyalar",
       "lead": "Tashqi servislar ulanish holati.",
       "empty": "Integratsiya yo'q",
+      "superadminOnly": "Faqat superadmin boshqaradi",
       "keys": { "website_api": "Veb-sayt API", "mobile_api": "Mobil API", "lexgo_ai": "LexGo.SI", "telegram": "Telegram", "sms": "SMS", "email": "Email" },
       "status": { "connected": "Ulangan", "planned": "Rejalashtirilgan", "error": "Xato", "disconnected": "Uzilgan",
         "degraded": "Qisman ishlayapti",

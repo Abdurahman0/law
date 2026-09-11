@@ -14,9 +14,11 @@ import { Notice } from "@/components/admin/AdminBits";
 import Modal from "@/components/admin/Modal";
 import Select from "@/components/Select";
 import DatePicker from "@/components/DatePicker";
-import { IconCalendar, IconPlus, IconClock, IconMapPin, IconClose } from "@/components/icons";
+import { IconCalendar, IconPlus, IconClock, IconMapPin, IconClose, IconBell } from "@/components/icons";
 
 const TYPES = ["hearing", "investigative", "meeting", "deadline"] as const;
+// Reminder presets in minutes before the event ("" = no reminder).
+const REMINDERS = ["", "15", "30", "60", "1440"] as const;
 
 function fmt(iso: string) {
   if (!iso) return "";
@@ -28,6 +30,7 @@ function fmt(iso: string) {
 // Court calendar + deadlines, shared by the advocate and lawyer portals.
 export default function CalendarPanel({ ns }: { ns: string }) {
   const t = useTranslations(ns);
+  const tr = useTranslations("portal.common.reminder");
   const [reloadKey, setReloadKey] = useState(0);
   const res = useResource<CalendarEvent>(() => listCalendarEvents(), [reloadKey]);
   const reload = () => setReloadKey((k) => k + 1);
@@ -38,6 +41,7 @@ export default function CalendarPanel({ ns }: { ns: string }) {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [location, setLocation] = useState("");
+  const [reminder, setReminder] = useState<string>("30");
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<{ ok: boolean; msg: string } | null>(null);
 
@@ -52,6 +56,7 @@ export default function CalendarPanel({ ns }: { ns: string }) {
         title: title.trim(),
         starts_at: new Date(`${date}T${time || "09:00"}`).toISOString(),
         location: location.trim() || undefined,
+        ...(reminder ? { reminder_minutes_before: parseInt(reminder, 10) } : {}),
       });
       setNote({ ok: true, msg: t("created") });
       setTitle("");
@@ -77,6 +82,14 @@ export default function CalendarPanel({ ns }: { ns: string }) {
   }
 
   const typeOpts = TYPES.map((v) => ({ value: v, label: t(v) }));
+  // "30 daqiqa oldin" / "1 soat oldin" / "1 kun oldin".
+  const beforeLabel = (min: number) =>
+    min > 0 && min % 1440 === 0
+      ? tr("days", { n: min / 1440 })
+      : min > 0 && min % 60 === 0
+        ? tr("hours", { n: min / 60 })
+        : tr("minutes", { n: min });
+  const reminderOpts = REMINDERS.map((v) => ({ value: v, label: v ? beforeLabel(parseInt(v, 10)) : tr("none") }));
 
   return (
     <div className="ppanel">
@@ -109,6 +122,13 @@ export default function CalendarPanel({ ns }: { ns: string }) {
                       {ev.location}
                     </>
                   ) : null}
+                  {ev.reminderScheduled && ev.reminderMinutesBefore != null ? (
+                    <>
+                      {" · "}
+                      <IconBell />
+                      {beforeLabel(ev.reminderMinutesBefore)}
+                    </>
+                  ) : null}
                 </span>
               </div>
               <button className="calev__x" type="button" aria-label={t("remove")} onClick={() => remove(ev.id)}>
@@ -139,6 +159,10 @@ export default function CalendarPanel({ ns }: { ns: string }) {
           <div>
             <label>{t("locationLabel")}</label>
             <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder={t("locationPh")} />
+          </div>
+          <div>
+            <label>{tr("label")}</label>
+            <Select value={reminder} onChange={setReminder} options={reminderOpts} ariaLabel={tr("label")} />
           </div>
           {note ? <Notice ok={note.ok} msg={note.msg} /> : null}
           <button className="btn btn--pri btn--full" type="submit" disabled={busy}>

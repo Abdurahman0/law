@@ -1643,6 +1643,28 @@
   },
   "portal": {
     "metaTitle": "Portal",
+    "cabinet": {
+      "title": "Account status",
+      "name": "Full name",
+      "type": "Type",
+      "region": "Region",
+      "license": "License",
+      "status": {
+        "pending": "Under review",
+        "approved": "Verified",
+        "verified": "Verified",
+        "rejected": "Rejected",
+        "active": "Active"
+      },
+      "blockedLead": "Unavailable until an admin approves your account:",
+      "actions": {
+        "acceptOrders": "Accepting orders",
+        "secureChat": "Secure chat",
+        "calls": "Calls"
+      },
+      "completeProfile": "Complete profile",
+      "chooseServices": "Choose services"
+    },
     "pending": {
       "title": "Account awaiting admin approval",
       "text": "You can fill in and set up your profile. Marketplace actions (cases, clients, listings) unlock after an admin approves your account.",
@@ -1773,6 +1795,13 @@
         "text": "Gift not a legal service, but legal peace of mind.",
         "cta": "Gift it",
         "dismiss": "Dismiss"
+      },
+      "reminder": {
+        "label": "Reminder",
+        "none": "No reminder",
+        "minutes": "{n} min before",
+        "hours": "{n, plural, one {# hour} other {# hours}} before",
+        "days": "{n, plural, one {# day} other {# days}} before"
       },
       "twofa": {
         "title": "Two-factor authentication (2FA)",
@@ -1973,6 +2002,8 @@
         "title": "Clients",
         "conflict": "Conflict",
         "casesCount": "{n} cases",
+        "ordersCount": "{n} orders",
+        "activeCases": "{n} active",
         "conflictAlert": "Possible conflict of interest — check before accepting",
         "empty": "No clients yet",
         "emptyText": "Your clients will appear here once you take on cases."
@@ -2580,6 +2611,8 @@
         "title": "Clients",
         "conflict": "Conflict",
         "casesCount": "{n} cases",
+        "ordersCount": "{n} orders",
+        "activeCases": "{n} active",
         "conflictAlert": "Possible conflict of interest — check before accepting",
         "empty": "No clients yet",
         "emptyText": "Your clients will appear here once you take on cases."
@@ -3554,6 +3587,7 @@
       "title": "Integrations",
       "lead": "Connection status of external services.",
       "empty": "No integrations",
+      "superadminOnly": "Managed by superadmin only",
       "keys": { "website_api": "Website API", "mobile_api": "Mobile API", "lexgo_ai": "LexGo.AI", "telegram": "Telegram", "sms": "SMS", "email": "Email" },
       "status": { "connected": "Connected", "planned": "Planned", "error": "Error", "disconnected": "Disconnected",
         "degraded": "Degraded",

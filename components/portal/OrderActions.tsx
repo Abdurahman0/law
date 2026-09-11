@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { acceptOrder, declineOrder } from "@/lib/services/backend";
 import { IconCheck, IconClose } from "@/components/icons";
+import { useSellerCabinet } from "./SellerCabinet";
 
 // Accept / decline controls for an open order (lawyer dashboard, marketplace,
 // advocate opportunities). Shows a resolved badge once actioned.
@@ -17,9 +18,12 @@ export default function OrderActions({
   const tc = useTranslations("portal.common");
   const [busy, setBusy] = useState<null | "accept" | "decline">(null);
   const [done, setDone] = useState<null | "accept" | "decline">(null);
+  // available_actions.accept_orders from the seller cabinet (allowed until it loads).
+  const cabinet = useSellerCabinet();
+  const canAct = cabinet.data ? cabinet.data.actions.acceptOrders : true;
 
   async function run(action: "accept" | "decline") {
-    if (busy || done) return;
+    if (busy || done || !canAct) return;
     setBusy(action);
     try {
       if (action === "accept") await acceptOrder(orderId);
@@ -44,10 +48,10 @@ export default function OrderActions({
 
   return (
     <div className="pcase__act">
-      <button className="btn btn--pri btn--sm" type="button" disabled={!!busy} onClick={() => run("accept")}>
+      <button className="btn btn--pri btn--sm" type="button" disabled={!!busy || !canAct} onClick={() => run("accept")}>
         {busy === "accept" ? tc("accepting") : tc("accept")}
       </button>
-      <button className="btn btn--line btn--sm" type="button" disabled={!!busy} onClick={() => run("decline")}>
+      <button className="btn btn--line btn--sm" type="button" disabled={!!busy || !canAct} onClick={() => run("decline")}>
         {tc("decline")}
       </button>
     </div>

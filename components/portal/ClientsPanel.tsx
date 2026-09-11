@@ -30,7 +30,11 @@ export default function ClientsPanel({ ns }: { ns: string }) {
               <span className="pclient__av">{initials(c.name || "?")}</span>
               <div className="pclient__m">
                 <b>{c.name || "—"}</b>
-                <span>{[c.phone, t("casesCount", { n: c.casesCount })].filter(Boolean).join(" · ")}</span>
+                <span>
+                  {[c.phone, t("casesCount", { n: c.casesCount }), t("ordersCount", { n: c.ordersCount })]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </span>
                 {c.hasConflict ? (
                   <em className="pclient__conflict">
                     <IconAlert />
@@ -38,6 +42,9 @@ export default function ClientsPanel({ ns }: { ns: string }) {
                   </em>
                 ) : null}
               </div>
+              {c.activeCaseIds.length ? (
+                <span className="pclient__badge pclient__badge--ok">{t("activeCases", { n: c.activeCaseIds.length })}</span>
+              ) : null}
               {c.hasConflict ? <span className="pclient__badge pclient__badge--warn">{t("conflict")}</span> : null}
             </div>
           ))}

@@ -6,11 +6,13 @@ import { Link } from "@/i18n/navigation";
 import { useAuth } from "@/lib/auth";
 import StatGrid from "@/components/portal/StatGrid";
 import SellerDashboard from "@/components/portal/SellerDashboard";
+import { useSellerCabinet } from "@/components/portal/SellerCabinet";
 import { IconBolt, IconArrowRight } from "@/components/icons";
 
 export default function AdvocateDashboard() {
   const t = useTranslations("portal.advocate.dashboard");
   const { session } = useAuth();
+  const cabinet = useSellerCabinet();
   const completeness = session?.completeness ?? 0;
 
   return (
@@ -38,12 +40,14 @@ export default function AdvocateDashboard() {
       {/* Module 10 dashboard: «Bugun» / «Moliyaviy holat» / «Yangi keyslar». */}
       <SellerDashboard role="advocate" />
 
-      <div className="ppanel">
-        <div className="ppanel__h">
-          <b>{t("performance")}</b>
+      {cabinet.data?.limitedAccess ? null : (
+        <div className="ppanel">
+          <div className="ppanel__h">
+            <b>{t("performance")}</b>
+          </div>
+          <StatGrid variant="performance" emptyTitle={t("performanceEmpty")} emptyText={t("performanceEmptyText")} />
         </div>
-        <StatGrid variant="performance" emptyTitle={t("performanceEmpty")} emptyText={t("performanceEmptyText")} />
-      </div>
+      )}
 
       <div className="ppanel advboost">
         <div className="ppanel__h">

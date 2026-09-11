@@ -10,6 +10,8 @@ import NotificationBell from "./NotificationBell";
 import IncomingCallWatcher from "./IncomingCallWatcher";
 import GrowthBanner from "./GrowthBanner";
 import GiftNudge from "./GiftNudge";
+import { CabinetProvider, useCabinetLoader } from "./SellerCabinet";
+import type { SellerActions } from "@/lib/services/backend";
 import {
   IconLogo,
   IconGrid,
@@ -52,6 +54,20 @@ const PENDING_ALLOWED: Record<Role, Set<string>> = {
   lawyer: new Set(["dashboard", "services", "subscription", "notifications"]),
   advocate: new Set(["dashboard", "profile", "subscription", "notifications"]),
 };
+
+// Nav items that also need a specific cabinet action (available_actions).
+const ACTION_GATED: Record<string, keyof SellerActions> = {
+  marketplace: "acceptOrders",
+  opportunities: "acceptOrders",
+  chat: "secureChat",
+  messages: "secureChat",
+};
+
+function isLocked(role: Role, key: string, limited: boolean, actions: SellerActions | null): boolean {
+  if (limited && !PENDING_ALLOWED[role].has(key)) return true;
+  const action = ACTION_GATED[key];
+  return !!actions && !!action && !actions[action];
+}
 
 const LAWYER_NAV: NavItem[] = [
   { href: "/portal/lawyer", key: "dashboard", Icon: IconGrid },
@@ -127,7 +143,14 @@ export default function PortalShell({
   const [openPath, setOpenPath] = useState<string | null>(null);
   const open = openPath === pathname;
 
-  // Guard: require a session; keep role and route in sync. Pending sellers are
+  // Lawyer/advocate cabinet bootstrap (reloaded on navigation). Until it loads,
+  // the session's account status decides whether access is limited.
+  const cabinet = useCabinetLoader(role !== "client" && ready && session?.role === role, pathname);
+  const limited =
+    role !== "client" && (cabinet.data ? cabinet.data.limitedAccess : session?.accountStatus === "pending");
+  const actions = cabinet.data?.actions ?? null;
+
+  // Guard: require a session; keep role and route in sync. Limited sellers are
   // bounced off gated (operational) routes back to their dashboard.
   useEffect(() => {
     if (!ready) return;
@@ -139,22 +162,20 @@ export default function PortalShell({
       router.replace(`/portal/${session.role}`);
       return;
     }
-    if (role !== "client" && session.accountStatus === "pending") {
+    if (role !== "client") {
       const navList = role === "advocate" ? ADVOCATE_NAV : LAWYER_NAV;
       const cur = navList
         .slice()
         .sort((a, b) => b.href.length - a.href.length)
         .find((n) => pathname === n.href || pathname.startsWith(n.href + "/"));
-      if (cur && !PENDING_ALLOWED[role].has(cur.key)) {
+      if (cur && isLocked(role, cur.key, limited, actions)) {
         router.replace(`/portal/${role}`);
       }
     }
-  }, [ready, session, role, router, pathname]);
+  }, [ready, session, role, router, pathname, limited, actions]);
 
   if (!ready || !session || session.role !== role) return null;
 
-  const pending = role !== "client" && session.accountStatus === "pending";
-  const allowed = PENDING_ALLOWED[role];
   const nav =
     role === "advocate" ? ADVOCATE_NAV : role === "lawyer" ? LAWYER_NAV : CLIENT_NAV;
   const active = nav
@@ -185,7 +206,7 @@ export default function PortalShell({
         <nav className="psb__nav">
           {nav.map(({ href, key, Icon }) => {
             const on = active?.href === href;
-            const locked = pending && !allowed.has(key);
+            const locked = isLocked(role, key, limited, actions);
             if (locked) {
               return (
                 <span
@@ -244,7 +265,7 @@ export default function PortalShell({
         </header>
         <div className="pbody">
           <div className="pbody__in">
-            {pending ? (
+            {limited ? (
               <div className="pend-banner" role="status">
                 <span className="pend-banner__ic"><IconClock /></span>
                 <div>
@@ -257,7 +278,7 @@ export default function PortalShell({
             ) : (
               <GiftNudge />
             )}
-            {children}
+            <CabinetProvider value={cabinet}>{children}</CabinetProvider>
           </div>
         </div>
       </div>

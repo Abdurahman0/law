@@ -3,16 +3,11 @@
 import { useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import {
-  getLawyerStats,
-  listOpenOrders,
-  type SellerStats,
-  type BackendOrder,
-} from "@/lib/services/backend";
-import { useResource, useResourceOne } from "@/lib/useResource";
+import type { BackendOrder, SellerActions, SellerCabinet } from "@/lib/services/backend";
 import { Skeleton, EmptyState } from "./DataState";
 import OrderActions from "./OrderActions";
-import type { Role } from "@/lib/auth";
+import { useSellerCabinet } from "./SellerCabinet";
+import { useAuth, type Role } from "@/lib/auth";
 import {
   IconBriefcase,
   IconScale,
@@ -23,14 +18,15 @@ import {
   IconTrendingUp,
   IconEye,
   IconMapPin,
+  IconLock,
 } from "@/components/icons";
 
 type SvgC = (p: { className?: string }) => ReactNode;
 type Tile = { key: string; from: "workload" | "finance"; label: string; Icon: SvgC; money?: boolean };
 
-// «Bugun» — counts pulled from the workload block. courts_today /
-// documents_to_review are optional backend keys (fall back to 0 until the
-// backend ships them — see LEXGO_SELLER_DASHBOARD_BACKEND_UPDATE).
+// «Bugun» — counts pulled from the workload block. unread_messages is the
+// real secure-chat unread count (LEXGO_FRONTEND_CIMS_BACKEND_UPDATE); missing
+// keys fall back to 0.
 const TODAY: Tile[] = [
   { key: "active_cases", from: "workload", label: "activeCases", Icon: IconBriefcase },
   { key: "courts_today", from: "workload", label: "courtsToday", Icon: IconScale },
@@ -38,8 +34,7 @@ const TODAY: Tile[] = [
   { key: "unread_messages", from: "workload", label: "newMessages", Icon: IconChat },
   { key: "documents_to_review", from: "workload", label: "docsToReview", Icon: IconDocLines },
 ];
-// «Moliyaviy holat» — sums from the finance block (earnings_today,
-// earnings_via_lexgo, payable are optional keys, 0 until backend ships them).
+// «Moliyaviy holat» — sums from the finance block (missing keys fall back to 0).
 const FINANCE: Tile[] = [
   { key: "earnings_today", from: "finance", label: "incomeToday", Icon: IconCard, money: true },
   { key: "earnings_month", from: "finance", label: "incomeMonth", Icon: IconTrendingUp, money: true },
@@ -58,16 +53,20 @@ const som = (n: number) => n.toLocaleString("ru-RU").replace(/,/g, " ");
 export default function SellerDashboard({ role }: { role: Role }) {
   const t = useTranslations("portal.sellerDash");
   const tc = useTranslations("portal.common");
-  const stats = useResourceOne<SellerStats>(getLawyerStats, []);
-  const orders = useResource<BackendOrder>(listOpenOrders, []);
+  // Stats + new orders come from the cabinet bootstrap loaded by the shell.
+  const cabinet = useSellerCabinet();
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
 
+  // Pending/unverified seller: profile + verification state instead of empty
+  // stats and orders they can't act on.
+  if (cabinet.data?.limitedAccess) return <CabinetStatus cabinet={cabinet.data} role={role} />;
+
   function tiles(list: Tile[]) {
-    if (stats.status === "loading") return <Skeleton rows={2} />;
-    if (stats.status === "error" || !stats.data) {
+    if (cabinet.status === "loading") return <Skeleton rows={2} />;
+    if (cabinet.status === "error" || !cabinet.data) {
       return <EmptyState icon={<IconTrendingUp />} title={tc("loadError")} text={tc("loadErrorText")} />;
     }
-    const s = stats.data;
+    const s = cabinet.data.stats;
     const cur = String((s.finance?.currency as string) || "UZS");
     return (
       <div className="amet">
@@ -85,7 +84,7 @@ export default function SellerDashboard({ role }: { role: Role }) {
     );
   }
 
-  const openCases = orders.data.filter((o) => !dismissed.has(o.id));
+  const openCases = (cabinet.data?.newOrders ?? []).filter((o) => !dismissed.has(o.id));
 
   return (
     <>
@@ -109,7 +108,7 @@ export default function SellerDashboard({ role }: { role: Role }) {
           <b>{t("newCases")}</b>
           <span className="advmuted">{t("newCasesSub", { n: openCases.length })}</span>
         </div>
-        {orders.status === "loading" ? (
+        {cabinet.status === "loading" ? (
           <Skeleton rows={3} />
         ) : !openCases.length ? (
           <EmptyState icon={<IconBriefcase />} title={t("casesEmpty")} text={t("casesEmptyText")} />
@@ -122,6 +121,52 @@ export default function SellerDashboard({ role }: { role: Role }) {
         )}
       </div>
     </>
+  );
+}
+
+function CabinetStatus({ cabinet: c, role }: { cabinet: SellerCabinet; role: Role }) {
+  const t = useTranslations("portal.cabinet");
+  const tc = useTranslations("portal.common");
+  const te = useTranslations("enums");
+  const { session } = useAuth();
+  const statusKey = c.verification.verified ? "approved" : c.verification.status || c.accountStatus || "pending";
+  const blocked = (Object.keys(c.actions) as (keyof SellerActions)[]).filter((k) => !c.actions[k]);
+  const region = c.profile.region;
+
+  return (
+    <div className="ppanel">
+      <div className="ppanel__h">
+        <b>{t("title")}</b>
+        <span className="creq__badge">{t.has(`status.${statusKey}`) ? t(`status.${statusKey}`) : statusKey}</span>
+      </div>
+      <div className="pkv">
+        <div className="pkv__i"><label>{t("name")}</label><b>{c.profile.name || session?.name || "—"}</b></div>
+        <div className="pkv__i"><label>{t("type")}</label><b>{tc(role === "advocate" ? "roleAdvocate" : "roleLawyer")}</b></div>
+        {region ? (
+          <div className="pkv__i"><label>{t("region")}</label><b>{te.has(`regions.${region}`) ? te(`regions.${region}`) : region}</b></div>
+        ) : null}
+        {c.profile.licenseNumber ? (
+          <div className="pkv__i"><label>{t("license")}</label><b>{c.profile.licenseNumber}</b></div>
+        ) : null}
+      </div>
+      {blocked.length ? (
+        <>
+          <p className="ppanel__note" style={{ marginTop: 16 }}>{t("blockedLead")}</p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {blocked.map((k) => (
+              <span className="chip" key={k}><IconLock />{t(`actions.${k}`)}</span>
+            ))}
+          </div>
+        </>
+      ) : null}
+      <Link
+        href={role === "advocate" ? "/portal/advocate/profile" : "/portal/lawyer/services"}
+        className="btn btn--pri btn--sm"
+        style={{ marginTop: 16 }}
+      >
+        {t(role === "advocate" ? "completeProfile" : "chooseServices")}
+      </Link>
+    </div>
   );
 }
 

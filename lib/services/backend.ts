@@ -1451,9 +1451,51 @@ export async function downloadTemplateFile(templateId: string, filename: string)
 
 // ── Seller stats & clients ────────────────────────────────────────
 export type SellerStats = { workload: Dict; finance: Dict; performance: Dict };
-export async function getLawyerStats(): Promise<SellerStats> {
-  const d = asDict(await http("/lawyers/me/stats"));
+function normStats(v: unknown): SellerStats {
+  const d = asDict(v);
   return { workload: asDict(d.workload), finance: asDict(d.finance), performance: asDict(d.performance) };
+}
+export async function getLawyerStats(): Promise<SellerStats> {
+  return normStats(await http("/lawyers/me/stats"));
+}
+
+// ── Seller cabinet bootstrap (GET /lawyers/me/cabinet) ────────────
+// One first-load request for the lawyer/advocate portal. Pending sellers get
+// 200 with limited_access=true (profile + verification only) instead of 403.
+export type SellerActions = { acceptOrders: boolean; secureChat: boolean; calls: boolean };
+export type SellerCabinet = {
+  accountStatus: string;
+  role: string;
+  sellerType: string;
+  limitedAccess: boolean;
+  actions: SellerActions;
+  profile: BackendLawyer;
+  verification: { status: string; verified: boolean };
+  stats: SellerStats;
+  newOrders: BackendOrder[];
+};
+export async function getSellerCabinet(): Promise<SellerCabinet> {
+  const d = asDict(await http("/lawyers/me/cabinet"));
+  const limitedAccess = Boolean(d.limited_access);
+  const a = asDict(d.available_actions);
+  // An action the backend doesn't list follows the overall access level.
+  const allowed = (k: string) => (a[k] == null ? !limitedAccess : Boolean(a[k]));
+  const profile = asDict(d.profile);
+  const v = asDict(d.verification);
+  return {
+    accountStatus: asStr(d.account_status),
+    role: asStr(d.role),
+    sellerType: asStr(d.seller_type ?? profile.seller_type),
+    limitedAccess,
+    actions: { acceptOrders: allowed("accept_orders"), secureChat: allowed("secure_chat"), calls: allowed("calls") },
+    profile: normLawyer(profile),
+    verification: {
+      status: typeof d.verification === "string" ? d.verification : asStr(v.status ?? v.verification_status ?? profile.verification_status),
+      verified: Boolean(v.is_verified ?? v.verified ?? profile.is_verified),
+    },
+    stats: normStats(d.stats),
+    newOrders: listFrom(d.new_orders, "orders", "items", "data").map(normOrder),
+  };
 }
 
 export type LawyerClient = {
@@ -1461,6 +1503,8 @@ export type LawyerClient = {
   name: string;
   phone: string;
   casesCount: number;
+  ordersCount: number;
+  activeCaseIds: string[];
   hasConflict: boolean;
   lastActiveAt?: string;
 };
@@ -1472,6 +1516,8 @@ export async function getLawyerClients(): Promise<LawyerClient[]> {
       name: asStr(d.name),
       phone: asStr(d.phone),
       casesCount: asNum(d.cases_count),
+      ordersCount: asNum(d.orders_count),
+      activeCaseIds: asArr(d.active_case_ids).map((x) => asStr(x)),
       hasConflict: Boolean(d.has_conflict),
       lastActiveAt: asStr(d.last_active_at) || undefined,
     };
@@ -1488,6 +1534,8 @@ export type CalendarEvent = {
   endsAt?: string;
   location: string;
   status: string;
+  reminderMinutesBefore?: number;
+  reminderScheduled: boolean;
 };
 function normEvent(v: unknown): CalendarEvent {
   const d = asDict(v);
@@ -1500,6 +1548,8 @@ function normEvent(v: unknown): CalendarEvent {
     endsAt: asStr(d.ends_at) || undefined,
     location: asStr(d.location),
     status: asStr(d.status),
+    reminderMinutesBefore: d.reminder_minutes_before != null ? asNum(d.reminder_minutes_before) : undefined,
+    reminderScheduled: Boolean(d.reminder_scheduled),
   };
 }
 export async function listCalendarEvents(range?: { from?: string; to?: string }): Promise<CalendarEvent[]> {
@@ -1516,6 +1566,7 @@ export type CalendarEventInput = {
   starts_at: string;
   ends_at?: string;
   location?: string;
+  reminder_minutes_before?: number; // non-negative; omit for no reminder
 };
 export async function createCalendarEvent(input: CalendarEventInput): Promise<CalendarEvent> {
   return normEvent(await http("/calendar-events", { method: "POST", body: JSON.stringify(input) }));
@@ -2210,8 +2261,13 @@ export async function getOrderStatusHistory(orderId: string): Promise<OrderStatu
 }
 
 // ── Admin audit trail ─────────────────────────────────────────────
-export async function listAuditTrail(): Promise<ActivityEntry[]> {
-  return listFrom(await http("/admin/audit-trail"), "items", "data", "logs").map(normActivity);
+// Optional date range, inclusive, as YYYY-MM-DD.
+export async function listAuditTrail(range?: { dateFrom?: string; dateTo?: string }): Promise<ActivityEntry[]> {
+  const q = new URLSearchParams();
+  if (range?.dateFrom) q.set("date_from", range.dateFrom);
+  if (range?.dateTo) q.set("date_to", range.dateTo);
+  const qs = q.toString();
+  return listFrom(await http(`/admin/audit-trail${qs ? `?${qs}` : ""}`), "items", "data", "logs").map(normActivity);
 }
 
 // ── Dedicated lead re-engage ──────────────────────────────────────
@@ -2307,11 +2363,30 @@ export async function getEntitlements(): Promise<Entitlements> {
 }
 
 // ── Integrations status ───────────────────────────────────────────
-export type Integration = { key: string; status: string; healthy: boolean; configured: boolean };
+// Status metadata only — the backend never returns secrets (secret_exposed=false).
+export type Integration = {
+  key: string;
+  label: string;
+  category: string;
+  status: string;
+  healthy: boolean;
+  configured: boolean;
+  canTest: boolean;
+  requiresSuperadmin: boolean;
+};
 export async function getIntegrationsStatus(): Promise<Integration[]> {
   return listFrom(await http("/integrations/status"), "items", "data", "integrations").map((x) => {
     const d = asDict(x);
-    return { key: asStr(d.key ?? d.name), status: asStr(d.status), healthy: Boolean(d.healthy), configured: Boolean(d.configured) };
+    return {
+      key: asStr(d.key ?? d.name),
+      label: asStr(d.label),
+      category: asStr(d.category),
+      status: asStr(d.status),
+      healthy: Boolean(d.healthy),
+      configured: Boolean(d.configured),
+      canTest: Boolean(d.can_test),
+      requiresSuperadmin: Boolean(d.requires_superadmin),
+    };
   });
 }
 

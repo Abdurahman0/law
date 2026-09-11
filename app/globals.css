@@ -1787,6 +1787,7 @@ body:has(.schat) .fab{display:none}
 .pclient__conflict svg{width:13px;height:13px;stroke:#C0392B}
 .pclient__badge{font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:var(--pill);flex:none}
 .pclient__badge--warn{color:#C0392B;background:#FDECEC}
+.pclient__badge--ok{color:var(--ok);background:#E1F6EE}
 .calist{display:flex;flex-direction:column;gap:8px}
 .calev{display:flex;align-items:center;gap:13px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--rl);background:#fff}
 .calev__type{font-size:.72rem;font-weight:700;padding:5px 11px;border-radius:var(--pill);flex:none;color:var(--b700);background:var(--b100)}
@@ -2251,6 +2252,12 @@ body:has(.schat) .fab{display:none}
 .intg__c--warn .intg__dot{background:#f59e0b}
 .intg__c--off .intg__dot{background:#9ca3af}
 .intg__st{font-size:.74rem;color:var(--gray);text-transform:capitalize}
+.intg__group + .intg__group{margin-top:18px}
+.intg__cat{display:block;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--gray);margin-bottom:10px}
+.intg__lock{display:grid;place-items:center;flex:none;color:var(--gray2)}
+.intg__lock svg{width:14px;height:14px}
+/* Audit trail date range filter */
+.audit__dates .mpick{flex:0 1 220px}
 
 /* Secure chat inline error banner */
 .schat__err{display:flex;align-items:center;gap:8px;margin:8px 12px;padding:9px 12px;border-radius:10px;background:#fef2f2;border:1px solid #fecaca;color:#dc2626;font-size:.85rem}
