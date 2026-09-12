@@ -19,7 +19,7 @@
   "meta": {
     "siteName": "LexGo",
     "title": "LexGo — yuridik yordam, bir necha tegishda",
-    "description": "Advokat toping, hujjat tayyorlang va LexGo.SI dan bepul javob oling. O'zbekistonning yuridik xizmatlar ekotizimi.",
+    "description": "Advokat toping, hujjat tayyorlang va Sun'iy Intellektdan bepul javob oling. O'zbekistonning yuridik xizmatlar ekotizimi.",
     "titleTemplate": "%s — LexGo"
   },
   "enums": {
@@ -146,7 +146,7 @@
     "hero": {
       "titleLead": "Yuridik yordam endi",
       "titleAccent": "bir necha tegishda",
-      "subtitle": "Advokat toping, hujjatni 5 daqiqada tayyorlang yoki LexGo.SI dan bepul javob oling. Hammasi bitta ilovada.",
+      "subtitle": "Advokat toping, hujjatni 5 daqiqada tayyorlang yoki Sun'iy Intellektdan bepul javob oling. Hammasi bitta ilovada.",
       "tags": [
         "1 240+ advokat",
         "14 hudud",
@@ -216,7 +216,7 @@
       },
       {
         "city": "Toshkent",
-        "text": "LexGo.SI 12 ta hujjatni tahlil qildi"
+        "text": "Sun'iy Intellekt 12 ta hujjatni tahlil qildi"
       },
       {
         "city": "Buxoro",
@@ -269,7 +269,7 @@
       "items": [
         {
           "title": "Bir necha daqiqada javob",
-          "text": "LexGo.SI amaldagi aniq moddaga havola bilan javob beradi — dastlabki 5 ta so'rovingiz bepul."
+          "text": "Sun'iy Intellekt amaldagi aniq moddaga havola bilan javob beradi — dastlabki 5 ta so'rovingiz bepul."
         },
         {
           "title": "Tasdiqlangan advokatlar",
@@ -300,7 +300,7 @@
     "finalCta": {
       "kicker": "Hozir boshlang",
       "title": "Keyingi 5 daqiqada yuridik yordam oling",
-      "lead": "Muammoingizni oddiy so'zlar bilan yozing — LexGo.SI sizni kerakli xizmat va advokatga yo'naltiradi. Dastlabki 5 ta so'rov bepul.",
+      "lead": "Muammoingizni oddiy so'zlar bilan yozing — Sun'iy Intellekt sizni kerakli xizmat va advokatga yo'naltiradi. Dastlabki 5 ta so'rov bepul.",
       "primary": "Hozir yordam oling",
       "secondary": "Advokat topish"
     }
@@ -344,7 +344,7 @@
       "legalEntity": "Yuridik shaxs"
     },
     "preparedBy": {
-      "ai": "LexGo.SI — tezroq va arzon",
+      "ai": "Sun'iy Intellekt — tezroq va arzon",
       "lawyer": "Advokat — 60 daqiqada"
     },
     "quickLawyer": [
@@ -413,7 +413,7 @@
       "lawyerDisc": "Advokat buyurtmani 30 daqiqada tasdiqlaydi. Kontaktlar 10% oldindan to'lovdan keyin ochiladi.",
       "templateReadyTitle": "{doc} — namuna tayyor",
       "templateTime": "5 daqiqa",
-      "byAi": "LexGo.SI tayyorlaydi",
+      "byAi": "Sun'iy Intellekt tayyorlaydi",
       "byLawyer": "Advokat tayyorlaydi — 60 daqiqada",
       "kvDocument": "Hujjat",
       "kvForWhom": "Kim uchun",
@@ -424,7 +424,7 @@
         "To'lovdan keyin DOCX va PDF yuklab olasiz"
       ],
       "startFilling": "Namunani to'ldirishni boshlash",
-      "aiAnalysisTitle": "LexGo.SI dastlabki tahlili",
+      "aiAnalysisTitle": "Sun'iy Intellekt dastlabki tahlili",
       "analysisDone": "Tahlil yakunlandi",
       "kvDirection": "Yo'nalish",
       "kvStage": "Ish bosqichi",
@@ -898,11 +898,11 @@
       ]
     },
     "compare": {
-      "title": "LexGo.SI yoki tirik advokat?",
+      "title": "Sun'iy Intellekt yoki tirik advokat?",
       "lead": "Har bir xizmat ikkala variantni taklif qiladi. Tezlik va narxni yoki chuqurlik va inson imzosini tanlang.",
       "headers": {
         "feature": "",
-        "ai": "LexGo.SI",
+        "ai": "Sun'iy Intellekt",
         "lawyer": "Advokat"
       },
       "rows": [
@@ -985,7 +985,7 @@
           "Shartnoma va muhim hujjatlarni advokat ko'rib chiqadi — 10 sahifagacha",
           "200+ tayyor yuridik hujjat shabloni",
           "Advokatlar tarmog'idagi qo'shimcha xizmatlarga 25% chegirma",
-          "LexGo mahsulotlariga, jumladan LexGo.SI ga 10% chegirma",
+          "LexGo mahsulotlariga, jumladan Sun'iy Intellektga 10% chegirma",
           "Tezkor vaziyatlarda (jinoiy-ma'muriy soha) eng yaqin tajribali advokatni 25% chegirmada zudlik bilan yuboramiz",
           "Turmush o'rtog'ingiz ham qamrab olinadi"
         ],
@@ -1000,7 +1000,7 @@
           "Biznesni huquqiy tekshirish: har 3 oyda 1 soatlik konsultatsiya (6 oydan keyin ochiladi)",
           "Biznes va shaxsiy masalalar uchun 200+ shablon bazasidan bepul foydalanish",
           "Har oy 1 ta mualliflik huquqini ro'yxatdan o'tkazish",
-          "LexGo.SI paketiga 10% chegirma",
+          "Sun'iy Intellekt paketiga 10% chegirma",
           "Obunadan tashqari qo'shimcha advokatlik xizmatlariga 25% chegirma",
           "Tezkor vaziyatlarda (istalgan soha) eng yaqin tajribali advokatni 25% chegirmada zudlik bilan yuboramiz",
           "Ota-ona, turmush o'rtoq va qaramog'dagi farzandlar qamrab olinadi"
@@ -1075,7 +1075,7 @@
           "premium": "25%"
         },
         {
-          "feature": "LexGo.SI chegirma",
+          "feature": "Sun'iy Intellekt chegirma",
           "standard": "10%",
           "premium": "10%"
         }
@@ -1380,7 +1380,7 @@
     "features": [
       {
         "title": "Bir zumda Sun'iy intellekt javoblari",
-        "text": "LexGo.SI ga istalgan vaqtda savol bering va soniyalarda asosli javob oling."
+        "text": "Sun'iy Intellektga istalgan vaqtda savol bering va soniyalarda asosli javob oling."
       },
       {
         "title": "Advokat topish va buyurtma",
@@ -1419,7 +1419,7 @@
     "title": "Ko'p beriladigan savollar",
     "items": [
       {
-        "q": "LexGo.SI advokat o'rnini bosadimi?",
+        "q": "Sun'iy Intellekt advokat o'rnini bosadimi?",
         "a": "Yo'q. Sun'iy intellekt ishni qisqartirib beradi, xronologiya tuzadi, hujjatlarni taqqoslaydi va xavflarni ko'rsatadi. Yakuniy huquqiy qaror har doim advokatda qoladi — shuning uchun har bir Sun'iy intellekt xizmatining yonida advokat varianti ham turadi."
       },
       {
@@ -1440,7 +1440,7 @@
       },
       {
         "q": "Qaysi xizmatni tanlashni bilmasam-chi?",
-        "a": "Muammoyingizni oddiy so'zlar bilan yozing. LexGo.SI matnni tahlil qilib, yo'nalishni va ish bosqichini aniqlaydi, mos xizmat turlari hamda paketlarni tanlab beradi va shu yo'nalishdagi advokatlarni filtrlaydi."
+        "a": "Muammoyingizni oddiy so'zlar bilan yozing. Sun'iy Intellekt matnni tahlil qilib, yo'nalishni va ish bosqichini aniqlaydi, mos xizmat turlari hamda paketlarni tanlab beradi va shu yo'nalishdagi advokatlarni filtrlaydi."
       },
       {
         "q": "Ma'lumotlarim maxfiy saqlanadimi?",
@@ -1606,8 +1606,8 @@
     "limitLogin": "Davom etish uchun kirish"
   },
   "chatPage": {
-    "metaTitle": "LexGo.SI chat",
-    "title": "LexGo.SI",
+    "metaTitle": "Sun'iy Intellekt chat",
+    "title": "Sun'iy Intellekt",
     "subtitle": "O'zbekiston qonunchiligiga o'qitilgan",
     "newChat": "Yangi chat",
     "historyTitle": "Chatlar",
@@ -1615,7 +1615,7 @@
     "noChats": "Hozircha chatlar yo'q",
     "menu": "Menyu",
     "emptyTitle": "Qanday yordam bera olaman?",
-    "emptyText": "Huquqiy vaziyatingiz, hujjat yoki ish haqida so'rang — LexGo.SI qonunga havolalar bilan javob beradi.",
+    "emptyText": "Huquqiy vaziyatingiz, hujjat yoki ish haqida so'rang — Sun'iy Intellekt qonunga havolalar bilan javob beradi.",
     "hi": "Salom, {name}",
     "suggestions": [
       "Meni so'roqqa chaqirishdi — huquqlarim qanday?",
@@ -1623,15 +1623,15 @@
       "3 oydan beri ish haqim to'lanmayapti.",
       "MChJ ochib, savdo belgimni himoya qilmoqchiman."
     ],
-    "inputPlaceholder": "LexGo.SI ga xabar yozing…",
+    "inputPlaceholder": "Sun'iy Intellektga xabar yozing…",
     "send": "Yuborish",
     "you": "Siz",
-    "assistant": "LexGo.SI",
+    "assistant": "Sun'iy Intellekt",
     "offline": "Serverga ulanib bo'lmadi — bu oflayn javob.",
-    "disclaimer": "LexGo.SI xato qilishi mumkin. Yakuniy huquqiy qaror advokatda qoladi.",
+    "disclaimer": "Sun'iy Intellekt xato qilishi mumkin. Yakuniy huquqiy qaror advokatda qoladi.",
     "downloadPdf": "PDF yuklab olish",
     "open": "Ochish",
-    "limitReached": "Mehmonlar uchun bepul limit tugadi. LexGo.SI bilan davom etish uchun tizimga kiring.",
+    "limitReached": "Mehmonlar uchun bepul limit tugadi. Sun'iy Intellekt bilan davom etish uchun tizimga kiring.",
     "limitLogin": "Davom etish uchun kirish"
   },
   "portal": {
@@ -1907,7 +1907,7 @@
         "academy": "Akademiya",
         "warranty": "Kafolat",
         "complaints": "Shikoyatlar",
-        "ai": "LexGo.SI",
+        "ai": "Sun'iy Intellekt",
         "intake": "Muammo tahlili",
         "docAnalysis": "Hujjat tahlili",
         "profile": "Profil",
@@ -3581,7 +3581,7 @@
       "lead": "Tashqi servislar ulanish holati.",
       "empty": "Integratsiya yo'q",
       "superadminOnly": "Faqat superadmin boshqaradi",
-      "keys": { "website_api": "Veb-sayt API", "mobile_api": "Mobil API", "lexgo_ai": "LexGo.SI", "telegram": "Telegram", "sms": "SMS", "email": "Email" },
+      "keys": { "website_api": "Veb-sayt API", "mobile_api": "Mobil API", "lexgo_ai": "Sun'iy Intellekt", "telegram": "Telegram", "sms": "SMS", "email": "Email" },
       "status": { "connected": "Ulangan", "planned": "Rejalashtirilgan", "error": "Xato", "disconnected": "Uzilgan",
         "degraded": "Qisman ishlayapti",
         "not_configured": "Sozlanmagan" }
