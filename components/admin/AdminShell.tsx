@@ -152,6 +152,10 @@ export default function AdminShell({ children }: { children: ReactNode }) {
     .sort((a, b) => b.href.length - a.href.length)
     .find((n) => pathname === n.href || pathname.startsWith(n.href + "/"));
   const title = active ? t(`nav.${active.key}`) : t("title");
+  // Clicking your own name goes to your own profile. Lawyers have no profile
+  // route yet, so they land on their portal instead.
+  const role = session?.role ?? "client";
+  const profileHref = role === "lawyer" ? "/portal/lawyer" : `/portal/${role}/profile`;
 
   return (
     <div className="portal">
@@ -204,10 +208,10 @@ export default function AdminShell({ children }: { children: ReactNode }) {
           <h1>{title}</h1>
           <div className="ptop__sp">
             <LanguageSwitcher />
-            <div className="ptop__user">
+            <Link className="ptop__user" href={profileHref} title={session?.name || t("badge")}>
               <span className="ptop__av">{initials(session?.name || "A")}</span>
               <span>{session?.name || t("badge")}</span>
-            </div>
+            </Link>
           </div>
         </header>
         <div className="pbody">

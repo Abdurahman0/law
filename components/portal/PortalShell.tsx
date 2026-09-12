@@ -183,6 +183,9 @@ export default function PortalShell({
     .sort((a, b) => b.href.length - a.href.length)
     .find((n) => pathname === n.href || pathname.startsWith(n.href + "/"));
   const title = active ? t(`sidebar.${role}.${active.key}`) : t("metaTitle");
+  // The name in the header is where people click to reach their own profile.
+  // Lawyers have no profile route yet, so they land on their dashboard.
+  const profileHref = nav.find((n) => n.key === "profile")?.href ?? `/portal/${role}`;
 
   return (
     <div className="portal">
@@ -257,10 +260,10 @@ export default function PortalShell({
           <div className="ptop__sp">
             <NotificationBell role={role} />
             <LanguageSwitcher />
-            <div className="ptop__user">
+            <Link className="ptop__user" href={profileHref} title={session.name}>
               <span className="ptop__av">{initials(session.name || "U")}</span>
               <span>{session.name}</span>
-            </div>
+            </Link>
           </div>
         </header>
         <div className="pbody">
