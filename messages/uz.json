@@ -82,7 +82,7 @@
     }
   },
   "nav": {
-    "ai": "LexGo.SI",
+    "ai": "Sun'iy Intellekt",
     "lawyers": "Advokatlar",
     "services": "Xizmatlar",
     "subscription": "Obuna",
@@ -702,8 +702,8 @@
     ]
   },
   "aiPage": {
-    "metaTitle": "LexGo.SI",
-    "kicker": "LexGo.SI",
+    "metaTitle": "Sun'iy Intellekt",
+    "kicker": "Sun'iy Intellekt",
     "title": "O'zbekiston qonunchiligiga o'qitilgan huquqiy Sun'iy intellekt",
     "lead": "Tizimga milliy qonunchilik, tergov va sud amaliyoti natijalari hamda professional yuristlar tayyorlagan hujjat namunalari yuklangan. Javob mavhum emas — amaldagi normaga tayanadi.",
     "features": [
@@ -712,7 +712,7 @@
       "Hujjat tahlili: xatolar, qonunga zid bandlar, xavflar va takliflar",
       "Kol-markaz yuristlari uchun ichki yordamchi assistent"
     ],
-    "capabilitiesTitle": "LexGo.SI nima qila oladi",
+    "capabilitiesTitle": "Sun'iy Intellekt nima qila oladi",
     "capabilities": [
       {
         "title": "Havolalar bilan javob",
@@ -763,9 +763,9 @@
     ],
     "info": "Dastlabki 5 ta so'rov bepul. Keyingilari oylik obuna asosida. Platformada ro'yxatdan o'tgan advokatlarga obunaga 50% chegirma.",
     "phone": {
-      "title": "LexGo.SI",
+      "title": "Sun'iy Intellekt",
       "status": "Onlayn · {left} ta bepul so'rov qoldi",
-      "greeting": "Salom! Men LexGo.SI. Muammoyingizni oddiy so'zlar bilan yozing — yo'nalishni, ish bosqichini va mos xizmatni aytib beraman.",
+      "greeting": "Salom! Men Sun'iy Intellektman. Muammoyingizni oddiy so'zlar bilan yozing — yo'nalishni, ish bosqichini va mos xizmatni aytib beraman.",
       "greetingNote": "Dastlabki 5 ta so'rov bepul",
       "quick": [
         "Tergovga chaqirishdi",
