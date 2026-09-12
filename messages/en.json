@@ -755,20 +755,7 @@
         "a": "Choose the tax regime first, use an individual charter, and register the trademark separately from the company."
       }
     ],
-    "info": "The first 5 requests are free. Further ones are on a monthly subscription. Lawyers registered on the platform get a 50% discount on the subscription.",
-    "phone": {
-      "title": "LexGo.AI",
-      "status": "Online · {left} free requests left",
-      "greeting": "Hi! I'm LexGo.AI. Describe your problem in plain words — I'll tell you the direction, the case stage and the right service.",
-      "greetingNote": "First 5 requests free",
-      "quick": [
-        "Called for questioning",
-        "Contract breached",
-        "Wages unpaid",
-        "Want to open an LLC"
-      ],
-      "inputPlaceholder": "Type your question…"
-    }
+    "info": "The first 5 requests are free. Further ones are on a monthly subscription. Lawyers registered on the platform get a 50% discount on the subscription."
   },
   "servicesPage": {
     "metaTitle": "Online services",

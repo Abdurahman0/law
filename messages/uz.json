@@ -761,20 +761,7 @@
         "a": "Avval soliq rejimini tanlang, individual ustavdan foydalaning va savdo belgisini kompaniyadan alohida ro'yxatdan o'tkazing."
       }
     ],
-    "info": "Dastlabki 5 ta so'rov bepul. Keyingilari oylik obuna asosida. Platformada ro'yxatdan o'tgan advokatlarga obunaga 50% chegirma.",
-    "phone": {
-      "title": "Sun'iy Intellekt",
-      "status": "Onlayn · {left} ta bepul so'rov qoldi",
-      "greeting": "Salom! Men Sun'iy Intellektman. Muammoyingizni oddiy so'zlar bilan yozing — yo'nalishni, ish bosqichini va mos xizmatni aytib beraman.",
-      "greetingNote": "Dastlabki 5 ta so'rov bepul",
-      "quick": [
-        "Tergovga chaqirishdi",
-        "Shartnoma buzildi",
-        "Ish haqi to'lanmadi",
-        "MChJ ochmoqchiman"
-      ],
-      "inputPlaceholder": "Savolingizni yozing…"
-    }
+    "info": "Dastlabki 5 ta so'rov bepul. Keyingilari oylik obuna asosida. Platformada ro'yxatdan o'tgan advokatlarga obunaga 50% chegirma."
   },
   "servicesPage": {
     "metaTitle": "Onlayn xizmatlar",
@@ -1543,9 +1530,9 @@
     ]
   },
   "chat": {
-    "title": "LexGo.SI",
+    "title": "Sun'iy Intellekt",
     "statusOnline": "Onlayn · {left} ta bepul so'rov",
-    "greeting": "Assalomu alaykum! Men LexGo.SI — O'zbekiston qonunchiligiga o'qitilganman. Muammoyingizni ikki-uch gapda yozing, men yo'nalishni, ish bosqichini va mos xizmatni aytaman.",
+    "greeting": "Assalomu alaykum! Men Sun'iy Intellekt — O'zbekiston qonunchiligiga o'qitilganman. Muammoyingizni ikki-uch gapda yozing, men yo'nalishni, ish bosqichini va mos xizmatni aytaman.",
     "greetingNote": "Dastlabki 5 ta so'rov bepul · yakuniy huquqiy qaror advokatda qoladi",
     "inputPlaceholder": "Savolingizni yozing…",
     "quick": [
@@ -1559,11 +1546,11 @@
     "seeLawyer": "Mos advokatni ko'rish",
     "paywall": {
       "title": "Bepul so'rovlar tugadi.",
-      "text": " Cheksiz savol, hujjat tahlili va tayyorlash uchun LexGo.SI obunasini rasmiylashtiring.",
+      "text": " Cheksiz savol, hujjat tahlili va tayyorlash uchun Sun'iy Intellekt obunasini rasmiylashtiring.",
       "cta": "Obuna narxlari",
       "inputDisabled": "Davom etish uchun obuna kerak"
     },
-    "openLabel": "LexGo.SI bilan suhbat",
+    "openLabel": "Sun'iy Intellekt bilan suhbat",
     "closeLabel": "Yopish",
     "online": "Onlayn",
     "openFull": "To'liq chatni ochish",
@@ -1579,7 +1566,7 @@
       },
       "subscription": {
         "text": "Ikki tarif bor.\n\nStandart — cheksiz 30 daqiqalik konsultatsiyalar, hujjat ko'rigi 10 sahifagacha, 200+ shablon, turmush o'rtog'ingiz ham qamrab olinadi.\n\nPremium — bularga qo'shimcha biznes-audit konsultatsiyasi, har oy 1 ta mualliflik huquqi, ota-ona va farzandlar qamrovi.\n\n12 oylik olinsa 10%, to'lov bir yo'la qilinsa yana 10% arzon bo'ladi.",
-        "meta": "Advokat va yuristlarga LexGo.SI obunasiga 50% chegirma"
+        "meta": "Advokat va yuristlarga Sun'iy Intellekt obunasiga 50% chegirma"
       },
       "price": {
         "text": "Narx xizmat turiga bog'liq:\n\n• Ekspress konsultatsiya — 90 000 so'mdan\n• Hujjat tayyorlash — 60 000 so'mdan\n• Hujjat tekshiruvi — 150 000 so'mdan\n• Advokat paketlari — 1 250 000 so'mdan\n\nAniq narxni ayta olishim uchun masalangizni yozing.",

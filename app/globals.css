@@ -459,7 +459,9 @@ section[id]{scroll-margin-top:86px}
   .head--row{flex-direction:column;align-items:flex-start}
 }
 @media (max-width:760px){
-  body{padding-bottom:78px}
+  /* Must clear the tab bar, which is 87px here and taller again on a phone
+     with a home indicator — 78px left the last line of every page under it. */
+  body{padding-bottom:calc(90px + env(safe-area-inset-bottom))}
   .tabbar{display:block}
   .frow{grid-template-columns:1fr 1fr}
   .roles{grid-template-columns:1fr}
@@ -904,7 +906,10 @@ body:has(.plogin) .fab{display:none}
 
 /* panel */
 .ppanel{background:#fff;border-radius:var(--rl);box-shadow:inset 0 0 0 1.5px var(--line);padding:20px}
-.ppanel__h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+/* Wraps because the action group on the right grows with the page: the pipeline
+   header alone is 566px of content, and without a wrap its last two buttons sit
+   past the right edge of a phone with nothing to scroll them back into view. */
+.ppanel__h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
 .ppanel__h b{font-family:var(--fd);font-size:1.05rem;letter-spacing:-.02em}
 .ppanel__h a:not(.btn){font-size:.82rem;font-weight:600;color:var(--b600)}
 
@@ -1634,7 +1639,7 @@ body:has(.auth) .fab{display:none}
 
 
 /* admin header action row + modal */
-.ahdr{display:flex;align-items:center;gap:12px}
+.ahdr{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end}
 .amodal{position:fixed;inset:0;z-index:200;background:rgba(3,16,43,.55);backdrop-filter:blur(4px);display:grid;place-items:center;padding:20px;animation:fade .2s ease both}
 .amodal__c{width:min(560px,100%);max-height:90vh;overflow-y:auto;background:#fff;border-radius:var(--rl);box-shadow:var(--s3);animation:pop .22s cubic-bezier(.2,.8,.3,1) both}
 .amodal__h{position:sticky;top:0;background:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line);z-index:1}
